@@ -1,2 +1,1 @@
-// XDR serialization layer — generic, not Groundhog-specific
-export {};
+export { XdrWriter } from "./writer.js";
