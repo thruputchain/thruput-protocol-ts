@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { serialize, deserialize } from "../../../src/xdr/codec.js";
-import * as codecs from "../../../src/protocol/codecs/index.js";
 import {
+  serialize, deserialize,
   contractAddress, contractEntrypointID, gasAmount,
-  calldata, blockHeight, ed25519PublicKey, ed25519Signature,
+  calldata, blockHeight,
   keyID, bitMap, weight,
   CryptographicScheme, AuthClaimType,
-  type Invocation, type Uniquifier, type AuthClaim,
-} from "../../../src/protocol/index.js";
+  Invocation, Uniquifier, AuthClaim,
+  codec,
+} from "../../../src/index.js";
 
 describe("transaction codecs round-trip", () => {
   it("Invocation", () => {
@@ -17,8 +17,8 @@ describe("transaction codecs round-trip", () => {
       gas_limit: gasAmount(1000000n),
       calldata: calldata(new Uint8Array([1, 2, 3, 4])),
     };
-    const bytes = serialize(inv, codecs.Invocation);
-    const decoded = deserialize(bytes, codecs.Invocation);
+    const bytes = serialize(inv, codec.Invocation);
+    const decoded = deserialize(bytes, codec.Invocation);
     expect(decoded).toEqual(inv);
   });
 
@@ -27,8 +27,8 @@ describe("transaction codecs round-trip", () => {
       block_expiry_height: blockHeight(100n),
       nonce: 42n,
     };
-    const bytes = serialize(u, codecs.Uniquifier);
-    expect(deserialize(bytes, codecs.Uniquifier)).toEqual(u);
+    const bytes = serialize(u, codec.Uniquifier);
+    expect(deserialize(bytes, codec.Uniquifier)).toEqual(u);
   });
 });
 
@@ -38,8 +38,8 @@ describe("auth_claim codecs round-trip", () => {
       claim_type: AuthClaimType.kInvokedAddressSignature,
       invoked_address_signature_id: keyID(3n),
     };
-    const bytes = serialize(claim, codecs.AuthClaim);
-    expect(deserialize(bytes, codecs.AuthClaim)).toEqual(claim);
+    const bytes = serialize(claim, codec.AuthClaim);
+    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
   });
 
   it("AuthClaim — kInvokedAddressSignedWeight (anonymous struct arm)", () => {
@@ -50,8 +50,8 @@ describe("auth_claim codecs round-trip", () => {
         required_weight: weight(2n),
       },
     };
-    const bytes = serialize(claim, codecs.AuthClaim);
-    expect(deserialize(bytes, codecs.AuthClaim)).toEqual(claim);
+    const bytes = serialize(claim, codec.AuthClaim);
+    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
   });
 
   it("AuthClaim — kOtherAddressSignature (anonymous struct arm)", () => {
@@ -62,8 +62,8 @@ describe("auth_claim codecs round-trip", () => {
         key_id: keyID(1n),
       },
     };
-    const bytes = serialize(claim, codecs.AuthClaim);
-    expect(deserialize(bytes, codecs.AuthClaim)).toEqual(claim);
+    const bytes = serialize(claim, codec.AuthClaim);
+    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
   });
 
   it("AuthClaim — kOtherAddressSignedWeight (anonymous struct arm)", () => {
@@ -75,7 +75,7 @@ describe("auth_claim codecs round-trip", () => {
         required_weight: weight(3n),
       },
     };
-    const bytes = serialize(claim, codecs.AuthClaim);
-    expect(deserialize(bytes, codecs.AuthClaim)).toEqual(claim);
+    const bytes = serialize(claim, codec.AuthClaim);
+    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
   });
 });

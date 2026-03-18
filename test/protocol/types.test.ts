@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
+  serialize, deserialize,
+} from "../../src/xdr/codec.js";
+import {
   sha256Hash, SHA256Hash,
   contractAddress, ContractAddress,
   ed25519Signature, Ed25519Signature,
@@ -10,6 +13,7 @@ import {
   CryptographicScheme,
   kTotalHogSupply,
   kHogDivisibility,
+  codec,
 } from "../../src/protocol/types.js";
 
 describe("branded type factories", () => {
@@ -64,6 +68,29 @@ describe("enums", () => {
 
   it("CryptographicScheme has correct values", () => {
     expect(CryptographicScheme.Ed25519).toBe(0);
+  });
+});
+
+describe("enum codecs", () => {
+  it("CryptographicScheme round-trips Ed25519", () => {
+    const bytes = serialize(CryptographicScheme.Ed25519, codec.CryptographicScheme);
+    expect(bytes).toEqual(new Uint8Array([0, 0, 0, 0]));
+    const decoded = deserialize(bytes, codec.CryptographicScheme);
+    expect(decoded).toBe(CryptographicScheme.Ed25519);
+  });
+
+  it("StorageKeyType round-trips all variants", () => {
+    for (const variant of [
+      StorageKeyType.kStorageKeyTypeContractData,
+      StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance,
+      StorageKeyType.kStorageKeyTypeAddressAuthData,
+      StorageKeyType.kStorageKeyTypeAddressMetadata,
+      StorageKeyType.kStorageKeyTypeReplayCache,
+    ]) {
+      const bytes = serialize(variant, codec.StorageKeyType);
+      const decoded = deserialize(bytes, codec.StorageKeyType);
+      expect(decoded).toBe(variant);
+    }
   });
 });
 

@@ -5,8 +5,8 @@ import {
   blockHeight, ed25519Signature,
   keyID,
   CryptographicScheme, AuthClaimType,
-  xdr,
-  type SignedTransaction,
+  SignedTransaction,
+  codec,
 } from "../src/index.js";
 
 describe("end-to-end: build and round-trip a SignedTransaction", () => {
@@ -47,8 +47,8 @@ describe("end-to-end: build and round-trip a SignedTransaction", () => {
       ],
     };
 
-    const bytes = serialize(stx, xdr.SignedTransaction);
-    const decoded = deserialize(bytes, xdr.SignedTransaction);
+    const bytes = serialize(stx, codec.SignedTransaction);
+    const decoded = deserialize(bytes, codec.SignedTransaction);
     expect(decoded).toEqual(stx);
   });
 });
