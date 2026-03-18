@@ -33,7 +33,7 @@ export interface XdrCodec<T> {
   decode(r: IReader): T;
 }
 
-// Standard XDR serialization — uses XdrWriter/XdrReader
+// Standard XDR (TXS) serialization
 import { XdrWriter } from "./writer.js";
 import { XdrReader } from "./reader.js";
 
@@ -45,5 +45,20 @@ export function serialize<T>(val: T, codec: XdrCodec<T>): Uint8Array {
 
 export function deserialize<T>(data: Uint8Array, codec: XdrCodec<T>): T {
   const r = new XdrReader(data);
+  return codec.decode(r);
+}
+
+// Compact XDR (CXS) serialization
+import { CxsWriter } from "./cxs_writer.js";
+import { CxsReader } from "./cxs_reader.js";
+
+export function serializeCxs<T>(val: T, codec: XdrCodec<T>): Uint8Array {
+  const w = new CxsWriter();
+  codec.encode(w, val);
+  return w.finish();
+}
+
+export function deserializeCxs<T>(data: Uint8Array, codec: XdrCodec<T>): T {
+  const r = new CxsReader(data);
   return codec.decode(r);
 }
