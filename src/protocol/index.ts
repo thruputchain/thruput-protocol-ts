@@ -1,2 +1,1 @@
-// Groundhog protocol types — generated from .x files
-export {};
+export * from "./types.js";
