@@ -1,4 +1,5 @@
 const INITIAL_CAPACITY = 256;
+const textEncoder = new TextEncoder();
 
 export class XdrWriter {
   private buf: Uint8Array;
@@ -65,20 +66,24 @@ export class XdrWriter {
     if (val < -(1n << 127n) || val > (1n << 127n) - 1n) {
       throw new Error(`int128 overflow: ${val}`);
     }
+    this.grow(16);
     const lowbits = val & 0xFFFFFFFFFFFFFFFFn;
     const highbits = (val >> 64n);
-    this.writeInt64(highbits);
-    this.writeUint64(lowbits);
+    this.view.setBigInt64(this.pos, highbits);
+    this.view.setBigUint64(this.pos + 8, lowbits);
+    this.pos += 16;
   }
 
   writeUint128(val: bigint): void {
     if (val < 0n || val > (1n << 128n) - 1n) {
       throw new Error(`uint128 overflow: ${val}`);
     }
+    this.grow(16);
     const lowbits = val & 0xFFFFFFFFFFFFFFFFn;
     const highbits = val >> 64n;
-    this.writeUint64(highbits);
-    this.writeUint64(lowbits);
+    this.view.setBigUint64(this.pos, highbits);
+    this.view.setBigUint64(this.pos + 8, lowbits);
+    this.pos += 16;
   }
 
   writeBool(val: boolean): void {
@@ -103,17 +108,11 @@ export class XdrWriter {
       throw new Error(`var opaque exceeds max: ${val.length} > ${max}`);
     }
     this.writeUint32(BigInt(val.length));
-    const padded = paddedLen(val.length);
-    this.grow(padded);
-    this.buf.set(val, this.pos);
-    for (let i = val.length; i < padded; i++) {
-      this.buf[this.pos + i] = 0;
-    }
-    this.pos += padded;
+    this.writeFixedOpaque(val, val.length);
   }
 
   writeString(val: string, max: number): void {
-    const encoded = new TextEncoder().encode(val);
+    const encoded = textEncoder.encode(val);
     this.writeVarOpaque(encoded, max);
   }
 }

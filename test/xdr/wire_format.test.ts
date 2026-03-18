@@ -9,18 +9,7 @@
 import { describe, it, expect } from "vitest";
 import { XdrWriter } from "../../src/xdr/writer.js";
 import { XdrReader } from "../../src/xdr/reader.js";
-
-function hex(bytes: Uint8Array): string {
-  return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
-}
-
-function fromHex(h: string): Uint8Array {
-  const bytes = new Uint8Array(h.length / 2);
-  for (let i = 0; i < h.length; i += 2) {
-    bytes[i / 2] = parseInt(h.substring(i, i + 2), 16);
-  }
-  return bytes;
-}
+import { toHex as hex, fromHex } from "../helpers/hex.js";
 
 describe("XDR wire format — integers", () => {
   // RFC 4506 §4.1: Integer (32-bit big-endian two's complement)
