@@ -1,7 +1,9 @@
 // XDR serialization layer
 export { XdrWriter } from "./xdr/writer.js";
 export { XdrReader } from "./xdr/reader.js";
-export { serialize, deserialize } from "./xdr/codec.js";
+export { CxsWriter } from "./xdr/cxs_writer.js";
+export { CxsReader } from "./xdr/cxs_reader.js";
+export { serialize, deserialize, serializeCxs, deserializeCxs } from "./xdr/codec.js";
 export type { XdrCodec, IWriter, IReader } from "./xdr/codec.js";
 
 // Protocol types + codecs (unified)
