@@ -1,3 +1,5 @@
+const textDecoder = new TextDecoder();
+
 export class XdrReader {
   private view: DataView;
   private pos: number = 0;
@@ -65,7 +67,7 @@ export class XdrReader {
   readFixedOpaque(len: number): Uint8Array {
     const padded = (len + 3) & ~3;
     this.ensure(padded);
-    const result = this.data.slice(this.pos, this.pos + len);
+    const result = this.data.subarray(this.pos, this.pos + len);
     this.pos += padded;
     return result;
   }
@@ -80,6 +82,6 @@ export class XdrReader {
 
   readString(max: number): string {
     const bytes = this.readVarOpaque(max);
-    return new TextDecoder().decode(bytes);
+    return textDecoder.decode(bytes);
   }
 }
