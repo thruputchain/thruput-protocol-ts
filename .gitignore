@@ -2,3 +2,6 @@ node_modules/
 dist/
 coverage/
 *.tsbuildinfo
+protocolts_to_prot
+protocolts_to_prot.pub
+*.pub
