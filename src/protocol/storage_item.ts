@@ -137,8 +137,8 @@ const _StorageItemType: XdrCodec<StorageItemType> = {
 };
 
 const _Bytestring: XdrCodec<Bytestring> = {
-  encode(w, val) { w.writeVarOpaque(val, Number(kBytestringMaxLen)); },
-  decode(r) { return bytestring(r.readVarOpaque(Number(kBytestringMaxLen))); },
+  encode(w, val) { w.writeVarOpaque(val, Number(proto.kBytestringMaxLen)); },
+  decode(r) { return bytestring(r.readVarOpaque(Number(proto.kBytestringMaxLen))); },
 };
 
 const _StorageItem: XdrCodec<StorageItem> = {

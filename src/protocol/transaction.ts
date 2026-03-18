@@ -137,8 +137,8 @@ const _Calldata: XdrCodec<Calldata> = {
 };
 
 const _ReturnBuffer: XdrCodec<ReturnBuffer> = {
-  encode(w, val) { w.writeVarOpaque(val, Number(kMaxReturnBufferLen)); },
-  decode(r) { return returnBuffer(r.readVarOpaque(Number(kMaxReturnBufferLen))); },
+  encode(w, val) { w.writeVarOpaque(val, Number(proto.kMaxReturnBufferLen)); },
+  decode(r) { return returnBuffer(r.readVarOpaque(Number(proto.kMaxReturnBufferLen))); },
 };
 
 const _GasClaim: XdrCodec<GasClaim> = {

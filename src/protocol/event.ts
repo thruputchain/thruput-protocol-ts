@@ -49,12 +49,12 @@ const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.contract_address);
     w.writeUint32(val.num_topics);
-    w.writeVarOpaque(val.serialized_event, Number(kMaxEventLength));
+    w.writeVarOpaque(val.serialized_event, Number(proto.kMaxEventLength));
   },
   decode(r) {
     const contract_address = proto.codec.ContractAddress.decode(r);
     const num_topics = r.readUint32();
-    const serialized_event = r.readVarOpaque(Number(kMaxEventLength));
+    const serialized_event = r.readVarOpaque(Number(proto.kMaxEventLength));
     return { contract_address, num_topics, serialized_event };
   },
 };

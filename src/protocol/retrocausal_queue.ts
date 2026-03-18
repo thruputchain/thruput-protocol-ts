@@ -52,8 +52,8 @@ export interface RetrocausalQueueDelta {
 //
 
 const _QueueEntry: XdrCodec<QueueEntry> = {
-  encode(w, val) { w.writeVarOpaque(val, Number(kQueueEntryMaxLen)); },
-  decode(r) { return queueEntry(r.readVarOpaque(Number(kQueueEntryMaxLen))); },
+  encode(w, val) { w.writeVarOpaque(val, Number(proto.kQueueEntryMaxLen)); },
+  decode(r) { return queueEntry(r.readVarOpaque(Number(proto.kQueueEntryMaxLen))); },
 };
 
 const _RetrocausalQueueBlock: XdrCodec<RetrocausalQueueBlock> = {
