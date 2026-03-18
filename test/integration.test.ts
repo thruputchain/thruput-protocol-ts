@@ -5,8 +5,7 @@ import {
   blockHeight, ed25519Signature,
   keyID,
   CryptographicScheme, AuthClaimType,
-  xdr,
-  type SignedTransaction,
+  SignedTransaction,
 } from "../src/index.js";
 
 describe("end-to-end: build and round-trip a SignedTransaction", () => {
@@ -14,6 +13,8 @@ describe("end-to-end: build and round-trip a SignedTransaction", () => {
     const addr = contractAddress(new Uint8Array(32).fill(0x01));
     const ep = contractEntrypointID(new Uint8Array(8).fill(0xAB));
 
+    // TypeScript resolves SignedTransaction as the *type* in type position
+    // and the *codec* in value position — same name, no conflict.
     const stx: SignedTransaction = {
       tx: {
         invocation: {
@@ -47,8 +48,9 @@ describe("end-to-end: build and round-trip a SignedTransaction", () => {
       ],
     };
 
-    const bytes = serialize(stx, xdr.SignedTransaction);
-    const decoded = deserialize(bytes, xdr.SignedTransaction);
+    // SignedTransaction here is the codec (value), not the type
+    const bytes = serialize(stx, SignedTransaction);
+    const decoded = deserialize(bytes, SignedTransaction);
     expect(decoded).toEqual(stx);
   });
 });

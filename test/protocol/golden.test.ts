@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { serialize, deserialize } from "../../src/xdr/codec.js";
-import * as xdr from "../../src/protocol/codecs/index.js";
+import * as proto from "../../src/protocol/index.js";
 import vectors from "../fixtures/golden_vectors.json";
 
 // Each vector: { type: "Invocation" | "SignedTransaction" | ..., hex: "abcdef..." }
-const codecMap: Record<string, unknown> = xdr;
+const codecMap: Record<string, unknown> = proto;
 
 function hexToBytes(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2);

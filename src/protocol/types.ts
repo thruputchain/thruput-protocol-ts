@@ -1,5 +1,7 @@
-// types.ts — Hand-written TypeScript from types.x
-// This file serves as the reference for future gen_ts.cc codegen output.
+// -*- TypeScript -*-
+// Generated from types.x — DO NOT EDIT
+import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+import * as proto from "./index.js";
 
 // ============================================================================
 // Branded bigint types
@@ -97,37 +99,37 @@ export enum StorageKeyType {
 // Unions
 // ============================================================================
 
-export type Signature = {
-  scheme: CryptographicScheme.Ed25519;
-  ed25519: Ed25519Signature;
-};
+export type Signature =
+  | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519Signature }
+;
 
-export type PublicKey = {
-  scheme: CryptographicScheme.Ed25519;
-  ed25519: Ed25519PublicKey;
-};
+export type PublicKey =
+  | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519PublicKey }
+;
 
-export type SecretKey = {
-  scheme: CryptographicScheme.Ed25519;
-  ed25519: Ed25519SecretKey;
-};
+export type SecretKey =
+  | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519SecretKey }
+;
 
-export type ExtensionPoint = { v: 0 };
+export type ExtensionPoint =
+  | { v: 0 }
+;
 
 export type StorageKey =
-  | { key_type: StorageKeyType.kStorageKeyTypeContractData; contract_data_key: StorageKeyContractData }
-  | { key_type: StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance }
-  | { key_type: StorageKeyType.kStorageKeyTypeAddressAuthData }
-  | { key_type: StorageKeyType.kStorageKeyTypeAddressMetadata }
-  | { key_type: StorageKeyType.kStorageKeyTypeReplayCache };
+  | { key_type: proto.StorageKeyType.kStorageKeyTypeContractData; contract_data_key: proto.StorageKeyContractData }
+  | { key_type: proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance }
+  | { key_type: proto.StorageKeyType.kStorageKeyTypeAddressAuthData }
+  | { key_type: proto.StorageKeyType.kStorageKeyTypeAddressMetadata }
+  | { key_type: proto.StorageKeyType.kStorageKeyTypeReplayCache }
+;
 
 // ============================================================================
 // Structs
 // ============================================================================
 
 export interface AddressAndKey {
-  address: ContractAddress;
-  key: StorageKey;
+  address: proto.ContractAddress;
+  key: proto.StorageKey;
 }
 
 // ============================================================================
@@ -136,3 +138,191 @@ export interface AddressAndKey {
 
 export const kTotalHogSupply = 62_500_000_000n;
 export const kHogDivisibility = 10_000_000n;
+
+// ============================================================================
+// XDR Codecs
+// ============================================================================
+
+export const TimePoint: XdrCodec<proto.TimePoint> = {
+  encode(w: IWriter, val: proto.TimePoint) { w.writeUint64(val); },
+  decode(r: IReader) { return proto.timePoint(r.readUint64()); },
+};
+
+export const RuntimeMemoryLength: XdrCodec<proto.RuntimeMemoryLength> = {
+  encode(w: IWriter, val: proto.RuntimeMemoryLength) { w.writeUint32(val); },
+  decode(r: IReader) { return proto.runtimeMemoryLength(r.readUint32()); },
+};
+
+export const GasAmount: XdrCodec<proto.GasAmount> = {
+  encode(w: IWriter, val: proto.GasAmount) { w.writeUint64(val); },
+  decode(r: IReader) { return proto.gasAmount(r.readUint64()); },
+};
+
+export const BlockHeight: XdrCodec<proto.BlockHeight> = {
+  encode(w: IWriter, val: proto.BlockHeight) { w.writeInt64(val); },
+  decode(r: IReader) { return proto.blockHeight(r.readInt64()); },
+};
+
+export const Ed25519Signature: XdrCodec<proto.Ed25519Signature> = {
+  encode(w: IWriter, val: proto.Ed25519Signature) { w.writeFixedOpaque(val, 64); },
+  decode(r: IReader) { return proto.ed25519Signature(r.readFixedOpaque(64)); },
+};
+
+export const Ed25519PublicKey: XdrCodec<proto.Ed25519PublicKey> = {
+  encode(w: IWriter, val: proto.Ed25519PublicKey) { w.writeFixedOpaque(val, 32); },
+  decode(r: IReader) { return proto.ed25519PublicKey(r.readFixedOpaque(32)); },
+};
+
+export const Ed25519SecretKey: XdrCodec<proto.Ed25519SecretKey> = {
+  encode(w: IWriter, val: proto.Ed25519SecretKey) { w.writeFixedOpaque(val, 64); },
+  decode(r: IReader) { return proto.ed25519SecretKey(r.readFixedOpaque(64)); },
+};
+
+export const SHA256Hash: XdrCodec<proto.SHA256Hash> = {
+  encode(w: IWriter, val: proto.SHA256Hash) { w.writeFixedOpaque(val, 32); },
+  decode(r: IReader) { return proto.sha256Hash(r.readFixedOpaque(32)); },
+};
+
+export const DbHash: XdrCodec<proto.DbHash> = {
+  encode(w: IWriter, val: proto.DbHash) { w.writeFixedOpaque(val, 2048); },
+  decode(r: IReader) { return proto.dbHash(r.readFixedOpaque(2048)); },
+};
+
+export const BlockHash: XdrCodec<proto.BlockHash> = {
+  encode(w: IWriter, val: proto.BlockHash) { w.writeFixedOpaque(val, 32); },
+  decode(r: IReader) { return proto.blockHash(r.readFixedOpaque(32)); },
+};
+
+export const ContractAddress: XdrCodec<proto.ContractAddress> = {
+  encode(w: IWriter, val: proto.ContractAddress) { w.writeFixedOpaque(val, 32); },
+  decode(r: IReader) { return proto.contractAddress(r.readFixedOpaque(32)); },
+};
+
+export const StorageKeyContractData: XdrCodec<proto.StorageKeyContractData> = {
+  encode(w: IWriter, val: proto.StorageKeyContractData) { w.writeFixedOpaque(val, 32); },
+  decode(r: IReader) { return proto.storageKeyContractData(r.readFixedOpaque(32)); },
+};
+
+export const Signature: XdrCodec<proto.Signature> = {
+  encode(w: IWriter, val: proto.Signature) {
+    w.writeInt32(BigInt(val.scheme));
+    switch (val.scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        proto.Ed25519Signature.encode(w, val.ed25519);
+        break;
+    }
+  },
+  decode(r: IReader) {
+    const scheme = Number(r.readInt32());
+    switch (scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        return { scheme, ed25519: proto.Ed25519Signature.decode(r) };
+      default:
+        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+    }
+  },
+};
+
+export const PublicKey: XdrCodec<proto.PublicKey> = {
+  encode(w: IWriter, val: proto.PublicKey) {
+    w.writeInt32(BigInt(val.scheme));
+    switch (val.scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        proto.Ed25519PublicKey.encode(w, val.ed25519);
+        break;
+    }
+  },
+  decode(r: IReader) {
+    const scheme = Number(r.readInt32());
+    switch (scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        return { scheme, ed25519: proto.Ed25519PublicKey.decode(r) };
+      default:
+        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+    }
+  },
+};
+
+export const SecretKey: XdrCodec<proto.SecretKey> = {
+  encode(w: IWriter, val: proto.SecretKey) {
+    w.writeInt32(BigInt(val.scheme));
+    switch (val.scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        proto.Ed25519SecretKey.encode(w, val.ed25519);
+        break;
+    }
+  },
+  decode(r: IReader) {
+    const scheme = Number(r.readInt32());
+    switch (scheme) {
+      case proto.CryptographicScheme.Ed25519:
+        return { scheme, ed25519: proto.Ed25519SecretKey.decode(r) };
+      default:
+        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+    }
+  },
+};
+
+export const ExtensionPoint: XdrCodec<proto.ExtensionPoint> = {
+  encode(w: IWriter, val: proto.ExtensionPoint) {
+    w.writeInt32(BigInt(val.v));
+  },
+  decode(r: IReader) {
+    const v = Number(r.readInt32());
+    switch (v) {
+      case 0:
+        return { v } as proto.ExtensionPoint;
+      default:
+        throw new Error(`Unknown ExtensionPoint discriminant: ${v}`);
+    }
+  },
+};
+
+export const StorageKey: XdrCodec<proto.StorageKey> = {
+  encode(w: IWriter, val: proto.StorageKey) {
+    w.writeInt32(BigInt(val.key_type));
+    switch (val.key_type) {
+      case proto.StorageKeyType.kStorageKeyTypeContractData:
+        proto.StorageKeyContractData.encode(w, val.contract_data_key);
+        break;
+      case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
+        break;
+      case proto.StorageKeyType.kStorageKeyTypeAddressAuthData:
+        break;
+      case proto.StorageKeyType.kStorageKeyTypeAddressMetadata:
+        break;
+      case proto.StorageKeyType.kStorageKeyTypeReplayCache:
+        break;
+    }
+  },
+  decode(r: IReader) {
+    const key_type = Number(r.readInt32());
+    switch (key_type) {
+      case proto.StorageKeyType.kStorageKeyTypeContractData:
+        return { key_type, contract_data_key: proto.StorageKeyContractData.decode(r) };
+      case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
+        return { key_type } as proto.StorageKey;
+      case proto.StorageKeyType.kStorageKeyTypeAddressAuthData:
+        return { key_type } as proto.StorageKey;
+      case proto.StorageKeyType.kStorageKeyTypeAddressMetadata:
+        return { key_type } as proto.StorageKey;
+      case proto.StorageKeyType.kStorageKeyTypeReplayCache:
+        return { key_type } as proto.StorageKey;
+      default:
+        throw new Error(`Unknown StorageKeyType: ${key_type}`);
+    }
+  },
+};
+
+export const AddressAndKey: XdrCodec<proto.AddressAndKey> = {
+  encode(w: IWriter, val: proto.AddressAndKey) {
+    proto.ContractAddress.encode(w, val.address);
+    proto.StorageKey.encode(w, val.key);
+  },
+  decode(r: IReader) {
+    return {
+      address: proto.ContractAddress.decode(r),
+      key: proto.StorageKey.decode(r),
+    };
+  },
+};
