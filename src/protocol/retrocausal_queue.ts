@@ -1,6 +1,6 @@
 // -*- TypeScript -*-
 // Generated from retrocausal_queue.x — DO NOT EDIT
-import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+import { type XdrCodec } from "../xdr/codec.js";
 import * as proto from "./index.js";
 
 export const kQueueEntryMaxLen = 256n;
@@ -17,7 +17,11 @@ export function queueEntry(data: Uint8Array): QueueEntry {
 // XDR Codecs
 // ============================================================================
 
-export const QueueEntry: XdrCodec<proto.QueueEntry> = {
-  encode(w: IWriter, val: proto.QueueEntry) { w.writeVarOpaque(val, Number(proto.kQueueEntryMaxLen)); },
-  decode(r: IReader) { return proto.queueEntry(r.readVarOpaque(Number(proto.kQueueEntryMaxLen))); },
+const _QueueEntry: XdrCodec<proto.QueueEntry> = {
+  encode(w, val) { w.writeVarOpaque(val, Number(proto.kQueueEntryMaxLen)); },
+  decode(r) { return proto.queueEntry(r.readVarOpaque(Number(proto.kQueueEntryMaxLen))); },
 };
+
+export const codec = {
+  QueueEntry: _QueueEntry,
+} as const;

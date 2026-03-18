@@ -1,6 +1,6 @@
 // -*- TypeScript -*-
 // Generated from transaction.x — DO NOT EDIT
-import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+import { type XdrCodec } from "../xdr/codec.js";
 import * as proto from "./index.js";
 
 // ============================================================================
@@ -123,69 +123,69 @@ export type OptSignedTransactionBatch = proto.OptSignedTransaction[];
 // XDR Codecs
 // ============================================================================
 
-export const Calldata: XdrCodec<proto.Calldata> = {
-  encode(w: IWriter, val: proto.Calldata) { w.writeVarOpaque(val, 0xFFFFFFFF); },
-  decode(r: IReader) { return proto.calldata(r.readVarOpaque(0xFFFFFFFF)); },
-};
-
-export const ReturnBuffer: XdrCodec<proto.ReturnBuffer> = {
-  encode(w: IWriter, val: proto.ReturnBuffer) { w.writeVarOpaque(val, 1024); },
-  decode(r: IReader) { return proto.returnBuffer(r.readVarOpaque(1024)); },
-};
-
-function varArray<T>(codec: XdrCodec<T>, max: number = 0xFFFFFFFF): XdrCodec<T[]> {
+function varArray<T>(itemCodec: XdrCodec<T>, max: number = 0xFFFFFFFF): XdrCodec<T[]> {
   return {
-    encode(w: IWriter, val: T[]) {
+    encode(w, val) {
       if (val.length > max) throw new Error(`array length ${val.length} exceeds max ${max}`);
       w.writeUint32(BigInt(val.length));
-      for (const item of val) codec.encode(w, item);
+      for (const item of val) itemCodec.encode(w, item);
     },
-    decode(r: IReader) {
+    decode(r) {
       const len = Number(r.readUint32());
       if (len > max) throw new Error(`array length ${len} exceeds max ${max}`);
       const result: T[] = [];
-      for (let i = 0; i < len; i++) result.push(codec.decode(r));
+      for (let i = 0; i < len; i++) result.push(itemCodec.decode(r));
       return result;
     },
   };
 }
 
-export const GasClaim: XdrCodec<proto.GasClaim> = {
-  encode(w: IWriter, val: proto.GasClaim) {
-    proto.ContractAddress.encode(w, val.sponsored_contract);
+const _Calldata: XdrCodec<proto.Calldata> = {
+  encode(w, val) { w.writeVarOpaque(val, 0xFFFFFFFF); },
+  decode(r) { return proto.calldata(r.readVarOpaque(0xFFFFFFFF)); },
+};
+
+const _ReturnBuffer: XdrCodec<proto.ReturnBuffer> = {
+  encode(w, val) { w.writeVarOpaque(val, 1024); },
+  decode(r) { return proto.returnBuffer(r.readVarOpaque(1024)); },
+};
+
+const _GasClaim: XdrCodec<proto.GasClaim> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.sponsored_contract);
     w.writeUint64(val.amount);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      sponsored_contract: proto.ContractAddress.decode(r),
+      sponsored_contract: proto.codec.ContractAddress.decode(r),
       amount: proto.gasAmount(r.readUint64()),
     };
   },
 };
 
-export const Invocation: XdrCodec<proto.Invocation> = {
-  encode(w: IWriter, val: proto.Invocation) {
-    proto.ContractAddress.encode(w, val.invoked_address);
-    proto.ContractEntrypointID.encode(w, val.entrypoint);
+const _Invocation: XdrCodec<proto.Invocation> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.invoked_address);
+    proto.codec.ContractEntrypointID.encode(w, val.entrypoint);
     w.writeUint64(val.gas_limit);
-    proto.Calldata.encode(w, val.calldata);
+    _Calldata.encode(w, val.calldata);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      invoked_address: proto.ContractAddress.decode(r),
-      entrypoint: proto.ContractEntrypointID.decode(r),
+      invoked_address: proto.codec.ContractAddress.decode(r),
+      entrypoint: proto.codec.ContractEntrypointID.decode(r),
       gas_limit: proto.gasAmount(r.readUint64()),
-      calldata: proto.Calldata.decode(r),
+      calldata: _Calldata.decode(r),
     };
   },
 };
 
-export const Uniquifier: XdrCodec<proto.Uniquifier> = {
-  encode(w: IWriter, val: proto.Uniquifier) {
+const _Uniquifier: XdrCodec<proto.Uniquifier> = {
+  encode(w, val) {
     w.writeInt64(val.block_expiry_height);
     w.writeUint64(val.nonce);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
       block_expiry_height: proto.blockHeight(r.readInt64()),
       nonce: r.readUint64(),
@@ -193,78 +193,84 @@ export const Uniquifier: XdrCodec<proto.Uniquifier> = {
   },
 };
 
-export const DecoratedSignature: XdrCodec<proto.DecoratedSignature> = {
-  encode(w: IWriter, val: proto.DecoratedSignature) {
+const _DecoratedSignature: XdrCodec<proto.DecoratedSignature> = {
+  encode(w, val) {
     w.writeUint32(val.auth_claim_idx);
     w.writeUint32(val.public_key_id);
-    proto.Signature.encode(w, val.signature);
+    proto.codec.Signature.encode(w, val.signature);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
       auth_claim_idx: r.readUint32(),
       public_key_id: r.readUint32(),
-      signature: proto.Signature.decode(r),
+      signature: proto.codec.Signature.decode(r),
     };
   },
 };
 
-const ContractArray = varArray(proto.Contract);
-const GasClaimArray = varArray(GasClaim);
-const DecoratedSignatureArray = varArray(DecoratedSignature);
+const GasClaimArray = varArray(_GasClaim);
+const DecoratedSignatureArray = varArray(_DecoratedSignature);
 
-export const Transaction: XdrCodec<proto.Transaction> = {
-  encode(w: IWriter, val: proto.Transaction) {
-    proto.Invocation.encode(w, val.invocation);
-    proto.Uniquifier.encode(w, val.uniquifier);
+// ContractArray and QueueEntryArray reference proto.codec.* which is resolved
+// lazily inside encode/decode — safe despite circular module deps.
+const ContractArray: XdrCodec<proto.Contract[]> = {
+  encode(w, val) { varArray(proto.codec.Contract).encode(w, val); },
+  decode(r) { return varArray(proto.codec.Contract).decode(r); },
+};
+
+const _Transaction: XdrCodec<proto.Transaction> = {
+  encode(w, val) {
+    _Invocation.encode(w, val.invocation);
+    _Uniquifier.encode(w, val.uniquifier);
     ContractArray.encode(w, val.contracts_to_deploy);
-    proto.AuthClaimData.encode(w, val.auth_claims);
+    proto.codec.AuthClaimData.encode(w, val.auth_claims);
     GasClaimArray.encode(w, val.gas_claims);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      invocation: proto.Invocation.decode(r),
-      uniquifier: proto.Uniquifier.decode(r),
+      invocation: _Invocation.decode(r),
+      uniquifier: _Uniquifier.decode(r),
       contracts_to_deploy: ContractArray.decode(r),
-      auth_claims: proto.AuthClaimData.decode(r),
+      auth_claims: proto.codec.AuthClaimData.decode(r),
       gas_claims: GasClaimArray.decode(r),
     };
   },
 };
 
-export const SignedTransaction: XdrCodec<proto.SignedTransaction> = {
-  encode(w: IWriter, val: proto.SignedTransaction) {
-    proto.Transaction.encode(w, val.tx);
+const _SignedTransaction: XdrCodec<proto.SignedTransaction> = {
+  encode(w, val) {
+    _Transaction.encode(w, val.tx);
     DecoratedSignatureArray.encode(w, val.signatures);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      tx: proto.Transaction.decode(r),
+      tx: _Transaction.decode(r),
       signatures: DecoratedSignatureArray.decode(r),
     };
   },
 };
 
-export const InvocationFrameOutput: XdrCodec<proto.InvocationFrameOutput> = {
-  encode(w: IWriter, val: proto.InvocationFrameOutput) {
+const _InvocationFrameOutput: XdrCodec<proto.InvocationFrameOutput> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.status_code));
     switch (val.status_code) {
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeReturn:
-        proto.ReturnBuffer.encode(w, val.return_buffer);
+        _ReturnBuffer.encode(w, val.return_buffer);
         break;
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeAbort:
-        proto.ReturnBuffer.encode(w, val.abort_buffer);
+        _ReturnBuffer.encode(w, val.abort_buffer);
         break;
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeFault:
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const status_code = Number(r.readInt32());
     switch (status_code) {
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeReturn:
-        return { status_code, return_buffer: proto.ReturnBuffer.decode(r) };
+        return { status_code, return_buffer: _ReturnBuffer.decode(r) };
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeAbort:
-        return { status_code, abort_buffer: proto.ReturnBuffer.decode(r) };
+        return { status_code, abort_buffer: _ReturnBuffer.decode(r) };
       case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeFault:
         return { status_code };
       default:
@@ -273,19 +279,18 @@ export const InvocationFrameOutput: XdrCodec<proto.InvocationFrameOutput> = {
   },
 };
 
-const QueueEntryCodec: XdrCodec<proto.QueueEntry> = {
-  encode(w: IWriter, val: proto.QueueEntry) { w.writeVarOpaque(val, 256); },
-  decode(r: IReader) { return proto.queueEntry(r.readVarOpaque(256)); },
+const QueueEntryArray: XdrCodec<proto.QueueEntry[]> = {
+  encode(w, val) { varArray(proto.codec.QueueEntry).encode(w, val); },
+  decode(r) { return varArray(proto.codec.QueueEntry).decode(r); },
 };
-const QueueEntryArray = varArray(QueueEntryCodec);
 
-export const NondeterministicProposalData: XdrCodec<proto.NondeterministicProposalData> = {
-  encode(w: IWriter, val: proto.NondeterministicProposalData) {
+const _NondeterministicProposalData: XdrCodec<proto.NondeterministicProposalData> = {
+  encode(w, val) {
     w.writeVarOpaque(val.nondeterministic_bits, 0xFFFFFFFF);
     w.writeUint32(val.nondeterministic_bit_count);
     QueueEntryArray.encode(w, val.observed_queue_entry_sequence);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
       nondeterministic_bits: r.readVarOpaque(0xFFFFFFFF),
       nondeterministic_bit_count: r.readUint32(),
@@ -294,15 +299,29 @@ export const NondeterministicProposalData: XdrCodec<proto.NondeterministicPropos
   },
 };
 
-export const ProposedTransaction: XdrCodec<proto.ProposedTransaction> = {
-  encode(w: IWriter, val: proto.ProposedTransaction) {
-    proto.SignedTransaction.encode(w, val.signed_tx);
-    proto.NondeterministicProposalData.encode(w, val.nondeterministic_proposal_data);
+const _ProposedTransaction: XdrCodec<proto.ProposedTransaction> = {
+  encode(w, val) {
+    _SignedTransaction.encode(w, val.signed_tx);
+    _NondeterministicProposalData.encode(w, val.nondeterministic_proposal_data);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      signed_tx: proto.SignedTransaction.decode(r),
-      nondeterministic_proposal_data: proto.NondeterministicProposalData.decode(r),
+      signed_tx: _SignedTransaction.decode(r),
+      nondeterministic_proposal_data: _NondeterministicProposalData.decode(r),
     };
   },
 };
+
+export const codec = {
+  Calldata: _Calldata,
+  ReturnBuffer: _ReturnBuffer,
+  GasClaim: _GasClaim,
+  Invocation: _Invocation,
+  Uniquifier: _Uniquifier,
+  DecoratedSignature: _DecoratedSignature,
+  Transaction: _Transaction,
+  SignedTransaction: _SignedTransaction,
+  InvocationFrameOutput: _InvocationFrameOutput,
+  NondeterministicProposalData: _NondeterministicProposalData,
+  ProposedTransaction: _ProposedTransaction,
+} as const;

@@ -1,6 +1,6 @@
 // -*- TypeScript -*-
 // Generated from auth_claim.x — DO NOT EDIT
-import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+import { type XdrCodec } from "../xdr/codec.js";
 import * as proto from "./index.js";
 
 // ============================================================================
@@ -89,18 +89,18 @@ export type AuthClaimData = proto.AuthClaim[];
 // XDR Codecs
 // ============================================================================
 
-export const PubkeyAccountPreimage: XdrCodec<proto.PubkeyAccountPreimage> = {
-  encode(w: IWriter, val: proto.PubkeyAccountPreimage) {
-    proto.PublicKey.encode(w, val.pubkey);
+const _PubkeyAccountPreimage: XdrCodec<proto.PubkeyAccountPreimage> = {
+  encode(w, val) {
+    proto.codec.PublicKey.encode(w, val.pubkey);
     w.writeUint64(val.nonce);
   },
-  decode(r: IReader) {
-    return { pubkey: proto.PublicKey.decode(r), nonce: r.readUint64() };
+  decode(r) {
+    return { pubkey: proto.codec.PublicKey.decode(r), nonce: r.readUint64() };
   },
 };
 
-export const AuthClaim: XdrCodec<proto.AuthClaim> = {
-  encode(w: IWriter, val: proto.AuthClaim) {
+const _AuthClaim: XdrCodec<proto.AuthClaim> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.claim_type));
     switch (val.claim_type) {
       case proto.AuthClaimType.kInvokedAddressSignature:
@@ -111,20 +111,20 @@ export const AuthClaim: XdrCodec<proto.AuthClaim> = {
         w.writeUint32(val.invoked_address_signed_weight.required_weight);
         break;
       case proto.AuthClaimType.kOtherAddressSignature:
-        proto.ContractAddress.encode(w, val.other_address_signature_id.address);
+        proto.codec.ContractAddress.encode(w, val.other_address_signature_id.address);
         w.writeUint32(val.other_address_signature_id.key_id);
         break;
       case proto.AuthClaimType.kOtherAddressSignedWeight:
-        proto.ContractAddress.encode(w, val.other_address_signed_weight.address);
+        proto.codec.ContractAddress.encode(w, val.other_address_signed_weight.address);
         w.writeUint32(val.other_address_signed_weight.accepted_keys);
         w.writeUint32(val.other_address_signed_weight.required_weight);
         break;
       case proto.AuthClaimType.kPubkeySignature:
-        proto.PubkeyAccountPreimage.encode(w, val.pubkey_preimage);
+        _PubkeyAccountPreimage.encode(w, val.pubkey_preimage);
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const claim_type = Number(r.readInt32());
     switch (claim_type) {
       case proto.AuthClaimType.kInvokedAddressSignature:
@@ -141,7 +141,7 @@ export const AuthClaim: XdrCodec<proto.AuthClaim> = {
         return {
           claim_type,
           other_address_signature_id: {
-            address: proto.ContractAddress.decode(r),
+            address: proto.codec.ContractAddress.decode(r),
             key_id: proto.keyID(r.readUint32()),
           },
         };
@@ -149,30 +149,36 @@ export const AuthClaim: XdrCodec<proto.AuthClaim> = {
         return {
           claim_type,
           other_address_signed_weight: {
-            address: proto.ContractAddress.decode(r),
+            address: proto.codec.ContractAddress.decode(r),
             accepted_keys: proto.bitMap(r.readUint32()),
             required_weight: proto.weight(r.readUint32()),
           },
         };
       case proto.AuthClaimType.kPubkeySignature:
-        return { claim_type, pubkey_preimage: proto.PubkeyAccountPreimage.decode(r) };
+        return { claim_type, pubkey_preimage: _PubkeyAccountPreimage.decode(r) };
       default:
         throw new Error(`Unknown AuthClaimType: ${claim_type}`);
     }
   },
 };
 
-export const AuthClaimData: XdrCodec<proto.AuthClaimData> = {
-  encode(w: IWriter, val: proto.AuthClaimData) {
+const _AuthClaimData: XdrCodec<proto.AuthClaimData> = {
+  encode(w, val) {
     if (val.length > Number(proto.kMaxAuthClaims)) throw new Error(`AuthClaimData length ${val.length} exceeds max ${proto.kMaxAuthClaims}`);
     w.writeUint32(BigInt(val.length));
-    for (const item of val) proto.AuthClaim.encode(w, item);
+    for (const item of val) _AuthClaim.encode(w, item);
   },
-  decode(r: IReader) {
+  decode(r) {
     const len = Number(r.readUint32());
     if (len > Number(proto.kMaxAuthClaims)) throw new Error(`AuthClaimData length ${len} exceeds max ${proto.kMaxAuthClaims}`);
     const result: proto.AuthClaimData = [];
-    for (let i = 0; i < len; i++) result.push(proto.AuthClaim.decode(r));
+    for (let i = 0; i < len; i++) result.push(_AuthClaim.decode(r));
     return result;
   },
 };
+
+export const codec = {
+  PubkeyAccountPreimage: _PubkeyAccountPreimage,
+  AuthClaim: _AuthClaim,
+  AuthClaimData: _AuthClaimData,
+} as const;

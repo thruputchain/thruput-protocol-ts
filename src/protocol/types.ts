@@ -1,11 +1,21 @@
 // -*- TypeScript -*-
-// Generated from types.x — DO NOT EDIT
-import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+// Generated Code: DO NOT CHECK IN
+
+// Generated from x23c commit: 3f9085a9d256ce71dd85566a4608e897076b5424
+
+import type { XdrCodec } from "../xdr/codec.js";
 import * as proto from "./index.js";
 
-// ============================================================================
-// Branded bigint types
-// ============================================================================
+
+export interface uint128_xdr {
+  highbits: bigint;
+  lowbits: bigint;
+}
+
+export interface int128_xdr {
+  highbits: bigint;
+  lowbits: bigint;
+}
 
 export type TimePoint = bigint & { readonly __brand: "TimePoint" };
 export function timePoint(val: bigint): TimePoint {
@@ -21,15 +31,6 @@ export type GasAmount = bigint & { readonly __brand: "GasAmount" };
 export function gasAmount(val: bigint): GasAmount {
   return val as GasAmount;
 }
-
-export type BlockHeight = bigint & { readonly __brand: "BlockHeight" };
-export function blockHeight(val: bigint): BlockHeight {
-  return val as BlockHeight;
-}
-
-// ============================================================================
-// Branded Uint8Array types (fixed-size opaque newtypes)
-// ============================================================================
 
 export type Ed25519Signature = Uint8Array & { readonly __brand: "Ed25519Signature" };
 export function ed25519Signature(data: Uint8Array): Ed25519Signature {
@@ -49,55 +50,9 @@ export function ed25519SecretKey(data: Uint8Array): Ed25519SecretKey {
   return data as Ed25519SecretKey;
 }
 
-export type SHA256Hash = Uint8Array & { readonly __brand: "SHA256Hash" };
-export function sha256Hash(data: Uint8Array): SHA256Hash {
-  if (data.length !== 32) throw new Error(`SHA256Hash must be exactly 32 bytes, got ${data.length}`);
-  return data as SHA256Hash;
-}
-
-export type DbHash = Uint8Array & { readonly __brand: "DbHash" };
-export function dbHash(data: Uint8Array): DbHash {
-  if (data.length !== 2048) throw new Error(`DbHash must be exactly 2048 bytes, got ${data.length}`);
-  return data as DbHash;
-}
-
-export type BlockHash = SHA256Hash & { readonly __brand: "BlockHash" };
-export function blockHash(data: Uint8Array): BlockHash {
-  if (data.length !== 32) throw new Error(`BlockHash must be exactly 32 bytes, got ${data.length}`);
-  return data as BlockHash;
-}
-
-export type ContractAddress = Uint8Array & { readonly __brand: "ContractAddress" };
-export function contractAddress(data: Uint8Array): ContractAddress {
-  if (data.length !== 32) throw new Error(`ContractAddress must be exactly 32 bytes, got ${data.length}`);
-  return data as ContractAddress;
-}
-
-export type StorageKeyContractData = Uint8Array & { readonly __brand: "StorageKeyContractData" };
-export function storageKeyContractData(data: Uint8Array): StorageKeyContractData {
-  if (data.length !== 32) throw new Error(`StorageKeyContractData must be exactly 32 bytes, got ${data.length}`);
-  return data as StorageKeyContractData;
-}
-
-// ============================================================================
-// Enums
-// ============================================================================
-
 export enum CryptographicScheme {
   Ed25519 = 0,
 }
-
-export enum StorageKeyType {
-  kStorageKeyTypeContractData = 0,
-  kStorageKeyTypeFreeNativeTokenBalance = 1,
-  kStorageKeyTypeAddressAuthData = 2,
-  kStorageKeyTypeAddressMetadata = 3,
-  kStorageKeyTypeReplayCache = 4,
-}
-
-// ============================================================================
-// Unions
-// ============================================================================
 
 export type Signature =
   | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519Signature }
@@ -115,6 +70,43 @@ export type ExtensionPoint =
   | { v: 0 }
 ;
 
+export type SHA256Hash = Uint8Array & { readonly __brand: "SHA256Hash" };
+export function sha256Hash(data: Uint8Array): SHA256Hash {
+  if (data.length !== 32) throw new Error(`SHA256Hash must be exactly 32 bytes, got ${data.length}`);
+  return data as SHA256Hash;
+}
+
+export type DbHash = Uint8Array & { readonly __brand: "DbHash" };
+export function dbHash(data: Uint8Array): DbHash {
+  if (data.length !== 2048) throw new Error(`DbHash must be exactly 2048 bytes, got ${data.length}`);
+  return data as DbHash;
+}
+
+export type BlockHash = proto.SHA256Hash & { readonly __brand: "BlockHash" };
+export function blockHash(val: proto.SHA256Hash): BlockHash {
+  return val as BlockHash;
+}
+
+export type ContractAddress = Uint8Array & { readonly __brand: "ContractAddress" };
+export function contractAddress(data: Uint8Array): ContractAddress {
+  if (data.length !== 32) throw new Error(`ContractAddress must be exactly 32 bytes, got ${data.length}`);
+  return data as ContractAddress;
+}
+
+export enum StorageKeyType {
+  kStorageKeyTypeContractData = 0,
+  kStorageKeyTypeFreeNativeTokenBalance = 1,
+  kStorageKeyTypeAddressAuthData = 2,
+  kStorageKeyTypeAddressMetadata = 3,
+  kStorageKeyTypeReplayCache = 4,
+}
+
+export type StorageKeyContractData = Uint8Array & { readonly __brand: "StorageKeyContractData" };
+export function storageKeyContractData(data: Uint8Array): StorageKeyContractData {
+  if (data.length !== 32) throw new Error(`StorageKeyContractData must be exactly 32 bytes, got ${data.length}`);
+  return data as StorageKeyContractData;
+}
+
 export type StorageKey =
   | { key_type: proto.StorageKeyType.kStorageKeyTypeContractData; contract_data_key: proto.StorageKeyContractData }
   | { key_type: proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance }
@@ -123,167 +115,202 @@ export type StorageKey =
   | { key_type: proto.StorageKeyType.kStorageKeyTypeReplayCache }
 ;
 
-// ============================================================================
-// Structs
-// ============================================================================
+export const kTotalHogSupply = 62_500_000_000n;
+
+export const kHogDivisibility = 10_000_000n;
 
 export interface AddressAndKey {
   address: proto.ContractAddress;
   key: proto.StorageKey;
 }
 
-// ============================================================================
-// Constants
-// ============================================================================
+export type BlockHeight = bigint & { readonly __brand: "BlockHeight" };
+export function blockHeight(val: bigint): BlockHeight {
+  return val as BlockHeight;
+}
 
-export const kTotalHogSupply = 62_500_000_000n;
-export const kHogDivisibility = 10_000_000n;
 
-// ============================================================================
-// XDR Codecs
-// ============================================================================
+//
+// XDR Codecs below this point
+//
 
-export const TimePoint: XdrCodec<proto.TimePoint> = {
-  encode(w: IWriter, val: proto.TimePoint) { w.writeUint64(val); },
-  decode(r: IReader) { return proto.timePoint(r.readUint64()); },
+const _uint128_xdr: XdrCodec<uint128_xdr> = {
+  encode(w, val) {
+    w.writeUint64(val.highbits);
+    w.writeUint64(val.lowbits);
+  },
+  decode(r) {
+    const highbits = r.readUint64();
+    const lowbits = r.readUint64();
+    return { highbits, lowbits };
+  },
 };
 
-export const RuntimeMemoryLength: XdrCodec<proto.RuntimeMemoryLength> = {
-  encode(w: IWriter, val: proto.RuntimeMemoryLength) { w.writeUint32(val); },
-  decode(r: IReader) { return proto.runtimeMemoryLength(r.readUint32()); },
+const _int128_xdr: XdrCodec<int128_xdr> = {
+  encode(w, val) {
+    w.writeInt64(val.highbits);
+    w.writeUint64(val.lowbits);
+  },
+  decode(r) {
+    const highbits = r.readInt64();
+    const lowbits = r.readUint64();
+    return { highbits, lowbits };
+  },
 };
 
-export const GasAmount: XdrCodec<proto.GasAmount> = {
-  encode(w: IWriter, val: proto.GasAmount) { w.writeUint64(val); },
-  decode(r: IReader) { return proto.gasAmount(r.readUint64()); },
+const _TimePoint: XdrCodec<TimePoint> = {
+  encode(w, val) { w.writeUint64(val); },
+  decode(r) { return timePoint(r.readUint64()); },
 };
 
-export const BlockHeight: XdrCodec<proto.BlockHeight> = {
-  encode(w: IWriter, val: proto.BlockHeight) { w.writeInt64(val); },
-  decode(r: IReader) { return proto.blockHeight(r.readInt64()); },
+const _RuntimeMemoryLength: XdrCodec<RuntimeMemoryLength> = {
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return runtimeMemoryLength(r.readUint32()); },
 };
 
-export const Ed25519Signature: XdrCodec<proto.Ed25519Signature> = {
-  encode(w: IWriter, val: proto.Ed25519Signature) { w.writeFixedOpaque(val, 64); },
-  decode(r: IReader) { return proto.ed25519Signature(r.readFixedOpaque(64)); },
+const _GasAmount: XdrCodec<GasAmount> = {
+  encode(w, val) { w.writeUint64(val); },
+  decode(r) { return gasAmount(r.readUint64()); },
 };
 
-export const Ed25519PublicKey: XdrCodec<proto.Ed25519PublicKey> = {
-  encode(w: IWriter, val: proto.Ed25519PublicKey) { w.writeFixedOpaque(val, 32); },
-  decode(r: IReader) { return proto.ed25519PublicKey(r.readFixedOpaque(32)); },
+const _Ed25519Signature: XdrCodec<Ed25519Signature> = {
+  encode(w, val) { w.writeFixedOpaque(val, 64); },
+  decode(r) { return ed25519Signature(r.readFixedOpaque(64)); },
 };
 
-export const Ed25519SecretKey: XdrCodec<proto.Ed25519SecretKey> = {
-  encode(w: IWriter, val: proto.Ed25519SecretKey) { w.writeFixedOpaque(val, 64); },
-  decode(r: IReader) { return proto.ed25519SecretKey(r.readFixedOpaque(64)); },
+const _Ed25519PublicKey: XdrCodec<Ed25519PublicKey> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return ed25519PublicKey(r.readFixedOpaque(32)); },
 };
 
-export const SHA256Hash: XdrCodec<proto.SHA256Hash> = {
-  encode(w: IWriter, val: proto.SHA256Hash) { w.writeFixedOpaque(val, 32); },
-  decode(r: IReader) { return proto.sha256Hash(r.readFixedOpaque(32)); },
+const _Ed25519SecretKey: XdrCodec<Ed25519SecretKey> = {
+  encode(w, val) { w.writeFixedOpaque(val, 64); },
+  decode(r) { return ed25519SecretKey(r.readFixedOpaque(64)); },
 };
 
-export const DbHash: XdrCodec<proto.DbHash> = {
-  encode(w: IWriter, val: proto.DbHash) { w.writeFixedOpaque(val, 2048); },
-  decode(r: IReader) { return proto.dbHash(r.readFixedOpaque(2048)); },
+const _CryptographicScheme: XdrCodec<CryptographicScheme> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as CryptographicScheme; },
 };
 
-export const BlockHash: XdrCodec<proto.BlockHash> = {
-  encode(w: IWriter, val: proto.BlockHash) { w.writeFixedOpaque(val, 32); },
-  decode(r: IReader) { return proto.blockHash(r.readFixedOpaque(32)); },
-};
-
-export const ContractAddress: XdrCodec<proto.ContractAddress> = {
-  encode(w: IWriter, val: proto.ContractAddress) { w.writeFixedOpaque(val, 32); },
-  decode(r: IReader) { return proto.contractAddress(r.readFixedOpaque(32)); },
-};
-
-export const StorageKeyContractData: XdrCodec<proto.StorageKeyContractData> = {
-  encode(w: IWriter, val: proto.StorageKeyContractData) { w.writeFixedOpaque(val, 32); },
-  decode(r: IReader) { return proto.storageKeyContractData(r.readFixedOpaque(32)); },
-};
-
-export const Signature: XdrCodec<proto.Signature> = {
-  encode(w: IWriter, val: proto.Signature) {
+const _Signature: XdrCodec<Signature> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
       case proto.CryptographicScheme.Ed25519:
-        proto.Ed25519Signature.encode(w, val.ed25519);
+        proto.codec.Ed25519Signature.encode(w, val.ed25519);
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const scheme = Number(r.readInt32());
     switch (scheme) {
       case proto.CryptographicScheme.Ed25519:
-        return { scheme, ed25519: proto.Ed25519Signature.decode(r) };
+        const ed25519 = proto.codec.Ed25519Signature.decode(r);
+        return { scheme, ed25519 };
       default:
-        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+        throw new Error(`Unknown Signature discriminant: ${scheme}`);
     }
   },
 };
 
-export const PublicKey: XdrCodec<proto.PublicKey> = {
-  encode(w: IWriter, val: proto.PublicKey) {
+const _PublicKey: XdrCodec<PublicKey> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
       case proto.CryptographicScheme.Ed25519:
-        proto.Ed25519PublicKey.encode(w, val.ed25519);
+        proto.codec.Ed25519PublicKey.encode(w, val.ed25519);
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const scheme = Number(r.readInt32());
     switch (scheme) {
       case proto.CryptographicScheme.Ed25519:
-        return { scheme, ed25519: proto.Ed25519PublicKey.decode(r) };
+        const ed25519 = proto.codec.Ed25519PublicKey.decode(r);
+        return { scheme, ed25519 };
       default:
-        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+        throw new Error(`Unknown PublicKey discriminant: ${scheme}`);
     }
   },
 };
 
-export const SecretKey: XdrCodec<proto.SecretKey> = {
-  encode(w: IWriter, val: proto.SecretKey) {
+const _SecretKey: XdrCodec<SecretKey> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
       case proto.CryptographicScheme.Ed25519:
-        proto.Ed25519SecretKey.encode(w, val.ed25519);
+        proto.codec.Ed25519SecretKey.encode(w, val.ed25519);
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const scheme = Number(r.readInt32());
     switch (scheme) {
       case proto.CryptographicScheme.Ed25519:
-        return { scheme, ed25519: proto.Ed25519SecretKey.decode(r) };
+        const ed25519 = proto.codec.Ed25519SecretKey.decode(r);
+        return { scheme, ed25519 };
       default:
-        throw new Error(`Unknown CryptographicScheme: ${scheme}`);
+        throw new Error(`Unknown SecretKey discriminant: ${scheme}`);
     }
   },
 };
 
-export const ExtensionPoint: XdrCodec<proto.ExtensionPoint> = {
-  encode(w: IWriter, val: proto.ExtensionPoint) {
+const _ExtensionPoint: XdrCodec<ExtensionPoint> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.v));
+    switch (val.v) {
+      case 0:
+        break;
+    }
   },
-  decode(r: IReader) {
+  decode(r) {
     const v = Number(r.readInt32());
     switch (v) {
       case 0:
-        return { v } as proto.ExtensionPoint;
+        return { v } as ExtensionPoint;
       default:
         throw new Error(`Unknown ExtensionPoint discriminant: ${v}`);
     }
   },
 };
 
-export const StorageKey: XdrCodec<proto.StorageKey> = {
-  encode(w: IWriter, val: proto.StorageKey) {
+const _SHA256Hash: XdrCodec<SHA256Hash> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return sha256Hash(r.readFixedOpaque(32)); },
+};
+
+const _DbHash: XdrCodec<DbHash> = {
+  encode(w, val) { w.writeFixedOpaque(val, 2048); },
+  decode(r) { return dbHash(r.readFixedOpaque(2048)); },
+};
+
+const _BlockHash: XdrCodec<BlockHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return blockHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
+const _ContractAddress: XdrCodec<ContractAddress> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return contractAddress(r.readFixedOpaque(32)); },
+};
+
+const _StorageKeyType: XdrCodec<StorageKeyType> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as StorageKeyType; },
+};
+
+const _StorageKeyContractData: XdrCodec<StorageKeyContractData> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return storageKeyContractData(r.readFixedOpaque(32)); },
+};
+
+const _StorageKey: XdrCodec<StorageKey> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.key_type));
     switch (val.key_type) {
       case proto.StorageKeyType.kStorageKeyTypeContractData:
-        proto.StorageKeyContractData.encode(w, val.contract_data_key);
+        proto.codec.StorageKeyContractData.encode(w, val.contract_data_key);
         break;
       case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
         break;
@@ -295,34 +322,65 @@ export const StorageKey: XdrCodec<proto.StorageKey> = {
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const key_type = Number(r.readInt32());
     switch (key_type) {
       case proto.StorageKeyType.kStorageKeyTypeContractData:
-        return { key_type, contract_data_key: proto.StorageKeyContractData.decode(r) };
+        const contract_data_key = proto.codec.StorageKeyContractData.decode(r);
+        return { key_type, contract_data_key };
       case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
-        return { key_type } as proto.StorageKey;
+        return { key_type } as StorageKey;
       case proto.StorageKeyType.kStorageKeyTypeAddressAuthData:
-        return { key_type } as proto.StorageKey;
+        return { key_type } as StorageKey;
       case proto.StorageKeyType.kStorageKeyTypeAddressMetadata:
-        return { key_type } as proto.StorageKey;
+        return { key_type } as StorageKey;
       case proto.StorageKeyType.kStorageKeyTypeReplayCache:
-        return { key_type } as proto.StorageKey;
+        return { key_type } as StorageKey;
       default:
-        throw new Error(`Unknown StorageKeyType: ${key_type}`);
+        throw new Error(`Unknown StorageKey discriminant: ${key_type}`);
     }
   },
 };
 
-export const AddressAndKey: XdrCodec<proto.AddressAndKey> = {
-  encode(w: IWriter, val: proto.AddressAndKey) {
-    proto.ContractAddress.encode(w, val.address);
-    proto.StorageKey.encode(w, val.key);
+const _AddressAndKey: XdrCodec<AddressAndKey> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.address);
+    proto.codec.StorageKey.encode(w, val.key);
   },
-  decode(r: IReader) {
-    return {
-      address: proto.ContractAddress.decode(r),
-      key: proto.StorageKey.decode(r),
-    };
+  decode(r) {
+    const address = proto.codec.ContractAddress.decode(r);
+    const key = proto.codec.StorageKey.decode(r);
+    return { address, key };
   },
 };
+
+const _BlockHeight: XdrCodec<BlockHeight> = {
+  encode(w, val) { w.writeInt64(val); },
+  decode(r) { return blockHeight(r.readInt64()); },
+};
+
+export const codec = {
+  uint128_xdr: _uint128_xdr,
+  int128_xdr: _int128_xdr,
+  TimePoint: _TimePoint,
+  RuntimeMemoryLength: _RuntimeMemoryLength,
+  GasAmount: _GasAmount,
+  Ed25519Signature: _Ed25519Signature,
+  Ed25519PublicKey: _Ed25519PublicKey,
+  Ed25519SecretKey: _Ed25519SecretKey,
+  CryptographicScheme: _CryptographicScheme,
+  Signature: _Signature,
+  PublicKey: _PublicKey,
+  SecretKey: _SecretKey,
+  ExtensionPoint: _ExtensionPoint,
+  SHA256Hash: _SHA256Hash,
+  DbHash: _DbHash,
+  BlockHash: _BlockHash,
+  ContractAddress: _ContractAddress,
+  StorageKeyType: _StorageKeyType,
+  StorageKeyContractData: _StorageKeyContractData,
+  StorageKey: _StorageKey,
+  AddressAndKey: _AddressAndKey,
+  BlockHeight: _BlockHeight,
+} as const;
+

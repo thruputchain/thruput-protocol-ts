@@ -1,6 +1,6 @@
 // -*- TypeScript -*-
 // Generated from contract.x — DO NOT EDIT
-import { type XdrCodec, type IWriter, type IReader } from "../xdr/codec.js";
+import { type XdrCodec } from "../xdr/codec.js";
 import * as proto from "./index.js";
 
 // ============================================================================
@@ -76,32 +76,32 @@ export type Contract =
 // XDR Codecs
 // ============================================================================
 
-export const ContractEntrypointID: XdrCodec<proto.ContractEntrypointID> = {
-  encode(w: IWriter, val: proto.ContractEntrypointID) { w.writeFixedOpaque(val, 8); },
-  decode(r: IReader) { return proto.contractEntrypointID(r.readFixedOpaque(8)); },
+const _ContractEntrypointID: XdrCodec<proto.ContractEntrypointID> = {
+  encode(w, val) { w.writeFixedOpaque(val, 8); },
+  decode(r) { return proto.contractEntrypointID(r.readFixedOpaque(8)); },
 };
 
-export const Identifier: XdrCodec<proto.Identifier> = {
-  encode(w: IWriter, val: proto.Identifier) { w.writeString(val, 0xFFFFFFFF); },
-  decode(r: IReader) { return proto.identifier(r.readString(0xFFFFFFFF)); },
+const _Identifier: XdrCodec<proto.Identifier> = {
+  encode(w, val) { w.writeString(val, 0xFFFFFFFF); },
+  decode(r) { return proto.identifier(r.readString(0xFFFFFFFF)); },
 };
 
-export const SemVer: XdrCodec<proto.SemVer> = {
-  encode(w: IWriter, val: proto.SemVer) { w.writeString(val, 0xFFFFFFFF); },
-  decode(r: IReader) { return proto.semVer(r.readString(0xFFFFFFFF)); },
+const _SemVer: XdrCodec<proto.SemVer> = {
+  encode(w, val) { w.writeString(val, 0xFFFFFFFF); },
+  decode(r) { return proto.semVer(r.readString(0xFFFFFFFF)); },
 };
 
-export const ContractBlob: XdrCodec<proto.ContractBlob> = {
-  encode(w: IWriter, val: proto.ContractBlob) { w.writeVarOpaque(val.wasm, 0xFFFFFFFF); },
-  decode(r: IReader) { return { wasm: r.readVarOpaque(0xFFFFFFFF) }; },
+const _ContractBlob: XdrCodec<proto.ContractBlob> = {
+  encode(w, val) { w.writeVarOpaque(val.wasm, 0xFFFFFFFF); },
+  decode(r) { return { wasm: r.readVarOpaque(0xFFFFFFFF) }; },
 };
 
-export const Contract: XdrCodec<proto.Contract> = {
-  encode(w: IWriter, val: proto.Contract) {
+const _Contract: XdrCodec<proto.Contract> = {
+  encode(w, val) {
     w.writeInt32(BigInt(val.contract_type));
     switch (val.contract_type) {
       case proto.ContractType.kWasmi:
-        proto.ContractBlob.encode(w, val.wasmi_contract);
+        _ContractBlob.encode(w, val.wasmi_contract);
         break;
       case proto.ContractType.kNative:
         w.writeInt32(BigInt(val.native_contract_id));
@@ -111,11 +111,11 @@ export const Contract: XdrCodec<proto.Contract> = {
         break;
     }
   },
-  decode(r: IReader) {
+  decode(r) {
     const contract_type = Number(r.readInt32());
     switch (contract_type) {
       case proto.ContractType.kWasmi:
-        return { contract_type, wasmi_contract: proto.ContractBlob.decode(r) };
+        return { contract_type, wasmi_contract: _ContractBlob.decode(r) };
       case proto.ContractType.kNative:
         return { contract_type, native_contract_id: Number(r.readInt32()) as proto.HogexecPrecompiledNativeContracts };
       case proto.ContractType.kMockTest:
@@ -126,47 +126,59 @@ export const Contract: XdrCodec<proto.Contract> = {
   },
 };
 
-export const ContractDeploymentHashPreimage: XdrCodec<proto.ContractDeploymentHashPreimage> = {
-  encode(w: IWriter, val: proto.ContractDeploymentHashPreimage) {
-    proto.ContractAddress.encode(w, val.deployer_address);
-    proto.SHA256Hash.encode(w, val.nonce);
-    proto.SHA256Hash.encode(w, val.contract_hash);
+const _ContractDeploymentHashPreimage: XdrCodec<proto.ContractDeploymentHashPreimage> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.deployer_address);
+    proto.codec.SHA256Hash.encode(w, val.nonce);
+    proto.codec.SHA256Hash.encode(w, val.contract_hash);
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      deployer_address: proto.ContractAddress.decode(r),
-      nonce: proto.SHA256Hash.decode(r),
-      contract_hash: proto.SHA256Hash.decode(r),
+      deployer_address: proto.codec.ContractAddress.decode(r),
+      nonce: proto.codec.SHA256Hash.decode(r),
+      contract_hash: proto.codec.SHA256Hash.decode(r),
     };
   },
 };
 
-export const ContractInterfaceIDPreimage: XdrCodec<proto.ContractInterfaceIDPreimage> = {
-  encode(w: IWriter, val: proto.ContractInterfaceIDPreimage) {
-    proto.Identifier.encode(w, val.name);
-    proto.SemVer.encode(w, val.vers);
+const _ContractInterfaceIDPreimage: XdrCodec<proto.ContractInterfaceIDPreimage> = {
+  encode(w, val) {
+    _Identifier.encode(w, val.name);
+    _SemVer.encode(w, val.vers);
   },
-  decode(r: IReader) {
-    return { name: proto.Identifier.decode(r), vers: proto.SemVer.decode(r) };
+  decode(r) {
+    return { name: _Identifier.decode(r), vers: _SemVer.decode(r) };
   },
 };
 
-export const DeployedContractHash: XdrCodec<proto.DeployedContractHash> = {
-  encode(w: IWriter, val: proto.DeployedContractHash) {
-    proto.SHA256Hash.encode(w, val.hash);
+const _DeployedContractHash: XdrCodec<proto.DeployedContractHash> = {
+  encode(w, val) {
+    proto.codec.SHA256Hash.encode(w, val.hash);
     w.writeUint32(val.contract_size);
     w.writeInt32(BigInt(val.contract_type));
   },
-  decode(r: IReader) {
+  decode(r) {
     return {
-      hash: proto.SHA256Hash.decode(r),
+      hash: proto.codec.SHA256Hash.decode(r),
       contract_size: r.readUint32(),
       contract_type: Number(r.readInt32()) as proto.ContractType,
     };
   },
 };
 
-export const AddressMetadata: XdrCodec<proto.AddressMetadata> = {
-  encode(w: IWriter, val: proto.AddressMetadata) { proto.DeployedContractHash.encode(w, val.deployed_contract); },
-  decode(r: IReader) { return { deployed_contract: proto.DeployedContractHash.decode(r) }; },
+const _AddressMetadata: XdrCodec<proto.AddressMetadata> = {
+  encode(w, val) { _DeployedContractHash.encode(w, val.deployed_contract); },
+  decode(r) { return { deployed_contract: _DeployedContractHash.decode(r) }; },
 };
+
+export const codec = {
+  ContractEntrypointID: _ContractEntrypointID,
+  Identifier: _Identifier,
+  SemVer: _SemVer,
+  ContractBlob: _ContractBlob,
+  Contract: _Contract,
+  ContractDeploymentHashPreimage: _ContractDeploymentHashPreimage,
+  ContractInterfaceIDPreimage: _ContractInterfaceIDPreimage,
+  DeployedContractHash: _DeployedContractHash,
+  AddressMetadata: _AddressMetadata,
+} as const;
