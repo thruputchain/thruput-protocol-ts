@@ -7,7 +7,7 @@
 // The types/codecs section is identical to the existing codegen.
 // The new part is the RpcProgramMeta at the bottom.
 
-import type { XdrCodec } from "@groundhog/protocol";
+import { type XdrCodec, VoidCodec } from "@groundhog/protocol";
 import * as proto from "./index.js";
 
 // ============================================================================
@@ -122,12 +122,6 @@ export const codec = {
 
 import type { RpcProgramMeta } from "../onc/client.js";
 
-// Void codec for methods with void request or response
-const _Void: XdrCodec<void> = {
-  encode() {},
-  decode() {},
-};
-
 /**
  * ONC-RPC program metadata for the Wallet service.
  *
@@ -157,7 +151,7 @@ export const WalletProgram: RpcProgramMeta = {
   programId: 0x8aa87aa7,
   version: 1,
   methods: {
-    wallet_null: { proc: 0, request: _Void, response: _Void },
+    wallet_null: { proc: 0, request: VoidCodec, response: VoidCodec },
     wallet_submit: { proc: 10, request: _WalletSubmit, response: _WalletAck },
   },
 };

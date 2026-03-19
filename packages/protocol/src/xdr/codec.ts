@@ -33,6 +33,12 @@ export interface XdrCodec<T> {
   decode(r: IReader): T;
 }
 
+/** Codec for XDR void — encodes/decodes nothing. */
+export const VoidCodec: XdrCodec<void> = {
+  encode() {},
+  decode() {},
+};
+
 // Standard XDR (TXS) serialization
 import { XdrWriter } from "./writer.js";
 import { XdrReader } from "./reader.js";

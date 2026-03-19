@@ -5,7 +5,7 @@
 // - Multi-argument RPC methods (encoded as an anonymous struct)
 // - typedef aliases (Bytes)
 
-import type { XdrCodec } from "@groundhog/protocol";
+import { type XdrCodec, VoidCodec } from "@groundhog/protocol";
 import * as proto from "./index.js";
 
 // ============================================================================
@@ -103,11 +103,6 @@ export const codec = {
 
 import type { RpcProgramMeta } from "../onc/client.js";
 
-const _Void: XdrCodec<void> = {
-  encode() {},
-  decode() {},
-};
-
 /**
  * ONC-RPC program metadata for the DogwoodAPI service.
  *
@@ -125,9 +120,9 @@ export const DogwoodAPIProgram: RpcProgramMeta = {
   programId: 0x8ee88ee8,
   version: 1,
   methods: {
-    dogwoodapi_null: { proc: 0, request: _Void, response: _Void },
+    dogwoodapi_null: { proc: 0, request: VoidCodec, response: VoidCodec },
     // Multi-arg: uses the generated DogwoodapiSendArgs struct
-    dogwoodapi_send: { proc: 10, request: _DogwoodapiSendArgs, response: _Void },
+    dogwoodapi_send: { proc: 10, request: _DogwoodapiSendArgs, response: VoidCodec },
     // Single-arg: uses the argument type's codec directly
     dogwoodapi_receive: { proc: 20, request: proto.codec.Milliseconds as XdrCodec<proto.Milliseconds>, response: _DogwoodReceived },
   },
