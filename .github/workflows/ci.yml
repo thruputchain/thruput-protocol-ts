@@ -9,9 +9,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: npm
@@ -25,4 +25,34 @@ jobs:
         run: npx vitest run
 
       - name: Build (fail on warnings)
-        run: npx tsup src/index.ts --format esm,cjs --dts 2>&1 | tee /dev/stderr | (! grep -q "WARNING")
+        run: npx tsup src/index.ts src/utils/index.ts --format esm,cjs --dts 2>&1 | tee /dev/stderr | (! grep -q "WARNING")
+
+  cross-sdk:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_REGISTRIES_GROUNDHOG_INDEX: "sparse+https://groundhog.dev/crates/api/v1/crates/"
+      CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+      CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - run: npm ci
+
+      - name: Install groundhog-test-vectors
+        run: cargo install groundhog-test-vectors --registry groundhog
+
+      - name: Generate entrypoint vectors
+        run: groundhog-test-vectors entrypoint-id > test/fixtures/entrypoint_vectors.json
+
+      - name: Generate XDR vectors
+        run: groundhog-test-vectors xdr > test/fixtures/xdr_vectors.json
+
+      - name: Run cross-SDK tests
+        run: npx vitest run test/cross-sdk/
