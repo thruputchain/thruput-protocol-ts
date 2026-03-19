@@ -19,6 +19,7 @@ core_protos=(
 )
 
 rpc_protos=(
+  dogwood_kit.x wallet_kit.x auth_card.x sched_db.x
   wallet.x dogwood_rpc.x event_rpc.x auth_rpc.x test_rpc.x
   discovery.x config.x dogwood.x
   scp.x scp_config.x scp_control.x scp_handle.x network.x
