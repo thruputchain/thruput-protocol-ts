@@ -223,6 +223,7 @@ const MockResultCodec: XdrCodec<MockResult> = {
     switch (val.error) {
       case MockError.None: {
         const v = val as { error: MockError.None; value: bigint };
+        if (v.value === undefined) throw new Error("MockResult encode: discriminant is None but value is undefined");
         w.writeUint32(v.value);
         break;
       }
@@ -288,14 +289,18 @@ const MockMessageCodec: XdrCodec<MockMessage> = {
     switch (val.tag) {
       case 0: {
         const v = val as { tag: 0; count: bigint };
+        if (v.count === undefined) throw new Error("MockMessage encode: discriminant is 0 but count is undefined");
         w.writeUint64(v.count);
         break;
       }
       case 1:
         break;
-      default:
-        w.writeVarOpaque((val as { raw_payload: Uint8Array }).raw_payload, 0xFFFFFFFF);
+      default: {
+        const v = val as { raw_payload: Uint8Array };
+        if (v.raw_payload === undefined) throw new Error("MockMessage encode: default arm but raw_payload is undefined");
+        w.writeVarOpaque(v.raw_payload, 0xFFFFFFFF);
         break;
+      }
     }
   },
   decode(r: IReader) {
@@ -492,16 +497,20 @@ describe("union codecs — discriminant/field mismatch safety", () => {
       expect("value" in decoded).toBe(true);
     });
 
-    it("MockResult: error variant ignores extra fields during encode", () => {
-      // Even if someone constructs a bad value with extra fields,
-      // the codec only encodes what the discriminant says
+    it("MockResult: error discriminant with extra value field is harmless (default void ignores it)", () => {
+      // The default arm is void, so it doesn't read any fields.
+      // The extra 'value' is ignored — it's not encoded.
       const bad = { error: MockError.NotFound, value: 999n } as any;
       const bytes = serialize(bad as MockResult, MockResultCodec);
-      // Should be 4 bytes (just discriminant), not 8 (discriminant + value)
-      expect(bytes.length).toBe(4);
+      expect(bytes.length).toBe(4); // just discriminant
       const decoded = deserialize(bytes, MockResultCodec);
       expect(decoded.error).toBe(MockError.NotFound);
       expect("value" in decoded).toBe(false);
+    });
+
+    it("MockResult: success discriminant with missing value throws", () => {
+      const bad = { error: MockError.None } as any;
+      expect(() => serialize(bad as MockResult, MockResultCodec)).toThrow(/value is undefined/);
     });
   });
 
@@ -527,12 +536,14 @@ describe("union codecs — discriminant/field mismatch safety", () => {
       expect("count" in decoded).toBe(false);
     });
 
-    it("MockMessage: encode of known arm ignores default fields", () => {
-      // Hand-construct a bad value: tag=0 with raw_payload instead of count
+    it("MockMessage tag=0 with missing count throws on encode", () => {
       const bad = { tag: 0, raw_payload: new Uint8Array([1, 2, 3]) } as any;
-      // Encode will read .count (which is undefined) — this should throw
-      // because writeUint64(undefined) will fail
-      expect(() => serialize(bad as MockMessage, MockMessageCodec)).toThrow();
+      expect(() => serialize(bad as MockMessage, MockMessageCodec)).toThrow(/count is undefined/);
+    });
+
+    it("MockMessage unknown tag with missing raw_payload throws on encode", () => {
+      const bad = { tag: 50 } as any;
+      expect(() => serialize(bad as MockMessage, MockMessageCodec)).toThrow(/raw_payload is undefined/);
     });
   });
 

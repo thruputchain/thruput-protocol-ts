@@ -1,16 +1,18 @@
 // -*- TypeScript -*-
-// Example codegen output for unions with default arms.
+// Reference codegen output for unions with default arms.
 //
-// Three patterns x23c needs to handle:
-// 1. No default arm (existing — throw on unknown discriminant)
-// 2. Default arm with void body (forward compat / error pattern)
-// 3. Default arm with data body (rare but possible)
+// THIS IS THE SPEC — x23c should produce output matching these patterns.
+//
+// Three patterns:
+// 1. No default arm — throw on unknown discriminant (existing, unchanged)
+// 2. Default arm with void body — catch-all { disc: number } + field validation
+// 3. Default arm with data body — same + default body encoding
 
 import type { XdrCodec } from "@groundhog/xdr";
 import * as proto from "../index.js";
 
 // ============================================================================
-// Pattern 1: No default arm (already works — no changes needed)
+// Pattern 1: No default arm (UNCHANGED — already correct)
 //
 // union StorageKey switch (StorageKeyType key_type) {
 //   case ContractData: StorageKeyContractData contract_data_key;
@@ -19,7 +21,6 @@ import * as proto from "../index.js";
 // };
 // ============================================================================
 
-// Type: only known variants
 export type StorageKey =
   | { key_type: proto.StorageKeyType.ContractData; contract_data_key: proto.StorageKeyContractData }
   | { key_type: proto.StorageKeyType.FreeNativeTokenBalance }
@@ -28,12 +29,12 @@ export type StorageKey =
   | { key_type: proto.StorageKeyType.ReplayCache }
 ;
 
-// Codec: throw on unknown
 const _StorageKey: XdrCodec<StorageKey> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.key_type));
     switch (val.key_type) {
       case proto.StorageKeyType.ContractData:
+        // TypeScript narrows correctly — no cast needed, no validation needed
         proto.codec.StorageKeyContractData.encode(w, val.contract_data_key);
         break;
       case proto.StorageKeyType.FreeNativeTokenBalance:
@@ -62,38 +63,38 @@ const _StorageKey: XdrCodec<StorageKey> = {
 // ============================================================================
 // Pattern 2: Default arm with void body
 //
-// This is the common "result/error" pattern and the "forward compat" pattern.
-//
 // union ExpectedStorageCost switch (RPCError error) {
 //   case kRPCNone: StorageCost storage_cost;
 //   default: void;
 // };
 //
-// union WalletTransactionAck switch (WalletTransactionAckType ack_type) {
-//   case WalletTransactionNotSubmitted: void;
-//   case WalletTransactionSubmitted: WalletSubmittedTransactionID submitted_transaction_id;
-//   default: void;
-// };
+// KEY DIFFERENCES from pattern 1:
+// - Type has | { disc: number } catch-all as the last variant
+// - Encode: cast to INLINE VARIANT TYPE (not Extract<>) + validate field exists
+// - Decode: default returns { disc } instead of throwing
 // ============================================================================
 
-// Type: known variants + a catch-all with { discriminant: number }
-// The catch-all uses the raw discriminant type so unknown values are preserved.
 export type ExpectedStorageCost =
   | { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost }
   | { error: number }
 ;
 
-// Codec: encode uses Extract<> for narrowing (needed because { error: number }
-// overlaps with the specific variants). Decode returns { error } for default.
 const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone: {
-        const v = val as Extract<ExpectedStorageCost, { error: proto.RPCError.kRPCNone }>;
+        // Cast to the INLINE variant type — NOT Extract<>, which fails
+        // because { error: number } overlaps all specific variants.
+        const v = val as { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost };
+        // Validate the field exists — catches discriminant/field mismatches
+        if (v.storage_cost === undefined) {
+          throw new Error("ExpectedStorageCost encode: discriminant is kRPCNone but storage_cost is undefined");
+        }
         proto.codec.StorageCost.encode(w, v.storage_cost);
         break;
       }
+      // default: void — nothing to encode, nothing to validate
     }
   },
   decode(r) {
@@ -102,12 +103,20 @@ const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
       case proto.RPCError.kRPCNone:
         return { error, storage_cost: proto.codec.StorageCost.decode(r) };
       default:
+        // Don't throw — return the discriminant for forward compatibility
         return { error };
     }
   },
 };
 
-// Same pattern, multiple known arms:
+// Another pattern 2 example with multiple known arms:
+//
+// union WalletTransactionAck switch (WalletTransactionAckType ack_type) {
+//   case WalletTransactionNotSubmitted: void;
+//   case WalletTransactionSubmitted: WalletSubmittedTransactionID submitted_transaction_id;
+//   default: void;
+// };
+
 export type WalletTransactionAck =
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionNotSubmitted }
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID }
@@ -119,12 +128,17 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
     w.writeInt32(BigInt(val.ack_type));
     switch (val.ack_type) {
       case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
+        // void arm — nothing to encode
         break;
       case proto.WalletTransactionAckType.WalletTransactionSubmitted: {
-        const v = val as Extract<WalletTransactionAck, { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted }>;
+        const v = val as { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID };
+        if (v.submitted_transaction_id === undefined) {
+          throw new Error("WalletTransactionAck encode: discriminant is WalletTransactionSubmitted but submitted_transaction_id is undefined");
+        }
         proto.codec.WalletSubmittedTransactionID.encode(w, v.submitted_transaction_id);
         break;
       }
+      // default: void — nothing to encode
     }
   },
   decode(r) {
@@ -141,16 +155,18 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
 };
 
 // ============================================================================
-// Pattern 3: Default arm with data body (hypothetical)
+// Pattern 3: Default arm with data body
 //
 // union Foo switch (int tag) {
 //   case 0: BarData bar;
+//   case 1: void;
 //   default: opaque raw_data<>;
 // };
 // ============================================================================
 
 export type Foo =
   | { tag: 0; bar: proto.BarData }
+  | { tag: 1 }
   | { tag: number; raw_data: Uint8Array }
 ;
 
@@ -159,13 +175,23 @@ const _Foo: XdrCodec<Foo> = {
     w.writeInt32(BigInt(val.tag));
     switch (val.tag) {
       case 0: {
-        const v = val as Extract<Foo, { tag: 0 }>;
+        const v = val as { tag: 0; bar: proto.BarData };
+        if (v.bar === undefined) {
+          throw new Error("Foo encode: discriminant is 0 but bar is undefined");
+        }
         proto.codec.BarData.encode(w, v.bar);
         break;
       }
-      default:
-        w.writeVarOpaque((val as { raw_data: Uint8Array }).raw_data, Number(0xFFFFFFFF));
+      case 1:
         break;
+      default: {
+        const v = val as { tag: number; raw_data: Uint8Array };
+        if (v.raw_data === undefined) {
+          throw new Error("Foo encode: default arm but raw_data is undefined");
+        }
+        w.writeVarOpaque(v.raw_data, Number(0xFFFFFFFF));
+        break;
+      }
     }
   },
   decode(r) {
@@ -173,6 +199,8 @@ const _Foo: XdrCodec<Foo> = {
     switch (tag) {
       case 0:
         return { tag, bar: proto.codec.BarData.decode(r) };
+      case 1:
+        return { tag };
       default:
         return { tag, raw_data: r.readVarOpaque(Number(0xFFFFFFFF)) };
     }
@@ -180,29 +208,39 @@ const _Foo: XdrCodec<Foo> = {
 };
 
 // ============================================================================
-// Summary of codegen rules:
+// CODEGEN RULES SUMMARY
 //
-// 1. TYPE DEFINITION:
-//    - No default:  only known variant arms
-//    - Default void: known arms + | { disc: number }
-//    - Default data: known arms + | { disc: number; field: Type }
+// TYPE:
+//   No default:     only known variant arms
+//   Default void:   known arms + | { disc: number }
+//   Default data:   known arms + | { disc: number; field: Type }
 //
-// 2. ENCODE:
-//    - No default:  switch with known cases (narrowing works naturally)
-//    - With default: each case with data fields wraps the body in:
-//        case VARIANT: {
-//          const v = val as Extract<UnionType, { disc: VARIANT }>;
-//          encode(v.field);
-//          break;
-//        }
-//      The Extract<> is needed because { disc: number } overlaps all variants.
-//    - Default void: no default case needed (nothing to encode)
-//    - Default data: default case encodes the default field
+// ENCODE (for unions WITH a default arm):
+//   Each data arm:
+//     case VARIANT: {
+//       const v = val as { disc: VARIANT; field1: Type1; field2: Type2 };
+//       if (v.field1 === undefined) throw new Error("... field1 is undefined");
+//       encode(v.field1);
+//       break;
+//     }
+//   Void arm:       case VARIANT: break;
+//   Default void:   (no default case needed — falls through)
+//   Default data:
+//     default: {
+//       const v = val as { disc: number; field: Type };
+//       if (v.field === undefined) throw new Error("... field is undefined");
+//       encode(v.field);
+//       break;
+//     }
 //
-// 3. DECODE:
-//    - No default:  default: throw
-//    - Default void: default: return { disc }
-//    - Default data: default: return { disc, field: decode() }
+// ENCODE (for unions WITHOUT a default arm):
+//   No cast needed — TypeScript narrows correctly in switch cases.
+//   No validation needed — type system prevents mismatches.
+//
+// DECODE:
+//   No default:     default: throw new Error(`Unknown Foo discriminant: ${disc}`)
+//   Default void:   default: return { disc }
+//   Default data:   default: return { disc, field: decode() }
 // ============================================================================
 
 export const codec = {
