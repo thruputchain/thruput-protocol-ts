@@ -1,0 +1,129 @@
+// -*- TypeScript -*-
+// Generated from dogwood_rpc.x — DO NOT CHECK IN
+//
+// This example shows how to handle:
+// - Multi-argument RPC methods (encoded as an anonymous struct)
+// - typedef aliases (Bytes)
+
+import { type XdrCodec, VoidCodec } from "@groundhog/protocol";
+import * as proto from "./index.js";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+// typedef opaque Bytes<>;
+export type Bytes = Uint8Array & { readonly __brand: "Bytes" };
+export function bytes(data: Uint8Array): Bytes {
+  return data as Bytes;
+}
+
+export interface DogwoodStandaloneConfig {
+  validator_config: proto.ValidatorConfig;
+  router_config: proto.RouterConfig;
+  dogwood_config: proto.DogwoodConfig;
+}
+
+export interface DogwoodReceived {
+  from: proto.ValidatorID;
+  payload: Uint8Array;
+}
+
+// Multi-argument RPC methods get an anonymous request struct.
+// XDR: void dogwoodapi_send(Milliseconds, Bytes) = 10;
+// The arguments become fields named arg1, arg2, ... or by their type name.
+// x23c should use the XDR type name in lowercase as the field name.
+export interface DogwoodapiSendArgs {
+  milliseconds: proto.Milliseconds;
+  bytes: proto.Bytes;
+}
+
+// Single-argument methods use the argument type directly (no wrapper struct).
+// XDR: DogwoodReceived dogwoodapi_receive(Milliseconds) = 20;
+// Request type is just proto.Milliseconds.
+
+// ============================================================================
+// XDR Codecs
+// ============================================================================
+
+const _Bytes: XdrCodec<Bytes> = {
+  encode(w, val) { w.writeVarOpaque(val, Number(0xFFFFFFFF)); },
+  decode(r) { return bytes(r.readVarOpaque(Number(0xFFFFFFFF))); },
+};
+
+const _DogwoodStandaloneConfig: XdrCodec<DogwoodStandaloneConfig> = {
+  encode(w, val) {
+    proto.codec.ValidatorConfig.encode(w, val.validator_config);
+    proto.codec.RouterConfig.encode(w, val.router_config);
+    proto.codec.DogwoodConfig.encode(w, val.dogwood_config);
+  },
+  decode(r) {
+    const validator_config = proto.codec.ValidatorConfig.decode(r);
+    const router_config = proto.codec.RouterConfig.decode(r);
+    const dogwood_config = proto.codec.DogwoodConfig.decode(r);
+    return { validator_config, router_config, dogwood_config };
+  },
+};
+
+const _DogwoodReceived: XdrCodec<DogwoodReceived> = {
+  encode(w, val) {
+    proto.codec.ValidatorID.encode(w, val.from);
+    w.writeVarOpaque(val.payload, Number(0xFFFFFFFF));
+  },
+  decode(r) {
+    const from = proto.codec.ValidatorID.decode(r);
+    const payload = r.readVarOpaque(Number(0xFFFFFFFF));
+    return { from, payload };
+  },
+};
+
+// Codec for the multi-argument method's request struct
+const _DogwoodapiSendArgs: XdrCodec<DogwoodapiSendArgs> = {
+  encode(w, val) {
+    proto.codec.Milliseconds.encode(w, val.milliseconds);
+    proto.codec.Bytes.encode(w, val.bytes);
+  },
+  decode(r) {
+    const milliseconds = proto.codec.Milliseconds.decode(r);
+    const bytes = proto.codec.Bytes.decode(r);
+    return { milliseconds, bytes };
+  },
+};
+
+export const codec = {
+  Bytes: _Bytes,
+  DogwoodStandaloneConfig: _DogwoodStandaloneConfig,
+  DogwoodReceived: _DogwoodReceived,
+  DogwoodapiSendArgs: _DogwoodapiSendArgs,
+} as const;
+
+// ============================================================================
+// RPC Program Metadata
+// ============================================================================
+
+import type { RpcProgramMeta } from "../onc/client.js";
+
+/**
+ * ONC-RPC program metadata for the DogwoodAPI service.
+ *
+ * ```
+ * program DogwoodAPI {
+ *   version DogwoodAPI1 {
+ *     void dogwoodapi_null(void) = 0;
+ *     void dogwoodapi_send(Milliseconds, Bytes) = 10;
+ *     DogwoodReceived dogwoodapi_receive(Milliseconds) = 20;
+ *   } = 1;
+ * } = 0x8ee88ee8;
+ * ```
+ */
+export const DogwoodAPIProgram: RpcProgramMeta = {
+  programId: 0x8ee88ee8,
+  version: 1,
+  methods: {
+    dogwoodapi_null: { proc: 0, request: VoidCodec, response: VoidCodec },
+    // Multi-arg: uses the generated DogwoodapiSendArgs struct
+    dogwoodapi_send: { proc: 10, request: _DogwoodapiSendArgs, response: VoidCodec },
+    // Single-arg: uses the argument type's codec directly
+    dogwoodapi_receive: { proc: 20, request: proto.codec.Milliseconds as XdrCodec<proto.Milliseconds>, response: _DogwoodReceived },
+  },
+};

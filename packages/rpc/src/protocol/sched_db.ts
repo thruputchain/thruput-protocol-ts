@@ -1,0 +1,96 @@
+// -*- TypeScript -*-
+// Generated Code: DO NOT CHECK IN
+
+// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+
+import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import * as proto from "./index.js";
+
+
+
+export interface ShardCard {
+  protocol: proto.Protocol;
+  upid: proto.UPID;
+  block_height: proto.BlockHeight;
+  address_for_exec: proto.ServerAddress;
+  address_for_sched: proto.ServerAddress;
+  address_for_auth: proto.ServerAddress;
+}
+
+export interface Delta {
+  address: proto.ContractAddress;
+  hog_delta: proto.int128_xdr;
+}
+
+export interface HogsTransferred {
+  block: proto.BlockHeight;
+  deltas: proto.Delta[];
+}
+
+
+
+//
+// XDR Codecs below this point
+//
+
+const _ShardCard: XdrCodec<ShardCard> = {
+  encode(w, val) {
+    proto.codec.Protocol.encode(w, val.protocol);
+    proto.codec.UPID.encode(w, val.upid);
+    proto.codec.BlockHeight.encode(w, val.block_height);
+    proto.codec.ServerAddress.encode(w, val.address_for_exec);
+    proto.codec.ServerAddress.encode(w, val.address_for_sched);
+    proto.codec.ServerAddress.encode(w, val.address_for_auth);
+  },
+  decode(r) {
+    const protocol = proto.codec.Protocol.decode(r);
+    const upid = proto.codec.UPID.decode(r);
+    const block_height = proto.codec.BlockHeight.decode(r);
+    const address_for_exec = proto.codec.ServerAddress.decode(r);
+    const address_for_sched = proto.codec.ServerAddress.decode(r);
+    const address_for_auth = proto.codec.ServerAddress.decode(r);
+    return { protocol, upid, block_height, address_for_exec, address_for_sched, address_for_auth };
+  },
+};
+
+const _Delta: XdrCodec<Delta> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.address);
+    proto.codec.int128_xdr.encode(w, val.hog_delta);
+  },
+  decode(r) {
+    const address = proto.codec.ContractAddress.decode(r);
+    const hog_delta = proto.codec.int128_xdr.decode(r);
+    return { address, hog_delta };
+  },
+};
+
+const _HogsTransferred: XdrCodec<HogsTransferred> = {
+  encode(w, val) {
+    proto.codec.BlockHeight.encode(w, val.block);
+    w.writeUint32(BigInt(val.deltas.length));
+    for (const _item of val.deltas) proto.codec.Delta.encode(w, _item);
+  },
+  decode(r) {
+    const block = proto.codec.BlockHeight.decode(r);
+    const _deltas_len = Number(r.readUint32());
+    const deltas = Array.from({ length: _deltas_len }, () => proto.codec.Delta.decode(r));
+    return { block, deltas };
+  },
+};
+
+export const codec = {
+  ShardCard: _ShardCard,
+  Delta: _Delta,
+  HogsTransferred: _HogsTransferred,
+} as const;
+
+export const SchedDbProgram: RpcProgramMeta = {
+  programId: 0x7ee79998,
+  version: 1,
+  methods: {
+    scheddb_intro_shard: { proc: 1, request: _ShardCard, response: VoidCodec },
+    scheddb_hogs_transferred: { proc: 2, request: _HogsTransferred, response: VoidCodec },
+  },
+};
+

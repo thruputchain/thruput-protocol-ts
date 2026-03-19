@@ -1,9 +1,10 @@
 #!/bin/bash
 #
-# Generate TypeScript protocol types from XDR definitions.
+# Generate TypeScript from XDR definitions for both packages.
 # Usage: XDRC=/path/to/x23c ./scripts/generate.sh
 #
-# Mirrors protocol-rs/scripts/generate.sh but for TypeScript output.
+# The index.ts barrels are hand-written (like lib.rs in protocol-rs).
+# This script only regenerates the .ts files from .x files.
 
 set -euo pipefail
 
@@ -11,61 +12,31 @@ set -euo pipefail
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
-# XDR files to generate TypeScript for.
-# These are the user-facing protocol types (same as protocol-rs "protos" list).
-# RPC, scheduler, and coordinator types are not needed for the TS SDK.
-protos=(
-  types.x
-  contract.x
-  exec_result.x
-  event.x
-  genesis.x
-  transaction.x
-  retrocausal_queue.x
-  storage_cost.x
-  syscall_error.x
-  auth_claim.x
-  standard_asset_events.x
-  address_auth.x
-  storage_item.x
-  precompiles.x
-  block.x
+core_protos=(
+  types.x contract.x exec_result.x event.x genesis.x transaction.x
+  retrocausal_queue.x storage_cost.x syscall_error.x auth_claim.x
+  standard_asset_events.x address_auth.x storage_item.x precompiles.x block.x
 )
 
-OUTDIR="src/protocol"
+rpc_protos=(
+  dogwood_kit.x wallet_kit.x auth_card.x sched_db.x
+  wallet.x dogwood_rpc.x event_rpc.x auth_rpc.x test_rpc.x
+  discovery.x config.x dogwood.x
+  scp.x scp_config.x scp_control.x scp_handle.x network.x
+  rpc_types.x parallel.x nomination.x db_sched.x exec_sched.x
+  consensus.x sched_coord.x coord_sched.x catchup.x repair.x loadgen.x
+)
 
-echo "-- Generating TypeScript to ${OUTDIR}/ --" >&2
-
-for proto in "${protos[@]}"; do
-  name=$(basename "${proto}" .x)
-  echo "  ${proto} -> ${OUTDIR}/${name}.ts" >&2
-  $XDRC --ts -o "${OUTDIR}/${name}.ts" "protocol/${proto}"
+for proto in "${core_protos[@]}"; do
+  $XDRC --ts -o "packages/protocol/src/protocol/${proto%.x}.ts" "protocol/${proto}"
 done
 
-# Regenerate the barrel index that re-exports all generated files
-# and merges the codec namespaces.
-echo "-- Generating ${OUTDIR}/index.ts --" >&2
+for proto in "${rpc_protos[@]}"; do
+  $XDRC --ts -o "packages/rpc/src/protocol/${proto%.x}.ts" "protocol/${proto}"
+done
 
-{
-  echo "// Auto-generated barrel — do not edit"
-  echo ""
-  for proto in "${protos[@]}"; do
-    name=$(basename "${proto}" .x)
-    echo "export * from \"./${name}.js\";"
-  done
-  echo ""
-  echo "// Merged codec namespace"
-  for proto in "${protos[@]}"; do
-    name=$(basename "${proto}" .x)
-    echo "import { codec as ${name}_codec } from \"./${name}.js\";"
-  done
-  echo ""
-  echo "export const codec = {"
-  for proto in "${protos[@]}"; do
-    name=$(basename "${proto}" .x)
-    echo "  ...${name}_codec,"
-  done
-  echo "} as const;"
-} > "${OUTDIR}/index.ts"
+# Test fixture: echo RPC (standalone, needs proto import line removed)
+$XDRC --ts -o "packages/rpc/test/fixtures/echo.ts" "packages/rpc/test/fixtures/echo.x"
+sed -i '' '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
 
 echo "-- Done --" >&2
