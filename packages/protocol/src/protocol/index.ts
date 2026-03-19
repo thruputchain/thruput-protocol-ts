@@ -1,5 +1,4 @@
-// Auto-generated barrel — do not edit
-
+// Barrel — add new .x files here when they're added to generate.sh
 export * from "./types.js";
 export * from "./contract.js";
 export * from "./exec_result.js";

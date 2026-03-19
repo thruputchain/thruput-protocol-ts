@@ -1,5 +1,4 @@
-// Auto-generated barrel — do not edit
-
+// Barrel — add new .x files here when they're added to generate.sh
 export * from "@groundhog/protocol";
 export * from "./wallet.js";
 export * from "./dogwood_rpc.js";
@@ -27,7 +26,7 @@ export * from "./repair.js";
 export * from "./loadgen.js";
 
 // Merged codec namespace
-import { codec as _dep0_codec } from "@groundhog/protocol";
+import { codec as _protocol_codec } from "@groundhog/protocol";
 import { codec as wallet_codec } from "./wallet.js";
 import { codec as dogwood_rpc_codec } from "./dogwood_rpc.js";
 import { codec as event_rpc_codec } from "./event_rpc.js";
@@ -54,7 +53,7 @@ import { codec as repair_codec } from "./repair.js";
 import { codec as loadgen_codec } from "./loadgen.js";
 
 export const codec = {
-  ..._dep0_codec,
+  ..._protocol_codec,
   ...wallet_codec,
   ...dogwood_rpc_codec,
   ...event_rpc_codec,
