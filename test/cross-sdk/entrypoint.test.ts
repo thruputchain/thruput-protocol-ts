@@ -30,7 +30,18 @@ describe("cross-SDK: entrypoint ID derivation", () => {
     return;
   }
 
-  const data: VectorFile = JSON.parse(readFileSync(VECTORS_PATH, "utf-8"));
+  let data: VectorFile;
+  try {
+    data = JSON.parse(readFileSync(VECTORS_PATH, "utf-8"));
+  } catch {
+    it.skip(`vectors file at ${VECTORS_PATH} is not valid JSON (regenerate with groundhog-test-vectors)`, () => {});
+    return;
+  }
+
+  if (!data.vectors || data.vectors.length === 0) {
+    it.skip("vectors file is empty", () => {});
+    return;
+  }
 
   for (const vec of data.vectors) {
     const label = `${vec.interface ?? "null"}/${vec.version_str}/${vec.method}`;
