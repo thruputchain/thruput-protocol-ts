@@ -352,6 +352,219 @@ describe("union codecs — default data arm (pattern 3)", () => {
 // TXS vs CXS comparison
 // ============================================================================
 
+// ============================================================================
+// Discriminant/field mismatch safety
+//
+// Pattern 1 (no default): TypeScript enforces correct discriminant/field
+// pairs at compile time — you can't construct a bad value. The codec also
+// throws at runtime on unknown discriminants during decode.
+//
+// Pattern 2/3 (with default): The { disc: number } catch-all weakens
+// compile-time checking. But the codec decode always produces correctly
+// matched pairs, and encode only reads fields inside the matching case.
+// The risk is hand-constructed values with wrong field/discriminant combos.
+// ============================================================================
+
+describe("union codecs — discriminant/field mismatch safety", () => {
+  // -- Pattern 1: No default arm --
+
+  describe("no-default unions: decode throws on unknown discriminant", () => {
+    it("StorageKey throws on discriminant 99", () => {
+      const w = new XdrWriter();
+      w.writeInt32(99n);
+      expect(() => deserialize(w.finish(), codec.StorageKey)).toThrow(/Unknown/);
+    });
+
+    it("Signature throws on discriminant 5", () => {
+      const w = new XdrWriter();
+      w.writeInt32(5n);
+      w.writeFixedOpaque(new Uint8Array(64), 64);
+      expect(() => deserialize(w.finish(), codec.Signature)).toThrow(/Unknown/);
+    });
+
+    it("ExtensionPoint throws on discriminant 1", () => {
+      const w = new XdrWriter();
+      w.writeInt32(1n);
+      expect(() => deserialize(w.finish(), codec.ExtensionPoint)).toThrow(/Unknown/);
+    });
+
+    it("Contract throws on discriminant -1", () => {
+      const w = new XdrWriter();
+      w.writeInt32(-1n);
+      expect(() => deserialize(w.finish(), codec.Contract)).toThrow(/Unknown/);
+    });
+
+    it("InvocationFrameOutput throws on discriminant 99", () => {
+      const w = new XdrWriter();
+      w.writeInt32(99n);
+      expect(() => deserialize(w.finish(), codec.InvocationFrameOutput)).toThrow(/Unknown/);
+    });
+
+    it("AuthClaim throws on discriminant 99", () => {
+      const w = new XdrWriter();
+      w.writeInt32(99n);
+      expect(() => deserialize(w.finish(), codec.AuthClaim)).toThrow(/Unknown/);
+    });
+  });
+
+  describe("no-default unions: decode produces correctly paired discriminant+fields", () => {
+    it("StorageKey ContractData always has contract_data_key", () => {
+      const sk: StorageKey = {
+        key_type: StorageKeyType.ContractData,
+        contract_data_key: storageKeyContractData(new Uint8Array(32).fill(0x01)),
+      };
+      const decoded = deserialize(serialize(sk, codec.StorageKey), codec.StorageKey);
+      expect(decoded.key_type).toBe(StorageKeyType.ContractData);
+      if (decoded.key_type === StorageKeyType.ContractData) {
+        // TypeScript narrows correctly — contract_data_key is accessible
+        expect(decoded.contract_data_key.length).toBe(32);
+      }
+    });
+
+    it("StorageKey void arm has no data fields", () => {
+      const sk: StorageKey = { key_type: StorageKeyType.FreeNativeTokenBalance };
+      const decoded = deserialize(serialize(sk, codec.StorageKey), codec.StorageKey);
+      expect(decoded.key_type).toBe(StorageKeyType.FreeNativeTokenBalance);
+      expect(Object.keys(decoded)).toEqual(["key_type"]);
+    });
+
+    it("InvocationFrameOutput Return has return_buffer, not abort_buffer", () => {
+      const out: InvocationFrameOutput = {
+        status_code: InvocationFrameStatusCode.Return,
+        return_buffer: returnBuffer(new Uint8Array([1, 2])),
+      };
+      const decoded = deserialize(serialize(out, codec.InvocationFrameOutput), codec.InvocationFrameOutput);
+      expect("return_buffer" in decoded).toBe(true);
+      expect("abort_buffer" in decoded).toBe(false);
+    });
+
+    it("InvocationFrameOutput Abort has abort_buffer, not return_buffer", () => {
+      const out: InvocationFrameOutput = {
+        status_code: InvocationFrameStatusCode.Abort,
+        abort_buffer: returnBuffer(new Uint8Array([3, 4])),
+      };
+      const decoded = deserialize(serialize(out, codec.InvocationFrameOutput), codec.InvocationFrameOutput);
+      expect("abort_buffer" in decoded).toBe(true);
+      expect("return_buffer" in decoded).toBe(false);
+    });
+
+    it("InvocationFrameOutput Fault has no data fields", () => {
+      const out: InvocationFrameOutput = { status_code: InvocationFrameStatusCode.Fault };
+      const decoded = deserialize(serialize(out, codec.InvocationFrameOutput), codec.InvocationFrameOutput);
+      expect(Object.keys(decoded)).toEqual(["status_code"]);
+    });
+
+    it("Contract kWasmi has wasmi_contract, not native_contract_id", () => {
+      const c: Contract = {
+        contract_type: ContractType.kWasmi,
+        wasmi_contract: { wasm: new Uint8Array([1]) },
+      };
+      const decoded = deserialize(serialize(c, codec.Contract), codec.Contract);
+      expect("wasmi_contract" in decoded).toBe(true);
+      expect("native_contract_id" in decoded).toBe(false);
+      expect("mock_contract_id" in decoded).toBe(false);
+    });
+
+    it("Contract kNative has native_contract_id, not wasmi_contract", () => {
+      const c: Contract = {
+        contract_type: ContractType.kNative,
+        native_contract_id: HogexecPrecompiledNativeContracts.kNativeContractHogToken,
+      };
+      const decoded = deserialize(serialize(c, codec.Contract), codec.Contract);
+      expect("native_contract_id" in decoded).toBe(true);
+      expect("wasmi_contract" in decoded).toBe(false);
+    });
+  });
+
+  // -- Pattern 2: Default void arm --
+
+  describe("default-void unions: unknown discriminants don't crash", () => {
+    it("MockResult: unknown error code decodes to { error } only", () => {
+      const val: MockResult = { error: 77 };
+      const decoded = deserialize(serialize(val, MockResultCodec), MockResultCodec);
+      expect(decoded.error).toBe(77);
+      expect(Object.keys(decoded)).toEqual(["error"]);
+    });
+
+    it("MockResult: success always has value field", () => {
+      const val: MockResult = { error: MockError.None, value: 42n };
+      const decoded = deserialize(serialize(val, MockResultCodec), MockResultCodec);
+      expect("value" in decoded).toBe(true);
+    });
+
+    it("MockResult: error variant ignores extra fields during encode", () => {
+      // Even if someone constructs a bad value with extra fields,
+      // the codec only encodes what the discriminant says
+      const bad = { error: MockError.NotFound, value: 999n } as any;
+      const bytes = serialize(bad as MockResult, MockResultCodec);
+      // Should be 4 bytes (just discriminant), not 8 (discriminant + value)
+      expect(bytes.length).toBe(4);
+      const decoded = deserialize(bytes, MockResultCodec);
+      expect(decoded.error).toBe(MockError.NotFound);
+      expect("value" in decoded).toBe(false);
+    });
+  });
+
+  // -- Pattern 3: Default data arm --
+
+  describe("default-data unions: field presence matches discriminant", () => {
+    it("MockMessage tag=0 decode has count, not raw_payload", () => {
+      const val: MockMessage = { tag: 0, count: 42n };
+      const decoded = deserialize(serialize(val, MockMessageCodec), MockMessageCodec);
+      expect("count" in decoded).toBe(true);
+      expect("raw_payload" in decoded).toBe(false);
+    });
+
+    it("MockMessage tag=1 decode has neither count nor raw_payload", () => {
+      const decoded = deserialize(serialize({ tag: 1 } as MockMessage, MockMessageCodec), MockMessageCodec);
+      expect(Object.keys(decoded)).toEqual(["tag"]);
+    });
+
+    it("MockMessage unknown tag decode has raw_payload, not count", () => {
+      const val: MockMessage = { tag: 50, raw_payload: new Uint8Array([1]) };
+      const decoded = deserialize(serialize(val, MockMessageCodec), MockMessageCodec);
+      expect("raw_payload" in decoded).toBe(true);
+      expect("count" in decoded).toBe(false);
+    });
+
+    it("MockMessage: encode of known arm ignores default fields", () => {
+      // Hand-construct a bad value: tag=0 with raw_payload instead of count
+      const bad = { tag: 0, raw_payload: new Uint8Array([1, 2, 3]) } as any;
+      // Encode will read .count (which is undefined) — this should throw
+      // because writeUint64(undefined) will fail
+      expect(() => serialize(bad as MockMessage, MockMessageCodec)).toThrow();
+    });
+  });
+
+  // -- Byte-level: wrong discriminant in raw bytes --
+
+  describe("hand-crafted bad bytes: discriminant says X but body is for Y", () => {
+    it("StorageKey: discriminant=ContractData but no body → read past end", () => {
+      const w = new XdrWriter();
+      w.writeInt32(BigInt(StorageKeyType.ContractData));
+      // No contract_data_key bytes follow — decoder should throw
+      expect(() => deserialize(w.finish(), codec.StorageKey)).toThrow();
+    });
+
+    it("StorageKey: discriminant=FreeNativeTokenBalance with trailing garbage is ok", () => {
+      // Void arms don't read anything, so extra bytes are just unconsumed
+      const w = new XdrWriter();
+      w.writeInt32(BigInt(StorageKeyType.FreeNativeTokenBalance));
+      w.writeUint32(0xDEADn); // garbage
+      // Decode reads only the discriminant, ignores the rest
+      const decoded = deserialize(w.finish(), codec.StorageKey);
+      expect(decoded.key_type).toBe(StorageKeyType.FreeNativeTokenBalance);
+    });
+
+    it("InvocationFrameOutput: discriminant=Return but truncated → throws", () => {
+      const w = new XdrWriter();
+      w.writeInt32(BigInt(InvocationFrameStatusCode.Return));
+      // Return needs a var-length opaque (ReturnBuffer) but we give nothing
+      expect(() => deserialize(w.finish(), codec.InvocationFrameOutput)).toThrow();
+    });
+  });
+});
+
 describe("union codecs — TXS vs CXS", () => {
   it("CXS is smaller for small discriminants", () => {
     const sk: StorageKey = { key_type: StorageKeyType.FreeNativeTokenBalance };
