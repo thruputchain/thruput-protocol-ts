@@ -35,4 +35,8 @@ for proto in "${rpc_protos[@]}"; do
   $XDRC --ts -o "packages/rpc/src/protocol/${proto%.x}.ts" "protocol/${proto}"
 done
 
+# Test fixture: echo RPC (standalone, needs proto import line removed)
+$XDRC --ts -o "packages/rpc/test/fixtures/echo.ts" "packages/rpc/test/fixtures/echo.x"
+sed -i '' '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
+
 echo "-- Done --" >&2
