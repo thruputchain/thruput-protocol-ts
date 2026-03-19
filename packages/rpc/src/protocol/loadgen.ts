@@ -161,7 +161,10 @@ const _LoadgenResult: XdrCodec<LoadgenResult> = {
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
       {
-        const v = val as Extract<LoadgenResult, { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK }>;
+        const v = val as { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenSuccessResult };
+        if (v.success === undefined) {
+          throw new Error("LoadgenResult encode: discriminant is kLoadgenRPCErrorOK but success is undefined");
+        }
         proto.codec.LoadgenSuccessResult.encode(w, v.success);
         break;
       }
@@ -185,7 +188,10 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
       {
-        const v = val as Extract<LoadgenExtensionResult, { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK }>;
+        const v = val as { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenExtension };
+        if (v.success === undefined) {
+          throw new Error("LoadgenExtensionResult encode: discriminant is kLoadgenRPCErrorOK but success is undefined");
+        }
         proto.codec.LoadgenExtension.encode(w, v.success);
         break;
       }

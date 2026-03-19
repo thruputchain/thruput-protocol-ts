@@ -51,7 +51,10 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as Extract<EventBlockResult, { error: proto.RPCError.kRPCNone }>;
+        const v = val as { error: proto.RPCError.kRPCNone; root_hash: proto.SHA256Hash };
+        if (v.root_hash === undefined) {
+          throw new Error("EventBlockResult encode: discriminant is kRPCNone but root_hash is undefined");
+        }
         proto.codec.SHA256Hash.encode(w, v.root_hash);
         break;
       }

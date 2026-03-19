@@ -121,7 +121,10 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as Extract<HogAgeResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; hog_age_batch: proto.HogAgeBatch };
+        if (v.hog_age_batch === undefined) {
+          throw new Error("HogAgeResult encode: discriminant is DbSchedResultOK but hog_age_batch is undefined");
+        }
         proto.codec.HogAgeBatch.encode(w, v.hog_age_batch);
         break;
       }
@@ -145,7 +148,10 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as Extract<DbAddressAuthDataBatchResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; address_auth_data_batch: proto.AddressAuthData[] };
+        if (v.address_auth_data_batch === undefined) {
+          throw new Error("DbAddressAuthDataBatchResult encode: discriminant is DbSchedResultOK but address_auth_data_batch is undefined");
+        }
         w.writeUint32(BigInt(v.address_auth_data_batch.length));
         for (const _item of v.address_auth_data_batch) proto.codec.AddressAuthData.encode(w, _item);
         break;
@@ -171,7 +177,10 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as Extract<DbBlockResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; db_hash: proto.DbHash };
+        if (v.db_hash === undefined) {
+          throw new Error("DbBlockResult encode: discriminant is DbSchedResultOK but db_hash is undefined");
+        }
         proto.codec.DbHash.encode(w, v.db_hash);
         break;
       }
@@ -200,7 +209,10 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as Extract<DbTipResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; db_tip: proto.DbTip };
+        if (v.db_tip === undefined) {
+          throw new Error("DbTipResult encode: discriminant is DbSchedResultOK but db_tip is undefined");
+        }
         proto.codec.DbTip.encode(w, v.db_tip);
         break;
       }

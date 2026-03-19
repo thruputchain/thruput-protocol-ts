@@ -39,6 +39,12 @@ export const VoidCodec: XdrCodec<void> = {
   decode() {},
 };
 
+/** Codec for XDR bool. */
+export const BoolCodec: XdrCodec<boolean> = {
+  encode(w, val) { w.writeBool(val); },
+  decode(r) { return r.readBool(); },
+};
+
 /** Metadata for a single RPC method (generated from XDR `program` blocks). */
 export interface RpcMethodMeta<Req, Resp> {
   proc: number;

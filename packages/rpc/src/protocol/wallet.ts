@@ -68,7 +68,10 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
         break;
       case proto.WalletTransactionAckType.WalletTransactionSubmitted:
       {
-        const v = val as Extract<WalletTransactionAck, { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted }>;
+        const v = val as { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID };
+        if (v.submitted_transaction_id === undefined) {
+          throw new Error("WalletTransactionAck encode: discriminant is WalletTransactionSubmitted but submitted_transaction_id is undefined");
+        }
         proto.codec.WalletSubmittedTransactionID.encode(w, v.submitted_transaction_id);
         break;
       }

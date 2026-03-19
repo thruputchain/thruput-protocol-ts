@@ -16,6 +16,7 @@ export {
 
 export {
   VoidCodec,
+  BoolCodec,
   serialize,
   deserialize,
   serializeCxs,

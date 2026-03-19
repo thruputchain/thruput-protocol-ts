@@ -64,7 +64,10 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
       case proto.ExecResult.ExecResultTxDeterministicError:
       case proto.ExecResult.ExecResultTxRootFrameReverted:
       {
-        const v = val as Extract<ExecProposeResult, { result: proto.ExecResult.ExecResultOK }>;
+        const v = val as { result: proto.ExecResult.ExecResultOK; proposal_data: proto.NondeterministicProposalData };
+        if (v.proposal_data === undefined) {
+          throw new Error("ExecProposeResult encode: discriminant is ExecResultOK but proposal_data is undefined");
+        }
         proto.codec.NondeterministicProposalData.encode(w, v.proposal_data);
         break;
       }

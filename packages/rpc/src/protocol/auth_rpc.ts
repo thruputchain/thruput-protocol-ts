@@ -197,7 +197,10 @@ const _DBAuthResult: XdrCodec<DBAuthResult> = {
     switch (val.error) {
       case proto.DBAuthError.kDBAuthSuccess:
       {
-        const v = val as Extract<DBAuthResult, { error: proto.DBAuthError.kDBAuthSuccess }>;
+        const v = val as { error: proto.DBAuthError.kDBAuthSuccess; auth_data: proto.AddressAuthData };
+        if (v.auth_data === undefined) {
+          throw new Error("DBAuthResult encode: discriminant is kDBAuthSuccess but auth_data is undefined");
+        }
         proto.codec.AddressAuthData.encode(w, v.auth_data);
         break;
       }
@@ -226,7 +229,10 @@ const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
     switch (val.outcome) {
       case proto.DBAuthIntroOutcome.kIntroSuccess:
       {
-        const v = val as Extract<DBAuthIntroResult, { outcome: proto.DBAuthIntroOutcome.kIntroSuccess }>;
+        const v = val as { outcome: proto.DBAuthIntroOutcome.kIntroSuccess; current_height: proto.BlockHeight };
+        if (v.current_height === undefined) {
+          throw new Error("DBAuthIntroResult encode: discriminant is kIntroSuccess but current_height is undefined");
+        }
         proto.codec.BlockHeight.encode(w, v.current_height);
         break;
       }
@@ -290,7 +296,10 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
     switch (val.outcome) {
       case proto.IntroAuthOutcome.kSuccess:
       {
-        const v = val as Extract<IntroAuthResult, { outcome: proto.IntroAuthOutcome.kSuccess }>;
+        const v = val as { outcome: proto.IntroAuthOutcome.kSuccess; shards: proto.ShardCard[] };
+        if (v.shards === undefined) {
+          throw new Error("IntroAuthResult encode: discriminant is kSuccess but shards is undefined");
+        }
         w.writeUint32(BigInt(v.shards.length));
         for (const _item of v.shards) proto.codec.ShardCard.encode(w, _item);
         break;
