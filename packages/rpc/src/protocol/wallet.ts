@@ -25,7 +25,6 @@ export function walletSubmittedTransactionID(data: Uint8Array): WalletSubmittedT
 export type WalletTransactionAck =
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionNotSubmitted }
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID }
-  | { ack_type: number }
 ;
 
 export interface WalletAck {

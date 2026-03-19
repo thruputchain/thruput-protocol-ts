@@ -47,42 +47,34 @@ export function storageCost(val: proto.int128_xdr): StorageCost {
 
 export type ExpectedStorageCost =
   | { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost }
-  | { error: number }
 ;
 
 export type ExpectedContract =
   | { error: proto.RPCError.kRPCNone; contract: proto.Contract }
-  | { error: number }
 ;
 
 export type ExpectedDeployment =
   | { error: proto.RPCError.kRPCNone; deployed_hash: proto.DeployedContractHash }
-  | { error: number }
 ;
 
 export type ExpectedProposalData =
   | { error: proto.RPCError.kRPCNone; proposal_data: proto.NondeterministicProposalData }
-  | { error: number }
 ;
 
 export type ExpectedStorageItem =
   | { error: proto.RPCError.kRPCNone; item: proto.WireStorageItem }
-  | { error: number }
 ;
 
 export type ExpectedRetrocausalQueueBlock =
   | { error: proto.RPCError.kRPCNone; queue_block: proto.RetrocausalQueueBlock }
-  | { error: number }
 ;
 
 export type ExpectedQueueEntry =
   | { error: proto.RPCError.kRPCNone; queue_entry: proto.QueueEntry }
-  | { error: number }
 ;
 
 export type ExpectedDBTip =
   | { error: proto.RPCError.kRPCNone; db_tip: proto.DbTip }
-  | { error: number }
 ;
 
 export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: "ContractAddressBatch" };

@@ -50,12 +50,10 @@ export enum LoadgenRPCError {
 
 export type LoadgenResult =
   | { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenSuccessResult }
-  | { error: number }
 ;
 
 export type LoadgenExtensionResult =
   | { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenExtension }
-  | { error: number }
 ;
 
 

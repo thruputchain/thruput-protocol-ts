@@ -34,17 +34,14 @@ export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
 
 export type HogAgeResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; hog_age_batch: proto.HogAgeBatch }
-  | { result: number }
 ;
 
 export type DbAddressAuthDataBatchResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; address_auth_data_batch: proto.AddressAuthData[] }
-  | { result: number }
 ;
 
 export type DbBlockResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; db_hash: proto.DbHash }
-  | { result: number }
 ;
 
 export enum DbShardResult {
@@ -53,7 +50,6 @@ export enum DbShardResult {
 
 export type DbTipResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; db_tip: proto.DbTip }
-  | { result: number }
 ;
 
 

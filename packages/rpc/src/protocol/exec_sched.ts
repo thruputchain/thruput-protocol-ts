@@ -12,7 +12,6 @@ export type ExecProposeResult =
   | { result: proto.ExecResult.ExecResultOK; proposal_data: proto.NondeterministicProposalData }
   | { result: proto.ExecResult.ExecResultTxDeterministicError; proposal_data: proto.NondeterministicProposalData }
   | { result: proto.ExecResult.ExecResultTxRootFrameReverted; proposal_data: proto.NondeterministicProposalData }
-  | { result: number }
 ;
 
 export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: "ProposedTransactionBatch" };

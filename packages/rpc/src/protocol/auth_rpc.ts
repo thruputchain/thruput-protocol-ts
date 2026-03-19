@@ -56,7 +56,6 @@ export enum DBAuthError {
 
 export type DBAuthResult =
   | { error: proto.DBAuthError.kDBAuthSuccess; auth_data: proto.AddressAuthData }
-  | { error: number }
 ;
 
 export enum DBAuthIntroOutcome {
@@ -66,7 +65,6 @@ export enum DBAuthIntroOutcome {
 
 export type DBAuthIntroResult =
   | { outcome: proto.DBAuthIntroOutcome.kIntroSuccess; current_height: proto.BlockHeight }
-  | { outcome: number }
 ;
 
 export type DBAuthResultBatch = proto.DBAuthResult[] & { readonly __brand: "DBAuthResultBatch" };
@@ -92,7 +90,6 @@ export enum IntroAuthOutcome {
 
 export type IntroAuthResult =
   | { outcome: proto.IntroAuthOutcome.kSuccess; shards: proto.ShardCard[] }
-  | { outcome: number }
 ;
 
 

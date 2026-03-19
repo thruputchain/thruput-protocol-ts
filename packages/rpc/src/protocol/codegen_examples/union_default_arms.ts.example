@@ -1,0 +1,213 @@
+// -*- TypeScript -*-
+// Example codegen output for unions with default arms.
+//
+// Three patterns x23c needs to handle:
+// 1. No default arm (existing — throw on unknown discriminant)
+// 2. Default arm with void body (forward compat / error pattern)
+// 3. Default arm with data body (rare but possible)
+
+import type { XdrCodec } from "@groundhog/xdr";
+import * as proto from "../index.js";
+
+// ============================================================================
+// Pattern 1: No default arm (already works — no changes needed)
+//
+// union StorageKey switch (StorageKeyType key_type) {
+//   case ContractData: StorageKeyContractData contract_data_key;
+//   case FreeNativeTokenBalance: void;
+//   ...
+// };
+// ============================================================================
+
+// Type: only known variants
+export type StorageKey =
+  | { key_type: proto.StorageKeyType.ContractData; contract_data_key: proto.StorageKeyContractData }
+  | { key_type: proto.StorageKeyType.FreeNativeTokenBalance }
+  | { key_type: proto.StorageKeyType.AuthData }
+  | { key_type: proto.StorageKeyType.Metadata }
+  | { key_type: proto.StorageKeyType.ReplayCache }
+;
+
+// Codec: throw on unknown
+const _StorageKey: XdrCodec<StorageKey> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.key_type));
+    switch (val.key_type) {
+      case proto.StorageKeyType.ContractData:
+        proto.codec.StorageKeyContractData.encode(w, val.contract_data_key);
+        break;
+      case proto.StorageKeyType.FreeNativeTokenBalance:
+      case proto.StorageKeyType.AuthData:
+      case proto.StorageKeyType.Metadata:
+      case proto.StorageKeyType.ReplayCache:
+        break;
+    }
+  },
+  decode(r) {
+    const key_type = Number(r.readInt32());
+    switch (key_type) {
+      case proto.StorageKeyType.ContractData:
+        return { key_type, contract_data_key: proto.codec.StorageKeyContractData.decode(r) };
+      case proto.StorageKeyType.FreeNativeTokenBalance:
+      case proto.StorageKeyType.AuthData:
+      case proto.StorageKeyType.Metadata:
+      case proto.StorageKeyType.ReplayCache:
+        return { key_type } as StorageKey;
+      default:
+        throw new Error(`Unknown StorageKey discriminant: ${key_type}`);
+    }
+  },
+};
+
+// ============================================================================
+// Pattern 2: Default arm with void body
+//
+// This is the common "result/error" pattern and the "forward compat" pattern.
+//
+// union ExpectedStorageCost switch (RPCError error) {
+//   case kRPCNone: StorageCost storage_cost;
+//   default: void;
+// };
+//
+// union WalletTransactionAck switch (WalletTransactionAckType ack_type) {
+//   case WalletTransactionNotSubmitted: void;
+//   case WalletTransactionSubmitted: WalletSubmittedTransactionID submitted_transaction_id;
+//   default: void;
+// };
+// ============================================================================
+
+// Type: known variants + a catch-all with { discriminant: number }
+// The catch-all uses the raw discriminant type so unknown values are preserved.
+export type ExpectedStorageCost =
+  | { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost }
+  | { error: number }
+;
+
+// Codec: encode uses Extract<> for narrowing (needed because { error: number }
+// overlaps with the specific variants). Decode returns { error } for default.
+const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.error));
+    switch (val.error) {
+      case proto.RPCError.kRPCNone: {
+        const v = val as Extract<ExpectedStorageCost, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.StorageCost.encode(w, v.storage_cost);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const error = Number(r.readInt32());
+    switch (error) {
+      case proto.RPCError.kRPCNone:
+        return { error, storage_cost: proto.codec.StorageCost.decode(r) };
+      default:
+        return { error };
+    }
+  },
+};
+
+// Same pattern, multiple known arms:
+export type WalletTransactionAck =
+  | { ack_type: proto.WalletTransactionAckType.WalletTransactionNotSubmitted }
+  | { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID }
+  | { ack_type: number }
+;
+
+const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.ack_type));
+    switch (val.ack_type) {
+      case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
+        break;
+      case proto.WalletTransactionAckType.WalletTransactionSubmitted: {
+        const v = val as Extract<WalletTransactionAck, { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted }>;
+        proto.codec.WalletSubmittedTransactionID.encode(w, v.submitted_transaction_id);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const ack_type = Number(r.readInt32());
+    switch (ack_type) {
+      case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
+        return { ack_type };
+      case proto.WalletTransactionAckType.WalletTransactionSubmitted:
+        return { ack_type, submitted_transaction_id: proto.codec.WalletSubmittedTransactionID.decode(r) };
+      default:
+        return { ack_type };
+    }
+  },
+};
+
+// ============================================================================
+// Pattern 3: Default arm with data body (hypothetical)
+//
+// union Foo switch (int tag) {
+//   case 0: BarData bar;
+//   default: opaque raw_data<>;
+// };
+// ============================================================================
+
+export type Foo =
+  | { tag: 0; bar: proto.BarData }
+  | { tag: number; raw_data: Uint8Array }
+;
+
+const _Foo: XdrCodec<Foo> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.tag));
+    switch (val.tag) {
+      case 0: {
+        const v = val as Extract<Foo, { tag: 0 }>;
+        proto.codec.BarData.encode(w, v.bar);
+        break;
+      }
+      default:
+        w.writeVarOpaque((val as { raw_data: Uint8Array }).raw_data, Number(0xFFFFFFFF));
+        break;
+    }
+  },
+  decode(r) {
+    const tag = Number(r.readInt32());
+    switch (tag) {
+      case 0:
+        return { tag, bar: proto.codec.BarData.decode(r) };
+      default:
+        return { tag, raw_data: r.readVarOpaque(Number(0xFFFFFFFF)) };
+    }
+  },
+};
+
+// ============================================================================
+// Summary of codegen rules:
+//
+// 1. TYPE DEFINITION:
+//    - No default:  only known variant arms
+//    - Default void: known arms + | { disc: number }
+//    - Default data: known arms + | { disc: number; field: Type }
+//
+// 2. ENCODE:
+//    - No default:  switch with known cases (narrowing works naturally)
+//    - With default: each case with data fields wraps the body in:
+//        case VARIANT: {
+//          const v = val as Extract<UnionType, { disc: VARIANT }>;
+//          encode(v.field);
+//          break;
+//        }
+//      The Extract<> is needed because { disc: number } overlaps all variants.
+//    - Default void: no default case needed (nothing to encode)
+//    - Default data: default case encodes the default field
+//
+// 3. DECODE:
+//    - No default:  default: throw
+//    - Default void: default: return { disc }
+//    - Default data: default: return { disc, field: decode() }
+// ============================================================================
+
+export const codec = {
+  StorageKey: _StorageKey,
+  ExpectedStorageCost: _ExpectedStorageCost,
+  WalletTransactionAck: _WalletTransactionAck,
+  Foo: _Foo,
+} as const;

@@ -17,7 +17,6 @@ export interface eventexecutor_emit_event_args {
 
 export type EventBlockResult =
   | { error: proto.RPCError.kRPCNone; root_hash: proto.SHA256Hash }
-  | { error: number }
 ;
 
 
