@@ -25,8 +25,8 @@ export interface RepairedTransactions {
 
 
 export interface repair_missing_cv_args {
-  ConsensusValueHash: proto.ConsensusValueHash;
-  BlockHeight: proto.BlockHeight;
+  arg0: proto.ConsensusValueHash;
+  arg1: proto.BlockHeight;
 }
 
 
@@ -76,13 +76,13 @@ const _RepairedTransactions: XdrCodec<RepairedTransactions> = {
 
 const _repair_missing_cv_args: XdrCodec<repair_missing_cv_args> = {
   encode(w, val) {
-    proto.codec.ConsensusValueHash.encode(w, val.ConsensusValueHash);
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
+    proto.codec.ConsensusValueHash.encode(w, val.arg0);
+    proto.codec.BlockHeight.encode(w, val.arg1);
   },
   decode(r) {
-    const ConsensusValueHash = proto.codec.ConsensusValueHash.decode(r);
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    return { ConsensusValueHash, BlockHeight };
+    const arg0 = proto.codec.ConsensusValueHash.decode(r);
+    const arg1 = proto.codec.BlockHeight.decode(r);
+    return { arg0, arg1 };
   },
 };
 

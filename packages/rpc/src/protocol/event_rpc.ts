@@ -10,9 +10,9 @@ import * as proto from "./index.js";
 
 
 export interface eventexecutor_emit_event_args {
-  BlockID: proto.BlockID;
-  TransactionID: proto.TransactionID;
-  TxEventLog: proto.TxEventLog;
+  arg0: proto.BlockID;
+  arg1: proto.TransactionID;
+  arg2: proto.TxEventLog;
 }
 
 export type EventBlockResult =
@@ -22,8 +22,8 @@ export type EventBlockResult =
 
 
 export interface eventsched_close_block_args {
-  BlockID: proto.BlockID;
-  BlockHeight: proto.BlockHeight;
+  arg0: proto.BlockID;
+  arg1: proto.BlockHeight;
 }
 
 
@@ -33,15 +33,15 @@ export interface eventsched_close_block_args {
 
 const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.TransactionID.encode(w, val.TransactionID);
-    proto.codec.TxEventLog.encode(w, val.TxEventLog);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.TransactionID.encode(w, val.arg1);
+    proto.codec.TxEventLog.encode(w, val.arg2);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const TransactionID = proto.codec.TransactionID.decode(r);
-    const TxEventLog = proto.codec.TxEventLog.decode(r);
-    return { BlockID, TransactionID, TxEventLog };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.TransactionID.decode(r);
+    const arg2 = proto.codec.TxEventLog.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 
@@ -70,13 +70,13 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
 
 const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.BlockHeight.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    return { BlockID, BlockHeight };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.BlockHeight.decode(r);
+    return { arg0, arg1 };
   },
 };
 

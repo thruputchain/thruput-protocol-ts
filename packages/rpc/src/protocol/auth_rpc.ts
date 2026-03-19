@@ -22,13 +22,13 @@ export function authErrorCodeBatch(val: proto.AuthErrorCode[]): AuthErrorCodeBat
 
 
 export interface authmempool_verify_transactions_args {
-  BlockHeight: proto.BlockHeight;
-  SignedTransactionBatch: proto.SignedTransactionBatch;
+  arg0: proto.BlockHeight;
+  arg1: proto.SignedTransactionBatch;
 }
 
 export interface authmempool_verify_batch_args {
-  BlockHeight: proto.BlockHeight;
-  SignedTransactionBatch: proto.SignedTransactionBatch;
+  arg0: proto.BlockHeight;
+  arg1: proto.SignedTransactionBatch;
 }
 
 export interface KeyChange {
@@ -43,8 +43,8 @@ export function keyChangeBatch(val: proto.KeyChange[]): KeyChangeBatch {
 
 
 export interface authdb_forward_key_changes_args {
-  BlockHeight: proto.BlockHeight;
-  KeyChangeBatch: proto.KeyChangeBatch;
+  arg0: proto.BlockHeight;
+  arg1: proto.KeyChangeBatch;
 }
 
 export enum DBAuthError {
@@ -76,13 +76,13 @@ export function dbAuthResultBatch(val: proto.DBAuthResult[]): DBAuthResultBatch 
 
 
 export interface authdb_get_auth_data_args {
-  BlockHeight: proto.BlockHeight;
-  ContractAddress: proto.ContractAddress;
+  arg0: proto.BlockHeight;
+  arg1: proto.ContractAddress;
 }
 
 export interface authdb_get_auth_data_batch_args {
-  BlockHeight: proto.BlockHeight;
-  ContractAddressBatch: proto.ContractAddressBatch;
+  arg0: proto.BlockHeight;
+  arg1: proto.ContractAddressBatch;
 }
 
 export enum IntroAuthOutcome {
@@ -97,8 +97,8 @@ export type IntroAuthResult =
 
 
 export interface mempoolauth_auth_data_changed_args {
-  BlockHeight: proto.BlockHeight;
-  KeyChangeBatch: proto.KeyChangeBatch;
+  arg0: proto.BlockHeight;
+  arg1: proto.KeyChangeBatch;
 }
 
 
@@ -124,25 +124,25 @@ const _AuthErrorCodeBatch: XdrCodec<AuthErrorCodeBatch> = {
 
 const _authmempool_verify_transactions_args: XdrCodec<authmempool_verify_transactions_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.SignedTransactionBatch.encode(w, val.SignedTransactionBatch);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.SignedTransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const SignedTransactionBatch = proto.codec.SignedTransactionBatch.decode(r);
-    return { BlockHeight, SignedTransactionBatch };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.SignedTransactionBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.SignedTransactionBatch.encode(w, val.SignedTransactionBatch);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.SignedTransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const SignedTransactionBatch = proto.codec.SignedTransactionBatch.decode(r);
-    return { BlockHeight, SignedTransactionBatch };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.SignedTransactionBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
@@ -176,13 +176,13 @@ const _KeyChangeBatch: XdrCodec<KeyChangeBatch> = {
 
 const _authdb_forward_key_changes_args: XdrCodec<authdb_forward_key_changes_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.KeyChangeBatch.encode(w, val.KeyChangeBatch);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.KeyChangeBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const KeyChangeBatch = proto.codec.KeyChangeBatch.decode(r);
-    return { BlockHeight, KeyChangeBatch };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.KeyChangeBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
@@ -255,25 +255,25 @@ const _DBAuthResultBatch: XdrCodec<DBAuthResultBatch> = {
 
 const _authdb_get_auth_data_args: XdrCodec<authdb_get_auth_data_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.ContractAddress.encode(w, val.ContractAddress);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.ContractAddress.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const ContractAddress = proto.codec.ContractAddress.decode(r);
-    return { BlockHeight, ContractAddress };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.ContractAddress.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _authdb_get_auth_data_batch_args: XdrCodec<authdb_get_auth_data_batch_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.ContractAddressBatch.encode(w, val.ContractAddressBatch);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.ContractAddressBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const ContractAddressBatch = proto.codec.ContractAddressBatch.decode(r);
-    return { BlockHeight, ContractAddressBatch };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.ContractAddressBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
@@ -309,13 +309,13 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
 
 const _mempoolauth_auth_data_changed_args: XdrCodec<mempoolauth_auth_data_changed_args> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
-    proto.codec.KeyChangeBatch.encode(w, val.KeyChangeBatch);
+    proto.codec.BlockHeight.encode(w, val.arg0);
+    proto.codec.KeyChangeBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    const KeyChangeBatch = proto.codec.KeyChangeBatch.decode(r);
-    return { BlockHeight, KeyChangeBatch };
+    const arg0 = proto.codec.BlockHeight.decode(r);
+    const arg1 = proto.codec.KeyChangeBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 

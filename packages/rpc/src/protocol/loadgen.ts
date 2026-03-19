@@ -60,9 +60,9 @@ export type LoadgenExtensionResult =
 
 
 export interface extend_experiment_args {
-  LoadgenContextID: proto.LoadgenContextID;
-  unsigned hyper: bigint;
-  BlockHeight: proto.BlockHeight;
+  arg0: proto.LoadgenContextID;
+  arg1: bigint;
+  arg2: proto.BlockHeight;
 }
 
 
@@ -203,15 +203,15 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
 
 const _extend_experiment_args: XdrCodec<extend_experiment_args> = {
   encode(w, val) {
-    proto.codec.LoadgenContextID.encode(w, val.LoadgenContextID);
-    w.writeUint64(val.unsigned hyper);
-    proto.codec.BlockHeight.encode(w, val.BlockHeight);
+    proto.codec.LoadgenContextID.encode(w, val.arg0);
+    w.writeUint64(val.arg1);
+    proto.codec.BlockHeight.encode(w, val.arg2);
   },
   decode(r) {
-    const LoadgenContextID = proto.codec.LoadgenContextID.decode(r);
-    const unsigned hyper = r.readUint64();
-    const BlockHeight = proto.codec.BlockHeight.decode(r);
-    return { LoadgenContextID, unsigned hyper, BlockHeight };
+    const arg0 = proto.codec.LoadgenContextID.decode(r);
+    const arg1 = r.readUint64();
+    const arg2 = proto.codec.BlockHeight.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 

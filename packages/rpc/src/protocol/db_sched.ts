@@ -58,26 +58,26 @@ export type DbTipResult =
 
 
 export interface dbsched_get_address_auth_data_args {
-  BlockID: proto.BlockID;
-  ContractAddressBatch: proto.ContractAddressBatch;
+  arg0: proto.BlockID;
+  arg1: proto.ContractAddressBatch;
 }
 
 export interface dbsched_create_snapshot_args {
-  BlockID: proto.BlockID;
-  BlockID2: proto.BlockID;
-  BlockExecutionMode: proto.BlockExecutionMode;
+  arg0: proto.BlockID;
+  arg1: proto.BlockID;
+  arg2: proto.BlockExecutionMode;
 }
 
 export interface dbsched_commit_snapshot_args {
-  BlockID: proto.BlockID;
-  BlockHash: proto.BlockHash;
+  arg0: proto.BlockID;
+  arg1: proto.BlockHash;
 }
 
 export interface dbsched_load_genesis_configuration_args {
-  GenesisConfiguration: proto.GenesisConfiguration;
-  unsigned hyper: bigint;
-  SHA256Hash: proto.SHA256Hash;
-  SHA256Hash2: proto.SHA256Hash;
+  arg0: proto.GenesisConfiguration;
+  arg1: bigint;
+  arg2: proto.SHA256Hash;
+  arg3: proto.SHA256Hash;
 }
 
 
@@ -216,55 +216,55 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
 
 const _dbsched_get_address_auth_data_args: XdrCodec<dbsched_get_address_auth_data_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.ContractAddressBatch.encode(w, val.ContractAddressBatch);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ContractAddressBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const ContractAddressBatch = proto.codec.ContractAddressBatch.decode(r);
-    return { BlockID, ContractAddressBatch };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ContractAddressBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _dbsched_create_snapshot_args: XdrCodec<dbsched_create_snapshot_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.BlockID.encode(w, val.BlockID2);
-    proto.codec.BlockExecutionMode.encode(w, val.BlockExecutionMode);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.BlockID.encode(w, val.arg1);
+    proto.codec.BlockExecutionMode.encode(w, val.arg2);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const BlockID2 = proto.codec.BlockID.decode(r);
-    const BlockExecutionMode = proto.codec.BlockExecutionMode.decode(r);
-    return { BlockID, BlockID2, BlockExecutionMode };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.BlockID.decode(r);
+    const arg2 = proto.codec.BlockExecutionMode.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 
 const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.BlockHash.encode(w, val.BlockHash);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.BlockHash.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const BlockHash = proto.codec.BlockHash.decode(r);
-    return { BlockID, BlockHash };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.BlockHash.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_configuration_args> = {
   encode(w, val) {
-    proto.codec.GenesisConfiguration.encode(w, val.GenesisConfiguration);
-    w.writeUint64(val.unsigned hyper);
-    proto.codec.SHA256Hash.encode(w, val.SHA256Hash);
-    proto.codec.SHA256Hash.encode(w, val.SHA256Hash2);
+    proto.codec.GenesisConfiguration.encode(w, val.arg0);
+    w.writeUint64(val.arg1);
+    proto.codec.SHA256Hash.encode(w, val.arg2);
+    proto.codec.SHA256Hash.encode(w, val.arg3);
   },
   decode(r) {
-    const GenesisConfiguration = proto.codec.GenesisConfiguration.decode(r);
-    const unsigned hyper = r.readUint64();
-    const SHA256Hash = proto.codec.SHA256Hash.decode(r);
-    const SHA256Hash2 = proto.codec.SHA256Hash.decode(r);
-    return { GenesisConfiguration, unsigned hyper, SHA256Hash, SHA256Hash2 };
+    const arg0 = proto.codec.GenesisConfiguration.decode(r);
+    const arg1 = r.readUint64();
+    const arg2 = proto.codec.SHA256Hash.decode(r);
+    const arg3 = proto.codec.SHA256Hash.decode(r);
+    return { arg0, arg1, arg2, arg3 };
   },
 };
 

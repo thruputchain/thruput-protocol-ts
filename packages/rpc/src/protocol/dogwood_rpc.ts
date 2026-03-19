@@ -25,8 +25,8 @@ export interface DogwoodReceived {
 
 
 export interface dogwoodapi_send_args {
-  Milliseconds: proto.Milliseconds;
-  Bytes: proto.Bytes;
+  arg0: proto.Milliseconds;
+  arg1: proto.Bytes;
 }
 
 
@@ -67,13 +67,13 @@ const _DogwoodReceived: XdrCodec<DogwoodReceived> = {
 
 const _dogwoodapi_send_args: XdrCodec<dogwoodapi_send_args> = {
   encode(w, val) {
-    proto.codec.Milliseconds.encode(w, val.Milliseconds);
-    proto.codec.Bytes.encode(w, val.Bytes);
+    proto.codec.Milliseconds.encode(w, val.arg0);
+    proto.codec.Bytes.encode(w, val.arg1);
   },
   decode(r) {
-    const Milliseconds = proto.codec.Milliseconds.decode(r);
-    const Bytes = proto.codec.Bytes.decode(r);
-    return { Milliseconds, Bytes };
+    const arg0 = proto.codec.Milliseconds.decode(r);
+    const arg1 = proto.codec.Bytes.decode(r);
+    return { arg0, arg1 };
   },
 };
 

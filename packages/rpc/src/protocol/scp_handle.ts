@@ -16,63 +16,63 @@ export enum SCPValidationLevel {
 
 
 export interface scp_handle_validate_ballot_value_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_validate_nomination_value_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_extract_valid_value_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_combine_candidates_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValues: proto.SCPValues;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValues;
 }
 
 export interface scp_handle_value_externalized_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_nominating_value_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_updated_candidate_value_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
 }
 
 export interface scp_handle_started_ballot_proto_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPBallot: proto.SCPBallot;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPBallot;
 }
 
 export interface scp_handle_accepted_ballot_prepared_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPBallot: proto.SCPBallot;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPBallot;
 }
 
 export interface scp_handle_confirmed_ballot_prepared_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPBallot: proto.SCPBallot;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPBallot;
 }
 
 export interface scp_handle_accepted_commit_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPBallot: proto.SCPBallot;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPBallot;
 }
 
 export interface scp_handle_ballot_did_hear_from_quorum_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPBallot: proto.SCPBallot;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPBallot;
 }
 
 
@@ -87,145 +87,145 @@ const _SCPValidationLevel: XdrCodec<SCPValidationLevel> = {
 
 const _scp_handle_validate_ballot_value_args: XdrCodec<scp_handle_validate_ballot_value_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_validate_nomination_value_args: XdrCodec<scp_handle_validate_nomination_value_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_extract_valid_value_args: XdrCodec<scp_handle_extract_valid_value_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_combine_candidates_args: XdrCodec<scp_handle_combine_candidates_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValues.encode(w, val.SCPValues);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValues.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValues = proto.codec.SCPValues.decode(r);
-    return { SCPSlotIndex, SCPValues };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValues.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_value_externalized_args: XdrCodec<scp_handle_value_externalized_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_nominating_value_args: XdrCodec<scp_handle_nominating_value_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_updated_candidate_value_args: XdrCodec<scp_handle_updated_candidate_value_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_started_ballot_proto_args: XdrCodec<scp_handle_started_ballot_proto_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPBallot.encode(w, val.SCPBallot);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPBallot.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPBallot = proto.codec.SCPBallot.decode(r);
-    return { SCPSlotIndex, SCPBallot };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPBallot.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_accepted_ballot_prepared_args: XdrCodec<scp_handle_accepted_ballot_prepared_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPBallot.encode(w, val.SCPBallot);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPBallot.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPBallot = proto.codec.SCPBallot.decode(r);
-    return { SCPSlotIndex, SCPBallot };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPBallot.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_confirmed_ballot_prepared_args: XdrCodec<scp_handle_confirmed_ballot_prepared_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPBallot.encode(w, val.SCPBallot);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPBallot.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPBallot = proto.codec.SCPBallot.decode(r);
-    return { SCPSlotIndex, SCPBallot };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPBallot.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_accepted_commit_args: XdrCodec<scp_handle_accepted_commit_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPBallot.encode(w, val.SCPBallot);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPBallot.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPBallot = proto.codec.SCPBallot.decode(r);
-    return { SCPSlotIndex, SCPBallot };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPBallot.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _scp_handle_ballot_did_hear_from_quorum_args: XdrCodec<scp_handle_ballot_did_hear_from_quorum_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPBallot.encode(w, val.SCPBallot);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPBallot.encode(w, val.arg1);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPBallot = proto.codec.SCPBallot.decode(r);
-    return { SCPSlotIndex, SCPBallot };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPBallot.decode(r);
+    return { arg0, arg1 };
   },
 };
 

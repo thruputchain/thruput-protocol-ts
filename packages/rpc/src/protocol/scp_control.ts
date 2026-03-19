@@ -10,9 +10,9 @@ import * as proto from "./index.js";
 
 
 export interface scp_control_nominate_args {
-  SCPSlotIndex: proto.SCPSlotIndex;
-  SCPValue: proto.SCPValue;
-  SCPValue2: proto.SCPValue;
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPValue;
+  arg2: proto.SCPValue;
 }
 
 
@@ -22,15 +22,15 @@ export interface scp_control_nominate_args {
 
 const _scp_control_nominate_args: XdrCodec<scp_control_nominate_args> = {
   encode(w, val) {
-    proto.codec.SCPSlotIndex.encode(w, val.SCPSlotIndex);
-    proto.codec.SCPValue.encode(w, val.SCPValue);
-    proto.codec.SCPValue.encode(w, val.SCPValue2);
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPValue.encode(w, val.arg1);
+    proto.codec.SCPValue.encode(w, val.arg2);
   },
   decode(r) {
-    const SCPSlotIndex = proto.codec.SCPSlotIndex.decode(r);
-    const SCPValue = proto.codec.SCPValue.decode(r);
-    const SCPValue2 = proto.codec.SCPValue.decode(r);
-    return { SCPSlotIndex, SCPValue, SCPValue2 };
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPValue.decode(r);
+    const arg2 = proto.codec.SCPValue.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 

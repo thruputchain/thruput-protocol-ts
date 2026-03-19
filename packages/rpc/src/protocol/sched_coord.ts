@@ -68,13 +68,13 @@ export type SchedulerGetTipResult =
 
 
 export interface schedulercoord_submit_vetted_args {
-  ValidatorID: proto.ValidatorID;
-  ParallelSignedTransactionBatch: proto.ParallelSignedTransactionBatch;
+  arg0: proto.ValidatorID;
+  arg1: proto.ParallelSignedTransactionBatch;
 }
 
 export interface schedulercoord_validate_args {
-  DbTip: proto.DbTip;
-  Nomination: proto.Nomination;
+  arg0: proto.DbTip;
+  arg1: proto.Nomination;
 }
 
 
@@ -222,25 +222,25 @@ const _SchedulerGetTipResult: XdrCodec<SchedulerGetTipResult> = {
 
 const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_args> = {
   encode(w, val) {
-    proto.codec.ValidatorID.encode(w, val.ValidatorID);
-    proto.codec.ParallelSignedTransactionBatch.encode(w, val.ParallelSignedTransactionBatch);
+    proto.codec.ValidatorID.encode(w, val.arg0);
+    proto.codec.ParallelSignedTransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const ValidatorID = proto.codec.ValidatorID.decode(r);
-    const ParallelSignedTransactionBatch = proto.codec.ParallelSignedTransactionBatch.decode(r);
-    return { ValidatorID, ParallelSignedTransactionBatch };
+    const arg0 = proto.codec.ValidatorID.decode(r);
+    const arg1 = proto.codec.ParallelSignedTransactionBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _schedulercoord_validate_args: XdrCodec<schedulercoord_validate_args> = {
   encode(w, val) {
-    proto.codec.DbTip.encode(w, val.DbTip);
-    proto.codec.Nomination.encode(w, val.Nomination);
+    proto.codec.DbTip.encode(w, val.arg0);
+    proto.codec.Nomination.encode(w, val.arg1);
   },
   decode(r) {
-    const DbTip = proto.codec.DbTip.decode(r);
-    const Nomination = proto.codec.Nomination.decode(r);
-    return { DbTip, Nomination };
+    const arg0 = proto.codec.DbTip.decode(r);
+    const arg1 = proto.codec.Nomination.decode(r);
+    return { arg0, arg1 };
   },
 };
 

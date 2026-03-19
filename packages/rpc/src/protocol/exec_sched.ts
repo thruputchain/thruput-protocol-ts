@@ -32,23 +32,23 @@ export function execValidateBatchResult(val: proto.ExecResult[]): ExecValidateBa
 
 
 export interface executorsched_propose_transaction_args {
-  BlockID: proto.BlockID;
-  Transaction: proto.Transaction;
+  arg0: proto.BlockID;
+  arg1: proto.Transaction;
 }
 
 export interface executorsched_validate_transaction_args {
-  BlockID: proto.BlockID;
-  ProposedTransaction: proto.ProposedTransaction;
+  arg0: proto.BlockID;
+  arg1: proto.ProposedTransaction;
 }
 
 export interface executorsched_propose_batch_args {
-  BlockID: proto.BlockID;
-  TransactionBatch: proto.TransactionBatch;
+  arg0: proto.BlockID;
+  arg1: proto.TransactionBatch;
 }
 
 export interface executorsched_validate_batch_args {
-  BlockID: proto.BlockID;
-  ProposedTransactionBatch: proto.ProposedTransactionBatch;
+  arg0: proto.BlockID;
+  arg1: proto.ProposedTransactionBatch;
 }
 
 
@@ -118,49 +118,49 @@ const _ExecValidateBatchResult: XdrCodec<ExecValidateBatchResult> = {
 
 const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_transaction_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.Transaction.encode(w, val.Transaction);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.Transaction.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const Transaction = proto.codec.Transaction.decode(r);
-    return { BlockID, Transaction };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.Transaction.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _executorsched_validate_transaction_args: XdrCodec<executorsched_validate_transaction_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.ProposedTransaction.encode(w, val.ProposedTransaction);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ProposedTransaction.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const ProposedTransaction = proto.codec.ProposedTransaction.decode(r);
-    return { BlockID, ProposedTransaction };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ProposedTransaction.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _executorsched_propose_batch_args: XdrCodec<executorsched_propose_batch_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.TransactionBatch.encode(w, val.TransactionBatch);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.TransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const TransactionBatch = proto.codec.TransactionBatch.decode(r);
-    return { BlockID, TransactionBatch };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.TransactionBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_args> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.BlockID);
-    proto.codec.ProposedTransactionBatch.encode(w, val.ProposedTransactionBatch);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ProposedTransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
-    const BlockID = proto.codec.BlockID.decode(r);
-    const ProposedTransactionBatch = proto.codec.ProposedTransactionBatch.decode(r);
-    return { BlockID, ProposedTransactionBatch };
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ProposedTransactionBatch.decode(r);
+    return { arg0, arg1 };
   },
 };
 
