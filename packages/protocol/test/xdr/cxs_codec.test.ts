@@ -53,7 +53,7 @@ describe("CXS codec round-trip with protocol types", () => {
 
   it("StorageKey (void variant): CXS round-trip", () => {
     const sk: StorageKey = {
-      key_type: StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance,
+      key_type: StorageKeyType.FreeNativeTokenBalance,
     };
     const cxsBytes = serializeCxs(sk, codec.StorageKey);
     const decoded = deserializeCxs(cxsBytes, codec.StorageKey);
@@ -62,7 +62,7 @@ describe("CXS codec round-trip with protocol types", () => {
 
   it("StorageKey (ContractData): CXS round-trip", () => {
     const sk: StorageKey = {
-      key_type: StorageKeyType.kStorageKeyTypeContractData,
+      key_type: StorageKeyType.ContractData,
       contract_data_key: storageKeyContractData(new Uint8Array(32).fill(0xFF)),
     };
     const cxsBytes = serializeCxs(sk, codec.StorageKey);

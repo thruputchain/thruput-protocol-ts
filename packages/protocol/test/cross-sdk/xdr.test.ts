@@ -99,11 +99,11 @@ function encodeEnum(type: string, value: { variant: string }): Uint8Array {
   if (type === "StorageKeyType") {
     const w = new XdrWriter();
     const variants: Record<string, number> = {
-      kStorageKeyTypeContractData: 0,
-      kStorageKeyTypeFreeNativeTokenBalance: 1,
-      kStorageKeyTypeAddressAuthData: 2,
-      kStorageKeyTypeAddressMetadata: 3,
-      kStorageKeyTypeReplayCache: 4,
+      ContractData: 0,
+      FreeNativeTokenBalance: 1,
+      AuthData: 2,
+      Metadata: 3,
+      ReplayCache: 4,
     };
     w.writeInt32(BigInt(variants[value.variant]));
     return w.finish();

@@ -25,6 +25,7 @@ export function walletSubmittedTransactionID(data: Uint8Array): WalletSubmittedT
 export type WalletTransactionAck =
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionNotSubmitted }
   | { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID }
+  | { ack_type: number }
 ;
 
 export interface WalletAck {
@@ -66,22 +67,23 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
       case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
         break;
       case proto.WalletTransactionAckType.WalletTransactionSubmitted:
-        proto.codec.WalletSubmittedTransactionID.encode(w, val.submitted_transaction_id);
+      {
+        const v = val as Extract<WalletTransactionAck, { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted }>;
+        proto.codec.WalletSubmittedTransactionID.encode(w, v.submitted_transaction_id);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
     const ack_type = Number(r.readInt32());
     switch (ack_type) {
       case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
-        return { ack_type } as WalletTransactionAck;
+        return { ack_type };
       case proto.WalletTransactionAckType.WalletTransactionSubmitted:
         const submitted_transaction_id = proto.codec.WalletSubmittedTransactionID.decode(r);
         return { ack_type, submitted_transaction_id };
       default:
-        return { ack_type } as WalletTransactionAck;
+        return { ack_type };
     }
   },
 };

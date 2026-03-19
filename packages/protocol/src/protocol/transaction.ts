@@ -34,22 +34,22 @@ export interface Invocation {
 }
 
 export enum InvocationFrameStatusCode {
-  kInvocationFrameStatusCodeReturn = 0,
-  kInvocationFrameStatusCodeFault = 1,
-  kInvocationFrameStatusCodeAbort = 2,
+  Return = 0,
+  Fault = 1,
+  Abort = 2,
 }
 
 export type InvocationFrameOutput =
-  | { status_code: proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeReturn; return_buffer: proto.ReturnBuffer }
-  | { status_code: proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeAbort; abort_buffer: proto.ReturnBuffer }
-  | { status_code: proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeFault }
+  | { status_code: proto.InvocationFrameStatusCode.Return; return_buffer: proto.ReturnBuffer }
+  | { status_code: proto.InvocationFrameStatusCode.Abort; abort_buffer: proto.ReturnBuffer }
+  | { status_code: proto.InvocationFrameStatusCode.Fault }
 ;
 
 export enum InvokeFlag {
-  kInvokeFlagNone = 0,
-  kInvokeFlagTryInvoke = 0x00000001,
-  kInvokeFlagReadOnly = 0x00000002,
-  kInvokeFlagDelegateCall = 0x00000004,
+  None = 0,
+  TryInvoke = 0x00000001,
+  ReadOnly = 0x00000002,
+  DelegateCall = 0x00000004,
 }
 
 export type InvokeFlagSet = bigint & { readonly __brand: "InvokeFlagSet" };
@@ -123,7 +123,7 @@ export interface ProposedTransaction {
 }
 
 export enum TransactionStatistic {
-  kTxStatGasRemaining = 0,
+  GasRemaining = 0,
 }
 
 
@@ -178,26 +178,26 @@ const _InvocationFrameOutput: XdrCodec<InvocationFrameOutput> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.status_code));
     switch (val.status_code) {
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeReturn:
+      case proto.InvocationFrameStatusCode.Return:
         proto.codec.ReturnBuffer.encode(w, val.return_buffer);
         break;
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeAbort:
+      case proto.InvocationFrameStatusCode.Abort:
         proto.codec.ReturnBuffer.encode(w, val.abort_buffer);
         break;
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeFault:
+      case proto.InvocationFrameStatusCode.Fault:
         break;
     }
   },
   decode(r) {
     const status_code = Number(r.readInt32());
     switch (status_code) {
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeReturn:
+      case proto.InvocationFrameStatusCode.Return:
         const return_buffer = proto.codec.ReturnBuffer.decode(r);
         return { status_code, return_buffer };
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeAbort:
+      case proto.InvocationFrameStatusCode.Abort:
         const abort_buffer = proto.codec.ReturnBuffer.decode(r);
         return { status_code, abort_buffer };
-      case proto.InvocationFrameStatusCode.kInvocationFrameStatusCodeFault:
+      case proto.InvocationFrameStatusCode.Fault:
         return { status_code } as InvocationFrameOutput;
       default:
         throw new Error(`Unknown InvocationFrameOutput discriminant: ${status_code}`);

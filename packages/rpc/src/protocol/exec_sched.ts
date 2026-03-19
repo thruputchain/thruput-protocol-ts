@@ -12,6 +12,7 @@ export type ExecProposeResult =
   | { result: proto.ExecResult.ExecResultOK; proposal_data: proto.NondeterministicProposalData }
   | { result: proto.ExecResult.ExecResultTxDeterministicError; proposal_data: proto.NondeterministicProposalData }
   | { result: proto.ExecResult.ExecResultTxRootFrameReverted; proposal_data: proto.NondeterministicProposalData }
+  | { result: number }
 ;
 
 export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: "ProposedTransactionBatch" };
@@ -62,10 +63,11 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
       case proto.ExecResult.ExecResultOK:
       case proto.ExecResult.ExecResultTxDeterministicError:
       case proto.ExecResult.ExecResultTxRootFrameReverted:
-        proto.codec.NondeterministicProposalData.encode(w, val.proposal_data);
+      {
+        const v = val as Extract<ExecProposeResult, { result: proto.ExecResult.ExecResultOK }>;
+        proto.codec.NondeterministicProposalData.encode(w, v.proposal_data);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -77,7 +79,7 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
         const proposal_data = proto.codec.NondeterministicProposalData.decode(r);
         return { result, proposal_data };
       default:
-        return { result } as ExecProposeResult;
+        return { result };
     }
   },
 };

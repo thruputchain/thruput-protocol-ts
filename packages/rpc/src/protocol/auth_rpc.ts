@@ -56,6 +56,7 @@ export enum DBAuthError {
 
 export type DBAuthResult =
   | { error: proto.DBAuthError.kDBAuthSuccess; auth_data: proto.AddressAuthData }
+  | { error: number }
 ;
 
 export enum DBAuthIntroOutcome {
@@ -65,6 +66,7 @@ export enum DBAuthIntroOutcome {
 
 export type DBAuthIntroResult =
   | { outcome: proto.DBAuthIntroOutcome.kIntroSuccess; current_height: proto.BlockHeight }
+  | { outcome: number }
 ;
 
 export type DBAuthResultBatch = proto.DBAuthResult[] & { readonly __brand: "DBAuthResultBatch" };
@@ -90,6 +92,7 @@ export enum IntroAuthOutcome {
 
 export type IntroAuthResult =
   | { outcome: proto.IntroAuthOutcome.kSuccess; shards: proto.ShardCard[] }
+  | { outcome: number }
 ;
 
 
@@ -193,10 +196,11 @@ const _DBAuthResult: XdrCodec<DBAuthResult> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.DBAuthError.kDBAuthSuccess:
-        proto.codec.AddressAuthData.encode(w, val.auth_data);
+      {
+        const v = val as Extract<DBAuthResult, { error: proto.DBAuthError.kDBAuthSuccess }>;
+        proto.codec.AddressAuthData.encode(w, v.auth_data);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -206,7 +210,7 @@ const _DBAuthResult: XdrCodec<DBAuthResult> = {
         const auth_data = proto.codec.AddressAuthData.decode(r);
         return { error, auth_data };
       default:
-        return { error } as DBAuthResult;
+        return { error };
     }
   },
 };
@@ -221,10 +225,11 @@ const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
       case proto.DBAuthIntroOutcome.kIntroSuccess:
-        proto.codec.BlockHeight.encode(w, val.current_height);
+      {
+        const v = val as Extract<DBAuthIntroResult, { outcome: proto.DBAuthIntroOutcome.kIntroSuccess }>;
+        proto.codec.BlockHeight.encode(w, v.current_height);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -234,7 +239,7 @@ const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
         const current_height = proto.codec.BlockHeight.decode(r);
         return { outcome, current_height };
       default:
-        return { outcome } as DBAuthIntroResult;
+        return { outcome };
     }
   },
 };
@@ -284,11 +289,12 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
       case proto.IntroAuthOutcome.kSuccess:
-        w.writeUint32(BigInt(val.shards.length));
-        for (const _item of val.shards) proto.codec.ShardCard.encode(w, _item);
+      {
+        const v = val as Extract<IntroAuthResult, { outcome: proto.IntroAuthOutcome.kSuccess }>;
+        w.writeUint32(BigInt(v.shards.length));
+        for (const _item of v.shards) proto.codec.ShardCard.encode(w, _item);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -299,7 +305,7 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
         const shards = Array.from({ length: _shards_len }, () => proto.codec.ShardCard.decode(r));
         return { outcome, shards };
       default:
-        return { outcome } as IntroAuthResult;
+        return { outcome };
     }
   },
 };

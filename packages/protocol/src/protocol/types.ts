@@ -94,11 +94,11 @@ export function contractAddress(data: Uint8Array): ContractAddress {
 }
 
 export enum StorageKeyType {
-  kStorageKeyTypeContractData = 0,
-  kStorageKeyTypeFreeNativeTokenBalance = 1,
-  kStorageKeyTypeAddressAuthData = 2,
-  kStorageKeyTypeAddressMetadata = 3,
-  kStorageKeyTypeReplayCache = 4,
+  ContractData = 0,
+  FreeNativeTokenBalance = 1,
+  AuthData = 2,
+  Metadata = 3,
+  ReplayCache = 4,
 }
 
 export type StorageKeyContractData = Uint8Array & { readonly __brand: "StorageKeyContractData" };
@@ -108,11 +108,11 @@ export function storageKeyContractData(data: Uint8Array): StorageKeyContractData
 }
 
 export type StorageKey =
-  | { key_type: proto.StorageKeyType.kStorageKeyTypeContractData; contract_data_key: proto.StorageKeyContractData }
-  | { key_type: proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance }
-  | { key_type: proto.StorageKeyType.kStorageKeyTypeAddressAuthData }
-  | { key_type: proto.StorageKeyType.kStorageKeyTypeAddressMetadata }
-  | { key_type: proto.StorageKeyType.kStorageKeyTypeReplayCache }
+  | { key_type: proto.StorageKeyType.ContractData; contract_data_key: proto.StorageKeyContractData }
+  | { key_type: proto.StorageKeyType.FreeNativeTokenBalance }
+  | { key_type: proto.StorageKeyType.AuthData }
+  | { key_type: proto.StorageKeyType.Metadata }
+  | { key_type: proto.StorageKeyType.ReplayCache }
 ;
 
 export const kTotalHogSupply = 62_500_000_000n;
@@ -309,32 +309,32 @@ const _StorageKey: XdrCodec<StorageKey> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.key_type));
     switch (val.key_type) {
-      case proto.StorageKeyType.kStorageKeyTypeContractData:
+      case proto.StorageKeyType.ContractData:
         proto.codec.StorageKeyContractData.encode(w, val.contract_data_key);
         break;
-      case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
+      case proto.StorageKeyType.FreeNativeTokenBalance:
         break;
-      case proto.StorageKeyType.kStorageKeyTypeAddressAuthData:
+      case proto.StorageKeyType.AuthData:
         break;
-      case proto.StorageKeyType.kStorageKeyTypeAddressMetadata:
+      case proto.StorageKeyType.Metadata:
         break;
-      case proto.StorageKeyType.kStorageKeyTypeReplayCache:
+      case proto.StorageKeyType.ReplayCache:
         break;
     }
   },
   decode(r) {
     const key_type = Number(r.readInt32());
     switch (key_type) {
-      case proto.StorageKeyType.kStorageKeyTypeContractData:
+      case proto.StorageKeyType.ContractData:
         const contract_data_key = proto.codec.StorageKeyContractData.decode(r);
         return { key_type, contract_data_key };
-      case proto.StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance:
+      case proto.StorageKeyType.FreeNativeTokenBalance:
         return { key_type } as StorageKey;
-      case proto.StorageKeyType.kStorageKeyTypeAddressAuthData:
+      case proto.StorageKeyType.AuthData:
         return { key_type } as StorageKey;
-      case proto.StorageKeyType.kStorageKeyTypeAddressMetadata:
+      case proto.StorageKeyType.Metadata:
         return { key_type } as StorageKey;
-      case proto.StorageKeyType.kStorageKeyTypeReplayCache:
+      case proto.StorageKeyType.ReplayCache:
         return { key_type } as StorageKey;
       default:
         throw new Error(`Unknown StorageKey discriminant: ${key_type}`);

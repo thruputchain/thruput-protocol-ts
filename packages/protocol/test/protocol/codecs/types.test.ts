@@ -36,7 +36,7 @@ describe("types.x codecs round-trip", () => {
 
   it("StorageKey (ContractData variant)", () => {
     const sk: StorageKey = {
-      key_type: StorageKeyType.kStorageKeyTypeContractData,
+      key_type: StorageKeyType.ContractData,
       contract_data_key: storageKeyContractData(new Uint8Array(32).fill(0xFF)),
     };
     const bytes = serialize(sk, codec.StorageKey);
@@ -45,7 +45,7 @@ describe("types.x codecs round-trip", () => {
 
   it("StorageKey (void variant — FreeNativeTokenBalance)", () => {
     const sk: StorageKey = {
-      key_type: StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance,
+      key_type: StorageKeyType.FreeNativeTokenBalance,
     };
     const bytes = serialize(sk, codec.StorageKey);
     expect(deserialize(bytes, codec.StorageKey)).toEqual(sk);
@@ -61,7 +61,7 @@ describe("types.x codecs round-trip", () => {
   it("AddressAndKey", () => {
     const val: AddressAndKey = {
       address: contractAddress(new Uint8Array(32).fill(0x01)),
-      key: { key_type: StorageKeyType.kStorageKeyTypeReplayCache },
+      key: { key_type: StorageKeyType.ReplayCache },
     };
     const bytes = serialize(val, codec.AddressAndKey);
     expect(deserialize(bytes, codec.AddressAndKey)).toEqual(val);

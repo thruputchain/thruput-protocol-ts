@@ -34,14 +34,17 @@ export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
 
 export type HogAgeResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; hog_age_batch: proto.HogAgeBatch }
+  | { result: number }
 ;
 
 export type DbAddressAuthDataBatchResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; address_auth_data_batch: proto.AddressAuthData[] }
+  | { result: number }
 ;
 
 export type DbBlockResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; db_hash: proto.DbHash }
+  | { result: number }
 ;
 
 export enum DbShardResult {
@@ -50,6 +53,7 @@ export enum DbShardResult {
 
 export type DbTipResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; db_tip: proto.DbTip }
+  | { result: number }
 ;
 
 
@@ -116,10 +120,11 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        proto.codec.HogAgeBatch.encode(w, val.hog_age_batch);
+      {
+        const v = val as Extract<HogAgeResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        proto.codec.HogAgeBatch.encode(w, v.hog_age_batch);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -129,7 +134,7 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
         const hog_age_batch = proto.codec.HogAgeBatch.decode(r);
         return { result, hog_age_batch };
       default:
-        return { result } as HogAgeResult;
+        return { result };
     }
   },
 };
@@ -139,11 +144,12 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        w.writeUint32(BigInt(val.address_auth_data_batch.length));
-        for (const _item of val.address_auth_data_batch) proto.codec.AddressAuthData.encode(w, _item);
+      {
+        const v = val as Extract<DbAddressAuthDataBatchResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        w.writeUint32(BigInt(v.address_auth_data_batch.length));
+        for (const _item of v.address_auth_data_batch) proto.codec.AddressAuthData.encode(w, _item);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -154,7 +160,7 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
         const address_auth_data_batch = Array.from({ length: _address_auth_data_batch_len }, () => proto.codec.AddressAuthData.decode(r));
         return { result, address_auth_data_batch };
       default:
-        return { result } as DbAddressAuthDataBatchResult;
+        return { result };
     }
   },
 };
@@ -164,10 +170,11 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        proto.codec.DbHash.encode(w, val.db_hash);
+      {
+        const v = val as Extract<DbBlockResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        proto.codec.DbHash.encode(w, v.db_hash);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -177,7 +184,7 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
         const db_hash = proto.codec.DbHash.decode(r);
         return { result, db_hash };
       default:
-        return { result } as DbBlockResult;
+        return { result };
     }
   },
 };
@@ -192,10 +199,11 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        proto.codec.DbTip.encode(w, val.db_tip);
+      {
+        const v = val as Extract<DbTipResult, { result: proto.DbSchedResult.DbSchedResultOK }>;
+        proto.codec.DbTip.encode(w, v.db_tip);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -205,7 +213,7 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
         const db_tip = proto.codec.DbTip.decode(r);
         return { result, db_tip };
       default:
-        return { result } as DbTipResult;
+        return { result };
     }
   },
 };

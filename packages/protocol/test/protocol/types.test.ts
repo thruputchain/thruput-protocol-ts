@@ -59,11 +59,11 @@ describe("branded type factories", () => {
 
 describe("enums", () => {
   it("StorageKeyType has correct values", () => {
-    expect(StorageKeyType.kStorageKeyTypeContractData).toBe(0);
-    expect(StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance).toBe(1);
-    expect(StorageKeyType.kStorageKeyTypeAddressAuthData).toBe(2);
-    expect(StorageKeyType.kStorageKeyTypeAddressMetadata).toBe(3);
-    expect(StorageKeyType.kStorageKeyTypeReplayCache).toBe(4);
+    expect(StorageKeyType.ContractData).toBe(0);
+    expect(StorageKeyType.FreeNativeTokenBalance).toBe(1);
+    expect(StorageKeyType.AuthData).toBe(2);
+    expect(StorageKeyType.Metadata).toBe(3);
+    expect(StorageKeyType.ReplayCache).toBe(4);
   });
 
   it("CryptographicScheme has correct values", () => {
@@ -81,11 +81,11 @@ describe("enum codecs", () => {
 
   it("StorageKeyType round-trips all variants", () => {
     for (const variant of [
-      StorageKeyType.kStorageKeyTypeContractData,
-      StorageKeyType.kStorageKeyTypeFreeNativeTokenBalance,
-      StorageKeyType.kStorageKeyTypeAddressAuthData,
-      StorageKeyType.kStorageKeyTypeAddressMetadata,
-      StorageKeyType.kStorageKeyTypeReplayCache,
+      StorageKeyType.ContractData,
+      StorageKeyType.FreeNativeTokenBalance,
+      StorageKeyType.AuthData,
+      StorageKeyType.Metadata,
+      StorageKeyType.ReplayCache,
     ]) {
       const bytes = serialize(variant, codec.StorageKeyType);
       const decoded = deserialize(bytes, codec.StorageKeyType);

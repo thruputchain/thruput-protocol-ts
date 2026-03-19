@@ -50,10 +50,12 @@ export enum LoadgenRPCError {
 
 export type LoadgenResult =
   | { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenSuccessResult }
+  | { error: number }
 ;
 
 export type LoadgenExtensionResult =
   | { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenExtension }
+  | { error: number }
 ;
 
 
@@ -158,10 +160,11 @@ const _LoadgenResult: XdrCodec<LoadgenResult> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
-        proto.codec.LoadgenSuccessResult.encode(w, val.success);
+      {
+        const v = val as Extract<LoadgenResult, { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK }>;
+        proto.codec.LoadgenSuccessResult.encode(w, v.success);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -171,7 +174,7 @@ const _LoadgenResult: XdrCodec<LoadgenResult> = {
         const success = proto.codec.LoadgenSuccessResult.decode(r);
         return { error, success };
       default:
-        return { error } as LoadgenResult;
+        return { error };
     }
   },
 };
@@ -181,10 +184,11 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
-        proto.codec.LoadgenExtension.encode(w, val.success);
+      {
+        const v = val as Extract<LoadgenExtensionResult, { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK }>;
+        proto.codec.LoadgenExtension.encode(w, v.success);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -194,7 +198,7 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
         const success = proto.codec.LoadgenExtension.decode(r);
         return { error, success };
       default:
-        return { error } as LoadgenExtensionResult;
+        return { error };
     }
   },
 };

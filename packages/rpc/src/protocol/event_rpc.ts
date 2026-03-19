@@ -17,6 +17,7 @@ export interface eventexecutor_emit_event_args {
 
 export type EventBlockResult =
   | { error: proto.RPCError.kRPCNone; root_hash: proto.SHA256Hash }
+  | { error: number }
 ;
 
 
@@ -49,10 +50,11 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.SHA256Hash.encode(w, val.root_hash);
+      {
+        const v = val as Extract<EventBlockResult, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.SHA256Hash.encode(w, v.root_hash);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -62,7 +64,7 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
         const root_hash = proto.codec.SHA256Hash.decode(r);
         return { error, root_hash };
       default:
-        return { error } as EventBlockResult;
+        return { error };
     }
   },
 };

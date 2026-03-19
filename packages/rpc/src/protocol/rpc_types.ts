@@ -47,34 +47,42 @@ export function storageCost(val: proto.int128_xdr): StorageCost {
 
 export type ExpectedStorageCost =
   | { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost }
+  | { error: number }
 ;
 
 export type ExpectedContract =
   | { error: proto.RPCError.kRPCNone; contract: proto.Contract }
+  | { error: number }
 ;
 
 export type ExpectedDeployment =
   | { error: proto.RPCError.kRPCNone; deployed_hash: proto.DeployedContractHash }
+  | { error: number }
 ;
 
 export type ExpectedProposalData =
   | { error: proto.RPCError.kRPCNone; proposal_data: proto.NondeterministicProposalData }
+  | { error: number }
 ;
 
 export type ExpectedStorageItem =
   | { error: proto.RPCError.kRPCNone; item: proto.WireStorageItem }
+  | { error: number }
 ;
 
 export type ExpectedRetrocausalQueueBlock =
   | { error: proto.RPCError.kRPCNone; queue_block: proto.RetrocausalQueueBlock }
+  | { error: number }
 ;
 
 export type ExpectedQueueEntry =
   | { error: proto.RPCError.kRPCNone; queue_entry: proto.QueueEntry }
+  | { error: number }
 ;
 
 export type ExpectedDBTip =
   | { error: proto.RPCError.kRPCNone; db_tip: proto.DbTip }
+  | { error: number }
 ;
 
 export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: "ContractAddressBatch" };
@@ -133,10 +141,11 @@ const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.StorageCost.encode(w, val.storage_cost);
+      {
+        const v = val as Extract<ExpectedStorageCost, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.StorageCost.encode(w, v.storage_cost);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -146,7 +155,7 @@ const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
         const storage_cost = proto.codec.StorageCost.decode(r);
         return { error, storage_cost };
       default:
-        return { error } as ExpectedStorageCost;
+        return { error };
     }
   },
 };
@@ -156,10 +165,11 @@ const _ExpectedContract: XdrCodec<ExpectedContract> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.Contract.encode(w, val.contract);
+      {
+        const v = val as Extract<ExpectedContract, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.Contract.encode(w, v.contract);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -169,7 +179,7 @@ const _ExpectedContract: XdrCodec<ExpectedContract> = {
         const contract = proto.codec.Contract.decode(r);
         return { error, contract };
       default:
-        return { error } as ExpectedContract;
+        return { error };
     }
   },
 };
@@ -179,10 +189,11 @@ const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.DeployedContractHash.encode(w, val.deployed_hash);
+      {
+        const v = val as Extract<ExpectedDeployment, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.DeployedContractHash.encode(w, v.deployed_hash);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -192,7 +203,7 @@ const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = {
         const deployed_hash = proto.codec.DeployedContractHash.decode(r);
         return { error, deployed_hash };
       default:
-        return { error } as ExpectedDeployment;
+        return { error };
     }
   },
 };
@@ -202,10 +213,11 @@ const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.NondeterministicProposalData.encode(w, val.proposal_data);
+      {
+        const v = val as Extract<ExpectedProposalData, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.NondeterministicProposalData.encode(w, v.proposal_data);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -215,7 +227,7 @@ const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
         const proposal_data = proto.codec.NondeterministicProposalData.decode(r);
         return { error, proposal_data };
       default:
-        return { error } as ExpectedProposalData;
+        return { error };
     }
   },
 };
@@ -225,10 +237,11 @@ const _ExpectedStorageItem: XdrCodec<ExpectedStorageItem> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.WireStorageItem.encode(w, val.item);
+      {
+        const v = val as Extract<ExpectedStorageItem, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.WireStorageItem.encode(w, v.item);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -238,7 +251,7 @@ const _ExpectedStorageItem: XdrCodec<ExpectedStorageItem> = {
         const item = proto.codec.WireStorageItem.decode(r);
         return { error, item };
       default:
-        return { error } as ExpectedStorageItem;
+        return { error };
     }
   },
 };
@@ -248,10 +261,11 @@ const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = 
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.RetrocausalQueueBlock.encode(w, val.queue_block);
+      {
+        const v = val as Extract<ExpectedRetrocausalQueueBlock, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.RetrocausalQueueBlock.encode(w, v.queue_block);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -261,7 +275,7 @@ const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = 
         const queue_block = proto.codec.RetrocausalQueueBlock.decode(r);
         return { error, queue_block };
       default:
-        return { error } as ExpectedRetrocausalQueueBlock;
+        return { error };
     }
   },
 };
@@ -271,10 +285,11 @@ const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.QueueEntry.encode(w, val.queue_entry);
+      {
+        const v = val as Extract<ExpectedQueueEntry, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.QueueEntry.encode(w, v.queue_entry);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -284,7 +299,7 @@ const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = {
         const queue_entry = proto.codec.QueueEntry.decode(r);
         return { error, queue_entry };
       default:
-        return { error } as ExpectedQueueEntry;
+        return { error };
     }
   },
 };
@@ -294,10 +309,11 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
       case proto.RPCError.kRPCNone:
-        proto.codec.DbTip.encode(w, val.db_tip);
+      {
+        const v = val as Extract<ExpectedDBTip, { error: proto.RPCError.kRPCNone }>;
+        proto.codec.DbTip.encode(w, v.db_tip);
         break;
-      default:
-        break;
+      }
     }
   },
   decode(r) {
@@ -307,7 +323,7 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
         const db_tip = proto.codec.DbTip.decode(r);
         return { error, db_tip };
       default:
-        return { error } as ExpectedDBTip;
+        return { error };
     }
   },
 };
