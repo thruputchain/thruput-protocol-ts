@@ -1,10 +1,5 @@
-// XDR serialization layer
-export { XdrWriter } from "./xdr/writer.js";
-export { XdrReader } from "./xdr/reader.js";
-export { CxsWriter } from "./xdr/cxs_writer.js";
-export { CxsReader } from "./xdr/cxs_reader.js";
-export { serialize, deserialize, serializeCxs, deserializeCxs } from "./xdr/codec.js";
-export type { XdrCodec, IWriter, IReader } from "./xdr/codec.js";
+// Re-export XDR framework so consumers can import everything from @groundhog/protocol
+export * from "@groundhog/xdr";
 
 // Protocol types + codecs (unified)
 export * from "./protocol/index.js";

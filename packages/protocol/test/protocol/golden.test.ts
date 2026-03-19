@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { serialize, deserialize } from "../../src/xdr/codec.js";
+import { serialize, deserialize } from "../../src/index.js";
 import * as proto from "../../src/protocol/index.js";
 import { fromHex, toHex } from "../helpers/hex.js";
 import vectors from "../fixtures/golden_vectors.json";

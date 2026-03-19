@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize,
-} from "../../src/xdr/codec.js";
+} from "../../src/index.js";
 import {
   sha256Hash, SHA256Hash,
   contractAddress, ContractAddress,

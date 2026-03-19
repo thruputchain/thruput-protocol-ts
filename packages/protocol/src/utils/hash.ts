@@ -4,7 +4,7 @@
  * Uses the Web Crypto API (available in browsers and Node.js 16+).
  */
 
-import { serialize } from "../xdr/codec.js";
+import { serialize } from "@groundhog/xdr";
 import { codec } from "../protocol/index.js";
 import type { SignedTransaction, SHA256Hash, ContractAddress, ContractEntrypointID } from "../protocol/index.js";
 import { sha256Hash } from "../protocol/types.js";

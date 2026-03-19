@@ -4,7 +4,7 @@
  * Builds call messages and parses reply messages using standard XDR encoding.
  */
 
-import { XdrWriter, XdrReader } from "@groundhog/protocol";
+import { XdrWriter, XdrReader } from "@groundhog/xdr";
 
 // ONC-RPC constants (RFC 5531)
 const RPC_VERSION = 2;

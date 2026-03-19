@@ -39,6 +39,20 @@ export const VoidCodec: XdrCodec<void> = {
   decode() {},
 };
 
+/** Metadata for a single RPC method (generated from XDR `program` blocks). */
+export interface RpcMethodMeta<Req, Resp> {
+  proc: number;
+  request: XdrCodec<Req>;
+  response: XdrCodec<Resp>;
+}
+
+/** Metadata for an RPC program (generated from XDR `program` blocks). */
+export interface RpcProgramMeta {
+  programId: number;
+  version: number;
+  methods: Record<string, RpcMethodMeta<unknown, unknown>>;
+}
+
 // Standard XDR (TXS) serialization
 import { XdrWriter } from "./writer.js";
 import { XdrReader } from "./reader.js";

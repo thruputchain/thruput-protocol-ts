@@ -3,7 +3,7 @@
 
 // Generated from x23c commit: 3f9085a9d256ce71dd85566a4608e897076b5424
 
-import type { XdrCodec } from "../xdr/codec.js";
+import type { XdrCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 

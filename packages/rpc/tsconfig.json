@@ -12,6 +12,7 @@
     "types": ["node"],
     "lib": ["ES2022", "DOM"],
     "paths": {
+      "@groundhog/xdr": ["../xdr/src/index.ts"],
       "@groundhog/protocol": ["../protocol/src/index.ts"]
     }
   },

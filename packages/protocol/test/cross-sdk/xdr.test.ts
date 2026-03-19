@@ -5,9 +5,9 @@
  * and verifies the TypeScript XDR encoding produces identical bytes.
  */
 import { describe, it, expect } from "vitest";
-import { XdrWriter } from "../../src/xdr/writer.js";
+import { XdrWriter } from "../../src/index.js";
 import { toHex, fromHex } from "../../src/utils/index.js";
-import { serialize } from "../../src/xdr/codec.js";
+import { serialize } from "../../src/index.js";
 import {
   contractAddress, sha256Hash, ed25519PublicKey, contractEntrypointID,
   codec,

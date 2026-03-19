@@ -4,32 +4,18 @@
  * Given a transport and program metadata, provides typed method dispatch.
  */
 
-import { serialize, deserialize } from "@groundhog/protocol";
-import type { XdrCodec } from "@groundhog/protocol";
+import { serialize, deserialize } from "@groundhog/xdr";
+import type { XdrCodec, RpcProgramMeta } from "@groundhog/xdr";
 import type { RpcTransport } from "./transport.js";
 import { buildCallMessage, parseReplyMessage } from "./message.js";
-
-/** Metadata for a single RPC method. */
-export interface RpcMethodMeta<Req, Resp> {
-  proc: number;
-  request: XdrCodec<Req>;
-  response: XdrCodec<Resp>;
-}
-
-/** Metadata for an RPC program (generated from XDR `program` blocks). */
-export interface RpcProgramMeta {
-  programId: number;
-  version: number;
-  methods: Record<string, RpcMethodMeta<unknown, unknown>>;
-}
 
 /**
  * Create an ONC-RPC client for a given program.
  *
  * Usage:
  * ```typescript
- * const client = createRpcClient(transport, WalletProgramMeta);
- * const ack = await client.call("walletSubmit", request);
+ * const client = createRpcClient(transport, WalletProgram);
+ * const ack = await client.call("wallet_submit", request);
  * ```
  */
 export class RpcClient {
