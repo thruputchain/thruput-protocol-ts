@@ -3,6 +3,7 @@ import {
   hashSignedTransaction,
   deriveContractAddress,
   deriveEntrypointID,
+  majorVersionFromSemver,
   toHex,
 } from "../../src/utils/index.js";
 import {
@@ -95,33 +96,49 @@ describe("deriveContractAddress", () => {
   });
 });
 
+describe("majorVersionFromSemver", () => {
+  it("1.2.3 → '1'", () => expect(majorVersionFromSemver("1.2.3")).toBe("1"));
+  it("3.2.1 → '3'", () => expect(majorVersionFromSemver("3.2.1")).toBe("3"));
+  it("0.9.2 → '0.9'", () => expect(majorVersionFromSemver("0.9.2")).toBe("0.9"));
+  it("0.1.0 → '0.1'", () => expect(majorVersionFromSemver("0.1.0")).toBe("0.1"));
+  it("0.0.2 → '0.0.2'", () => expect(majorVersionFromSemver("0.0.2")).toBe("0.0.2"));
+  it("0.0.1 → '0.0.1'", () => expect(majorVersionFromSemver("0.0.1")).toBe("0.0.1"));
+  it("0.0.0 → '0.0.0'", () => expect(majorVersionFromSemver("0.0.0")).toBe("0.0.0"));
+});
+
 describe("deriveEntrypointID", () => {
   it("returns an 8-byte ContractEntrypointID", async () => {
-    const id = await deriveEntrypointID("ERC20", "1", "transfer");
+    const id = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
     expect(id.length).toBe(8);
   });
 
   it("is deterministic", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "1", "transfer");
+    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
     expect(toHex(id1)).toBe(toHex(id2));
   });
 
   it("different method names produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "1", "approve");
+    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = await deriveEntrypointID("ERC20", "1.0.0", "approve");
     expect(toHex(id1)).not.toBe(toHex(id2));
   });
 
   it("different versions produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "2", "transfer");
+    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = await deriveEntrypointID("ERC20", "2.0.0", "transfer");
     expect(toHex(id1)).not.toBe(toHex(id2));
   });
 
   it("different interface names produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1", "transfer");
-    const id2 = await deriveEntrypointID("Governance", "1", "transfer");
+    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = await deriveEntrypointID("Governance", "1.0.0", "transfer");
     expect(toHex(id1)).not.toBe(toHex(id2));
+  });
+
+  it("null interface uses _unnamed_interface", async () => {
+    const id1 = await deriveEntrypointID(null, "1.0.0", "transfer");
+    const id2 = await deriveEntrypointID("_unnamed_interface", "1.0.0", "transfer");
+    expect(toHex(id1)).toBe(toHex(id2));
   });
 });

@@ -1,2 +1,2 @@
 export { toHex, fromHex } from "./hex.js";
-export { hashSignedTransaction, deriveContractAddress, deriveEntrypointID } from "./hash.js";
+export { hashSignedTransaction, deriveContractAddress, deriveEntrypointID, majorVersionFromSemver } from "./hash.js";

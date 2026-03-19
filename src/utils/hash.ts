@@ -47,19 +47,46 @@ export async function deriveContractAddress(
 }
 
 /**
- * Derive a contract entrypoint ID from interface name, major version, and method name.
+ * Extract the "major version" string from a semver version string.
  *
- * EntrypointID = SHA-256(name || majorVersion || methodName)[0..8]
+ * Matches the Rust SDK's `major_version_from_string`:
+ * - "1.2.3" → "1" (major is non-zero)
+ * - "0.9.2" → "0.9" (major is 0, minor is non-zero)
+ * - "0.0.2" → "0.0.2" (0.0.z is always considered major)
+ * - "0.0.0" → "0.0.0"
+ */
+export function majorVersionFromSemver(versionStr: string): string {
+  const parts = versionStr.split(".");
+  if (parts.length < 3) throw new Error(`Invalid semver: ${versionStr}`);
+  const major = parseInt(parts[0], 10);
+  const minor = parseInt(parts[1], 10);
+  const patch = parseInt(parts[2], 10);
+  if (major > 0) return `${major}`;
+  if (minor > 0) return `${major}.${minor}`;
+  if (patch > 0) return `${major}.${minor}.${patch}`;
+  return versionStr;
+}
+
+/**
+ * Derive a contract entrypoint ID.
  *
+ * EntrypointID = SHA-256(interfaceName || majorVersion(versionStr) || methodName)[0..8]
+ *
+ * If interfaceName is null, uses "_unnamed_interface" as the domain separator.
  * The concatenation is raw UTF-8 bytes, not XDR-encoded.
+ *
+ * Matches the Rust SDK's `contract_entrypoint_id` function.
  */
 export async function deriveEntrypointID(
-  interfaceName: string,
-  majorVersion: string,
+  interfaceName: string | null,
+  versionStr: string,
   methodName: string,
 ): Promise<ContractEntrypointID> {
+  const name = interfaceName ?? "_unnamed_interface";
+  const majorVersion = majorVersionFromSemver(versionStr);
+
   const encoder = new TextEncoder();
-  const nameBytes = encoder.encode(interfaceName);
+  const nameBytes = encoder.encode(name);
   const versionBytes = encoder.encode(majorVersion);
   const methodBytes = encoder.encode(methodName);
 
