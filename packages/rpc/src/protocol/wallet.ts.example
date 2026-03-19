@@ -1,0 +1,163 @@
+// -*- TypeScript -*-
+// Generated from wallet.x — DO NOT CHECK IN
+//
+// This file shows what x23c --ts should generate for an .x file
+// that contains both types and a `program` block.
+//
+// The types/codecs section is identical to the existing codegen.
+// The new part is the RpcProgramMeta at the bottom.
+
+import type { XdrCodec } from "@groundhog/protocol";
+import * as proto from "./index.js";
+
+// ============================================================================
+// Types (same codegen pattern as core protocol types)
+// ============================================================================
+
+export interface WalletSubmit {
+  signed_transactions: proto.SignedTransaction[];
+}
+
+export enum WalletTransactionAckType {
+  WalletTransactionNotSubmitted = 0,
+  WalletTransactionSubmitted = 1,
+}
+
+export type WalletSubmittedTransactionID = Uint8Array & { readonly __brand: "WalletSubmittedTransactionID" };
+export function walletSubmittedTransactionID(data: Uint8Array): WalletSubmittedTransactionID {
+  if (data.length !== 32) throw new Error(`WalletSubmittedTransactionID must be exactly 32 bytes, got ${data.length}`);
+  return data as WalletSubmittedTransactionID;
+}
+
+export type WalletTransactionAck =
+  | { ack_type: proto.WalletTransactionAckType.WalletTransactionNotSubmitted }
+  | { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID }
+;
+
+export interface WalletAck {
+  transaction_acks: proto.WalletTransactionAck[];
+}
+
+// ============================================================================
+// XDR Codecs (same pattern as core types)
+// ============================================================================
+
+const _WalletSubmit: XdrCodec<WalletSubmit> = {
+  encode(w, val) {
+    w.writeUint32(BigInt(val.signed_transactions.length));
+    for (const _item of val.signed_transactions) proto.codec.SignedTransaction.encode(w, _item);
+  },
+  decode(r) {
+    const _len = Number(r.readUint32());
+    const signed_transactions = Array.from({ length: _len }, () => proto.codec.SignedTransaction.decode(r));
+    return { signed_transactions };
+  },
+};
+
+const _WalletTransactionAckType: XdrCodec<WalletTransactionAckType> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as WalletTransactionAckType; },
+};
+
+const _WalletSubmittedTransactionID: XdrCodec<WalletSubmittedTransactionID> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return walletSubmittedTransactionID(r.readFixedOpaque(32)); },
+};
+
+const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.ack_type));
+    switch (val.ack_type) {
+      case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
+        break;
+      case proto.WalletTransactionAckType.WalletTransactionSubmitted:
+        proto.codec.WalletSubmittedTransactionID.encode(w, val.submitted_transaction_id);
+        break;
+      default:
+        // XDR default arm — void
+        break;
+    }
+  },
+  decode(r) {
+    const ack_type = Number(r.readInt32());
+    switch (ack_type) {
+      case proto.WalletTransactionAckType.WalletTransactionNotSubmitted:
+        return { ack_type } as WalletTransactionAck;
+      case proto.WalletTransactionAckType.WalletTransactionSubmitted:
+        const submitted_transaction_id = proto.codec.WalletSubmittedTransactionID.decode(r);
+        return { ack_type, submitted_transaction_id };
+      default:
+        // XDR default arm — void, but preserve the discriminant value
+        return { ack_type } as WalletTransactionAck;
+    }
+  },
+};
+
+const _WalletAck: XdrCodec<WalletAck> = {
+  encode(w, val) {
+    w.writeUint32(BigInt(val.transaction_acks.length));
+    for (const _item of val.transaction_acks) proto.codec.WalletTransactionAck.encode(w, _item);
+  },
+  decode(r) {
+    const _len = Number(r.readUint32());
+    const transaction_acks = Array.from({ length: _len }, () => proto.codec.WalletTransactionAck.decode(r));
+    return { transaction_acks };
+  },
+};
+
+export const codec = {
+  WalletSubmit: _WalletSubmit,
+  WalletTransactionAckType: _WalletTransactionAckType,
+  WalletSubmittedTransactionID: _WalletSubmittedTransactionID,
+  WalletTransactionAck: _WalletTransactionAck,
+  WalletAck: _WalletAck,
+} as const;
+
+// ============================================================================
+// RPC Program Metadata
+//
+// NEW: generated from the `program` block in the .x file.
+// Used by @groundhog/rpc's RpcClient for typed method dispatch.
+// ============================================================================
+
+import type { RpcProgramMeta } from "../onc/client.js";
+
+// Void codec for methods with void request or response
+const _Void: XdrCodec<void> = {
+  encode() {},
+  decode() {},
+};
+
+/**
+ * ONC-RPC program metadata for the Wallet service.
+ *
+ * ```
+ * program Wallet {
+ *   version Wallet1 {
+ *     void wallet_null(void) = 0;
+ *     WalletAck wallet_submit(WalletSubmit) = 10;
+ *   } = 1;
+ * } = 0x8aa87aa7;
+ * ```
+ *
+ * Usage:
+ * ```typescript
+ * import { createRpcClient, WebSocketTransport } from "@groundhog/rpc";
+ * import { WalletProgram } from "@groundhog/rpc/protocol/wallet";
+ *
+ * const transport = new WebSocketTransport("ws://node:11234");
+ * const client = createRpcClient(transport, WalletProgram);
+ *
+ * const ack = await client.call("wallet_submit", {
+ *   signed_transactions: [stx],
+ * });
+ * ```
+ */
+export const WalletProgram: RpcProgramMeta = {
+  programId: 0x8aa87aa7,
+  version: 1,
+  methods: {
+    wallet_null: { proc: 0, request: _Void, response: _Void },
+    wallet_submit: { proc: 10, request: _WalletSubmit, response: _WalletAck },
+  },
+};
