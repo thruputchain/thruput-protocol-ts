@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-hogd-linux
     steps:
       - name: Generate hogd read token
         id: hogd-token
