@@ -98,16 +98,22 @@ jobs:
             gh pr merge "$EXISTING_PR" --auto --squash 2>&1; echo "merge exit code: $?"
           else
             echo "::group::Debug: gh pr create"
+            set +e
             PR_URL=$(gh pr create \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" 2>&1); CREATE_RC=$?
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" 2>&1)
+            CREATE_RC=$?
+            set -e
             echo "gh pr create exit code: $CREATE_RC"
             echo "PR_URL='$PR_URL'"
             echo "::endgroup::"
-            if [ -n "$PR_URL" ] && [ $CREATE_RC -eq 0 ]; then
+            if [ $CREATE_RC -eq 0 ]; then
               gh pr merge "$PR_URL" --auto --squash 2>&1; echo "merge exit code: $?"
+            else
+              echo "::error::gh pr create failed (rc=$CREATE_RC): $PR_URL"
+              exit 1
             fi
           fi
         env:
