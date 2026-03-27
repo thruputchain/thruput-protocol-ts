@@ -1,9 +1,7 @@
-// Generated from echo.x by x23c --ts, then patched for standalone use.
-//
-// To regenerate:
-//   x23c --ts -o packages/rpc/test/fixtures/echo.ts packages/rpc/test/fixtures/echo.x
-// Then delete the `import * as proto from "./index.js";` line (this file is
-// standalone — it doesn't reference any external protocol types via proto.*).
+// -*- TypeScript -*-
+// Generated Code: DO NOT CHECK IN
+
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 

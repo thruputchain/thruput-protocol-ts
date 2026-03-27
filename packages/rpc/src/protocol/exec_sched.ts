@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -64,9 +64,9 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
       case proto.ExecResult.ExecResultTxDeterministicError:
       case proto.ExecResult.ExecResultTxRootFrameReverted:
       {
-        const v = val as { result: proto.ExecResult.ExecResultOK; proposal_data: proto.NondeterministicProposalData };
+        const v = val as { result: number; proposal_data: proto.NondeterministicProposalData };
         if (v.proposal_data === undefined) {
-          throw new Error("ExecProposeResult encode: discriminant is ExecResultOK but proposal_data is undefined");
+          throw new Error("ExecProposeResult encode: proposal_data is undefined");
         }
         proto.codec.NondeterministicProposalData.encode(w, v.proposal_data);
         break;
@@ -173,10 +173,6 @@ export const codec = {
   ProposedTransactionBatch: _ProposedTransactionBatch,
   ExecProposeBatchResult: _ExecProposeBatchResult,
   ExecValidateBatchResult: _ExecValidateBatchResult,
-  executorsched_propose_transaction_args: _executorsched_propose_transaction_args,
-  executorsched_validate_transaction_args: _executorsched_validate_transaction_args,
-  executorsched_propose_batch_args: _executorsched_propose_batch_args,
-  executorsched_validate_batch_args: _executorsched_validate_batch_args,
 } as const;
 
 export const ExecutorSchedProgram: RpcProgramMeta = {

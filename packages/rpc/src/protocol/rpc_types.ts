@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import type { XdrCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -142,9 +142,9 @@ const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; storage_cost: proto.StorageCost };
+        const v = val as { error: number; storage_cost: proto.StorageCost };
         if (v.storage_cost === undefined) {
-          throw new Error("ExpectedStorageCost encode: discriminant is kRPCNone but storage_cost is undefined");
+          throw new Error("ExpectedStorageCost encode: storage_cost is undefined");
         }
         proto.codec.StorageCost.encode(w, v.storage_cost);
         break;
@@ -169,9 +169,9 @@ const _ExpectedContract: XdrCodec<ExpectedContract> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; contract: proto.Contract };
+        const v = val as { error: number; contract: proto.Contract };
         if (v.contract === undefined) {
-          throw new Error("ExpectedContract encode: discriminant is kRPCNone but contract is undefined");
+          throw new Error("ExpectedContract encode: contract is undefined");
         }
         proto.codec.Contract.encode(w, v.contract);
         break;
@@ -196,9 +196,9 @@ const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; deployed_hash: proto.DeployedContractHash };
+        const v = val as { error: number; deployed_hash: proto.DeployedContractHash };
         if (v.deployed_hash === undefined) {
-          throw new Error("ExpectedDeployment encode: discriminant is kRPCNone but deployed_hash is undefined");
+          throw new Error("ExpectedDeployment encode: deployed_hash is undefined");
         }
         proto.codec.DeployedContractHash.encode(w, v.deployed_hash);
         break;
@@ -223,9 +223,9 @@ const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; proposal_data: proto.NondeterministicProposalData };
+        const v = val as { error: number; proposal_data: proto.NondeterministicProposalData };
         if (v.proposal_data === undefined) {
-          throw new Error("ExpectedProposalData encode: discriminant is kRPCNone but proposal_data is undefined");
+          throw new Error("ExpectedProposalData encode: proposal_data is undefined");
         }
         proto.codec.NondeterministicProposalData.encode(w, v.proposal_data);
         break;
@@ -250,9 +250,9 @@ const _ExpectedStorageItem: XdrCodec<ExpectedStorageItem> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; item: proto.WireStorageItem };
+        const v = val as { error: number; item: proto.WireStorageItem };
         if (v.item === undefined) {
-          throw new Error("ExpectedStorageItem encode: discriminant is kRPCNone but item is undefined");
+          throw new Error("ExpectedStorageItem encode: item is undefined");
         }
         proto.codec.WireStorageItem.encode(w, v.item);
         break;
@@ -277,9 +277,9 @@ const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = 
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; queue_block: proto.RetrocausalQueueBlock };
+        const v = val as { error: number; queue_block: proto.RetrocausalQueueBlock };
         if (v.queue_block === undefined) {
-          throw new Error("ExpectedRetrocausalQueueBlock encode: discriminant is kRPCNone but queue_block is undefined");
+          throw new Error("ExpectedRetrocausalQueueBlock encode: queue_block is undefined");
         }
         proto.codec.RetrocausalQueueBlock.encode(w, v.queue_block);
         break;
@@ -304,9 +304,9 @@ const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; queue_entry: proto.QueueEntry };
+        const v = val as { error: number; queue_entry: proto.QueueEntry };
         if (v.queue_entry === undefined) {
-          throw new Error("ExpectedQueueEntry encode: discriminant is kRPCNone but queue_entry is undefined");
+          throw new Error("ExpectedQueueEntry encode: queue_entry is undefined");
         }
         proto.codec.QueueEntry.encode(w, v.queue_entry);
         break;
@@ -331,9 +331,9 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; db_tip: proto.DbTip };
+        const v = val as { error: number; db_tip: proto.DbTip };
         if (v.db_tip === undefined) {
-          throw new Error("ExpectedDBTip encode: discriminant is kRPCNone but db_tip is undefined");
+          throw new Error("ExpectedDBTip encode: db_tip is undefined");
         }
         proto.codec.DbTip.encode(w, v.db_tip);
         break;
