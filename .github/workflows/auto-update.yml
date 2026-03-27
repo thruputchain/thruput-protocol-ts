@@ -15,14 +15,14 @@ jobs:
   update:
     runs-on: namespace-profile-hogd-linux
     steps:
-      - name: Generate app token
-        id: app-token
+      - name: Generate hogd read token
+        id: hogd-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
           owner: groundhogchain
-          repositories: hogd,protocol-ts
+          repositories: hogd
 
       - name: Setup SSH Agent
         uses: webfactory/ssh-agent@v0.10.0
@@ -32,7 +32,7 @@ jobs:
             ${{ secrets.PROT_TS_SELF_WRITE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           ssh-key: ${{ secrets.PROT_TS_SELF_WRITE_KEY }}
@@ -50,7 +50,7 @@ jobs:
           tar xzf x23c-linux-x86_64.tar.gz
           chmod +x x23c
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
 
       - name: Regenerate
         run: XDRC=./x23c ./scripts/generate.sh
@@ -81,17 +81,17 @@ jobs:
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
           git push -f -u origin "$BRANCH"
 
-          # Create PR if no open one exists for this branch
-          OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
-          if [ -z "$OPEN_PR" ]; then
-            gh pr create \
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Updated existing PR: $EXISTING_PR"
+            gh pr merge "$EXISTING_PR" --auto --squash
+          else
+            PR_URL=$(gh pr create \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" || true
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}")
+            gh pr merge "$PR_URL" --auto --squash
           fi
-
-          # Enable auto-merge (works whether PR was just created or already existed)
-          gh pr merge "$BRANCH" --auto --squash || true
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
