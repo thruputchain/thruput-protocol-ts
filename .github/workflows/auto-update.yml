@@ -66,32 +66,43 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commit and open PR
+      - name: Commit and push
         if: steps.diff.outputs.changed == 'true'
+        id: push
         run: |
           PROTOCOL_SHA=$(git -C protocol rev-parse --short=7 HEAD)
-          BRANCH="auto-update/protocol"
+          echo "protocol_sha=$PROTOCOL_SHA" >> "$GITHUB_OUTPUT"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin git@github.com:groundhogchain/protocol-ts.git
 
-          git checkout -b "$BRANCH"
+          git checkout -b auto-update/protocol
           git add -A
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
-          git push -f -u origin "$BRANCH"
+          git push -f -u origin auto-update/protocol
+
+      - name: Create or update PR
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          BRANCH="auto-update/protocol"
+          PROTOCOL_SHA="${{ steps.push.outputs.protocol_sha }}"
 
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
           if [ -n "$EXISTING_PR" ]; then
             echo "Updated existing PR: $EXISTING_PR"
-            gh pr merge "$EXISTING_PR" --auto --squash
           else
-            PR_URL=$(gh pr create \
+            gh pr create \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}")
-            gh pr merge "$PR_URL" --auto --squash
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" || true
           fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge
+        if: steps.diff.outputs.changed == 'true'
+        run: gh pr merge auto-update/protocol --auto --squash || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
