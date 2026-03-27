@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -68,9 +68,9 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
         break;
       case proto.WalletTransactionAckType.WalletTransactionSubmitted:
       {
-        const v = val as { ack_type: proto.WalletTransactionAckType.WalletTransactionSubmitted; submitted_transaction_id: proto.WalletSubmittedTransactionID };
+        const v = val as { ack_type: number; submitted_transaction_id: proto.WalletSubmittedTransactionID };
         if (v.submitted_transaction_id === undefined) {
-          throw new Error("WalletTransactionAck encode: discriminant is WalletTransactionSubmitted but submitted_transaction_id is undefined");
+          throw new Error("WalletTransactionAck encode: submitted_transaction_id is undefined");
         }
         proto.codec.WalletSubmittedTransactionID.encode(w, v.submitted_transaction_id);
         break;

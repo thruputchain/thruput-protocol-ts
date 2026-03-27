@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -42,8 +42,13 @@ export enum SchedulerValidationOutcome {
   SchedulerValidationExecutorFailed = 4,
 }
 
+export interface SchedulerValidationBlock {
+  db_tip: proto.DbTip;
+  signed_transactions: proto.ParallelSignedTransactionBatch;
+}
+
 export type SchedulerValidationResult =
-  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationOK; db_tip: proto.DbTip }
+  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationOK; block: proto.SchedulerValidationBlock }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs; missing_tx_hashes: proto.SignedTransactionHash[] }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationDbFailed }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed }
@@ -148,12 +153,24 @@ const _SchedulerValidationOutcome: XdrCodec<SchedulerValidationOutcome> = {
   decode(r) { return Number(r.readInt32()) as SchedulerValidationOutcome; },
 };
 
+const _SchedulerValidationBlock: XdrCodec<SchedulerValidationBlock> = {
+  encode(w, val) {
+    proto.codec.DbTip.encode(w, val.db_tip);
+    proto.codec.ParallelSignedTransactionBatch.encode(w, val.signed_transactions);
+  },
+  decode(r) {
+    const db_tip = proto.codec.DbTip.decode(r);
+    const signed_transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
+    return { db_tip, signed_transactions };
+  },
+};
+
 const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
       case proto.SchedulerValidationOutcome.SchedulerValidationOK:
-        proto.codec.DbTip.encode(w, val.db_tip);
+        proto.codec.SchedulerValidationBlock.encode(w, val.block);
         break;
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
         w.writeUint32(BigInt(val.missing_tx_hashes.length));
@@ -169,8 +186,8 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
     const outcome = Number(r.readInt32());
     switch (outcome) {
       case proto.SchedulerValidationOutcome.SchedulerValidationOK:
-        const db_tip = proto.codec.DbTip.decode(r);
-        return { outcome, db_tip };
+        const block = proto.codec.SchedulerValidationBlock.decode(r);
+        return { outcome, block };
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
         const _missing_tx_hashes_len = Number(r.readUint32());
         const missing_tx_hashes = Array.from({ length: _missing_tx_hashes_len }, () => proto.codec.SignedTransactionHash.decode(r));
@@ -251,12 +268,11 @@ export const codec = {
   SchedulerNominatedBlock: _SchedulerNominatedBlock,
   SchedulerNominationResult: _SchedulerNominationResult,
   SchedulerValidationOutcome: _SchedulerValidationOutcome,
+  SchedulerValidationBlock: _SchedulerValidationBlock,
   SchedulerValidationResult: _SchedulerValidationResult,
   SchedulerCommitOutcome: _SchedulerCommitOutcome,
   SchedulerGetTipOutcome: _SchedulerGetTipOutcome,
   SchedulerGetTipResult: _SchedulerGetTipResult,
-  schedulercoord_submit_vetted_args: _schedulercoord_submit_vetted_args,
-  schedulercoord_validate_args: _schedulercoord_validate_args,
 } as const;
 
 export const SchedulerCoordProgram: RpcProgramMeta = {

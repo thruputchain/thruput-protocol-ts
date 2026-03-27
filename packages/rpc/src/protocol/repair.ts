@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -10,6 +10,7 @@ import * as proto from "./index.js";
 
 export interface MissingTransactions {
   transaction_hashes: proto.SignedTransactionHash[];
+  cv_hash: proto.ConsensusValueHash;
   block_hash: proto.BlockHash;
 }
 
@@ -38,13 +39,15 @@ const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
     w.writeUint32(BigInt(val.transaction_hashes.length));
     for (const _item of val.transaction_hashes) proto.codec.SignedTransactionHash.encode(w, _item);
+    proto.codec.ConsensusValueHash.encode(w, val.cv_hash);
     proto.codec.BlockHash.encode(w, val.block_hash);
   },
   decode(r) {
     const _transaction_hashes_len = Number(r.readUint32());
     const transaction_hashes = Array.from({ length: _transaction_hashes_len }, () => proto.codec.SignedTransactionHash.decode(r));
+    const cv_hash = proto.codec.ConsensusValueHash.decode(r);
     const block_hash = proto.codec.BlockHash.decode(r);
-    return { transaction_hashes, block_hash };
+    return { transaction_hashes, cv_hash, block_hash };
   },
 };
 
@@ -90,7 +93,6 @@ export const codec = {
   MissingTransactions: _MissingTransactions,
   MissingTransactionsEnvelope: _MissingTransactionsEnvelope,
   RepairedTransactions: _RepairedTransactions,
-  repair_missing_cv_args: _repair_missing_cv_args,
 } as const;
 
 export const RepairProgram: RpcProgramMeta = {

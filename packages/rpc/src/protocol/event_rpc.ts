@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -51,9 +51,9 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
     switch (val.error) {
       case proto.RPCError.kRPCNone:
       {
-        const v = val as { error: proto.RPCError.kRPCNone; root_hash: proto.SHA256Hash };
+        const v = val as { error: number; root_hash: proto.SHA256Hash };
         if (v.root_hash === undefined) {
-          throw new Error("EventBlockResult encode: discriminant is kRPCNone but root_hash is undefined");
+          throw new Error("EventBlockResult encode: root_hash is undefined");
         }
         proto.codec.SHA256Hash.encode(w, v.root_hash);
         break;
@@ -85,9 +85,7 @@ const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = {
 };
 
 export const codec = {
-  eventexecutor_emit_event_args: _eventexecutor_emit_event_args,
   EventBlockResult: _EventBlockResult,
-  eventsched_close_block_args: _eventsched_close_block_args,
 } as const;
 
 export const EventExecutorProgram: RpcProgramMeta = {
