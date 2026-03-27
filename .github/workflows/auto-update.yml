@@ -81,8 +81,9 @@ jobs:
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
           git push -f -u origin "$BRANCH"
 
-          # Create PR if one doesn't already exist for this branch
-          if ! gh pr view "$BRANCH" --json url &>/dev/null; then
+          # Create PR if no open one exists for this branch
+          OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          if [ -z "$OPEN_PR" ]; then
             gh pr create \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
