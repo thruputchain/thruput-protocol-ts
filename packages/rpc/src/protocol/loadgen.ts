@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -161,9 +161,9 @@ const _LoadgenResult: XdrCodec<LoadgenResult> = {
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
       {
-        const v = val as { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenSuccessResult };
+        const v = val as { error: number; success: proto.LoadgenSuccessResult };
         if (v.success === undefined) {
-          throw new Error("LoadgenResult encode: discriminant is kLoadgenRPCErrorOK but success is undefined");
+          throw new Error("LoadgenResult encode: success is undefined");
         }
         proto.codec.LoadgenSuccessResult.encode(w, v.success);
         break;
@@ -188,9 +188,9 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
     switch (val.error) {
       case proto.LoadgenRPCError.kLoadgenRPCErrorOK:
       {
-        const v = val as { error: proto.LoadgenRPCError.kLoadgenRPCErrorOK; success: proto.LoadgenExtension };
+        const v = val as { error: number; success: proto.LoadgenExtension };
         if (v.success === undefined) {
-          throw new Error("LoadgenExtensionResult encode: discriminant is kLoadgenRPCErrorOK but success is undefined");
+          throw new Error("LoadgenExtensionResult encode: success is undefined");
         }
         proto.codec.LoadgenExtension.encode(w, v.success);
         break;
@@ -234,7 +234,6 @@ export const codec = {
   LoadgenRPCError: _LoadgenRPCError,
   LoadgenResult: _LoadgenResult,
   LoadgenExtensionResult: _LoadgenExtensionResult,
-  extend_experiment_args: _extend_experiment_args,
 } as const;
 
 export const LoadgenInterfaceProgram: RpcProgramMeta = {
