@@ -37,6 +37,10 @@ done
 
 # Test fixture: echo RPC (standalone, needs proto import line removed)
 $XDRC --ts -o "packages/rpc/test/fixtures/echo.ts" "packages/rpc/test/fixtures/echo.x"
-sed -i '' '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
+if [[ "$OSTYPE" == darwin* ]]; then
+  sed -i '' '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
+else
+  sed -i '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
+fi
 
 echo "-- Done --" >&2

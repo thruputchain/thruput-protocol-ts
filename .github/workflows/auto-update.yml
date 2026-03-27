@@ -1,0 +1,97 @@
+name: Auto-update protocol
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: auto-update-protocol
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate hogd read token
+        id: hogd-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
+          private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
+          owner: groundhogchain
+          repositories: hogd
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
+            ${{ secrets.PROT_TS_SELF_WRITE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          ssh-key: ${{ secrets.PROT_TS_SELF_WRITE_KEY }}
+
+      - name: Update protocol submodule to latest main
+        run: |
+          git -C protocol fetch origin main
+          git -C protocol checkout origin/main
+
+      - name: Download x23c
+        run: |
+          gh release download latest-x23c \
+            --repo groundhogchain/hogd \
+            --pattern 'x23c-linux-x86_64.tar.gz'
+          tar xzf x23c-linux-x86_64.tar.gz
+          chmod +x x23c
+        env:
+          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
+
+      - name: Regenerate
+        run: XDRC=./x23c ./scripts/generate.sh
+
+      - name: Check for changes
+        id: diff
+        run: |
+          rm -f x23c x23c-linux-x86_64.tar.gz
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Protocol submodule already up to date."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and open PR
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          PROTOCOL_SHA=$(git -C protocol rev-parse --short=7 HEAD)
+          BRANCH="auto-update/protocol"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin git@github.com:groundhogchain/protocol-ts.git
+
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "bump to protocol@${PROTOCOL_SHA}"
+          git push -f -u origin "$BRANCH"
+
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Updated existing PR: $EXISTING_PR"
+            gh pr merge "$EXISTING_PR" --auto --squash
+          else
+            PR_URL=$(gh pr create \
+              --title "Auto-update protocol to ${PROTOCOL_SHA}" \
+              --body "Automated protocol submodule bump and regeneration.
+
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}")
+            gh pr merge "$PR_URL" --auto --squash
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
