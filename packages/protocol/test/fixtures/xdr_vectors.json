@@ -1,0 +1,429 @@
+{
+  "category": "xdr_serialization",
+  "vectors": [
+    {
+      "expected_hex": "00000000",
+      "name": "u32_zero",
+      "type": "u32",
+      "value": "0"
+    },
+    {
+      "expected_hex": "00000001",
+      "name": "u32_one",
+      "type": "u32",
+      "value": "1"
+    },
+    {
+      "expected_hex": "ffffffff",
+      "name": "u32_max",
+      "type": "u32",
+      "value": "4294967295"
+    },
+    {
+      "expected_hex": "00003039",
+      "name": "u32_mid",
+      "type": "u32",
+      "value": "12345"
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "i32_zero",
+      "type": "i32",
+      "value": "0"
+    },
+    {
+      "expected_hex": "0000002a",
+      "name": "i32_positive",
+      "type": "i32",
+      "value": "42"
+    },
+    {
+      "expected_hex": "ffffffff",
+      "name": "i32_negative",
+      "type": "i32",
+      "value": "-1"
+    },
+    {
+      "expected_hex": "80000000",
+      "name": "i32_min",
+      "type": "i32",
+      "value": "-2147483648"
+    },
+    {
+      "expected_hex": "7fffffff",
+      "name": "i32_max",
+      "type": "i32",
+      "value": "2147483647"
+    },
+    {
+      "expected_hex": "0000000000000000",
+      "name": "u64_zero",
+      "type": "u64",
+      "value": "0"
+    },
+    {
+      "expected_hex": "ffffffffffffffff",
+      "name": "u64_max",
+      "type": "u64",
+      "value": "18446744073709551615"
+    },
+    {
+      "expected_hex": "000000e8d4a51000",
+      "name": "u64_mid",
+      "type": "u64",
+      "value": "1000000000000"
+    },
+    {
+      "expected_hex": "0000000000000000",
+      "name": "i64_zero",
+      "type": "i64",
+      "value": "0"
+    },
+    {
+      "expected_hex": "ffffffffffffffff",
+      "name": "i64_negative",
+      "type": "i64",
+      "value": "-1"
+    },
+    {
+      "expected_hex": "8000000000000000",
+      "name": "i64_min",
+      "type": "i64",
+      "value": "-9223372036854775808"
+    },
+    {
+      "expected_hex": "7fffffffffffffff",
+      "name": "i64_max",
+      "type": "i64",
+      "value": "9223372036854775807"
+    },
+    {
+      "expected_hex": "00000000000000000000000000000000",
+      "name": "u128_zero",
+      "type": "u128",
+      "value": "0"
+    },
+    {
+      "expected_hex": "ffffffffffffffffffffffffffffffff",
+      "name": "u128_max",
+      "type": "u128",
+      "value": "340282366920938463463374607431768211455"
+    },
+    {
+      "expected_hex": "fffffffffffffffffffffffffffffffe",
+      "name": "u128_large",
+      "type": "u128",
+      "value": "340282366920938463463374607431768211454"
+    },
+    {
+      "expected_hex": "00000000000000000000000000000000",
+      "name": "i128_zero",
+      "type": "i128",
+      "value": "0"
+    },
+    {
+      "expected_hex": "ffffffffffffffffffffffffffffffff",
+      "name": "i128_negative",
+      "type": "i128",
+      "value": "-1"
+    },
+    {
+      "expected_hex": "80000000000000000000000000000000",
+      "name": "i128_min",
+      "type": "i128",
+      "value": "-170141183460469231731687303715884105728"
+    },
+    {
+      "expected_hex": "7fffffffffffffffffffffffffffffff",
+      "name": "i128_max",
+      "type": "i128",
+      "value": "170141183460469231731687303715884105727"
+    },
+    {
+      "expected_hex": "00000001",
+      "name": "bool_true",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "bool_false",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "bytes_empty",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": ""
+    },
+    {
+      "expected_hex": "00000001ab000000",
+      "name": "bytes_1",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": "ab"
+    },
+    {
+      "expected_hex": "00000002abcd0000",
+      "name": "bytes_2",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": "abcd"
+    },
+    {
+      "expected_hex": "00000003abcdef00",
+      "name": "bytes_3",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": "abcdef"
+    },
+    {
+      "expected_hex": "00000004abcdef01",
+      "name": "bytes_4",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": "abcdef01"
+    },
+    {
+      "expected_hex": "00000005abcdef0123000000",
+      "name": "bytes_5",
+      "type": {
+        "bytes": "1024"
+      },
+      "value": "abcdef0123"
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "string_empty",
+      "type": {
+        "string": "256"
+      },
+      "value": ""
+    },
+    {
+      "expected_hex": "0000000568656c6c6f000000",
+      "name": "string_hello",
+      "type": {
+        "string": "256"
+      },
+      "value": "hello"
+    },
+    {
+      "expected_hex": "0000000461626364",
+      "name": "string_4chars",
+      "type": {
+        "string": "256"
+      },
+      "value": "abcd"
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "vec_u32_empty",
+      "type": {
+        "vec": "u32"
+      },
+      "value": []
+    },
+    {
+      "expected_hex": "000000010000002a",
+      "name": "vec_u32_single",
+      "type": {
+        "vec": "u32"
+      },
+      "value": [
+        "42"
+      ]
+    },
+    {
+      "expected_hex": "00000003000000010000000200000003",
+      "name": "vec_u32_three",
+      "type": {
+        "vec": "u32"
+      },
+      "value": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "expected_hex": "00000002000000000000006400000000000000c8",
+      "name": "vec_u64_two",
+      "type": {
+        "vec": "u64"
+      },
+      "value": [
+        "100",
+        "200"
+      ]
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "option_u32_none",
+      "type": {
+        "option": "u32"
+      },
+      "value": null
+    },
+    {
+      "expected_hex": "000000010000002a",
+      "name": "option_u32_some",
+      "type": {
+        "option": "u32"
+      },
+      "value": "42"
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "option_i64_none",
+      "type": {
+        "option": "i64"
+      },
+      "value": null
+    },
+    {
+      "expected_hex": "00000001fffffffffffffc19",
+      "name": "option_i64_some_neg",
+      "type": {
+        "option": "i64"
+      },
+      "value": "-999"
+    },
+    {
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "name": "contract_address_zeros",
+      "type": "ContractAddress",
+      "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "expected_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "name": "contract_address_ones",
+      "type": "ContractAddress",
+      "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "expected_hex": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0",
+      "name": "contract_address_sample",
+      "type": "ContractAddress",
+      "value": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0"
+    },
+    {
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "name": "sha256_hash_zeros",
+      "type": "SHA256Hash",
+      "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "expected_hex": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0",
+      "name": "sha256_hash_sample",
+      "type": "SHA256Hash",
+      "value": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0"
+    },
+    {
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "name": "ed25519_pubkey_zeros",
+      "type": "Ed25519PublicKey",
+      "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "expected_hex": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0",
+      "name": "ed25519_pubkey_sample",
+      "type": "Ed25519PublicKey",
+      "value": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0"
+    },
+    {
+      "expected_hex": "0000000000000000",
+      "name": "entrypoint_id_zeros",
+      "type": "ContractEntrypointID",
+      "value": "0000000000000000"
+    },
+    {
+      "expected_hex": "0123456789abcdef",
+      "name": "entrypoint_id_sample",
+      "type": "ContractEntrypointID",
+      "value": "0123456789abcdef"
+    },
+    {
+      "expected_hex": "00000000",
+      "name": "storage_key_type_contract_data",
+      "type": "StorageKeyType",
+      "value": {
+        "variant": "ContractData"
+      }
+    },
+    {
+      "expected_hex": "00000001",
+      "name": "storage_key_type_free_native_token",
+      "type": "StorageKeyType",
+      "value": {
+        "variant": "FreeNativeTokenBalance"
+      }
+    },
+    {
+      "expected_hex": "00000002",
+      "name": "storage_key_type_address_auth_data",
+      "type": "StorageKeyType",
+      "value": {
+        "variant": "AuthData"
+      }
+    },
+    {
+      "expected_hex": "00000003",
+      "name": "storage_key_type_address_metadata",
+      "type": "StorageKeyType",
+      "value": {
+        "variant": "Metadata"
+      }
+    },
+    {
+      "expected_hex": "00000004",
+      "name": "storage_key_type_replay_cache",
+      "type": "StorageKeyType",
+      "value": {
+        "variant": "ReplayCache"
+      }
+    },
+    {
+      "expected_hex": "000000000123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f00000000a",
+      "name": "public_key_config",
+      "type": "PublicKeyConfig",
+      "value": {
+        "key": {
+          "value": {
+            "ed25519": "0123456789abcdeffedcba98765432100f1e2d3c4b5a69788796a5b4c3d2e1f0"
+          },
+          "variant": "Ed25519"
+        },
+        "max_weight": "10"
+      }
+    },
+    {
+      "expected_hex": "aabbccddeeff001122334455667788990102030405060708090a0b0c0d0e0f10deadbeefcafebabe00000000000f4240000000000000000000000064000000000000002a000000000000000000000000",
+      "name": "transaction_minimal",
+      "type": "Transaction",
+      "value": {
+        "auth_claims": [],
+        "contracts_to_deploy": [],
+        "gas_claims": [],
+        "invocation": {
+          "calldata": "",
+          "entrypoint": "deadbeefcafebabe",
+          "gas_limit": "1000000",
+          "invoked_address": "aabbccddeeff001122334455667788990102030405060708090a0b0c0d0e0f10"
+        },
+        "uniquifier": {
+          "block_expiry_height": "100",
+          "nonce": "42"
+        }
+      }
+    }
+  ],
+  "version": 1
+}

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -118,13 +118,11 @@ const _Seconds: XdrCodec<Seconds> = {
 const _ValidatorConfig: XdrCodec<ValidatorConfig> = {
   encode(w, val) {
     proto.codec.ValidatorPrivateInfo.encode(w, val.private_info);
-    w.writeUint32(BigInt(val.known_validators.length));
-    for (const _item of val.known_validators) proto.codec.ValidatorPublicInfo.encode(w, _item);
+    VarArrayCodec(proto.codec.ValidatorPublicInfo, Number(0xFFFFFFFF)).encode(w, val.known_validators);
   },
   decode(r) {
     const private_info = proto.codec.ValidatorPrivateInfo.decode(r);
-    const _known_validators_len = Number(r.readUint32());
-    const known_validators = Array.from({ length: _known_validators_len }, () => proto.codec.ValidatorPublicInfo.decode(r));
+    const known_validators = VarArrayCodec(proto.codec.ValidatorPublicInfo, Number(0xFFFFFFFF)).decode(r);
     return { private_info, known_validators };
   },
 };
@@ -132,13 +130,11 @@ const _ValidatorConfig: XdrCodec<ValidatorConfig> = {
 const _WalletConfig: XdrCodec<WalletConfig> = {
   encode(w, val) {
     proto.codec.JWTSecretKey.encode(w, val.secret_key);
-    w.writeUint32(BigInt(val.users.length));
-    for (const _item of val.users) proto.codec.WalletUser.encode(w, _item);
+    VarArrayCodec(proto.codec.WalletUser, Number(0xFFFFFFFF)).encode(w, val.users);
   },
   decode(r) {
     const secret_key = proto.codec.JWTSecretKey.decode(r);
-    const _users_len = Number(r.readUint32());
-    const users = Array.from({ length: _users_len }, () => proto.codec.WalletUser.decode(r));
+    const users = VarArrayCodec(proto.codec.WalletUser, Number(0xFFFFFFFF)).decode(r);
     return { secret_key, users };
   },
 };
@@ -279,85 +275,30 @@ const _StorageConfig: XdrCodec<StorageConfig> = {
 
 const _Config: XdrCodec<Config> = {
   encode(w, val) {
-    if (val.validator_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.ValidatorConfig.encode(w, val.validator_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.wallet_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.WalletConfig.encode(w, val.wallet_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.discovery_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.DiscoveryConfig.encode(w, val.discovery_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.router_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.RouterConfig.encode(w, val.router_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.dogwood_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.DogwoodConfig.encode(w, val.dogwood_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.mempool_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.MempoolConfig.encode(w, val.mempool_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.catchup_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.CatchupConfig.encode(w, val.catchup_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.scp_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.SCPConfig.encode(w, val.scp_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.baton_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.BatonConfig.encode(w, val.baton_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.repair_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.RepairConfig.encode(w, val.repair_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.storage_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.StorageConfig.encode(w, val.storage_config);
-    } else {
-      w.writeUint32(0n);
-    }
+    OptionCodec(proto.codec.ValidatorConfig).encode(w, val.validator_config);
+    OptionCodec(proto.codec.WalletConfig).encode(w, val.wallet_config);
+    OptionCodec(proto.codec.DiscoveryConfig).encode(w, val.discovery_config);
+    OptionCodec(proto.codec.RouterConfig).encode(w, val.router_config);
+    OptionCodec(proto.codec.DogwoodConfig).encode(w, val.dogwood_config);
+    OptionCodec(proto.codec.MempoolConfig).encode(w, val.mempool_config);
+    OptionCodec(proto.codec.CatchupConfig).encode(w, val.catchup_config);
+    OptionCodec(proto.codec.SCPConfig).encode(w, val.scp_config);
+    OptionCodec(proto.codec.BatonConfig).encode(w, val.baton_config);
+    OptionCodec(proto.codec.RepairConfig).encode(w, val.repair_config);
+    OptionCodec(proto.codec.StorageConfig).encode(w, val.storage_config);
   },
   decode(r) {
-    const validator_config = Number(r.readUint32()) ? proto.codec.ValidatorConfig.decode(r) : null;
-    const wallet_config = Number(r.readUint32()) ? proto.codec.WalletConfig.decode(r) : null;
-    const discovery_config = Number(r.readUint32()) ? proto.codec.DiscoveryConfig.decode(r) : null;
-    const router_config = Number(r.readUint32()) ? proto.codec.RouterConfig.decode(r) : null;
-    const dogwood_config = Number(r.readUint32()) ? proto.codec.DogwoodConfig.decode(r) : null;
-    const mempool_config = Number(r.readUint32()) ? proto.codec.MempoolConfig.decode(r) : null;
-    const catchup_config = Number(r.readUint32()) ? proto.codec.CatchupConfig.decode(r) : null;
-    const scp_config = Number(r.readUint32()) ? proto.codec.SCPConfig.decode(r) : null;
-    const baton_config = Number(r.readUint32()) ? proto.codec.BatonConfig.decode(r) : null;
-    const repair_config = Number(r.readUint32()) ? proto.codec.RepairConfig.decode(r) : null;
-    const storage_config = Number(r.readUint32()) ? proto.codec.StorageConfig.decode(r) : null;
+    const validator_config = OptionCodec(proto.codec.ValidatorConfig).decode(r);
+    const wallet_config = OptionCodec(proto.codec.WalletConfig).decode(r);
+    const discovery_config = OptionCodec(proto.codec.DiscoveryConfig).decode(r);
+    const router_config = OptionCodec(proto.codec.RouterConfig).decode(r);
+    const dogwood_config = OptionCodec(proto.codec.DogwoodConfig).decode(r);
+    const mempool_config = OptionCodec(proto.codec.MempoolConfig).decode(r);
+    const catchup_config = OptionCodec(proto.codec.CatchupConfig).decode(r);
+    const scp_config = OptionCodec(proto.codec.SCPConfig).decode(r);
+    const baton_config = OptionCodec(proto.codec.BatonConfig).decode(r);
+    const repair_config = OptionCodec(proto.codec.RepairConfig).decode(r);
+    const storage_config = OptionCodec(proto.codec.StorageConfig).decode(r);
     return { validator_config, wallet_config, discovery_config, router_config, dogwood_config, mempool_config, catchup_config, scp_config, baton_config, repair_config, storage_config };
   },
 };

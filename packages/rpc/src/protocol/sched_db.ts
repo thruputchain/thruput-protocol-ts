@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -68,13 +68,11 @@ const _Delta: XdrCodec<Delta> = {
 const _HogsTransferred: XdrCodec<HogsTransferred> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block);
-    w.writeUint32(BigInt(val.deltas.length));
-    for (const _item of val.deltas) proto.codec.Delta.encode(w, _item);
+    VarArrayCodec(proto.codec.Delta, Number(0xFFFFFFFF)).encode(w, val.deltas);
   },
   decode(r) {
     const block = proto.codec.BlockHeight.decode(r);
-    const _deltas_len = Number(r.readUint32());
-    const deltas = Array.from({ length: _deltas_len }, () => proto.codec.Delta.decode(r));
+    const deltas = VarArrayCodec(proto.codec.Delta, Number(0xFFFFFFFF)).decode(r);
     return { block, deltas };
   },
 };

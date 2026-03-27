@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -87,38 +87,11 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
   },
 };
 
-const _ProposedTransactionBatch: XdrCodec<ProposedTransactionBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.ProposedTransaction.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return proposedTransactionBatch(Array.from({ length: _len }, () => proto.codec.ProposedTransaction.decode(r)));
-  },
-};
+const _ProposedTransactionBatch = VarArrayCodec(() => proto.codec.ProposedTransaction, Number(0xFFFFFFFF)) as XdrCodec<ProposedTransactionBatch>;
 
-const _ExecProposeBatchResult: XdrCodec<ExecProposeBatchResult> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.ExecProposeResult.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return execProposeBatchResult(Array.from({ length: _len }, () => proto.codec.ExecProposeResult.decode(r)));
-  },
-};
+const _ExecProposeBatchResult = VarArrayCodec(() => proto.codec.ExecProposeResult, Number(0xFFFFFFFF)) as XdrCodec<ExecProposeBatchResult>;
 
-const _ExecValidateBatchResult: XdrCodec<ExecValidateBatchResult> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.ExecResult.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return execValidateBatchResult(Array.from({ length: _len }, () => proto.codec.ExecResult.decode(r)));
-  },
-};
+const _ExecValidateBatchResult = VarArrayCodec(() => proto.codec.ExecResult, Number(0xFFFFFFFF)) as XdrCodec<ExecValidateBatchResult>;
 
 const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_transaction_args> = {
   encode(w, val) {

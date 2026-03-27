@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -40,12 +40,10 @@ export interface WalletAck {
 
 const _WalletSubmit: XdrCodec<WalletSubmit> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.signed_transactions.length));
-    for (const _item of val.signed_transactions) proto.codec.SignedTransaction.encode(w, _item);
+    VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).encode(w, val.signed_transactions);
   },
   decode(r) {
-    const _signed_transactions_len = Number(r.readUint32());
-    const signed_transactions = Array.from({ length: _signed_transactions_len }, () => proto.codec.SignedTransaction.decode(r));
+    const signed_transactions = VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).decode(r);
     return { signed_transactions };
   },
 };
@@ -93,12 +91,10 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
 
 const _WalletAck: XdrCodec<WalletAck> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.transaction_acks.length));
-    for (const _item of val.transaction_acks) proto.codec.WalletTransactionAck.encode(w, _item);
+    VarArrayCodec(proto.codec.WalletTransactionAck, Number(0xFFFFFFFF)).encode(w, val.transaction_acks);
   },
   decode(r) {
-    const _transaction_acks_len = Number(r.readUint32());
-    const transaction_acks = Array.from({ length: _transaction_acks_len }, () => proto.codec.WalletTransactionAck.decode(r));
+    const transaction_acks = VarArrayCodec(proto.codec.WalletTransactionAck, Number(0xFFFFFFFF)).decode(r);
     return { transaction_acks };
   },
 };

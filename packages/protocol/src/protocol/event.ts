@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -62,13 +62,11 @@ const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = {
 const _TxEventLog: XdrCodec<TxEventLog> = {
   encode(w, val) {
     proto.codec.SHA256Hash.encode(w, val.proposed_tx_hash);
-    w.writeUint32(BigInt(val.events.length));
-    for (const _item of val.events) proto.codec.TxEmittedEvent.encode(w, _item);
+    VarArrayCodec(proto.codec.TxEmittedEvent, Number(0xFFFFFFFF)).encode(w, val.events);
   },
   decode(r) {
     const proposed_tx_hash = proto.codec.SHA256Hash.decode(r);
-    const _events_len = Number(r.readUint32());
-    const events = Array.from({ length: _events_len }, () => proto.codec.TxEmittedEvent.decode(r));
+    const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(0xFFFFFFFF)).decode(r);
     return { proposed_tx_hash, events };
   },
 };

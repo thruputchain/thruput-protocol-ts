@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -37,14 +37,12 @@ export interface repair_missing_cv_args {
 
 const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.transaction_hashes.length));
-    for (const _item of val.transaction_hashes) proto.codec.SignedTransactionHash.encode(w, _item);
+    VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.transaction_hashes);
     proto.codec.ConsensusValueHash.encode(w, val.cv_hash);
     proto.codec.BlockHash.encode(w, val.block_hash);
   },
   decode(r) {
-    const _transaction_hashes_len = Number(r.readUint32());
-    const transaction_hashes = Array.from({ length: _transaction_hashes_len }, () => proto.codec.SignedTransactionHash.decode(r));
+    const transaction_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
     const cv_hash = proto.codec.ConsensusValueHash.decode(r);
     const block_hash = proto.codec.BlockHash.decode(r);
     return { transaction_hashes, cv_hash, block_hash };
@@ -67,12 +65,10 @@ const _MissingTransactionsEnvelope: XdrCodec<MissingTransactionsEnvelope> = {
 
 const _RepairedTransactions: XdrCodec<RepairedTransactions> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.transactions.length));
-    for (const _item of val.transactions) proto.codec.SignedTransaction.encode(w, _item);
+    VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).encode(w, val.transactions);
   },
   decode(r) {
-    const _transactions_len = Number(r.readUint32());
-    const transactions = Array.from({ length: _transactions_len }, () => proto.codec.SignedTransaction.decode(r));
+    const transactions = VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).decode(r);
     return { transactions };
   },
 };

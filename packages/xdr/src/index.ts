@@ -17,6 +17,9 @@ export {
 export {
   VoidCodec,
   BoolCodec,
+  OptionCodec,
+  VarArrayCodec,
+  FixedArrayCodec,
   serialize,
   deserialize,
   serializeCxs,

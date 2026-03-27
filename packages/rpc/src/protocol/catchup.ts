@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -73,13 +73,11 @@ const _CatchupSpan: XdrCodec<CatchupSpan> = {
 const _CatchupBlocksRequest: XdrCodec<CatchupBlocksRequest> = {
   encode(w, val) {
     proto.codec.TimePoint.encode(w, val.timestamp);
-    w.writeUint32(BigInt(val.spans.length));
-    for (const _item of val.spans) proto.codec.CatchupSpan.encode(w, _item);
+    VarArrayCodec(proto.codec.CatchupSpan, Number(0xFFFFFFFF)).encode(w, val.spans);
   },
   decode(r) {
     const timestamp = proto.codec.TimePoint.decode(r);
-    const _spans_len = Number(r.readUint32());
-    const spans = Array.from({ length: _spans_len }, () => proto.codec.CatchupSpan.decode(r));
+    const spans = VarArrayCodec(proto.codec.CatchupSpan, Number(0xFFFFFFFF)).decode(r);
     return { timestamp, spans };
   },
 };
@@ -101,13 +99,11 @@ const _SignedCatchupBlocksRequest: XdrCodec<SignedCatchupBlocksRequest> = {
 const _CatchupBlocksResult: XdrCodec<CatchupBlocksResult> = {
   encode(w, val) {
     proto.codec.TimePoint.encode(w, val.timestamp);
-    w.writeUint32(BigInt(val.blocks.length));
-    for (const _item of val.blocks) proto.codec.CatchupBlock.encode(w, _item);
+    VarArrayCodec(proto.codec.CatchupBlock, Number(0xFFFFFFFF)).encode(w, val.blocks);
   },
   decode(r) {
     const timestamp = proto.codec.TimePoint.decode(r);
-    const _blocks_len = Number(r.readUint32());
-    const blocks = Array.from({ length: _blocks_len }, () => proto.codec.CatchupBlock.decode(r));
+    const blocks = VarArrayCodec(proto.codec.CatchupBlock, Number(0xFFFFFFFF)).decode(r);
     return { timestamp, blocks };
   },
 };
