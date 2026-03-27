@@ -15,14 +15,14 @@ jobs:
   update:
     runs-on: namespace-profile-hogd-linux
     steps:
-      - name: Generate hogd read token
-        id: hogd-token
+      - name: Generate app token
+        id: app-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
           owner: groundhogchain
-          repositories: hogd
+          repositories: hogd,protocol-ts
 
       - name: Setup SSH Agent
         uses: webfactory/ssh-agent@v0.10.0
@@ -50,7 +50,7 @@ jobs:
           tar xzf x23c-linux-x86_64.tar.gz
           chmod +x x23c
         env:
-          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Regenerate
         run: XDRC=./x23c ./scripts/generate.sh
@@ -94,4 +94,4 @@ jobs:
             gh pr merge "$PR_URL" --auto --squash
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
