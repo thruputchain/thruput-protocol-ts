@@ -81,17 +81,34 @@ jobs:
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
           git push -f -u origin "$BRANCH"
 
-          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          echo "::group::Debug: gh auth status"
+          gh auth status 2>&1 || true
+          echo "::endgroup::"
+
+          echo "::group::Debug: gh pr list"
+          gh pr list --head "$BRANCH" --state open --json url 2>&1; LIST_RC=$?
+          echo "gh pr list exit code: $LIST_RC"
+          echo "::endgroup::"
+
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url' 2>&1)
+          echo "EXISTING_PR='$EXISTING_PR'"
+
           if [ -n "$EXISTING_PR" ]; then
             echo "Updated existing PR: $EXISTING_PR"
-            gh pr merge "$EXISTING_PR" --auto --squash
+            gh pr merge "$EXISTING_PR" --auto --squash 2>&1; echo "merge exit code: $?"
           else
+            echo "::group::Debug: gh pr create"
             PR_URL=$(gh pr create \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}")
-            gh pr merge "$PR_URL" --auto --squash
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" 2>&1); CREATE_RC=$?
+            echo "gh pr create exit code: $CREATE_RC"
+            echo "PR_URL='$PR_URL'"
+            echo "::endgroup::"
+            if [ -n "$PR_URL" ] && [ $CREATE_RC -eq 0 ]; then
+              gh pr merge "$PR_URL" --auto --squash 2>&1; echo "merge exit code: $?"
+            fi
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
