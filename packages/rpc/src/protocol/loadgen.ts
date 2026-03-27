@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -108,16 +108,7 @@ const _ExperimentConfig: XdrCodec<ExperimentConfig> = {
   },
 };
 
-const _InitializationBlock: XdrCodec<InitializationBlock> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.SignedTransaction.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return initializationBlock(Array.from({ length: _len }, () => proto.codec.SignedTransaction.decode(r)));
-  },
-};
+const _InitializationBlock = VarArrayCodec(() => proto.codec.SignedTransaction, Number(0xFFFFFFFF)) as XdrCodec<InitializationBlock>;
 
 const _LoadgenContextID: XdrCodec<LoadgenContextID> = {
   encode(w, val) { w.writeUint64(val); },
@@ -127,14 +118,12 @@ const _LoadgenContextID: XdrCodec<LoadgenContextID> = {
 const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = {
   encode(w, val) {
     proto.codec.GenesisConfiguration.encode(w, val.genesis_configuration);
-    w.writeUint32(BigInt(val.initialization_txs.length));
-    for (const _item of val.initialization_txs) proto.codec.InitializationBlock.encode(w, _item);
+    VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).encode(w, val.initialization_txs);
     proto.codec.LoadgenContextID.encode(w, val.context_id);
   },
   decode(r) {
     const genesis_configuration = proto.codec.GenesisConfiguration.decode(r);
-    const _initialization_txs_len = Number(r.readUint32());
-    const initialization_txs = Array.from({ length: _initialization_txs_len }, () => proto.codec.InitializationBlock.decode(r));
+    const initialization_txs = VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).decode(r);
     const context_id = proto.codec.LoadgenContextID.decode(r);
     return { genesis_configuration, initialization_txs, context_id };
   },

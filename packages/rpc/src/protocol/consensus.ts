@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -59,33 +59,19 @@ const _ConsensusValue: XdrCodec<ConsensusValue> = {
   encode(w, val) {
     proto.codec.TimePoint.encode(w, val.timestamp);
     proto.codec.Nomination.encode(w, val.nomination);
-    w.writeUint32(BigInt(val.upgrades.length));
-    for (const _item of val.upgrades) proto.codec.Upgrade.encode(w, _item);
+    VarArrayCodec(proto.codec.Upgrade, Number(6)).encode(w, val.upgrades);
     proto.codec.ConsensusValueHash.encode(w, val.prev_cv_hash);
   },
   decode(r) {
     const timestamp = proto.codec.TimePoint.decode(r);
     const nomination = proto.codec.Nomination.decode(r);
-    const _upgrades_len = Number(r.readUint32());
-    const upgrades = Array.from({ length: _upgrades_len }, () => proto.codec.Upgrade.decode(r));
+    const upgrades = VarArrayCodec(proto.codec.Upgrade, Number(6)).decode(r);
     const prev_cv_hash = proto.codec.ConsensusValueHash.decode(r);
     return { timestamp, nomination, upgrades, prev_cv_hash };
   },
 };
 
-const _OptConsensusValue: XdrCodec<OptConsensusValue> = {
-  encode(w, val) {
-    if (val !== null) {
-      w.writeUint32(1n);
-      proto.codec.ConsensusValue.encode(w, val);
-    } else {
-      w.writeUint32(0n);
-    }
-  },
-  decode(r) {
-    return optConsensusValue(Number(r.readUint32()) ? proto.codec.ConsensusValue.decode(r) : null);
-  },
-};
+const _OptConsensusValue = OptionCodec(() => proto.codec.ConsensusValue) as XdrCodec<OptConsensusValue>;
 
 const _ConsensusValueCue: XdrCodec<ConsensusValueCue> = {
   encode(w, val) {

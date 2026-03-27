@@ -45,6 +45,73 @@ export const BoolCodec: XdrCodec<boolean> = {
   decode(r) { return r.readBool(); },
 };
 
+// Codec references may be passed as thunks (`() => codec`) to break circular
+// dependencies between generated files that all re-export through a barrel
+// module.  At module load time the barrel's `codec` object may not yet be
+// initialised, so eagerly evaluating `proto.codec.X` in a top-level
+// combinator call would fail.  A thunk defers the lookup to encode/decode
+// time, when all modules have finished loading.
+type LazyCodec<T> = XdrCodec<T> | (() => XdrCodec<T>);
+function resolve<T>(c: LazyCodec<T>): XdrCodec<T> {
+  return typeof c === "function" ? (c as () => XdrCodec<T>)() : c;
+}
+
+/** Codec combinator for XDR optional (u32 discriminant + inner value). */
+export function OptionCodec<T>(inner: LazyCodec<T>): XdrCodec<T | null> {
+  return {
+    encode(w, val) {
+      if (val !== null) {
+        w.writeUint32(1n);
+        resolve(inner).encode(w, val);
+      } else {
+        w.writeUint32(0n);
+      }
+    },
+    decode(r) {
+      return Number(r.readUint32()) ? resolve(inner).decode(r) : null;
+    },
+  };
+}
+
+/** Codec combinator for XDR variable-length array (u32 length prefix + elements). */
+export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]> {
+  return {
+    encode(w, val) {
+      if (val.length > max) {
+        throw new Error(`VarArray length ${val.length} exceeds max ${max}`);
+      }
+      const c = resolve(inner);
+      w.writeUint32(BigInt(val.length));
+      for (const item of val) c.encode(w, item);
+    },
+    decode(r) {
+      const len = Number(r.readUint32());
+      if (len > max) {
+        throw new Error(`VarArray length ${len} exceeds max ${max}`);
+      }
+      const c = resolve(inner);
+      return Array.from({ length: len }, () => c.decode(r));
+    },
+  };
+}
+
+/** Codec combinator for XDR fixed-length array (no length prefix, exactly N elements). */
+export function FixedArrayCodec<T>(inner: LazyCodec<T>, len: number): XdrCodec<T[]> {
+  return {
+    encode(w, val) {
+      if (val.length !== len) {
+        throw new Error(`FixedArray expected ${len} elements, got ${val.length}`);
+      }
+      const c = resolve(inner);
+      for (const item of val) c.encode(w, item);
+    },
+    decode(r) {
+      const c = resolve(inner);
+      return Array.from({ length: len }, () => c.decode(r));
+    },
+  };
+}
+
 /** Metadata for a single RPC method (generated from XDR `program` blocks). */
 export interface RpcMethodMeta<Req, Resp> {
   proc: number;

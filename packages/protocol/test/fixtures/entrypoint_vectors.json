@@ -1,0 +1,118 @@
+{
+  "category": "entrypoint_id",
+  "vectors": [
+    {
+      "derived_major_version": "1",
+      "expected_id": "CD5C877CDB380B34",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "6F60F63BE6D029A9",
+      "interface": "Token",
+      "method": "balance",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "BC48C823CAA291AB",
+      "interface": "Token",
+      "method": "approve",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "0.1",
+      "expected_id": "231C0F287A828F1E",
+      "interface": "Fibonacci",
+      "method": "slow_fibonacci",
+      "version_str": "0.1.0"
+    },
+    {
+      "derived_major_version": "0.1",
+      "expected_id": "0F7344BF57B1210B",
+      "interface": "Fibonacci",
+      "method": "get_balance",
+      "version_str": "0.1.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "FB27FA64408AF890",
+      "interface": "SimpleWallet",
+      "method": "send",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "2",
+      "expected_id": "5C0650951E5AD9F8",
+      "interface": "PaymentChannel",
+      "method": "close",
+      "version_str": "2.5.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "613678BD91DD1F6E",
+      "interface": null,
+      "method": "transfer",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "3",
+      "expected_id": "41DD3FB733D0F2D5",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "3.2.1"
+    },
+    {
+      "derived_major_version": "0.9",
+      "expected_id": "31E3C53C961DD484",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "0.9.2"
+    },
+    {
+      "derived_major_version": "0.1",
+      "expected_id": "B79C403EE2A15580",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "0.1.0"
+    },
+    {
+      "derived_major_version": "0.0.2",
+      "expected_id": "CA8365783D8AC618",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "0.0.2"
+    },
+    {
+      "derived_major_version": "0.0.1",
+      "expected_id": "40F6FC077AAB3007",
+      "interface": "Token",
+      "method": "transfer",
+      "version_str": "0.0.1"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "BD9311D81CDBDEFC",
+      "interface": "Token",
+      "method": "",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "ABF744334C9172FA",
+      "interface": "A",
+      "method": "b",
+      "version_str": "1.0.0"
+    },
+    {
+      "derived_major_version": "1",
+      "expected_id": "50F139C85C62E272",
+      "interface": "VeryLongInterfaceNameThatExceedsTypicalLength",
+      "method": "very_long_method_name_that_exceeds_typical_length",
+      "version_str": "1.0.0"
+    }
+  ],
+  "version": 1
+}

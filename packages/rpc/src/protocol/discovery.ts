@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -160,16 +160,12 @@ const _SignedValidatorInfoSnapshot: XdrCodec<SignedValidatorInfoSnapshot> = {
 
 const _KnownQuorumSets: XdrCodec<KnownQuorumSets> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.quorum_set_snapshots.length));
-    for (const _item of val.quorum_set_snapshots) proto.codec.SignedQuorumSetSnapshot.encode(w, _item);
-    w.writeUint32(BigInt(val.validator_snapshots.length));
-    for (const _item of val.validator_snapshots) proto.codec.SignedValidatorInfoSnapshot.encode(w, _item);
+    VarArrayCodec(proto.codec.SignedQuorumSetSnapshot, Number(0xFFFFFFFF)).encode(w, val.quorum_set_snapshots);
+    VarArrayCodec(proto.codec.SignedValidatorInfoSnapshot, Number(0xFFFFFFFF)).encode(w, val.validator_snapshots);
   },
   decode(r) {
-    const _quorum_set_snapshots_len = Number(r.readUint32());
-    const quorum_set_snapshots = Array.from({ length: _quorum_set_snapshots_len }, () => proto.codec.SignedQuorumSetSnapshot.decode(r));
-    const _validator_snapshots_len = Number(r.readUint32());
-    const validator_snapshots = Array.from({ length: _validator_snapshots_len }, () => proto.codec.SignedValidatorInfoSnapshot.decode(r));
+    const quorum_set_snapshots = VarArrayCodec(proto.codec.SignedQuorumSetSnapshot, Number(0xFFFFFFFF)).decode(r);
+    const validator_snapshots = VarArrayCodec(proto.codec.SignedValidatorInfoSnapshot, Number(0xFFFFFFFF)).decode(r);
     return { quorum_set_snapshots, validator_snapshots };
   },
 };

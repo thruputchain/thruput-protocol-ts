@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -173,8 +173,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
         proto.codec.SchedulerValidationBlock.encode(w, val.block);
         break;
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
-        w.writeUint32(BigInt(val.missing_tx_hashes.length));
-        for (const _item of val.missing_tx_hashes) proto.codec.SignedTransactionHash.encode(w, _item);
+        VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.missing_tx_hashes);
         break;
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:
@@ -189,8 +188,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
         const block = proto.codec.SchedulerValidationBlock.decode(r);
         return { outcome, block };
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
-        const _missing_tx_hashes_len = Number(r.readUint32());
-        const missing_tx_hashes = Array.from({ length: _missing_tx_hashes_len }, () => proto.codec.SignedTransactionHash.decode(r));
+        const missing_tx_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
         return { outcome, missing_tx_hashes };
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -93,27 +93,18 @@ const _DbSchedResult: XdrCodec<DbSchedResult> = {
 const _HogAge: XdrCodec<HogAge> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
-    for (const _item of val.num_hogs) proto.codec.uint128_xdr.encode(w, _item);
-    for (const _item of val.average_ages) proto.codec.BlockHeight.encode(w, _item);
+    FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).encode(w, val.num_hogs);
+    FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).encode(w, val.average_ages);
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const num_hogs = Array.from({ length: Number(proto.kHogAgeNumGroups) }, () => proto.codec.uint128_xdr.decode(r));
-    const average_ages = Array.from({ length: Number(proto.kHogAgeNumGroups) }, () => proto.codec.BlockHeight.decode(r));
+    const num_hogs = FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).decode(r);
+    const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).decode(r);
     return { address, num_hogs, average_ages };
   },
 };
 
-const _HogAgeBatch: XdrCodec<HogAgeBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.HogAge.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return hogAgeBatch(Array.from({ length: _len }, () => proto.codec.HogAge.decode(r)));
-  },
-};
+const _HogAgeBatch = VarArrayCodec(() => proto.codec.HogAge, Number(0xFFFFFFFF)) as XdrCodec<HogAgeBatch>;
 
 const _HogAgeResult: XdrCodec<HogAgeResult> = {
   encode(w, val) {
@@ -152,8 +143,7 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
         if (v.address_auth_data_batch === undefined) {
           throw new Error("DbAddressAuthDataBatchResult encode: address_auth_data_batch is undefined");
         }
-        w.writeUint32(BigInt(v.address_auth_data_batch.length));
-        for (const _item of v.address_auth_data_batch) proto.codec.AddressAuthData.encode(w, _item);
+        VarArrayCodec(proto.codec.AddressAuthData, Number(0xFFFFFFFF)).encode(w, v.address_auth_data_batch);
         break;
       }
     }
@@ -162,8 +152,7 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
     const result = Number(r.readInt32());
     switch (result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        const _address_auth_data_batch_len = Number(r.readUint32());
-        const address_auth_data_batch = Array.from({ length: _address_auth_data_batch_len }, () => proto.codec.AddressAuthData.decode(r));
+        const address_auth_data_batch = VarArrayCodec(proto.codec.AddressAuthData, Number(0xFFFFFFFF)).decode(r);
         return { result, address_auth_data_batch };
       default:
         return { result };

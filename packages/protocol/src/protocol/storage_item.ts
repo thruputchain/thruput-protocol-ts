@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -152,12 +152,10 @@ const _StorageItem: XdrCodec<StorageItem> = {
         proto.codec.int128_xdr.encode(w, val.nnint);
         break;
       case proto.StorageItemType.kItemTypeRetrocausalQueue:
-        w.writeUint32(BigInt(val.queue_entries.length));
-        for (const _item of val.queue_entries) proto.codec.QueueEntry.encode(w, _item);
+        VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).encode(w, val.queue_entries);
         break;
       case proto.StorageItemType.kItemTypeReplayCacheData:
-        w.writeUint32(BigInt(val.active_uniquifiers.length));
-        for (const _item of val.active_uniquifiers) proto.codec.Uniquifier.encode(w, _item);
+        VarArrayCodec(proto.codec.Uniquifier, Number(0xFFFFFFFF)).encode(w, val.active_uniquifiers);
         break;
       case proto.StorageItemType.kItemTypeAuthData:
         proto.codec.AddressAuthData.encode(w, val.auth_data);
@@ -177,12 +175,10 @@ const _StorageItem: XdrCodec<StorageItem> = {
         const nnint = proto.codec.int128_xdr.decode(r);
         return { type, nnint };
       case proto.StorageItemType.kItemTypeRetrocausalQueue:
-        const _queue_entries_len = Number(r.readUint32());
-        const queue_entries = Array.from({ length: _queue_entries_len }, () => proto.codec.QueueEntry.decode(r));
+        const queue_entries = VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).decode(r);
         return { type, queue_entries };
       case proto.StorageItemType.kItemTypeReplayCacheData:
-        const _active_uniquifiers_len = Number(r.readUint32());
-        const active_uniquifiers = Array.from({ length: _active_uniquifiers_len }, () => proto.codec.Uniquifier.decode(r));
+        const active_uniquifiers = VarArrayCodec(proto.codec.Uniquifier, Number(0xFFFFFFFF)).decode(r);
         return { type, active_uniquifiers };
       case proto.StorageItemType.kItemTypeAuthData:
         const auth_data = proto.codec.AddressAuthData.decode(r);
@@ -264,38 +260,24 @@ const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
 
 const _GasConfigChange: XdrCodec<GasConfigChange> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.new_gas_permission_configs.length));
-    for (const _item of val.new_gas_permission_configs) proto.codec.GasPermissionConfig.encode(w, _item);
+    VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).encode(w, val.new_gas_permission_configs);
   },
   decode(r) {
-    const _new_gas_permission_configs_len = Number(r.readUint32());
-    const new_gas_permission_configs = Array.from({ length: _new_gas_permission_configs_len }, () => proto.codec.GasPermissionConfig.decode(r));
+    const new_gas_permission_configs = VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).decode(r);
     return { new_gas_permission_configs };
   },
 };
 
 const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
   encode(w, val) {
-    w.writeUint32(BigInt(val.auth_data_change_signers.length));
-    for (const _item of val.auth_data_change_signers) proto.codec.AuthDataChangeSigner.encode(w, _item);
-    if (val.new_nonce_config !== null) {
-      w.writeUint32(1n);
-      proto.codec.NonceConfig.encode(w, val.new_nonce_config);
-    } else {
-      w.writeUint32(0n);
-    }
-    if (val.new_gas_config_change !== null) {
-      w.writeUint32(1n);
-      proto.codec.GasConfigChange.encode(w, val.new_gas_config_change);
-    } else {
-      w.writeUint32(0n);
-    }
+    VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).encode(w, val.auth_data_change_signers);
+    OptionCodec(proto.codec.NonceConfig).encode(w, val.new_nonce_config);
+    OptionCodec(proto.codec.GasConfigChange).encode(w, val.new_gas_config_change);
   },
   decode(r) {
-    const _auth_data_change_signers_len = Number(r.readUint32());
-    const auth_data_change_signers = Array.from({ length: _auth_data_change_signers_len }, () => proto.codec.AuthDataChangeSigner.decode(r));
-    const new_nonce_config = Number(r.readUint32()) ? proto.codec.NonceConfig.decode(r) : null;
-    const new_gas_config_change = Number(r.readUint32()) ? proto.codec.GasConfigChange.decode(r) : null;
+    const auth_data_change_signers = VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).decode(r);
+    const new_nonce_config = OptionCodec(proto.codec.NonceConfig).decode(r);
+    const new_gas_config_change = OptionCodec(proto.codec.GasConfigChange).decode(r);
     return { auth_data_change_signers, new_nonce_config, new_gas_config_change };
   },
 };
@@ -398,13 +380,11 @@ const _ReplayCacheHeightCount: XdrCodec<ReplayCacheHeightCount> = {
 const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = {
   encode(w, val) {
     w.writeInt64(val.size);
-    w.writeUint32(BigInt(val.heights.length));
-    for (const _item of val.heights) proto.codec.ReplayCacheHeightCount.encode(w, _item);
+    VarArrayCodec(proto.codec.ReplayCacheHeightCount, Number(proto.kReplayCacheNoncesMaxLen)).encode(w, val.heights);
   },
   decode(r) {
     const size = r.readInt64();
-    const _heights_len = Number(r.readUint32());
-    const heights = Array.from({ length: _heights_len }, () => proto.codec.ReplayCacheHeightCount.decode(r));
+    const heights = VarArrayCodec(proto.codec.ReplayCacheHeightCount, Number(proto.kReplayCacheNoncesMaxLen)).decode(r);
     return { size, heights };
   },
 };

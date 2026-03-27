@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -111,16 +111,7 @@ const _AuthErrorCode: XdrCodec<AuthErrorCode> = {
   decode(r) { return Number(r.readInt32()) as AuthErrorCode; },
 };
 
-const _AuthErrorCodeBatch: XdrCodec<AuthErrorCodeBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.AuthErrorCode.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return authErrorCodeBatch(Array.from({ length: _len }, () => proto.codec.AuthErrorCode.decode(r)));
-  },
-};
+const _AuthErrorCodeBatch = VarArrayCodec(() => proto.codec.AuthErrorCode, Number(0xFFFFFFFF)) as XdrCodec<AuthErrorCodeBatch>;
 
 const _authmempool_verify_transactions_args: XdrCodec<authmempool_verify_transactions_args> = {
   encode(w, val) {
@@ -149,30 +140,16 @@ const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = 
 const _KeyChange: XdrCodec<KeyChange> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
-    if (val.auth_data !== null) {
-      w.writeUint32(1n);
-      proto.codec.AddressAuthData.encode(w, val.auth_data);
-    } else {
-      w.writeUint32(0n);
-    }
+    OptionCodec(proto.codec.AddressAuthData).encode(w, val.auth_data);
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const auth_data = Number(r.readUint32()) ? proto.codec.AddressAuthData.decode(r) : null;
+    const auth_data = OptionCodec(proto.codec.AddressAuthData).decode(r);
     return { address, auth_data };
   },
 };
 
-const _KeyChangeBatch: XdrCodec<KeyChangeBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.KeyChange.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return keyChangeBatch(Array.from({ length: _len }, () => proto.codec.KeyChange.decode(r)));
-  },
-};
+const _KeyChangeBatch = VarArrayCodec(() => proto.codec.KeyChange, Number(0xFFFFFFFF)) as XdrCodec<KeyChangeBatch>;
 
 const _authdb_forward_key_changes_args: XdrCodec<authdb_forward_key_changes_args> = {
   encode(w, val) {
@@ -250,16 +227,7 @@ const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
   },
 };
 
-const _DBAuthResultBatch: XdrCodec<DBAuthResultBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.DBAuthResult.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return dbAuthResultBatch(Array.from({ length: _len }, () => proto.codec.DBAuthResult.decode(r)));
-  },
-};
+const _DBAuthResultBatch = VarArrayCodec(() => proto.codec.DBAuthResult, Number(0xFFFFFFFF)) as XdrCodec<DBAuthResultBatch>;
 
 const _authdb_get_auth_data_args: XdrCodec<authdb_get_auth_data_args> = {
   encode(w, val) {
@@ -300,8 +268,7 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
         if (v.shards === undefined) {
           throw new Error("IntroAuthResult encode: shards is undefined");
         }
-        w.writeUint32(BigInt(v.shards.length));
-        for (const _item of v.shards) proto.codec.ShardCard.encode(w, _item);
+        VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).encode(w, v.shards);
         break;
       }
     }
@@ -310,8 +277,7 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
     const outcome = Number(r.readInt32());
     switch (outcome) {
       case proto.IntroAuthOutcome.kSuccess:
-        const _shards_len = Number(r.readUint32());
-        const shards = Array.from({ length: _shards_len }, () => proto.codec.ShardCard.decode(r));
+        const shards = VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).decode(r);
         return { outcome, shards };
       default:
         return { outcome };

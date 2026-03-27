@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -59,19 +59,7 @@ const _PublicKeyConfig: XdrCodec<PublicKeyConfig> = {
   },
 };
 
-const _PublicKeyConfigOpt: XdrCodec<PublicKeyConfigOpt> = {
-  encode(w, val) {
-    if (val !== null) {
-      w.writeUint32(1n);
-      proto.codec.PublicKeyConfig.encode(w, val);
-    } else {
-      w.writeUint32(0n);
-    }
-  },
-  decode(r) {
-    return publicKeyConfigOpt(Number(r.readUint32()) ? proto.codec.PublicKeyConfig.decode(r) : null);
-  },
-};
+const _PublicKeyConfigOpt = OptionCodec(() => proto.codec.PublicKeyConfig) as XdrCodec<PublicKeyConfigOpt>;
 
 const _GasPermissionConfig: XdrCodec<GasPermissionConfig> = {
   encode(w, val) {
@@ -101,16 +89,14 @@ const _NonceConfig: XdrCodec<NonceConfig> = {
 
 const _AddressAuthData: XdrCodec<AddressAuthData> = {
   encode(w, val) {
-    for (const _item of val.public_keys) proto.codec.PublicKeyConfigOpt.encode(w, _item);
-    w.writeUint32(BigInt(val.gas_permissions.length));
-    for (const _item of val.gas_permissions) proto.codec.GasPermissionConfig.encode(w, _item);
+    FixedArrayCodec(proto.codec.PublicKeyConfigOpt, Number(proto.kMaxSigners)).encode(w, val.public_keys);
+    VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).encode(w, val.gas_permissions);
     proto.codec.NonceConfig.encode(w, val.nonce_config);
     proto.codec.BlockHeight.encode(w, val.last_written_height);
   },
   decode(r) {
-    const public_keys = Array.from({ length: Number(proto.kMaxSigners) }, () => proto.codec.PublicKeyConfigOpt.decode(r));
-    const _gas_permissions_len = Number(r.readUint32());
-    const gas_permissions = Array.from({ length: _gas_permissions_len }, () => proto.codec.GasPermissionConfig.decode(r));
+    const public_keys = FixedArrayCodec(proto.codec.PublicKeyConfigOpt, Number(proto.kMaxSigners)).decode(r);
+    const gas_permissions = VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).decode(r);
     const nonce_config = proto.codec.NonceConfig.decode(r);
     const last_written_height = proto.codec.BlockHeight.decode(r);
     return { public_keys, gas_permissions, nonce_config, last_written_height };

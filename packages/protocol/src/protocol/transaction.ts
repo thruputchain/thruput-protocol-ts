@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -231,20 +231,16 @@ const _Transaction: XdrCodec<Transaction> = {
   encode(w, val) {
     proto.codec.Invocation.encode(w, val.invocation);
     proto.codec.Uniquifier.encode(w, val.uniquifier);
-    w.writeUint32(BigInt(val.contracts_to_deploy.length));
-    for (const _item of val.contracts_to_deploy) proto.codec.Contract.encode(w, _item);
+    VarArrayCodec(proto.codec.Contract, Number(0xFFFFFFFF)).encode(w, val.contracts_to_deploy);
     proto.codec.AuthClaimData.encode(w, val.auth_claims);
-    w.writeUint32(BigInt(val.gas_claims.length));
-    for (const _item of val.gas_claims) proto.codec.GasClaim.encode(w, _item);
+    VarArrayCodec(proto.codec.GasClaim, Number(0xFFFFFFFF)).encode(w, val.gas_claims);
   },
   decode(r) {
     const invocation = proto.codec.Invocation.decode(r);
     const uniquifier = proto.codec.Uniquifier.decode(r);
-    const _contracts_to_deploy_len = Number(r.readUint32());
-    const contracts_to_deploy = Array.from({ length: _contracts_to_deploy_len }, () => proto.codec.Contract.decode(r));
+    const contracts_to_deploy = VarArrayCodec(proto.codec.Contract, Number(0xFFFFFFFF)).decode(r);
     const auth_claims = proto.codec.AuthClaimData.decode(r);
-    const _gas_claims_len = Number(r.readUint32());
-    const gas_claims = Array.from({ length: _gas_claims_len }, () => proto.codec.GasClaim.decode(r));
+    const gas_claims = VarArrayCodec(proto.codec.GasClaim, Number(0xFFFFFFFF)).decode(r);
     return { invocation, uniquifier, contracts_to_deploy, auth_claims, gas_claims };
   },
 };
@@ -271,87 +267,35 @@ const _SignedTransactionHash: XdrCodec<SignedTransactionHash> = {
 const _SignedTransaction: XdrCodec<SignedTransaction> = {
   encode(w, val) {
     proto.codec.Transaction.encode(w, val.tx);
-    w.writeUint32(BigInt(val.signatures.length));
-    for (const _item of val.signatures) proto.codec.DecoratedSignature.encode(w, _item);
+    VarArrayCodec(proto.codec.DecoratedSignature, Number(0xFFFFFFFF)).encode(w, val.signatures);
   },
   decode(r) {
     const tx = proto.codec.Transaction.decode(r);
-    const _signatures_len = Number(r.readUint32());
-    const signatures = Array.from({ length: _signatures_len }, () => proto.codec.DecoratedSignature.decode(r));
+    const signatures = VarArrayCodec(proto.codec.DecoratedSignature, Number(0xFFFFFFFF)).decode(r);
     return { tx, signatures };
   },
 };
 
-const _TransactionBatch: XdrCodec<TransactionBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.Transaction.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return transactionBatch(Array.from({ length: _len }, () => proto.codec.Transaction.decode(r)));
-  },
-};
+const _TransactionBatch = VarArrayCodec(() => proto.codec.Transaction, Number(0xFFFFFFFF)) as XdrCodec<TransactionBatch>;
 
-const _SignedTransactionBatch: XdrCodec<SignedTransactionBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.SignedTransaction.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return signedTransactionBatch(Array.from({ length: _len }, () => proto.codec.SignedTransaction.decode(r)));
-  },
-};
+const _SignedTransactionBatch = VarArrayCodec(() => proto.codec.SignedTransaction, Number(0xFFFFFFFF)) as XdrCodec<SignedTransactionBatch>;
 
-const _OptSignedTransaction: XdrCodec<OptSignedTransaction> = {
-  encode(w, val) {
-    if (val !== null) {
-      w.writeUint32(1n);
-      proto.codec.SignedTransaction.encode(w, val);
-    } else {
-      w.writeUint32(0n);
-    }
-  },
-  decode(r) {
-    return optSignedTransaction(Number(r.readUint32()) ? proto.codec.SignedTransaction.decode(r) : null);
-  },
-};
+const _OptSignedTransaction = OptionCodec(() => proto.codec.SignedTransaction) as XdrCodec<OptSignedTransaction>;
 
-const _OptSignedTransactionBatch: XdrCodec<OptSignedTransactionBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.OptSignedTransaction.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return optSignedTransactionBatch(Array.from({ length: _len }, () => proto.codec.OptSignedTransaction.decode(r)));
-  },
-};
+const _OptSignedTransactionBatch = VarArrayCodec(() => proto.codec.OptSignedTransaction, Number(0xFFFFFFFF)) as XdrCodec<OptSignedTransactionBatch>;
 
-const _SignedTransactionHashBatch: XdrCodec<SignedTransactionHashBatch> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.SignedTransactionHash.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return signedTransactionHashBatch(Array.from({ length: _len }, () => proto.codec.SignedTransactionHash.decode(r)));
-  },
-};
+const _SignedTransactionHashBatch = VarArrayCodec(() => proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)) as XdrCodec<SignedTransactionHashBatch>;
 
 const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = {
   encode(w, val) {
     w.writeVarOpaque(val.nondeterministic_bits, Number(0xFFFFFFFF));
     w.writeUint32(val.nondeterministic_bit_count);
-    w.writeUint32(BigInt(val.observed_queue_entry_sequence.length));
-    for (const _item of val.observed_queue_entry_sequence) proto.codec.QueueEntry.encode(w, _item);
+    VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).encode(w, val.observed_queue_entry_sequence);
   },
   decode(r) {
     const nondeterministic_bits = r.readVarOpaque(Number(0xFFFFFFFF));
     const nondeterministic_bit_count = r.readUint32();
-    const _observed_queue_entry_sequence_len = Number(r.readUint32());
-    const observed_queue_entry_sequence = Array.from({ length: _observed_queue_entry_sequence_len }, () => proto.codec.QueueEntry.decode(r));
+    const observed_queue_entry_sequence = VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).decode(r);
     return { nondeterministic_bits, nondeterministic_bit_count, observed_queue_entry_sequence };
   },
 };

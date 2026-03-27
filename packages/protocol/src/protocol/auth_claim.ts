@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -197,16 +197,7 @@ const _AuthClaim: XdrCodec<AuthClaim> = {
   },
 };
 
-const _AuthClaimData: XdrCodec<AuthClaimData> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.AuthClaim.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return authClaimData(Array.from({ length: _len }, () => proto.codec.AuthClaim.decode(r)));
-  },
-};
+const _AuthClaimData = VarArrayCodec(() => proto.codec.AuthClaim, Number(proto.kMaxAuthClaims)) as XdrCodec<AuthClaimData>;
 
 const _AuthVerifyErrorCode: XdrCodec<AuthVerifyErrorCode> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },

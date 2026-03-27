@@ -5,12 +5,11 @@
  * and verifies the TypeScript XDR encoding produces identical bytes.
  */
 import { describe, it, expect } from "vitest";
-import { XdrWriter } from "../../src/index.js";
+import { XdrWriter, serialize, OptionCodec, VarArrayCodec } from "../../src/index.js";
 import { toHex, fromHex } from "../../src/utils/index.js";
-import { serialize } from "../../src/index.js";
 import {
   contractAddress, sha256Hash, ed25519PublicKey, contractEntrypointID,
-  codec,
+  StorageKeyType, codec,
 } from "../../src/protocol/index.js";
 import type { Invocation, Transaction, Uniquifier } from "../../src/protocol/index.js";
 import { existsSync, readFileSync } from "fs";
@@ -29,6 +28,17 @@ interface VectorFile {
   category: string;
   vectors: XdrVector[];
 }
+
+import type { XdrCodec } from "../../src/index.js";
+
+const primitiveCodecs: Record<string, XdrCodec<bigint>> = {
+  u32: { encode(w, v) { w.writeUint32(v); }, decode(r) { return r.readUint32(); } },
+  i32: { encode(w, v) { w.writeInt32(v); }, decode(r) { return r.readInt32(); } },
+  u64: { encode(w, v) { w.writeUint64(v); }, decode(r) { return r.readUint64(); } },
+  i64: { encode(w, v) { w.writeInt64(v); }, decode(r) { return r.readInt64(); } },
+  u128: { encode(w, v) { w.writeUint128(v); }, decode(r) { return r.readUint128(); } },
+  i128: { encode(w, v) { w.writeInt128(v); }, decode(r) { return r.readInt128(); } },
+};
 
 function encodePrimitive(type: string, value: unknown): Uint8Array {
   const w = new XdrWriter();
@@ -52,28 +62,16 @@ function encodeCollection(type: { bytes?: string; string?: string; vec?: string;
     w.writeVarOpaque(data, parseInt(type.bytes));
   } else if (type.string) {
     w.writeString(value as string, parseInt(type.string));
-  } else if (type.vec === "u32") {
-    const arr = (value as string[]).map(v => BigInt(v));
-    w.writeUint32(BigInt(arr.length));
-    for (const v of arr) w.writeUint32(v);
-  } else if (type.vec === "u64") {
-    const arr = (value as string[]).map(v => BigInt(v));
-    w.writeUint32(BigInt(arr.length));
-    for (const v of arr) w.writeUint64(v);
-  } else if (type.option === "u32") {
-    if (value === null) {
-      w.writeBool(false);
-    } else {
-      w.writeBool(true);
-      w.writeUint32(BigInt(value as string));
-    }
-  } else if (type.option === "i64") {
-    if (value === null) {
-      w.writeBool(false);
-    } else {
-      w.writeBool(true);
-      w.writeInt64(BigInt(value as string));
-    }
+  } else if (type.vec) {
+    return serialize(
+      (value as string[]).map(v => BigInt(v)),
+      VarArrayCodec(primitiveCodecs[type.vec], 0xFFFFFFFF),
+    );
+  } else if (type.option) {
+    return serialize(
+      value === null ? null : BigInt(value as string),
+      OptionCodec(primitiveCodecs[type.option]),
+    );
   } else {
     return null!;
   }
@@ -93,22 +91,6 @@ function encodeFixed(type: string, value: string): Uint8Array {
     default:
       return null!;
   }
-}
-
-function encodeEnum(type: string, value: { variant: string }): Uint8Array {
-  if (type === "StorageKeyType") {
-    const w = new XdrWriter();
-    const variants: Record<string, number> = {
-      kStorageKeyTypeContractData: 0,
-      kStorageKeyTypeFreeNativeTokenBalance: 1,
-      kStorageKeyTypeAddressAuthData: 2,
-      kStorageKeyTypeAddressMetadata: 3,
-      kStorageKeyTypeReplayCache: 4,
-    };
-    w.writeInt32(BigInt(variants[value.variant]));
-    return w.finish();
-  }
-  return null!;
 }
 
 describe("cross-SDK: XDR serialization", () => {
@@ -133,7 +115,12 @@ describe("cross-SDK: XDR serialization", () => {
         } else if (fixedTypes.includes(vec.type)) {
           encoded = encodeFixed(vec.type, vec.value as string);
         } else if (vec.type === "StorageKeyType") {
-          encoded = encodeEnum(vec.type, vec.value as { variant: string });
+          const { variant } = vec.value as { variant: string };
+          const disc = StorageKeyType[variant as keyof typeof StorageKeyType];
+          if (disc === undefined) {
+            throw new Error(`Unknown StorageKeyType variant "${variant}" — protocol version mismatch?`);
+          }
+          encoded = serialize(disc, codec.StorageKeyType);
         } else {
           // Skip complex struct types for now — they need custom construction
           return;

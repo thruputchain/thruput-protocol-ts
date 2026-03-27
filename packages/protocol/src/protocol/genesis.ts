@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
+// Generated from x23c commit: 709902883de376dc08544eb36e6c9a16f03bceb1
 
-import type { XdrCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
 
 
@@ -69,16 +69,7 @@ const _InitialConfigurationEntry: XdrCodec<InitialConfigurationEntry> = {
   },
 };
 
-const _InitialConfigurationList: XdrCodec<InitialConfigurationList> = {
-  encode(w, val) {
-    w.writeUint32(BigInt(val.length));
-    for (const _item of val) proto.codec.InitialConfigurationEntry.encode(w, _item);
-  },
-  decode(r) {
-    const _len = Number(r.readUint32());
-    return initialConfigurationList(Array.from({ length: _len }, () => proto.codec.InitialConfigurationEntry.decode(r)));
-  },
-};
+const _InitialConfigurationList = VarArrayCodec(() => proto.codec.InitialConfigurationEntry, Number(0xFFFFFFFF)) as XdrCodec<InitialConfigurationList>;
 
 const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
   encode(w, val) {
