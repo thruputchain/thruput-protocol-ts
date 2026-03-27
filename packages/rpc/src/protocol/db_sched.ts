@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -121,9 +121,9 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; hog_age_batch: proto.HogAgeBatch };
+        const v = val as { result: number; hog_age_batch: proto.HogAgeBatch };
         if (v.hog_age_batch === undefined) {
-          throw new Error("HogAgeResult encode: discriminant is DbSchedResultOK but hog_age_batch is undefined");
+          throw new Error("HogAgeResult encode: hog_age_batch is undefined");
         }
         proto.codec.HogAgeBatch.encode(w, v.hog_age_batch);
         break;
@@ -148,9 +148,9 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; address_auth_data_batch: proto.AddressAuthData[] };
+        const v = val as { result: number; address_auth_data_batch: proto.AddressAuthData[] };
         if (v.address_auth_data_batch === undefined) {
-          throw new Error("DbAddressAuthDataBatchResult encode: discriminant is DbSchedResultOK but address_auth_data_batch is undefined");
+          throw new Error("DbAddressAuthDataBatchResult encode: address_auth_data_batch is undefined");
         }
         w.writeUint32(BigInt(v.address_auth_data_batch.length));
         for (const _item of v.address_auth_data_batch) proto.codec.AddressAuthData.encode(w, _item);
@@ -177,9 +177,9 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; db_hash: proto.DbHash };
+        const v = val as { result: number; db_hash: proto.DbHash };
         if (v.db_hash === undefined) {
-          throw new Error("DbBlockResult encode: discriminant is DbSchedResultOK but db_hash is undefined");
+          throw new Error("DbBlockResult encode: db_hash is undefined");
         }
         proto.codec.DbHash.encode(w, v.db_hash);
         break;
@@ -209,9 +209,9 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: proto.DbSchedResult.DbSchedResultOK; db_tip: proto.DbTip };
+        const v = val as { result: number; db_tip: proto.DbTip };
         if (v.db_tip === undefined) {
-          throw new Error("DbTipResult encode: discriminant is DbSchedResultOK but db_tip is undefined");
+          throw new Error("DbTipResult encode: db_tip is undefined");
         }
         proto.codec.DbTip.encode(w, v.db_tip);
         break;
@@ -293,10 +293,6 @@ export const codec = {
   DbBlockResult: _DbBlockResult,
   DbShardResult: _DbShardResult,
   DbTipResult: _DbTipResult,
-  dbsched_get_address_auth_data_args: _dbsched_get_address_auth_data_args,
-  dbsched_create_snapshot_args: _dbsched_create_snapshot_args,
-  dbsched_commit_snapshot_args: _dbsched_commit_snapshot_args,
-  dbsched_load_genesis_configuration_args: _dbsched_load_genesis_configuration_args,
 } as const;
 
 export const DbSchedProgram: RpcProgramMeta = {

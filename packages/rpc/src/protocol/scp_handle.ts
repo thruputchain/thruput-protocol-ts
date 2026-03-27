@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from x23c commit: 33b572011b97781c388215e8d1e06f5fe816fa06
 
 import { type XdrCodec, type RpcProgramMeta, VoidCodec } from "@groundhog/xdr";
 import * as proto from "./index.js";
@@ -231,18 +231,6 @@ const _scp_handle_ballot_did_hear_from_quorum_args: XdrCodec<scp_handle_ballot_d
 
 export const codec = {
   SCPValidationLevel: _SCPValidationLevel,
-  scp_handle_validate_ballot_value_args: _scp_handle_validate_ballot_value_args,
-  scp_handle_validate_nomination_value_args: _scp_handle_validate_nomination_value_args,
-  scp_handle_extract_valid_value_args: _scp_handle_extract_valid_value_args,
-  scp_handle_combine_candidates_args: _scp_handle_combine_candidates_args,
-  scp_handle_value_externalized_args: _scp_handle_value_externalized_args,
-  scp_handle_nominating_value_args: _scp_handle_nominating_value_args,
-  scp_handle_updated_candidate_value_args: _scp_handle_updated_candidate_value_args,
-  scp_handle_started_ballot_proto_args: _scp_handle_started_ballot_proto_args,
-  scp_handle_accepted_ballot_prepared_args: _scp_handle_accepted_ballot_prepared_args,
-  scp_handle_confirmed_ballot_prepared_args: _scp_handle_confirmed_ballot_prepared_args,
-  scp_handle_accepted_commit_args: _scp_handle_accepted_commit_args,
-  scp_handle_ballot_did_hear_from_quorum_args: _scp_handle_ballot_did_hear_from_quorum_args,
 } as const;
 
 export const SCP_HandleProgram: RpcProgramMeta = {
