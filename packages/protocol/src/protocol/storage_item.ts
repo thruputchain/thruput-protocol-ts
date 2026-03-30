@@ -111,8 +111,8 @@ export interface ReplayCacheData {
 }
 
 export enum StorageDeltaFlags {
-  kStorageDeltaFlagNone = 0,
-  kStorageDeltaFlagExclusiveLock = 0x00000001,
+  None = 0,
+  ExclusiveLock = 0x00000001,
 }
 
 export type StorageDeltaFlagSet = bigint & { readonly __brand: "StorageDeltaFlagSet" };
