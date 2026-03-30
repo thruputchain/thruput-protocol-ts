@@ -13,6 +13,7 @@ export enum SyscallErrorCode {
   kSyscallErrorCodeFault = 1,
   kSyscallErrorCodeNoSyscall = 2,
   kSyscallErrorCodeIsRootTransaction = 3,
+  kSyscallErrorCodeReentrance = 4,
   kSyscallErrorCodeContractAlreadyDeployed = 5,
   kSyscallErrorCodeNoReturnBufferAvailable = 6,
   kSyscallErrorCodeInvalidSyscallInput = 7,
