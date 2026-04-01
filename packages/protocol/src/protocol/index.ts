@@ -14,6 +14,7 @@ export * from "./address_auth.js";
 export * from "./storage_item.js";
 export * from "./precompiles.js";
 export * from "./block.js";
+export * from "./invoke_flag.js";
 
 // Merged codec namespace
 import { codec as types_codec } from "./types.js";
@@ -31,6 +32,7 @@ import { codec as address_auth_codec } from "./address_auth.js";
 import { codec as storage_item_codec } from "./storage_item.js";
 import { codec as precompiles_codec } from "./precompiles.js";
 import { codec as block_codec } from "./block.js";
+import { codec as invoke_flag_codec } from "./invoke_flag.js";
 
 export const codec = {
   ...types_codec,
@@ -48,4 +50,5 @@ export const codec = {
   ...storage_item_codec,
   ...precompiles_codec,
   ...block_codec,
+  ...invoke_flag_codec,
 } as const;
