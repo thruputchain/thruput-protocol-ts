@@ -49,6 +49,7 @@ export const SCP_ControlProgram: RpcProgramMeta = {
     scp_control_set_qset: { proc: 300, request: proto.codec.SCPQuorumSet as XdrCodec<proto.SCPQuorumSet>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },
     scp_control_get_qset: { proc: 301, request: proto.codec.SCPHash as XdrCodec<proto.SCPHash>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },
     scp_control_remove_qset: { proc: 302, request: proto.codec.SCPHash as XdrCodec<proto.SCPHash>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },
+    scp_control_set_lowest_non_externalized_slot: { proc: 400, request: proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: VoidCodec },
   },
 };
 
