@@ -16,6 +16,7 @@ core_protos=(
   types.x contract.x exec_result.x event.x genesis.x transaction.x
   retrocausal_queue.x storage_cost.x syscall_error.x auth_claim.x
   standard_asset_events.x address_auth.x storage_item.x precompiles.x block.x
+  invoke_flag.x
 )
 
 rpc_protos=(
