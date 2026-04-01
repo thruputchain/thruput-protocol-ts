@@ -45,18 +45,6 @@ export type InvocationFrameOutput =
   | { status_code: proto.InvocationFrameStatusCode.Fault }
 ;
 
-export enum InvokeFlag {
-  None = 0,
-  TryInvoke = 0x00000001,
-  ReadOnly = 0x00000002,
-  DelegateCall = 0x00000004,
-}
-
-export type InvokeFlagSet = bigint & { readonly __brand: "InvokeFlagSet" };
-export function invokeFlagSet(val: bigint): InvokeFlagSet {
-  return val as InvokeFlagSet;
-}
-
 export interface Uniquifier {
   block_expiry_height: proto.BlockHeight;
   nonce: bigint;
@@ -205,16 +193,6 @@ const _InvocationFrameOutput: XdrCodec<InvocationFrameOutput> = {
   },
 };
 
-const _InvokeFlag: XdrCodec<InvokeFlag> = {
-  encode(w, val) { w.writeInt32(BigInt(val)); },
-  decode(r) { return Number(r.readInt32()) as InvokeFlag; },
-};
-
-const _InvokeFlagSet: XdrCodec<InvokeFlagSet> = {
-  encode(w, val) { w.writeInt32(val); },
-  decode(r) { return invokeFlagSet(r.readInt32()); },
-};
-
 const _Uniquifier: XdrCodec<Uniquifier> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block_expiry_height);
@@ -324,8 +302,6 @@ export const codec = {
   Invocation: _Invocation,
   InvocationFrameStatusCode: _InvocationFrameStatusCode,
   InvocationFrameOutput: _InvocationFrameOutput,
-  InvokeFlag: _InvokeFlag,
-  InvokeFlagSet: _InvokeFlagSet,
   Uniquifier: _Uniquifier,
   Transaction: _Transaction,
   DecoratedSignature: _DecoratedSignature,
