@@ -58,7 +58,6 @@ export type SchedulerValidationResult =
 export enum SchedulerCommitOutcome {
   SchedulerCommitOK = 0,
   SchedulerCommitBlockNotFound = 1,
-  SchedulerCommitRace = 2,
 }
 
 export enum SchedulerGetTipOutcome {
