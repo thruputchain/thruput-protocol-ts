@@ -65,11 +65,6 @@ export type ExpectedProposalData =
   | { error: number }
 ;
 
-export type ExpectedStorageItem =
-  | { error: proto.RPCError.kRPCNone; item: proto.WireStorageItem }
-  | { error: number }
-;
-
 export type ExpectedRetrocausalQueueBlock =
   | { error: proto.RPCError.kRPCNone; queue_block: proto.RetrocausalQueueBlock }
   | { error: number }
@@ -244,33 +239,6 @@ const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
   },
 };
 
-const _ExpectedStorageItem: XdrCodec<ExpectedStorageItem> = {
-  encode(w, val) {
-    w.writeInt32(BigInt(val.error));
-    switch (val.error) {
-      case proto.RPCError.kRPCNone:
-      {
-        const v = val as { error: number; item: proto.WireStorageItem };
-        if (v.item === undefined) {
-          throw new Error("ExpectedStorageItem encode: item is undefined");
-        }
-        proto.codec.WireStorageItem.encode(w, v.item);
-        break;
-      }
-    }
-  },
-  decode(r) {
-    const error = Number(r.readInt32());
-    switch (error) {
-      case proto.RPCError.kRPCNone:
-        const item = proto.codec.WireStorageItem.decode(r);
-        return { error, item };
-      default:
-        return { error };
-    }
-  },
-};
-
 const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
@@ -365,7 +333,6 @@ export const codec = {
   ExpectedContract: _ExpectedContract,
   ExpectedDeployment: _ExpectedDeployment,
   ExpectedProposalData: _ExpectedProposalData,
-  ExpectedStorageItem: _ExpectedStorageItem,
   ExpectedRetrocausalQueueBlock: _ExpectedRetrocausalQueueBlock,
   ExpectedQueueEntry: _ExpectedQueueEntry,
   ExpectedDBTip: _ExpectedDBTip,
