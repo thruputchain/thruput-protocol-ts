@@ -54,6 +54,7 @@ export type SchedulerValidationResult =
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationDbFailed }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationInvalid }
+  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate }
 ;
 
 export enum SchedulerCommitOutcome {
@@ -178,6 +179,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationInvalid:
+      case proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate:
         break;
     }
   },
@@ -193,6 +195,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationInvalid:
+      case proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate:
         return { outcome } as SchedulerValidationResult;
       default:
         throw new Error(`Unknown SchedulerValidationResult discriminant: ${outcome}`);
