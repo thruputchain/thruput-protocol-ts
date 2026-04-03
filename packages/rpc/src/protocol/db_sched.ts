@@ -33,9 +33,14 @@ export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
 }
 
 export type HogAgeResult =
-  | { result: proto.DbSchedResult.DbSchedResultOK; hog_age_batch: proto.HogAgeBatch }
+  | { result: proto.DbSchedResult.DbSchedResultOK; hog_age: proto.HogAge }
   | { result: number }
 ;
+
+export type HogAgeResults = proto.HogAgeResult[] & { readonly __brand: "HogAgeResults" };
+export function hogAgeResults(val: proto.HogAgeResult[]): HogAgeResults {
+  return val as HogAgeResults;
+}
 
 export type DbAddressAuthDataBatchResult =
   | { result: proto.DbSchedResult.DbSchedResultOK; address_auth_data_batch: proto.AddressAuthData[] }
@@ -112,11 +117,11 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: number; hog_age_batch: proto.HogAgeBatch };
-        if (v.hog_age_batch === undefined) {
-          throw new Error("HogAgeResult encode: hog_age_batch is undefined");
+        const v = val as { result: number; hog_age: proto.HogAge };
+        if (v.hog_age === undefined) {
+          throw new Error("HogAgeResult encode: hog_age is undefined");
         }
-        proto.codec.HogAgeBatch.encode(w, v.hog_age_batch);
+        proto.codec.HogAge.encode(w, v.hog_age);
         break;
       }
     }
@@ -125,13 +130,15 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     const result = Number(r.readInt32());
     switch (result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        const hog_age_batch = proto.codec.HogAgeBatch.decode(r);
-        return { result, hog_age_batch };
+        const hog_age = proto.codec.HogAge.decode(r);
+        return { result, hog_age };
       default:
         return { result };
     }
   },
 };
+
+const _HogAgeResults = VarArrayCodec(() => proto.codec.HogAgeResult, Number(0xFFFFFFFF)) as XdrCodec<HogAgeResults>;
 
 const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
   encode(w, val) {
@@ -278,6 +285,7 @@ export const codec = {
   HogAge: _HogAge,
   HogAgeBatch: _HogAgeBatch,
   HogAgeResult: _HogAgeResult,
+  HogAgeResults: _HogAgeResults,
   DbAddressAuthDataBatchResult: _DbAddressAuthDataBatchResult,
   DbBlockResult: _DbBlockResult,
   DbShardResult: _DbShardResult,
@@ -290,7 +298,7 @@ export const DbSchedProgram: RpcProgramMeta = {
   methods: {
     dbsched_null: { proc: 0, request: VoidCodec, response: VoidCodec },
     dbsched_get_address_auth_data: { proc: 1, request: _dbsched_get_address_auth_data_args, response: _DbAddressAuthDataBatchResult },
-    dbsched_get_hog_ages: { proc: 2, request: proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: _HogAgeResult },
+    dbsched_get_hog_ages: { proc: 2, request: proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: _HogAgeResults },
     dbsched_write_hog_ages: { proc: 3, request: _HogAgeBatch, response: _DbSchedResult },
     dbsched_create_snapshot: { proc: 5, request: _dbsched_create_snapshot_args, response: _DbSchedResult },
     dbsched_commit_snapshot: { proc: 6, request: _dbsched_commit_snapshot_args, response: _DbBlockResult },
