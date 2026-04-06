@@ -77,6 +77,7 @@ export interface dbsched_create_snapshot_args {
 export interface dbsched_commit_snapshot_args {
   arg0: proto.BlockID;
   arg1: proto.BlockHash;
+  arg2: proto.SHA256Hash;
 }
 
 export interface dbsched_load_genesis_configuration_args {
@@ -257,11 +258,13 @@ const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockHash.encode(w, val.arg1);
+    proto.codec.SHA256Hash.encode(w, val.arg2);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
     const arg1 = proto.codec.BlockHash.decode(r);
-    return { arg0, arg1 };
+    const arg2 = proto.codec.SHA256Hash.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 
