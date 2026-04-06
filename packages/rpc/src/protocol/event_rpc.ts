@@ -105,7 +105,6 @@ export const EventSchedProgram: RpcProgramMeta = {
   methods: {
     eventsched_null: { proc: 0, request: VoidCodec, response: VoidCodec },
     eventsched_open_block: { proc: 10, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
-    eventsched_get_block_hash: { proc: 20, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: _EventBlockResult },
     eventsched_close_block: { proc: 30, request: _eventsched_close_block_args, response: _EventBlockResult },
     eventsched_abandon_block: { proc: 40, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
   },
