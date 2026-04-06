@@ -11,6 +11,7 @@ import * as proto from "./index.js";
 export enum DbSchedResult {
   DbSchedResultOK = 0,
   DbSchedResultError = 1,
+  DbSchedResultInvalidParentId = 2,
 }
 
 export const kHogAgeGroupToSchedule = 0n;
