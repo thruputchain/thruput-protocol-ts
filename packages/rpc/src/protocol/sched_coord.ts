@@ -41,6 +41,7 @@ export enum SchedulerValidationOutcome {
   SchedulerValidationDbFailed = 3,
   SchedulerValidationExecutorFailed = 4,
   SchedulerValidationTooLateToValidate = 5,
+  SchedulerValidationUnknownParentBlock = 6,
 }
 
 export interface SchedulerValidationBlock {
