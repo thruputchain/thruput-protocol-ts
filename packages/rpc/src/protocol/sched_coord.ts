@@ -294,7 +294,6 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedcoord_get_tip: { proc: 7, request: VoidCodec, response: _SchedulerGetTipResult },
     schedcoord_load_genesis_configuration: { proc: 8, request: proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
     schedcoord_lookup_transactions: { proc: 100, request: proto.codec.SignedTransactionHashBatch as XdrCodec<proto.SignedTransactionHashBatch>, response: proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
-    schedcoord_pending_transaction_count: { proc: 101, request: VoidCodec, response: proto.codec.BlockHeight as XdrCodec<proto.BlockHeight> },
   },
 };
 
