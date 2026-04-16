@@ -10,6 +10,8 @@ import * as proto from "./index.js";
 
 export const kMaxEventLength = 1024n;
 
+export const kMaxEventsPerTransaction = 1000n;
+
 export const kMaxTopics = 3n;
 
 export type Topic = Uint8Array & { readonly __brand: "Topic" };
@@ -65,12 +67,12 @@ const _TxEventLog: XdrCodec<TxEventLog> = {
   encode(w, val) {
     proto.codec.SHA256Hash.encode(w, val.proposed_tx_hash);
     proto.codec.ExecResult.encode(w, val.exec_result);
-    VarArrayCodec(proto.codec.TxEmittedEvent, Number(0xFFFFFFFF)).encode(w, val.events);
+    VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).encode(w, val.events);
   },
   decode(r) {
     const proposed_tx_hash = proto.codec.SHA256Hash.decode(r);
     const exec_result = proto.codec.ExecResult.decode(r);
-    const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(0xFFFFFFFF)).decode(r);
+    const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).decode(r);
     return { proposed_tx_hash, exec_result, events };
   },
 };
