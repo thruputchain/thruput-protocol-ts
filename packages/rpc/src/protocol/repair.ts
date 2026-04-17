@@ -10,6 +10,7 @@ import * as proto from "./index.js";
 
 export interface MissingTransactions {
   transaction_hashes: proto.SignedTransactionHash[];
+  height: proto.BlockHeight;
   cv_hash: proto.ConsensusValueHash;
   block_hash: proto.BlockHash;
 }
@@ -38,14 +39,16 @@ export interface repair_missing_cv_args {
 const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.transaction_hashes);
+    proto.codec.BlockHeight.encode(w, val.height);
     proto.codec.ConsensusValueHash.encode(w, val.cv_hash);
     proto.codec.BlockHash.encode(w, val.block_hash);
   },
   decode(r) {
     const transaction_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
+    const height = proto.codec.BlockHeight.decode(r);
     const cv_hash = proto.codec.ConsensusValueHash.decode(r);
     const block_hash = proto.codec.BlockHash.decode(r);
-    return { transaction_hashes, cv_hash, block_hash };
+    return { transaction_hashes, height, cv_hash, block_hash };
   },
 };
 
