@@ -12,8 +12,8 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize, serializeCxs, deserializeCxs,
   XdrWriter,
-} from "@groundhog/xdr";
-import type { XdrCodec, IWriter, IReader } from "@groundhog/xdr";
+} from "@groundhogchain/xdr";
+import type { XdrCodec, IWriter, IReader } from "@groundhogchain/xdr";
 import {
   contractAddress, ed25519PublicKey, ed25519Signature, ed25519SecretKey,
   storageKeyContractData, contractEntrypointID, returnBuffer,

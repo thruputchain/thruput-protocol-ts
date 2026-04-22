@@ -3,7 +3,7 @@
 
 // Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhog/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 

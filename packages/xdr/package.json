@@ -1,5 +1,5 @@
 {
-  "name": "@groundhog/xdr",
+  "name": "@groundhogchain/xdr",
   "version": "0.1.0",
   "description": "XDR/CXS serialization framework for Groundhog",
   "type": "module",
