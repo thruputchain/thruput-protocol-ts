@@ -1,8 +1,9 @@
 {
   "name": "@groundhogchain/xdr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "XDR/CXS serialization framework for Groundhog",
   "type": "module",
+  "files": ["dist"],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
