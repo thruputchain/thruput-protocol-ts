@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
+// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta, BoolCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -13,6 +13,11 @@ export interface scp_control_nominate_args {
   arg0: proto.SCPSlotIndex;
   arg1: proto.SCPValue;
   arg2: proto.SCPValue;
+}
+
+export interface scp_control_set_state_from_envelope_args {
+  arg0: proto.SCPSlotIndex;
+  arg1: proto.SCPEnvelope;
 }
 
 
@@ -34,6 +39,18 @@ const _scp_control_nominate_args: XdrCodec<scp_control_nominate_args> = {
   },
 };
 
+const _scp_control_set_state_from_envelope_args: XdrCodec<scp_control_set_state_from_envelope_args> = {
+  encode(w, val) {
+    proto.codec.SCPSlotIndex.encode(w, val.arg0);
+    proto.codec.SCPEnvelope.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.SCPSlotIndex.decode(r);
+    const arg1 = proto.codec.SCPEnvelope.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
 export const codec = {
 } as const;
 
@@ -46,6 +63,7 @@ export const SCP_ControlProgram: RpcProgramMeta = {
     scp_control_stop_nomination: { proc: 20, request: proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: VoidCodec },
     scp_control_update_local_quorum_set: { proc: 100, request: proto.codec.SCPQuorumSet as XdrCodec<proto.SCPQuorumSet>, response: VoidCodec },
     scp_control_received_envelope: { proc: 200, request: proto.codec.SCPEnvelope as XdrCodec<proto.SCPEnvelope>, response: VoidCodec },
+    scp_control_set_state_from_envelope: { proc: 201, request: _scp_control_set_state_from_envelope_args, response: VoidCodec },
     scp_control_set_qset: { proc: 300, request: proto.codec.SCPQuorumSet as XdrCodec<proto.SCPQuorumSet>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },
     scp_control_get_qset: { proc: 301, request: proto.codec.SCPHash as XdrCodec<proto.SCPHash>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },
     scp_control_remove_qset: { proc: 302, request: proto.codec.SCPHash as XdrCodec<proto.SCPHash>, response: proto.codec.SCPOptQuorumSet as XdrCodec<proto.SCPOptQuorumSet> },

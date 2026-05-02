@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize,
   contractAddress, contractEntrypointID, gasAmount,
-  calldata, blockHeight,
+  calldata, blockHeight, ed25519PublicKey,
   keyID, bitMap, weight,
   CryptographicScheme, AuthClaimType,
   Invocation, Uniquifier, AuthClaim,
@@ -33,20 +33,11 @@ describe("transaction codecs round-trip", () => {
 });
 
 describe("auth_claim codecs round-trip", () => {
-  it("AuthClaim — kInvokedAddressSignature", () => {
+  it("AuthClaim — kSourceAddressAuthData", () => {
     const claim: AuthClaim = {
-      claim_type: AuthClaimType.kInvokedAddressSignature,
-      invoked_address_signature_id: keyID(3n),
-    };
-    const bytes = serialize(claim, codec.AuthClaim);
-    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
-  });
-
-  it("AuthClaim — kInvokedAddressSignedWeight (anonymous struct arm)", () => {
-    const claim: AuthClaim = {
-      claim_type: AuthClaimType.kInvokedAddressSignedWeight,
-      invoked_address_signed_weight: {
-        accepted_keys: bitMap(0b111n),
+      claim_type: AuthClaimType.kSourceAddressAuthData,
+      source_address_claim: {
+        allowed_keys: bitMap(0b111n),
         required_weight: weight(2n),
       },
     };
@@ -54,25 +45,15 @@ describe("auth_claim codecs round-trip", () => {
     expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
   });
 
-  it("AuthClaim — kOtherAddressSignature (anonymous struct arm)", () => {
+  it("AuthClaim — kPubkeySignature", () => {
     const claim: AuthClaim = {
-      claim_type: AuthClaimType.kOtherAddressSignature,
-      other_address_signature_id: {
-        address: contractAddress(new Uint8Array(32).fill(0xBB)),
-        key_id: keyID(1n),
-      },
-    };
-    const bytes = serialize(claim, codec.AuthClaim);
-    expect(deserialize(bytes, codec.AuthClaim)).toEqual(claim);
-  });
-
-  it("AuthClaim — kOtherAddressSignedWeight (anonymous struct arm)", () => {
-    const claim: AuthClaim = {
-      claim_type: AuthClaimType.kOtherAddressSignedWeight,
-      other_address_signed_weight: {
-        address: contractAddress(new Uint8Array(32).fill(0xCC)),
-        accepted_keys: bitMap(0b1111n),
-        required_weight: weight(3n),
+      claim_type: AuthClaimType.kPubkeySignature,
+      pubkey_preimage: {
+        pubkey: {
+          scheme: CryptographicScheme.Ed25519,
+          ed25519: ed25519PublicKey(new Uint8Array(32).fill(0xDD)),
+        },
+        nonce: 42n,
       },
     };
     const bytes = serialize(claim, codec.AuthClaim);

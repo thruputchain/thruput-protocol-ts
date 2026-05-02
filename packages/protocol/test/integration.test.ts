@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize,
   contractAddress, contractEntrypointID, gasAmount, calldata,
-  blockHeight, ed25519Signature,
-  keyID,
+  blockHeight, ed25519Signature, ed25519PublicKey,
+  bitMap, weight,
   CryptographicScheme, AuthClaimType,
   SignedTransaction,
   codec,
@@ -27,17 +27,16 @@ describe("end-to-end: build and round-trip a SignedTransaction", () => {
           nonce: 12345n,
         },
         contracts_to_deploy: [],
-        auth_claims: [
-          {
-            claim_type: AuthClaimType.kInvokedAddressSignature,
-            invoked_address_signature_id: keyID(0n),
+        auth_claim: {
+          claim_type: AuthClaimType.kSourceAddressAuthData,
+          source_address_claim: {
+            allowed_keys: bitMap(1n),
+            required_weight: weight(1n),
           },
-        ],
-        gas_claims: [],
+        },
       },
       signatures: [
         {
-          auth_claim_idx: 0n,
           public_key_id: 0n,
           signature: {
             scheme: CryptographicScheme.Ed25519,

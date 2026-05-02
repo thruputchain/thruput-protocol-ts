@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
+// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -25,16 +25,9 @@ export function keyID(val: bigint): KeyID {
 
 export const kMaxSigners = 21n;
 
-export const kMaxGasConfigs = 5n;
-
-export const kMaxAuthClaims = 10n;
-
 export enum AuthClaimType {
-  kInvokedAddressSignature = 0,
-  kInvokedAddressSignedWeight = 1,
-  kOtherAddressSignature = 2,
-  kOtherAddressSignedWeight = 3,
-  kPubkeySignature = 4,
+  kSourceAddressAuthData = 0,
+  kPubkeySignature = 1,
 }
 
 export interface PubkeyAccountPreimage {
@@ -42,34 +35,15 @@ export interface PubkeyAccountPreimage {
   nonce: bigint;
 }
 
-export interface AuthClaim_invoked_address_signed_weight {
-  accepted_keys: proto.BitMap;
-  required_weight: proto.Weight;
-}
-
-export interface AuthClaim_other_address_signature_id {
-  address: proto.ContractAddress;
-  key_id: proto.KeyID;
-}
-
-export interface AuthClaim_other_address_signed_weight {
-  address: proto.ContractAddress;
-  accepted_keys: proto.BitMap;
+export interface AuthClaim_source_address_claim {
+  allowed_keys: proto.BitMap;
   required_weight: proto.Weight;
 }
 
 export type AuthClaim =
-  | { claim_type: proto.AuthClaimType.kInvokedAddressSignature; invoked_address_signature_id: proto.KeyID }
-  | { claim_type: proto.AuthClaimType.kInvokedAddressSignedWeight; invoked_address_signed_weight: proto.AuthClaim_invoked_address_signed_weight }
-  | { claim_type: proto.AuthClaimType.kOtherAddressSignature; other_address_signature_id: proto.AuthClaim_other_address_signature_id }
-  | { claim_type: proto.AuthClaimType.kOtherAddressSignedWeight; other_address_signed_weight: proto.AuthClaim_other_address_signed_weight }
+  | { claim_type: proto.AuthClaimType.kSourceAddressAuthData; source_address_claim: proto.AuthClaim_source_address_claim }
   | { claim_type: proto.AuthClaimType.kPubkeySignature; pubkey_preimage: proto.PubkeyAccountPreimage }
 ;
-
-export type AuthClaimData = proto.AuthClaim[] & { readonly __brand: "AuthClaimData" };
-export function authClaimData(val: proto.AuthClaim[]): AuthClaimData {
-  return val as AuthClaimData;
-}
 
 export enum AuthVerifyErrorCode {
   kAuthMalformed = 1,
@@ -114,41 +88,15 @@ const _PubkeyAccountPreimage: XdrCodec<PubkeyAccountPreimage> = {
   },
 };
 
-const _AuthClaim_invoked_address_signed_weight: XdrCodec<AuthClaim_invoked_address_signed_weight> = {
+const _AuthClaim_source_address_claim: XdrCodec<AuthClaim_source_address_claim> = {
   encode(w, val) {
-    proto.codec.BitMap.encode(w, val.accepted_keys);
+    proto.codec.BitMap.encode(w, val.allowed_keys);
     proto.codec.Weight.encode(w, val.required_weight);
   },
   decode(r) {
-    const accepted_keys = proto.codec.BitMap.decode(r);
+    const allowed_keys = proto.codec.BitMap.decode(r);
     const required_weight = proto.codec.Weight.decode(r);
-    return { accepted_keys, required_weight };
-  },
-};
-
-const _AuthClaim_other_address_signature_id: XdrCodec<AuthClaim_other_address_signature_id> = {
-  encode(w, val) {
-    proto.codec.ContractAddress.encode(w, val.address);
-    proto.codec.KeyID.encode(w, val.key_id);
-  },
-  decode(r) {
-    const address = proto.codec.ContractAddress.decode(r);
-    const key_id = proto.codec.KeyID.decode(r);
-    return { address, key_id };
-  },
-};
-
-const _AuthClaim_other_address_signed_weight: XdrCodec<AuthClaim_other_address_signed_weight> = {
-  encode(w, val) {
-    proto.codec.ContractAddress.encode(w, val.address);
-    proto.codec.BitMap.encode(w, val.accepted_keys);
-    proto.codec.Weight.encode(w, val.required_weight);
-  },
-  decode(r) {
-    const address = proto.codec.ContractAddress.decode(r);
-    const accepted_keys = proto.codec.BitMap.decode(r);
-    const required_weight = proto.codec.Weight.decode(r);
-    return { address, accepted_keys, required_weight };
+    return { allowed_keys, required_weight };
   },
 };
 
@@ -156,17 +104,8 @@ const _AuthClaim: XdrCodec<AuthClaim> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.claim_type));
     switch (val.claim_type) {
-      case proto.AuthClaimType.kInvokedAddressSignature:
-        proto.codec.KeyID.encode(w, val.invoked_address_signature_id);
-        break;
-      case proto.AuthClaimType.kInvokedAddressSignedWeight:
-        proto.codec.AuthClaim_invoked_address_signed_weight.encode(w, val.invoked_address_signed_weight);
-        break;
-      case proto.AuthClaimType.kOtherAddressSignature:
-        proto.codec.AuthClaim_other_address_signature_id.encode(w, val.other_address_signature_id);
-        break;
-      case proto.AuthClaimType.kOtherAddressSignedWeight:
-        proto.codec.AuthClaim_other_address_signed_weight.encode(w, val.other_address_signed_weight);
+      case proto.AuthClaimType.kSourceAddressAuthData:
+        proto.codec.AuthClaim_source_address_claim.encode(w, val.source_address_claim);
         break;
       case proto.AuthClaimType.kPubkeySignature:
         proto.codec.PubkeyAccountPreimage.encode(w, val.pubkey_preimage);
@@ -176,18 +115,9 @@ const _AuthClaim: XdrCodec<AuthClaim> = {
   decode(r) {
     const claim_type = Number(r.readInt32());
     switch (claim_type) {
-      case proto.AuthClaimType.kInvokedAddressSignature:
-        const invoked_address_signature_id = proto.codec.KeyID.decode(r);
-        return { claim_type, invoked_address_signature_id };
-      case proto.AuthClaimType.kInvokedAddressSignedWeight:
-        const invoked_address_signed_weight = proto.codec.AuthClaim_invoked_address_signed_weight.decode(r);
-        return { claim_type, invoked_address_signed_weight };
-      case proto.AuthClaimType.kOtherAddressSignature:
-        const other_address_signature_id = proto.codec.AuthClaim_other_address_signature_id.decode(r);
-        return { claim_type, other_address_signature_id };
-      case proto.AuthClaimType.kOtherAddressSignedWeight:
-        const other_address_signed_weight = proto.codec.AuthClaim_other_address_signed_weight.decode(r);
-        return { claim_type, other_address_signed_weight };
+      case proto.AuthClaimType.kSourceAddressAuthData:
+        const source_address_claim = proto.codec.AuthClaim_source_address_claim.decode(r);
+        return { claim_type, source_address_claim };
       case proto.AuthClaimType.kPubkeySignature:
         const pubkey_preimage = proto.codec.PubkeyAccountPreimage.decode(r);
         return { claim_type, pubkey_preimage };
@@ -196,8 +126,6 @@ const _AuthClaim: XdrCodec<AuthClaim> = {
     }
   },
 };
-
-const _AuthClaimData = VarArrayCodec(() => proto.codec.AuthClaim, Number(proto.kMaxAuthClaims)) as XdrCodec<AuthClaimData>;
 
 const _AuthVerifyErrorCode: XdrCodec<AuthVerifyErrorCode> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -210,11 +138,8 @@ export const codec = {
   KeyID: _KeyID,
   AuthClaimType: _AuthClaimType,
   PubkeyAccountPreimage: _PubkeyAccountPreimage,
-  AuthClaim_invoked_address_signed_weight: _AuthClaim_invoked_address_signed_weight,
-  AuthClaim_other_address_signature_id: _AuthClaim_other_address_signature_id,
-  AuthClaim_other_address_signed_weight: _AuthClaim_other_address_signed_weight,
+  AuthClaim_source_address_claim: _AuthClaim_source_address_claim,
   AuthClaim: _AuthClaim,
-  AuthClaimData: _AuthClaimData,
   AuthVerifyErrorCode: _AuthVerifyErrorCode,
 } as const;
 
