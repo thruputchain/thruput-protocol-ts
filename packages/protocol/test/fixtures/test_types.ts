@@ -146,13 +146,13 @@ const _TestPoint: XdrCodec<TestPoint> = {
 const _TestPerson: XdrCodec<TestPerson> = {
   encode(w, val) {
     w.writeString(val.name, Number(256));
-    proto.codec.TestHash.encode(w, val.id);
-    proto.codec.TestPoint.encode(w, val.location);
+    _TestHash.encode(w, val.id);
+    _TestPoint.encode(w, val.location);
   },
   decode(r) {
     const name = r.readString(Number(256));
-    const id = proto.codec.TestHash.decode(r);
-    const location = proto.codec.TestPoint.decode(r);
+    const id = _TestHash.decode(r);
+    const location = _TestPoint.decode(r);
     return { name, id, location };
   },
 };
@@ -177,7 +177,7 @@ const _TestShape: XdrCodec<TestShape> = {
         w.writeUint32(val.radius);
         break;
       case proto.TestColor.Green:
-        proto.codec.TestShape_rectangle.encode(w, val.rectangle);
+        _TestShape_rectangle.encode(w, val.rectangle);
         break;
       case proto.TestColor.Blue:
         break;
@@ -190,7 +190,7 @@ const _TestShape: XdrCodec<TestShape> = {
         const radius = r.readUint32();
         return { color, radius };
       case proto.TestColor.Green:
-        const rectangle = proto.codec.TestShape_rectangle.decode(r);
+        const rectangle = _TestShape_rectangle.decode(r);
         return { color, rectangle };
       case proto.TestColor.Blue:
         return { color } as TestShape;
@@ -308,12 +308,17 @@ const _TestScores: XdrCodec<TestScores> = {
   },
 };
 
+const _Uint32Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return r.readUint32(); },
+};
+
 const _TestOptional: XdrCodec<TestOptional> = {
   encode(w, val) {
-    OptionCodec().encode(w, val.maybe_value);
+    OptionCodec(_Uint32Codec).encode(w, val.maybe_value);
   },
   decode(r) {
-    const maybe_value = OptionCodec().decode(r);
+    const maybe_value = OptionCodec(_Uint32Codec).decode(r);
     return { maybe_value };
   },
 };
