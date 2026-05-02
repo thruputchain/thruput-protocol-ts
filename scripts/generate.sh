@@ -44,4 +44,12 @@ else
   sed -i '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
 fi
 
+# Test fixture: kitchen-sink XDR types (standalone, needs proto import line removed)
+$XDRC --ts -o "packages/protocol/test/fixtures/test_types.ts" "packages/protocol/test/fixtures/test_types.x"
+if [[ "$OSTYPE" == darwin* ]]; then
+  sed -i '' '/^import \* as proto/d' "packages/protocol/test/fixtures/test_types.ts"
+else
+  sed -i '/^import \* as proto/d' "packages/protocol/test/fixtures/test_types.ts"
+fi
+
 echo "-- Done --" >&2
