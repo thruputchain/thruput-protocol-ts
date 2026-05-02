@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
+// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -19,11 +19,6 @@ export type ReturnBuffer = Uint8Array & { readonly __brand: "ReturnBuffer" };
 export function returnBuffer(data: Uint8Array): ReturnBuffer {
   if (data.length > Number(kMaxReturnBufferLen)) throw new Error(`ReturnBuffer exceeds max length kMaxReturnBufferLen, got ${data.length}`);
   return data as ReturnBuffer;
-}
-
-export interface GasClaim {
-  sponsored_contract: proto.ContractAddress;
-  amount: proto.GasAmount;
 }
 
 export interface Invocation {
@@ -54,12 +49,10 @@ export interface Transaction {
   invocation: proto.Invocation;
   uniquifier: proto.Uniquifier;
   contracts_to_deploy: proto.Contract[];
-  auth_claims: proto.AuthClaimData;
-  gas_claims: proto.GasClaim[];
+  auth_claim: proto.AuthClaim;
 }
 
 export interface DecoratedSignature {
-  auth_claim_idx: bigint;
   public_key_id: bigint;
   signature: proto.Signature;
 }
@@ -127,18 +120,6 @@ const _Calldata: XdrCodec<Calldata> = {
 const _ReturnBuffer: XdrCodec<ReturnBuffer> = {
   encode(w, val) { w.writeVarOpaque(val, Number(proto.kMaxReturnBufferLen)); },
   decode(r) { return returnBuffer(r.readVarOpaque(Number(proto.kMaxReturnBufferLen))); },
-};
-
-const _GasClaim: XdrCodec<GasClaim> = {
-  encode(w, val) {
-    proto.codec.ContractAddress.encode(w, val.sponsored_contract);
-    proto.codec.GasAmount.encode(w, val.amount);
-  },
-  decode(r) {
-    const sponsored_contract = proto.codec.ContractAddress.decode(r);
-    const amount = proto.codec.GasAmount.decode(r);
-    return { sponsored_contract, amount };
-  },
 };
 
 const _Invocation: XdrCodec<Invocation> = {
@@ -210,30 +191,26 @@ const _Transaction: XdrCodec<Transaction> = {
     proto.codec.Invocation.encode(w, val.invocation);
     proto.codec.Uniquifier.encode(w, val.uniquifier);
     VarArrayCodec(proto.codec.Contract, Number(0xFFFFFFFF)).encode(w, val.contracts_to_deploy);
-    proto.codec.AuthClaimData.encode(w, val.auth_claims);
-    VarArrayCodec(proto.codec.GasClaim, Number(0xFFFFFFFF)).encode(w, val.gas_claims);
+    proto.codec.AuthClaim.encode(w, val.auth_claim);
   },
   decode(r) {
     const invocation = proto.codec.Invocation.decode(r);
     const uniquifier = proto.codec.Uniquifier.decode(r);
     const contracts_to_deploy = VarArrayCodec(proto.codec.Contract, Number(0xFFFFFFFF)).decode(r);
-    const auth_claims = proto.codec.AuthClaimData.decode(r);
-    const gas_claims = VarArrayCodec(proto.codec.GasClaim, Number(0xFFFFFFFF)).decode(r);
-    return { invocation, uniquifier, contracts_to_deploy, auth_claims, gas_claims };
+    const auth_claim = proto.codec.AuthClaim.decode(r);
+    return { invocation, uniquifier, contracts_to_deploy, auth_claim };
   },
 };
 
 const _DecoratedSignature: XdrCodec<DecoratedSignature> = {
   encode(w, val) {
-    w.writeUint32(val.auth_claim_idx);
     w.writeUint32(val.public_key_id);
     proto.codec.Signature.encode(w, val.signature);
   },
   decode(r) {
-    const auth_claim_idx = r.readUint32();
     const public_key_id = r.readUint32();
     const signature = proto.codec.Signature.decode(r);
-    return { auth_claim_idx, public_key_id, signature };
+    return { public_key_id, signature };
   },
 };
 
@@ -298,7 +275,6 @@ const _TransactionStatistic: XdrCodec<TransactionStatistic> = {
 export const codec = {
   Calldata: _Calldata,
   ReturnBuffer: _ReturnBuffer,
-  GasClaim: _GasClaim,
   Invocation: _Invocation,
   InvocationFrameStatusCode: _InvocationFrameStatusCode,
   InvocationFrameOutput: _InvocationFrameOutput,

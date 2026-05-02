@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
+// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -20,11 +20,6 @@ export function seconds(val: bigint): Seconds {
 export interface ValidatorConfig {
   private_info: proto.ValidatorPrivateInfo;
   known_validators: proto.ValidatorPublicInfo[];
-}
-
-export interface WalletConfig {
-  secret_key: proto.JWTSecretKey;
-  users: proto.WalletUser[];
 }
 
 export interface DiscoveryConfig {
@@ -88,7 +83,6 @@ export interface StorageConfig {
 
 export interface Config {
   validator_config: proto.ValidatorConfig | null;
-  wallet_config: proto.WalletConfig | null;
   discovery_config: proto.DiscoveryConfig | null;
   router_config: proto.RouterConfig | null;
   dogwood_config: proto.DogwoodConfig | null;
@@ -124,18 +118,6 @@ const _ValidatorConfig: XdrCodec<ValidatorConfig> = {
     const private_info = proto.codec.ValidatorPrivateInfo.decode(r);
     const known_validators = VarArrayCodec(proto.codec.ValidatorPublicInfo, Number(0xFFFFFFFF)).decode(r);
     return { private_info, known_validators };
-  },
-};
-
-const _WalletConfig: XdrCodec<WalletConfig> = {
-  encode(w, val) {
-    proto.codec.JWTSecretKey.encode(w, val.secret_key);
-    VarArrayCodec(proto.codec.WalletUser, Number(0xFFFFFFFF)).encode(w, val.users);
-  },
-  decode(r) {
-    const secret_key = proto.codec.JWTSecretKey.decode(r);
-    const users = VarArrayCodec(proto.codec.WalletUser, Number(0xFFFFFFFF)).decode(r);
-    return { secret_key, users };
   },
 };
 
@@ -276,7 +258,6 @@ const _StorageConfig: XdrCodec<StorageConfig> = {
 const _Config: XdrCodec<Config> = {
   encode(w, val) {
     OptionCodec(proto.codec.ValidatorConfig).encode(w, val.validator_config);
-    OptionCodec(proto.codec.WalletConfig).encode(w, val.wallet_config);
     OptionCodec(proto.codec.DiscoveryConfig).encode(w, val.discovery_config);
     OptionCodec(proto.codec.RouterConfig).encode(w, val.router_config);
     OptionCodec(proto.codec.DogwoodConfig).encode(w, val.dogwood_config);
@@ -289,7 +270,6 @@ const _Config: XdrCodec<Config> = {
   },
   decode(r) {
     const validator_config = OptionCodec(proto.codec.ValidatorConfig).decode(r);
-    const wallet_config = OptionCodec(proto.codec.WalletConfig).decode(r);
     const discovery_config = OptionCodec(proto.codec.DiscoveryConfig).decode(r);
     const router_config = OptionCodec(proto.codec.RouterConfig).decode(r);
     const dogwood_config = OptionCodec(proto.codec.DogwoodConfig).decode(r);
@@ -299,7 +279,7 @@ const _Config: XdrCodec<Config> = {
     const baton_config = OptionCodec(proto.codec.BatonConfig).decode(r);
     const repair_config = OptionCodec(proto.codec.RepairConfig).decode(r);
     const storage_config = OptionCodec(proto.codec.StorageConfig).decode(r);
-    return { validator_config, wallet_config, discovery_config, router_config, dogwood_config, mempool_config, catchup_config, scp_config, baton_config, repair_config, storage_config };
+    return { validator_config, discovery_config, router_config, dogwood_config, mempool_config, catchup_config, scp_config, baton_config, repair_config, storage_config };
   },
 };
 
@@ -307,7 +287,6 @@ export const codec = {
   Milliseconds: _Milliseconds,
   Seconds: _Seconds,
   ValidatorConfig: _ValidatorConfig,
-  WalletConfig: _WalletConfig,
   DiscoveryConfig: _DiscoveryConfig,
   RouterConfig: _RouterConfig,
   DogwoodConfig: _DogwoodConfig,

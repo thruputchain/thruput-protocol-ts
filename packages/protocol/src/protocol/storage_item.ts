@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: bab641a16d398d48b16086772f51d186ac0522cb
+// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -60,14 +60,9 @@ export interface AuthDataChangeSigner {
   public_key: proto.PublicKeyConfigOpt;
 }
 
-export interface GasConfigChange {
-  new_gas_permission_configs: proto.GasPermissionConfig[];
-}
-
 export interface AuthDataChangeArgs {
   auth_data_change_signers: proto.AuthDataChangeSigner[];
-  new_nonce_config: proto.NonceConfig | null;
-  new_gas_config_change: proto.GasConfigChange | null;
+  new_required_weight: proto.Weight | null;
 }
 
 export interface NonnegativeInt128SetAddArgs {
@@ -258,27 +253,15 @@ const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
   },
 };
 
-const _GasConfigChange: XdrCodec<GasConfigChange> = {
-  encode(w, val) {
-    VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).encode(w, val.new_gas_permission_configs);
-  },
-  decode(r) {
-    const new_gas_permission_configs = VarArrayCodec(proto.codec.GasPermissionConfig, Number(proto.kMaxGasConfigs)).decode(r);
-    return { new_gas_permission_configs };
-  },
-};
-
 const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).encode(w, val.auth_data_change_signers);
-    OptionCodec(proto.codec.NonceConfig).encode(w, val.new_nonce_config);
-    OptionCodec(proto.codec.GasConfigChange).encode(w, val.new_gas_config_change);
+    OptionCodec(proto.codec.Weight).encode(w, val.new_required_weight);
   },
   decode(r) {
     const auth_data_change_signers = VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).decode(r);
-    const new_nonce_config = OptionCodec(proto.codec.NonceConfig).decode(r);
-    const new_gas_config_change = OptionCodec(proto.codec.GasConfigChange).decode(r);
-    return { auth_data_change_signers, new_nonce_config, new_gas_config_change };
+    const new_required_weight = OptionCodec(proto.codec.Weight).decode(r);
+    return { auth_data_change_signers, new_required_weight };
   },
 };
 
@@ -432,7 +415,6 @@ export const codec = {
   WireStorageItem: _WireStorageItem,
   StorageDeltaType: _StorageDeltaType,
   AuthDataChangeSigner: _AuthDataChangeSigner,
-  GasConfigChange: _GasConfigChange,
   AuthDataChangeArgs: _AuthDataChangeArgs,
   NonnegativeInt128SetAddArgs: _NonnegativeInt128SetAddArgs,
   ConsumeUniquifierArgs: _ConsumeUniquifierArgs,
