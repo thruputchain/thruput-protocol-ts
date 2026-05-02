@@ -7,7 +7,6 @@ import {
   InvokeFlag,
   AuthClaimType,
   kMaxSigners,
-  kMaxAuthClaims,
   kQueueEntryMaxLen,
   queueEntry, QueueEntry,
 } from "../../src/protocol/index.js";
@@ -57,8 +56,8 @@ describe("transaction enums", () => {
 
 describe("auth_claim enums", () => {
   it("AuthClaimType", () => {
-    expect(AuthClaimType.kInvokedAddressSignature).toBe(0);
-    expect(AuthClaimType.kPubkeySignature).toBe(4);
+    expect(AuthClaimType.kSourceAddressAuthData).toBe(0);
+    expect(AuthClaimType.kPubkeySignature).toBe(1);
   });
 });
 
@@ -68,9 +67,6 @@ describe("constants", () => {
   });
   it("kMaxSigners", () => {
     expect(kMaxSigners).toBe(21n);
-  });
-  it("kMaxAuthClaims", () => {
-    expect(kMaxAuthClaims).toBe(10n);
   });
   it("kQueueEntryMaxLen", () => {
     expect(kQueueEntryMaxLen).toBe(256n);
