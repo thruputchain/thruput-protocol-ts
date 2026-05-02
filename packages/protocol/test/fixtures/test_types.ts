@@ -4,6 +4,7 @@
 // Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import * as proto from "./index.js";
 
 
 
@@ -53,8 +54,8 @@ export interface TestPoint {
 
 export interface TestPerson {
   name: string;
-  id: TestHash;
-  location: TestPoint;
+  id: proto.TestHash;
+  location: proto.TestPoint;
 }
 
 export interface TestShape_rectangle {
@@ -63,13 +64,13 @@ export interface TestShape_rectangle {
 }
 
 export type TestShape =
-  | { color: TestColor.Red; radius: bigint }
-  | { color: TestColor.Green; rectangle: TestShape_rectangle }
-  | { color: TestColor.Blue }
+  | { color: proto.TestColor.Red; radius: bigint }
+  | { color: proto.TestColor.Green; rectangle: proto.TestShape_rectangle }
+  | { color: proto.TestColor.Blue }
 ;
 
 export type TestResult =
-  | { status: TestStatusCode.OK; value: bigint }
+  | { status: proto.TestStatusCode.OK; value: bigint }
   | { status: number }
 ;
 
@@ -145,13 +146,13 @@ const _TestPoint: XdrCodec<TestPoint> = {
 const _TestPerson: XdrCodec<TestPerson> = {
   encode(w, val) {
     w.writeString(val.name, Number(256));
-    _TestHash.encode(w, val.id);
-    _TestPoint.encode(w, val.location);
+    proto.codec.TestHash.encode(w, val.id);
+    proto.codec.TestPoint.encode(w, val.location);
   },
   decode(r) {
     const name = r.readString(Number(256));
-    const id = _TestHash.decode(r);
-    const location = _TestPoint.decode(r);
+    const id = proto.codec.TestHash.decode(r);
+    const location = proto.codec.TestPoint.decode(r);
     return { name, id, location };
   },
 };
@@ -172,26 +173,26 @@ const _TestShape: XdrCodec<TestShape> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.color));
     switch (val.color) {
-      case TestColor.Red:
+      case proto.TestColor.Red:
         w.writeUint32(val.radius);
         break;
-      case TestColor.Green:
-        _TestShape_rectangle.encode(w, val.rectangle);
+      case proto.TestColor.Green:
+        proto.codec.TestShape_rectangle.encode(w, val.rectangle);
         break;
-      case TestColor.Blue:
+      case proto.TestColor.Blue:
         break;
     }
   },
   decode(r) {
     const color = Number(r.readInt32());
     switch (color) {
-      case TestColor.Red:
+      case proto.TestColor.Red:
         const radius = r.readUint32();
         return { color, radius };
-      case TestColor.Green:
-        const rectangle = _TestShape_rectangle.decode(r);
+      case proto.TestColor.Green:
+        const rectangle = proto.codec.TestShape_rectangle.decode(r);
         return { color, rectangle };
-      case TestColor.Blue:
+      case proto.TestColor.Blue:
         return { color } as TestShape;
       default:
         throw new Error(`Unknown TestShape discriminant: ${color}`);
@@ -203,7 +204,7 @@ const _TestResult: XdrCodec<TestResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.status));
     switch (val.status) {
-      case TestStatusCode.OK:
+      case proto.TestStatusCode.OK:
       {
         const v = val as { status: number; value: bigint };
         if (v.value === undefined) {
@@ -217,7 +218,7 @@ const _TestResult: XdrCodec<TestResult> = {
   decode(r) {
     const status = Number(r.readInt32());
     switch (status) {
-      case TestStatusCode.OK:
+      case proto.TestStatusCode.OK:
         const value = r.readUint32();
         return { status, value };
       default:
