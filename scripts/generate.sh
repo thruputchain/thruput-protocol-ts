@@ -44,12 +44,19 @@ else
   sed -i '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
 fi
 
-# Test fixture: kitchen-sink XDR types (standalone, needs proto import line removed)
+# Test fixture: kitchen-sink XDR types (standalone — strip proto import and
+# rewrite proto.codec.X / proto.X refs to local _X / X since all types are
+# in the same file)
 $XDRC --ts -o "packages/protocol/test/fixtures/test_types.ts" "packages/protocol/test/fixtures/test_types.x"
+TT="packages/protocol/test/fixtures/test_types.ts"
 if [[ "$OSTYPE" == darwin* ]]; then
-  sed -i '' '/^import \* as proto/d' "packages/protocol/test/fixtures/test_types.ts"
+  sed -i '' '/^import \* as proto/d' "$TT"
+  sed -i '' 's/proto\.codec\./_/g' "$TT"
+  sed -i '' 's/proto\.//g' "$TT"
 else
-  sed -i '/^import \* as proto/d' "packages/protocol/test/fixtures/test_types.ts"
+  sed -i '/^import \* as proto/d' "$TT"
+  sed -i 's/proto\.codec\./_/g' "$TT"
+  sed -i 's/proto\.//g' "$TT"
 fi
 
 echo "-- Done --" >&2
