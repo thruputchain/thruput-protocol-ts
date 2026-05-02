@@ -12,7 +12,7 @@ import {
   kTestMaxLen,
   kTestVersion,
   codec,
-} from "../fixtures/test_types.js";
+} from "../fixtures/index.js";
 
 describe("branded type factories", () => {
   it("testHash accepts 32 bytes", () => {

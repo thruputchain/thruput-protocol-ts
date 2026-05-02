@@ -5,11 +5,11 @@ import {
 import {
   testHash, testEntrypointId, testPayload, testBlob,
   codec,
-} from "../fixtures/test_types.js";
+} from "../fixtures/index.js";
 import type {
   TestPoint, TestPerson,
   TestMatrix, TestScores, TestOptional,
-} from "../fixtures/test_types.js";
+} from "../fixtures/index.js";
 
 describe("branded opaque codecs round-trip", () => {
   it("TestHash (fixed 32 bytes)", () => {

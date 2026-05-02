@@ -1,4 +1,4 @@
-// Kitchen-sink XDR fixture for codegen testing.
+// Base test types — no cross-type references.
 // Not part of the protocol — used only by the test suite.
 
 namespace hogd {
@@ -29,43 +29,14 @@ typedef opaque TestEntrypointId[8];
 typedef opaque TestPayload<1024>;
 typedef opaque TestBlob<>;
 
-// -- Structs --
+// -- Simple structs --
 
 struct TestPoint {
   unsigned int x;
   unsigned int y;
 };
 
-struct TestPerson {
-  string name<256>;
-  TestHash id;
-  TestPoint location;
-};
-
-// -- Union pattern 1: no default arm (enum-discriminated, data + void) --
-
-union TestShape switch (TestColor color) {
-  case Red:
-    unsigned int radius;
-  case Green:
-    struct {
-      unsigned int width;
-      unsigned int height;
-    } rectangle;
-  case Blue:
-    void;
-};
-
-// -- Union pattern 2: default void arm --
-
-union TestResult switch (TestStatusCode status) {
-  case OK:
-    unsigned int value;
-  default:
-    void;
-};
-
-// -- Union pattern 3: default data arm --
+// -- Int-discriminated unions (no cross-type refs) --
 
 union TestMessage switch (int tag) {
   case 0:
@@ -75,8 +46,6 @@ union TestMessage switch (int tag) {
   default:
     opaque raw_payload<>;
 };
-
-// -- Union: int-discriminated, void-only (like ExtensionPoint) --
 
 union TestExtPoint switch (int v) {
   case 0:

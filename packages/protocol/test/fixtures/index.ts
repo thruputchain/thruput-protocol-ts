@@ -1,7 +1,10 @@
-export * from "./test_types.js";
+export * from "./test_base.js";
+export * from "./test_compound.js";
 
-import { codec as test_types_codec } from "./test_types.js";
+import { codec as base_codec } from "./test_base.js";
+import { codec as compound_codec } from "./test_compound.js";
 
 export const codec = {
-  ...test_types_codec,
+  ...base_codec,
+  ...compound_codec,
 } as const;

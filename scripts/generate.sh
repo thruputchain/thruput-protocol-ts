@@ -44,8 +44,9 @@ else
   sed -i '/^import \* as proto/d' "packages/rpc/test/fixtures/echo.ts"
 fi
 
-# Test fixture: kitchen-sink XDR types (has a hand-written index.ts barrel
-# so the generated proto import resolves naturally)
-$XDRC --ts -o "packages/protocol/test/fixtures/test_types.ts" "packages/protocol/test/fixtures/test_types.x"
+# Test fixtures: kitchen-sink XDR types (split into base + compound so
+# cross-type refs resolve through the hand-written index.ts barrel)
+$XDRC --ts -o "packages/protocol/test/fixtures/test_base.ts" "packages/protocol/test/fixtures/test_base.x"
+$XDRC --ts -o "packages/protocol/test/fixtures/test_compound.ts" "packages/protocol/test/fixtures/test_compound.x"
 
 echo "-- Done --" >&2
