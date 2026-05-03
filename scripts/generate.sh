@@ -32,6 +32,14 @@ for proto in "${core_protos[@]}"; do
   $XDRC --ts -o "packages/protocol/src/protocol/${proto%.x}.ts" "protocol/${proto}"
 done
 
+contract_spec_protos=(
+  groundhog_contract_spec.x
+)
+
+for proto in "${contract_spec_protos[@]}"; do
+  $XDRC --ts -o "packages/contract-spec/src/protocol/${proto%.x}.ts" "protocol/${proto}"
+done
+
 for proto in "${rpc_protos[@]}"; do
   $XDRC --ts -o "packages/rpc/src/protocol/${proto%.x}.ts" "protocol/${proto}"
 done
