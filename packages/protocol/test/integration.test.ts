@@ -9,6 +9,37 @@ import {
   codec,
 } from "../src/index.js";
 
+describe("codec completeness", () => {
+  it("merged codec contains all per-file codec keys", () => {
+    // Regression: the bundler can emit types.ts after the merged codec,
+    // silently dropping ContractAddress, GasAmount, etc.
+    const expected = [
+      "ContractAddress", "GasAmount", "SHA256Hash", "BlockHeight",
+      "Signature", "PublicKey", "SecretKey",
+      "Invocation", "Transaction", "SignedTransaction",
+      "ContractEntrypointID", "Contract",
+      "BlockHeader",
+    ];
+    for (const key of expected) {
+      expect(codec[key as keyof typeof codec], `codec.${key} missing`).toBeDefined();
+      expect(codec[key as keyof typeof codec]).toHaveProperty("encode");
+      expect(codec[key as keyof typeof codec]).toHaveProperty("decode");
+    }
+  });
+
+  it("Invocation codec roundtrips correctly", () => {
+    const inv = {
+      invoked_address: contractAddress(new Uint8Array(32)),
+      entrypoint: contractEntrypointID(new Uint8Array(8)),
+      gas_limit: gasAmount(42n),
+      calldata: calldata(new Uint8Array([1, 2, 3])),
+    };
+    const bytes = serialize(inv, codec.Invocation);
+    const decoded = deserialize(bytes, codec.Invocation);
+    expect(decoded).toEqual(inv);
+  });
+});
+
 describe("end-to-end: build and round-trip a SignedTransaction", () => {
   it("constructs, serializes, and deserializes a complete SignedTransaction", () => {
     const addr = contractAddress(new Uint8Array(32).fill(0x01));
