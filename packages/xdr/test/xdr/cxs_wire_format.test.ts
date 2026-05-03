@@ -405,4 +405,25 @@ describe("CXS round-trip — all integer types", () => {
       expect(roundtrip(w => w.writeString("grüße", 100), r => r.readString(100))).toBe("grüße");
     });
   });
+
+  describe("remaining / position", () => {
+    it("tracks unconsumed bytes", () => {
+      // CXS encodes 42 as a single header byte (0x2a), 7 as (0x07)
+      const r = new CxsReader(fromHex("2a07"));
+      expect(r.remaining).toBe(2);
+      expect(r.position).toBe(0);
+      r.readUint32();
+      expect(r.remaining).toBe(1);
+      expect(r.position).toBe(1);
+      r.readUint32();
+      expect(r.remaining).toBe(0);
+    });
+
+    it("detects trailing bytes after decoding", () => {
+      // CXS encodes 1 as 0x01, then 2 trailing garbage bytes
+      const r = new CxsReader(fromHex("01ffff"));
+      r.readUint32();
+      expect(r.remaining).toBe(2);
+    });
+  });
 });
