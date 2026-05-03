@@ -34,21 +34,41 @@ import { codec as precompiles_codec } from "./precompiles.js";
 import { codec as block_codec } from "./block.js";
 import { codec as invoke_flag_codec } from "./invoke_flag.js";
 
-export const codec = {
-  ...types_codec,
-  ...contract_codec,
-  ...exec_result_codec,
-  ...event_codec,
-  ...genesis_codec,
-  ...transaction_codec,
-  ...retrocausal_queue_codec,
-  ...storage_cost_codec,
-  ...syscall_error_codec,
-  ...auth_claim_codec,
-  ...standard_asset_events_codec,
-  ...address_auth_codec,
-  ...storage_item_codec,
-  ...precompiles_codec,
-  ...block_codec,
-  ...invoke_flag_codec,
-} as const;
+// Lazy merge: the bundler may emit individual codec objects after this
+// spread (circular dependency between generated files and this barrel),
+// so we defer the merge to first access.
+function _buildCodec() {
+  return {
+    ...types_codec,
+    ...contract_codec,
+    ...exec_result_codec,
+    ...event_codec,
+    ...genesis_codec,
+    ...transaction_codec,
+    ...retrocausal_queue_codec,
+    ...storage_cost_codec,
+    ...syscall_error_codec,
+    ...auth_claim_codec,
+    ...standard_asset_events_codec,
+    ...address_auth_codec,
+    ...storage_item_codec,
+    ...precompiles_codec,
+    ...block_codec,
+    ...invoke_flag_codec,
+  } as const;
+}
+
+type _Codec = ReturnType<typeof _buildCodec>;
+let _cached: _Codec | undefined;
+function _resolve(): _Codec {
+  return (_cached ??= _buildCodec());
+}
+
+export const codec: _Codec = new Proxy({} as _Codec, {
+  get(_, prop) { return (_resolve() as any)[prop]; },
+  has(_, prop) { return prop in _resolve(); },
+  ownKeys() { return Reflect.ownKeys(_resolve()); },
+  getOwnPropertyDescriptor(_, prop) {
+    return Object.getOwnPropertyDescriptor(_resolve(), prop);
+  },
+});
