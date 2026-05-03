@@ -8,6 +8,8 @@
  * By default, validates minimal encoding (rejects non-shortest representations).
  */
 
+import type { IReader } from "./codec.js";
+
 const textDecoder = new TextDecoder();
 
 // Max values that fit in the header byte alone
@@ -15,7 +17,7 @@ const UH_MAX = 62;
 const IH_MAX = 31;
 const IH_MIN = -31;
 
-export class CxsReader {
+export class CxsReader implements IReader {
   private pos: number = 0;
 
   constructor(private data: Uint8Array) {}

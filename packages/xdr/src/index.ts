@@ -36,6 +36,7 @@ export type {
   IWriter,
   IReader,
   XdrCodec,
+  LazyCodec,
   RpcMethodMeta,
   RpcProgramMeta,
 } from "./xdr/codec.js";

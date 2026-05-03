@@ -269,12 +269,11 @@ describe("union codecs — discriminant/field mismatch safety", () => {
       expect(() => deserialize(w.finish(), codec.TestShape)).toThrow();
     });
 
-    it("TestShape: discriminant=Blue with trailing garbage is ok", () => {
+    it("TestShape: discriminant=Blue with trailing garbage throws", () => {
       const w = new XdrWriter();
       w.writeInt32(BigInt(TestColor.Blue));
       w.writeUint32(0xDEADn);
-      const decoded = deserialize(w.finish(), codec.TestShape);
-      expect(decoded.color).toBe(TestColor.Blue);
+      expect(() => deserialize(w.finish(), codec.TestShape)).toThrow("Trailing data");
     });
 
     it("TestExtPoint: discriminant=0 encodes as 4 zero bytes", () => {
