@@ -66,4 +66,23 @@ describe("XdrReader", () => {
     const r = new XdrReader(buf);
     expect(() => r.readVarOpaque(100)).toThrow();
   });
+
+  it("remaining tracks unconsumed bytes", () => {
+    // Two uint32s = 8 bytes
+    const r = new XdrReader(new Uint8Array([0, 0, 0, 1, 0, 0, 0, 2]));
+    expect(r.remaining).toBe(8);
+    expect(r.position).toBe(0);
+    r.readUint32();
+    expect(r.remaining).toBe(4);
+    expect(r.position).toBe(4);
+    r.readUint32();
+    expect(r.remaining).toBe(0);
+  });
+
+  it("remaining detects trailing bytes after decoding", () => {
+    // One uint32 (4 bytes) + 2 trailing bytes
+    const r = new XdrReader(new Uint8Array([0, 0, 0, 42, 0xff, 0xff]));
+    r.readUint32();
+    expect(r.remaining).toBe(2);
+  });
 });

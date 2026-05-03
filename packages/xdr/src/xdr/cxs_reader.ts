@@ -20,6 +20,10 @@ export class CxsReader {
 
   constructor(private data: Uint8Array) {}
 
+  get position(): number { return this.pos; }
+
+  get remaining(): number { return this.data.length - this.pos; }
+
   private ensure(n: number): void {
     if (this.pos + n > this.data.length) {
       throw new Error(
