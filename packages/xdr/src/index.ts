@@ -17,6 +17,12 @@ export {
 export {
   VoidCodec,
   BoolCodec,
+  Int32Codec,
+  Uint32Codec,
+  Int64Codec,
+  Uint64Codec,
+  Int128Codec,
+  Uint128Codec,
   OptionCodec,
   VarArrayCodec,
   FixedArrayCodec,

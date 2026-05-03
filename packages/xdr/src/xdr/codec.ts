@@ -45,6 +45,36 @@ export const BoolCodec: XdrCodec<boolean> = {
   decode(r) { return r.readBool(); },
 };
 
+export const Int32Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeInt32(val); },
+  decode(r) { return r.readInt32(); },
+};
+
+export const Uint32Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return r.readUint32(); },
+};
+
+export const Int64Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeInt64(val); },
+  decode(r) { return r.readInt64(); },
+};
+
+export const Uint64Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeUint64(val); },
+  decode(r) { return r.readUint64(); },
+};
+
+export const Int128Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeInt128(val); },
+  decode(r) { return r.readInt128(); },
+};
+
+export const Uint128Codec: XdrCodec<bigint> = {
+  encode(w, val) { w.writeUint128(val); },
+  decode(r) { return r.readUint128(); },
+};
+
 // Codec references may be passed as thunks (`() => codec`) to break circular
 // dependencies between generated files that all re-export through a barrel
 // module.  At module load time the barrel's `codec` object may not yet be
