@@ -1,7 +1,9 @@
+import type { IWriter } from "./codec.js";
+
 const INITIAL_CAPACITY = 256;
 const textEncoder = new TextEncoder();
 
-export class XdrWriter {
+export class XdrWriter implements IWriter {
   private buf: Uint8Array;
   private view: DataView;
   private pos: number = 0;

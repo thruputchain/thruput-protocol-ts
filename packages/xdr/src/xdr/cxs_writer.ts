@@ -6,6 +6,8 @@
  * See CXS.md in the xdrs repo for the full specification.
  */
 
+import type { IWriter } from "./codec.js";
+
 const INITIAL_CAPACITY = 256;
 const textEncoder = new TextEncoder();
 
@@ -21,7 +23,7 @@ const UH_MAX = 62;   // unsigned
 const IH_MAX = 31;   // signed positive
 const IH_MIN = -31;  // signed negative
 
-export class CxsWriter {
+export class CxsWriter implements IWriter {
   private buf: Uint8Array;
   private pos: number = 0;
 

@@ -1,6 +1,6 @@
 // Interfaces for XDR-like serialization formats.
 // XdrWriter/XdrReader implement these for standard XDR (RFC 4506).
-// A future CxsWriter/CxsReader would implement them for compressed XDR.
+// CxsWriter/CxsReader implement them for compact XDR (CXS).
 
 export interface IWriter {
   writeInt32(val: bigint): void;
@@ -16,6 +16,8 @@ export interface IWriter {
 }
 
 export interface IReader {
+  readonly position: number;
+  readonly remaining: number;
   readInt32(): bigint;
   readUint32(): bigint;
   readInt64(): bigint;
@@ -81,7 +83,7 @@ export const Uint128Codec: XdrCodec<bigint> = {
 // initialised, so eagerly evaluating `proto.codec.X` in a top-level
 // combinator call would fail.  A thunk defers the lookup to encode/decode
 // time, when all modules have finished loading.
-type LazyCodec<T> = XdrCodec<T> | (() => XdrCodec<T>);
+export type LazyCodec<T> = XdrCodec<T> | (() => XdrCodec<T>);
 function resolve<T>(c: LazyCodec<T>): XdrCodec<T> {
   return typeof c === "function" ? (c as () => XdrCodec<T>)() : c;
 }
@@ -98,7 +100,10 @@ export function OptionCodec<T>(inner: LazyCodec<T>): XdrCodec<T | null> {
       }
     },
     decode(r) {
-      return Number(r.readUint32()) ? resolve(inner).decode(r) : null;
+      const disc = r.readUint32();
+      if (disc === 1n) return resolve(inner).decode(r);
+      if (disc === 0n) return null;
+      throw new Error(`Option: invalid discriminant ${disc} (expected 0 or 1)`);
     },
   };
 }
@@ -168,7 +173,11 @@ export function serialize<T>(val: T, codec: XdrCodec<T>): Uint8Array {
 
 export function deserialize<T>(data: Uint8Array, codec: XdrCodec<T>): T {
   const r = new XdrReader(data);
-  return codec.decode(r);
+  const val = codec.decode(r);
+  if (r.remaining > 0) {
+    throw new Error(`Trailing data after XDR decode: ${r.remaining} bytes remaining`);
+  }
+  return val;
 }
 
 // Compact XDR (CXS) serialization
@@ -183,5 +192,9 @@ export function serializeCxs<T>(val: T, codec: XdrCodec<T>): Uint8Array {
 
 export function deserializeCxs<T>(data: Uint8Array, codec: XdrCodec<T>): T {
   const r = new CxsReader(data);
-  return codec.decode(r);
+  const val = codec.decode(r);
+  if (r.remaining > 0) {
+    throw new Error(`Trailing data after CXS decode: ${r.remaining} bytes remaining`);
+  }
+  return val;
 }
