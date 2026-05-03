@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/protocol",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Groundhog blockchain protocol types and XDR serialization",
   "type": "module",
   "files": [
@@ -28,7 +28,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.2.3"
+    "@groundhogchain/xdr": "0.2.4"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
