@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -315,8 +315,8 @@ export const AuthMempoolProgram: RpcProgramMeta = {
   programId: 0x8aa87aa7,
   version: 1,
   methods: {
-    authmempool_verify_transactions: { proc: 2, request: _authmempool_verify_transactions_args, response: _AuthErrorCodeBatch },
-    authmempool_verify_batch: { proc: 3, request: _authmempool_verify_batch_args, response: _AuthErrorCode },
+    authmempool_verify_transactions: { proc: 2, request: () => _authmempool_verify_transactions_args, response: () => _AuthErrorCodeBatch },
+    authmempool_verify_batch: { proc: 3, request: () => _authmempool_verify_batch_args, response: () => _AuthErrorCode },
   },
 };
 
@@ -324,7 +324,7 @@ export const AuthDBProgram: RpcProgramMeta = {
   programId: 0x8aa87aa8,
   version: 1,
   methods: {
-    authdb_forward_key_changes: { proc: 1, request: _authdb_forward_key_changes_args, response: VoidCodec },
+    authdb_forward_key_changes: { proc: 1, request: () => _authdb_forward_key_changes_args, response: () => VoidCodec },
   },
 };
 
@@ -332,9 +332,9 @@ export const DBAuthProgram: RpcProgramMeta = {
   programId: 0x8aa87aa9,
   version: 1,
   methods: {
-    authdb_get_auth_data: { proc: 0, request: _authdb_get_auth_data_args, response: _DBAuthResult },
-    authdb_get_auth_data_batch: { proc: 1, request: _authdb_get_auth_data_batch_args, response: _DBAuthResultBatch },
-    dbauth_intro: { proc: 2, request: proto.codec.AuthCard as XdrCodec<proto.AuthCard>, response: _DBAuthIntroResult },
+    authdb_get_auth_data: { proc: 0, request: () => _authdb_get_auth_data_args, response: () => _DBAuthResult },
+    authdb_get_auth_data_batch: { proc: 1, request: () => _authdb_get_auth_data_batch_args, response: () => _DBAuthResultBatch },
+    dbauth_intro: { proc: 2, request: () => proto.codec.AuthCard as XdrCodec<proto.AuthCard>, response: () => _DBAuthIntroResult },
   },
 };
 
@@ -342,8 +342,8 @@ export const MempoolAuthProgram: RpcProgramMeta = {
   programId: 0x8aa87aaa,
   version: 1,
   methods: {
-    mempoolauth_intro_auth: { proc: 0, request: proto.codec.AuthCard as XdrCodec<proto.AuthCard>, response: _IntroAuthResult },
-    mempoolauth_auth_data_changed: { proc: 1, request: _mempoolauth_auth_data_changed_args, response: VoidCodec },
+    mempoolauth_intro_auth: { proc: 0, request: () => proto.codec.AuthCard as XdrCodec<proto.AuthCard>, response: () => _IntroAuthResult },
+    mempoolauth_auth_data_changed: { proc: 1, request: () => _mempoolauth_auth_data_changed_args, response: () => VoidCodec },
   },
 };
 

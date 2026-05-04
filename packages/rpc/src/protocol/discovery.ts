@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -187,8 +187,8 @@ export const DiscoveryProgram: RpcProgramMeta = {
   programId: 0x3eef0505,
   version: 1,
   methods: {
-    discovery_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    discovery_update_quorums: { proc: 10, request: _KnownQuorumSets, response: _KnownQuorumSets },
+    discovery_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    discovery_update_quorums: { proc: 10, request: () => _KnownQuorumSets, response: () => _KnownQuorumSets },
   },
 };
 

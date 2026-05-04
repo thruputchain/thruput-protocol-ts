@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -300,16 +300,16 @@ export const DbSchedProgram: RpcProgramMeta = {
   programId: 0x88887ee7,
   version: 1,
   methods: {
-    dbsched_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    dbsched_get_address_auth_data: { proc: 1, request: _dbsched_get_address_auth_data_args, response: _DbAddressAuthDataBatchResult },
-    dbsched_get_hog_ages: { proc: 2, request: proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: _HogAgeResults },
-    dbsched_write_hog_ages: { proc: 3, request: _HogAgeBatch, response: _DbSchedResult },
-    dbsched_create_snapshot: { proc: 5, request: _dbsched_create_snapshot_args, response: _DbSchedResult },
-    dbsched_commit_snapshot: { proc: 6, request: _dbsched_commit_snapshot_args, response: _DbBlockResult },
-    dbsched_close_snapshot: { proc: 7, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: _DbBlockResult },
-    dbsched_abandon_snapshot: { proc: 8, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: _DbSchedResult },
-    dbsched_load_genesis_configuration: { proc: 9, request: _dbsched_load_genesis_configuration_args, response: _DbSchedResult },
-    dbsched_get_tip: { proc: 10, request: VoidCodec, response: _DbTipResult },
+    dbsched_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    dbsched_get_address_auth_data: { proc: 1, request: () => _dbsched_get_address_auth_data_args, response: () => _DbAddressAuthDataBatchResult },
+    dbsched_get_hog_ages: { proc: 2, request: () => proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: () => _HogAgeResults },
+    dbsched_write_hog_ages: { proc: 3, request: () => _HogAgeBatch, response: () => _DbSchedResult },
+    dbsched_create_snapshot: { proc: 5, request: () => _dbsched_create_snapshot_args, response: () => _DbSchedResult },
+    dbsched_commit_snapshot: { proc: 6, request: () => _dbsched_commit_snapshot_args, response: () => _DbBlockResult },
+    dbsched_close_snapshot: { proc: 7, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _DbBlockResult },
+    dbsched_abandon_snapshot: { proc: 8, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _DbSchedResult },
+    dbsched_load_genesis_configuration: { proc: 9, request: () => _dbsched_load_genesis_configuration_args, response: () => _DbSchedResult },
+    dbsched_get_tip: { proc: 10, request: () => VoidCodec, response: () => _DbTipResult },
   },
 };
 

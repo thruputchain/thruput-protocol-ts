@@ -4,7 +4,7 @@
  * Given a transport and program metadata, provides typed method dispatch.
  */
 
-import { serialize, deserialize } from "@groundhogchain/xdr";
+import { serialize, deserialize, resolve } from "@groundhogchain/xdr";
 import type { XdrCodec, RpcProgramMeta } from "@groundhogchain/xdr";
 import type { RpcTransport } from "./transport.js";
 import { buildCallMessage, parseReplyMessage } from "./message.js";
@@ -33,8 +33,8 @@ export class RpcClient {
       throw new Error(`Unknown RPC method: ${methodName}`);
     }
 
-    const reqCodec = method.request as XdrCodec<Req>;
-    const respCodec = method.response as XdrCodec<Resp>;
+    const reqCodec = resolve(method.request) as XdrCodec<Req>;
+    const respCodec = resolve(method.response) as XdrCodec<Resp>;
 
     const requestBody = serialize(request, reqCodec);
     const callMsg = buildCallMessage(

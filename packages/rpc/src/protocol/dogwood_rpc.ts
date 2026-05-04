@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -87,9 +87,9 @@ export const DogwoodAPIProgram: RpcProgramMeta = {
   programId: 0x8ee88ee8,
   version: 1,
   methods: {
-    dogwoodapi_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    dogwoodapi_send: { proc: 10, request: _dogwoodapi_send_args, response: VoidCodec },
-    dogwoodapi_receive: { proc: 20, request: proto.codec.Milliseconds as XdrCodec<proto.Milliseconds>, response: _DogwoodReceived },
+    dogwoodapi_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    dogwoodapi_send: { proc: 10, request: () => _dogwoodapi_send_args, response: () => VoidCodec },
+    dogwoodapi_receive: { proc: 20, request: () => proto.codec.Milliseconds as XdrCodec<proto.Milliseconds>, response: () => _DogwoodReceived },
   },
 };
 

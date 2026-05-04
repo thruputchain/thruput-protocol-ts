@@ -84,7 +84,7 @@ export const Uint128Codec: XdrCodec<bigint> = {
 // combinator call would fail.  A thunk defers the lookup to encode/decode
 // time, when all modules have finished loading.
 export type LazyCodec<T> = XdrCodec<T> | (() => XdrCodec<T>);
-function resolve<T>(c: LazyCodec<T>): XdrCodec<T> {
+export function resolve<T>(c: LazyCodec<T>): XdrCodec<T> {
   return typeof c === "function" ? (c as () => XdrCodec<T>)() : c;
 }
 
@@ -150,8 +150,8 @@ export function FixedArrayCodec<T>(inner: LazyCodec<T>, len: number): XdrCodec<T
 /** Metadata for a single RPC method (generated from XDR `program` blocks). */
 export interface RpcMethodMeta<Req, Resp> {
   proc: number;
-  request: XdrCodec<Req>;
-  response: XdrCodec<Resp>;
+  request: LazyCodec<Req>;
+  response: LazyCodec<Resp>;
 }
 
 /** Metadata for an RPC program (generated from XDR `program` blocks). */
