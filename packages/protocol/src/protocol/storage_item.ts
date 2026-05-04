@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -256,11 +256,11 @@ const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
 const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).encode(w, val.auth_data_change_signers);
-    OptionCodec(proto.codec.Weight).encode(w, val.new_required_weight);
+    OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).encode(w, val.new_required_weight);
   },
   decode(r) {
     const auth_data_change_signers = VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).decode(r);
-    const new_required_weight = OptionCodec(proto.codec.Weight).decode(r);
+    const new_required_weight = OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).decode(r);
     return { auth_data_change_signers, new_required_weight };
   },
 };

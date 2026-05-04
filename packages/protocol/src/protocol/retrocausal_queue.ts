@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -118,11 +118,11 @@ const _RetrocausalQueueInsertDelta: XdrCodec<RetrocausalQueueInsertDelta> = {
 
 const _RetrocausalQueueDelta: XdrCodec<RetrocausalQueueDelta> = {
   encode(w, val) {
-    OptionCodec(proto.codec.RetrocausalQueueConsumeDelta).encode(w, val.consume);
+    OptionCodec(_RetrocausalQueueConsumeDelta).encode(w, val.consume);
     proto.codec.RetrocausalQueueInsertDelta.encode(w, val.insert);
   },
   decode(r) {
-    const consume = OptionCodec(proto.codec.RetrocausalQueueConsumeDelta).decode(r);
+    const consume = OptionCodec(_RetrocausalQueueConsumeDelta).decode(r);
     const insert = proto.codec.RetrocausalQueueInsertDelta.decode(r);
     return { consume, insert };
   },

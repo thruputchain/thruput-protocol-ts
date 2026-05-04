@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -180,11 +180,11 @@ const _ContractSpecString: XdrCodec<ContractSpecString> = {
 
 const _ContractArrayType: XdrCodec<ContractArrayType> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ContractType).encode(w, val.element);
+    OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.element);
     w.writeUint32(val.len);
   },
   decode(r) {
-    const element = OptionCodec(proto.codec.ContractType).decode(r);
+    const element = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
     const len = r.readUint32();
     return { element, len };
   },
@@ -192,11 +192,11 @@ const _ContractArrayType: XdrCodec<ContractArrayType> = {
 
 const _ContractVectorType: XdrCodec<ContractVectorType> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ContractType).encode(w, val.element);
+    OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.element);
     w.writeUint32(val.max_len);
   },
   decode(r) {
-    const element = OptionCodec(proto.codec.ContractType).decode(r);
+    const element = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
     const max_len = r.readUint32();
     return { element, max_len };
   },
@@ -234,7 +234,7 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.Address:
         break;
       case proto.ContractTypeKind.Option:
-        OptionCodec(proto.codec.ContractType).encode(w, val.option_inner);
+        OptionCodec(_ContractType).encode(w, val.option_inner);
         break;
       case proto.ContractTypeKind.Vector:
         proto.codec.ContractVectorType.encode(w, val.vector);
@@ -278,7 +278,7 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.Address:
         return { v } as ContractType;
       case proto.ContractTypeKind.Option:
-        const option_inner = OptionCodec(proto.codec.ContractType).decode(r);
+        const option_inner = OptionCodec(_ContractType).decode(r);
         return { v, option_inner };
       case proto.ContractTypeKind.Vector:
         const vector = proto.codec.ContractVectorType.decode(r);

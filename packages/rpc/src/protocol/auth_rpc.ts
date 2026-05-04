@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -140,11 +140,11 @@ const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = 
 const _KeyChange: XdrCodec<KeyChange> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
-    OptionCodec(proto.codec.AddressAuthData).encode(w, val.auth_data);
+    OptionCodec(proto.codec.AddressAuthData as XdrCodec<proto.AddressAuthData>).encode(w, val.auth_data);
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const auth_data = OptionCodec(proto.codec.AddressAuthData).decode(r);
+    const auth_data = OptionCodec(proto.codec.AddressAuthData as XdrCodec<proto.AddressAuthData>).decode(r);
     return { address, auth_data };
   },
 };

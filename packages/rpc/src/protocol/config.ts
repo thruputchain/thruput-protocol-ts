@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -257,28 +257,28 @@ const _StorageConfig: XdrCodec<StorageConfig> = {
 
 const _Config: XdrCodec<Config> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ValidatorConfig).encode(w, val.validator_config);
-    OptionCodec(proto.codec.DiscoveryConfig).encode(w, val.discovery_config);
-    OptionCodec(proto.codec.RouterConfig).encode(w, val.router_config);
-    OptionCodec(proto.codec.DogwoodConfig).encode(w, val.dogwood_config);
-    OptionCodec(proto.codec.MempoolConfig).encode(w, val.mempool_config);
-    OptionCodec(proto.codec.CatchupConfig).encode(w, val.catchup_config);
-    OptionCodec(proto.codec.SCPConfig).encode(w, val.scp_config);
-    OptionCodec(proto.codec.BatonConfig).encode(w, val.baton_config);
-    OptionCodec(proto.codec.RepairConfig).encode(w, val.repair_config);
-    OptionCodec(proto.codec.StorageConfig).encode(w, val.storage_config);
+    OptionCodec(_ValidatorConfig).encode(w, val.validator_config);
+    OptionCodec(_DiscoveryConfig).encode(w, val.discovery_config);
+    OptionCodec(_RouterConfig).encode(w, val.router_config);
+    OptionCodec(_DogwoodConfig).encode(w, val.dogwood_config);
+    OptionCodec(_MempoolConfig).encode(w, val.mempool_config);
+    OptionCodec(_CatchupConfig).encode(w, val.catchup_config);
+    OptionCodec(proto.codec.SCPConfig as XdrCodec<proto.SCPConfig>).encode(w, val.scp_config);
+    OptionCodec(_BatonConfig).encode(w, val.baton_config);
+    OptionCodec(_RepairConfig).encode(w, val.repair_config);
+    OptionCodec(_StorageConfig).encode(w, val.storage_config);
   },
   decode(r) {
-    const validator_config = OptionCodec(proto.codec.ValidatorConfig).decode(r);
-    const discovery_config = OptionCodec(proto.codec.DiscoveryConfig).decode(r);
-    const router_config = OptionCodec(proto.codec.RouterConfig).decode(r);
-    const dogwood_config = OptionCodec(proto.codec.DogwoodConfig).decode(r);
-    const mempool_config = OptionCodec(proto.codec.MempoolConfig).decode(r);
-    const catchup_config = OptionCodec(proto.codec.CatchupConfig).decode(r);
-    const scp_config = OptionCodec(proto.codec.SCPConfig).decode(r);
-    const baton_config = OptionCodec(proto.codec.BatonConfig).decode(r);
-    const repair_config = OptionCodec(proto.codec.RepairConfig).decode(r);
-    const storage_config = OptionCodec(proto.codec.StorageConfig).decode(r);
+    const validator_config = OptionCodec(_ValidatorConfig).decode(r);
+    const discovery_config = OptionCodec(_DiscoveryConfig).decode(r);
+    const router_config = OptionCodec(_RouterConfig).decode(r);
+    const dogwood_config = OptionCodec(_DogwoodConfig).decode(r);
+    const mempool_config = OptionCodec(_MempoolConfig).decode(r);
+    const catchup_config = OptionCodec(_CatchupConfig).decode(r);
+    const scp_config = OptionCodec(proto.codec.SCPConfig as XdrCodec<proto.SCPConfig>).decode(r);
+    const baton_config = OptionCodec(_BatonConfig).decode(r);
+    const repair_config = OptionCodec(_RepairConfig).decode(r);
+    const storage_config = OptionCodec(_StorageConfig).decode(r);
     return { validator_config, discovery_config, router_config, dogwood_config, mempool_config, catchup_config, scp_config, baton_config, repair_config, storage_config };
   },
 };

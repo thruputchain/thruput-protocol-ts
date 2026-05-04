@@ -15,7 +15,6 @@ export * from "./scp.js";
 export * from "./scp_config.js";
 export * from "./scp_control.js";
 export * from "./scp_handle.js";
-export * from "./network.js";
 export * from "./rpc_types.js";
 export * from "./parallel.js";
 export * from "./nomination.js";
@@ -45,7 +44,6 @@ import { codec as scp_codec } from "./scp.js";
 import { codec as scp_config_codec } from "./scp_config.js";
 import { codec as scp_control_codec } from "./scp_control.js";
 import { codec as scp_handle_codec } from "./scp_handle.js";
-import { codec as network_codec } from "./network.js";
 import { codec as rpc_types_codec } from "./rpc_types.js";
 import { codec as parallel_codec } from "./parallel.js";
 import { codec as nomination_codec } from "./nomination.js";
@@ -75,7 +73,6 @@ export const codec = {
   ...scp_config_codec,
   ...scp_control_codec,
   ...scp_handle_codec,
-  ...network_codec,
   ...rpc_types_codec,
   ...parallel_codec,
   ...nomination_codec,
