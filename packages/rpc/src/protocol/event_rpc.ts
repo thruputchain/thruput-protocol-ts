@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -92,10 +92,10 @@ export const EventExecutorProgram: RpcProgramMeta = {
   programId: 0x8aa81224,
   version: 1,
   methods: {
-    eventexecutor_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    eventexecutor_open_block: { proc: 31, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
-    eventexecutor_close_block: { proc: 32, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
-    eventexecutor_emit_event: { proc: 30, request: _eventexecutor_emit_event_args, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventexecutor_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    eventexecutor_open_block: { proc: 31, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventexecutor_close_block: { proc: 32, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventexecutor_emit_event: { proc: 30, request: () => _eventexecutor_emit_event_args, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
   },
 };
 
@@ -103,10 +103,10 @@ export const EventSchedProgram: RpcProgramMeta = {
   programId: 0x8aa81226,
   version: 1,
   methods: {
-    eventsched_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    eventsched_open_block: { proc: 10, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
-    eventsched_close_block: { proc: 30, request: _eventsched_close_block_args, response: _EventBlockResult },
-    eventsched_abandon_block: { proc: 40, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventsched_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    eventsched_open_block: { proc: 10, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventsched_close_block: { proc: 30, request: () => _eventsched_close_block_args, response: () => _EventBlockResult },
+    eventsched_abandon_block: { proc: 40, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
   },
 };
 

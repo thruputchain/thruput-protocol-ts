@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -75,10 +75,10 @@ export const RepairProgram: RpcProgramMeta = {
   programId: 0x2233cccc,
   version: 1,
   methods: {
-    repair_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    repair_missing_txs: { proc: 10, request: _MissingTransactionsEnvelope, response: _RepairedTransactions },
-    repair_missing_cv: { proc: 20, request: proto.codec.ConsensusValueCue as XdrCodec<proto.ConsensusValueCue>, response: proto.codec.OptConsensusValue as XdrCodec<proto.OptConsensusValue> },
-    repair_missing_scp_envelopes: { proc: 30, request: proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: proto.codec.SCPEnvelopes as XdrCodec<proto.SCPEnvelopes> },
+    repair_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    repair_missing_txs: { proc: 10, request: () => _MissingTransactionsEnvelope, response: () => _RepairedTransactions },
+    repair_missing_cv: { proc: 20, request: () => proto.codec.ConsensusValueCue as XdrCodec<proto.ConsensusValueCue>, response: () => proto.codec.OptConsensusValue as XdrCodec<proto.OptConsensusValue> },
+    repair_missing_scp_envelopes: { proc: 30, request: () => proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: () => proto.codec.SCPEnvelopes as XdrCodec<proto.SCPEnvelopes> },
   },
 };
 

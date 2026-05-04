@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -152,16 +152,16 @@ export const ExecutorSchedProgram: RpcProgramMeta = {
   programId: 0x7ee79999,
   version: 1,
   methods: {
-    executorsched_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    executorsched_ready: { proc: 1, request: VoidCodec, response: proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_propose_transaction: { proc: 10, request: _executorsched_propose_transaction_args, response: _ExecProposeResult },
-    executorsched_validate_transaction: { proc: 20, request: _executorsched_validate_transaction_args, response: proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_propose_batch: { proc: 11, request: _executorsched_propose_batch_args, response: _ExecProposeBatchResult },
-    executorsched_validate_batch: { proc: 21, request: _executorsched_validate_batch_args, response: _ExecValidateBatchResult },
-    executorsched_open_proposal_block: { proc: 30, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_open_validation_block: { proc: 40, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_finish_block: { proc: 50, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_shutdown: { proc: 60, request: VoidCodec, response: VoidCodec },
+    executorsched_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    executorsched_ready: { proc: 1, request: () => VoidCodec, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_propose_transaction: { proc: 10, request: () => _executorsched_propose_transaction_args, response: () => _ExecProposeResult },
+    executorsched_validate_transaction: { proc: 20, request: () => _executorsched_validate_transaction_args, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_propose_batch: { proc: 11, request: () => _executorsched_propose_batch_args, response: () => _ExecProposeBatchResult },
+    executorsched_validate_batch: { proc: 21, request: () => _executorsched_validate_batch_args, response: () => _ExecValidateBatchResult },
+    executorsched_open_proposal_block: { proc: 30, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_open_validation_block: { proc: 40, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_finish_block: { proc: 50, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_shutdown: { proc: 60, request: () => VoidCodec, response: () => VoidCodec },
   },
 };
 

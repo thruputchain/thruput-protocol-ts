@@ -30,6 +30,7 @@ export {
   deserialize,
   serializeCxs,
   deserializeCxs,
+  resolve,
 } from "./xdr/codec.js";
 
 export type {

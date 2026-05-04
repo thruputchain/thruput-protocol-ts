@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -257,9 +257,9 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
   programId: 0x4321aaaa,
   version: 1,
   methods: {
-    indexer_block_explorer_intro: { proc: 0, request: proto.codec.Protocol as XdrCodec<proto.Protocol>, response: _IndexerBlockExplorerIntroOutcome },
-    get_transaction_info: { proc: 1, request: proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: _TxInfoResult },
-    get_events: { proc: 3, request: _EventQuery, response: _EventPage },
+    indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.Protocol as XdrCodec<proto.Protocol>, response: () => _IndexerBlockExplorerIntroOutcome },
+    get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
+    get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
   },
 };
 
@@ -267,7 +267,7 @@ export const IndexerEventProgram: RpcProgramMeta = {
   programId: 0x4321aaab,
   version: 1,
   methods: {
-    indexer_event_process_events: { proc: 0, request: _indexer_event_process_events_args, response: VoidCodec },
+    indexer_event_process_events: { proc: 0, request: () => _indexer_event_process_events_args, response: () => VoidCodec },
   },
 };
 
@@ -275,7 +275,7 @@ export const EventIndexerProgram: RpcProgramMeta = {
   programId: 0x4321aaac,
   version: 1,
   methods: {
-    event_indexer_intro: { proc: 0, request: _IndexerCard, response: VoidCodec },
+    event_indexer_intro: { proc: 0, request: () => _IndexerCard, response: () => VoidCodec },
   },
 };
 

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -284,16 +284,16 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
   programId: 0x76671111,
   version: 1,
   methods: {
-    schedulercoord_null: { proc: 0, request: VoidCodec, response: VoidCodec },
-    schedulercoord_intro_coord: { proc: 1, request: _CoordCard, response: _CoordinatorRegistrationOutcome },
-    schedulercoord_submit_unvetted: { proc: 2, request: proto.codec.ParallelSignedTransactionBatch as XdrCodec<proto.ParallelSignedTransactionBatch>, response: VoidCodec },
-    schedulercoord_submit_vetted: { proc: 3, request: _schedulercoord_submit_vetted_args, response: VoidCodec },
-    schedulercoord_nominate: { proc: 4, request: proto.codec.DbTip as XdrCodec<proto.DbTip>, response: _SchedulerNominationResult },
-    schedulercoord_validate: { proc: 5, request: _schedulercoord_validate_args, response: _SchedulerValidationResult },
-    schedulercoord_commit_block: { proc: 6, request: proto.codec.BlockID as XdrCodec<proto.BlockID>, response: _SchedulerCommitOutcome },
-    schedcoord_get_tip: { proc: 7, request: VoidCodec, response: _SchedulerGetTipResult },
-    schedcoord_load_genesis_configuration: { proc: 8, request: proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
-    schedcoord_lookup_transactions: { proc: 100, request: proto.codec.SignedTransactionHashBatch as XdrCodec<proto.SignedTransactionHashBatch>, response: proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
+    schedulercoord_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
+    schedulercoord_intro_coord: { proc: 1, request: () => _CoordCard, response: () => _CoordinatorRegistrationOutcome },
+    schedulercoord_submit_unvetted: { proc: 2, request: () => proto.codec.ParallelSignedTransactionBatch as XdrCodec<proto.ParallelSignedTransactionBatch>, response: () => VoidCodec },
+    schedulercoord_submit_vetted: { proc: 3, request: () => _schedulercoord_submit_vetted_args, response: () => VoidCodec },
+    schedulercoord_nominate: { proc: 4, request: () => proto.codec.DbTip as XdrCodec<proto.DbTip>, response: () => _SchedulerNominationResult },
+    schedulercoord_validate: { proc: 5, request: () => _schedulercoord_validate_args, response: () => _SchedulerValidationResult },
+    schedulercoord_commit_block: { proc: 6, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _SchedulerCommitOutcome },
+    schedcoord_get_tip: { proc: 7, request: () => VoidCodec, response: () => _SchedulerGetTipResult },
+    schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
+    schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.SignedTransactionHashBatch as XdrCodec<proto.SignedTransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
   },
 };
 
