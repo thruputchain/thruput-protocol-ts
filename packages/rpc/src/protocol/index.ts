@@ -56,32 +56,49 @@ import { codec as catchup_codec } from "./catchup.js";
 import { codec as repair_codec } from "./repair.js";
 import { codec as loadgen_codec } from "./loadgen.js";
 
-export const codec = {
-  ..._protocol_codec,
-  ...dogwood_kit_codec,
-  ...auth_card_codec,
-  ...sched_db_codec,
-  ...wallet_codec,
-  ...dogwood_rpc_codec,
-  ...event_rpc_codec,
-  ...auth_rpc_codec,
-  ...test_rpc_codec,
-  ...discovery_codec,
-  ...config_codec,
-  ...dogwood_codec,
-  ...scp_codec,
-  ...scp_config_codec,
-  ...scp_control_codec,
-  ...scp_handle_codec,
-  ...rpc_types_codec,
-  ...parallel_codec,
-  ...nomination_codec,
-  ...db_sched_codec,
-  ...exec_sched_codec,
-  ...consensus_codec,
-  ...sched_coord_codec,
-  ...coord_sched_codec,
-  ...catchup_codec,
-  ...repair_codec,
-  ...loadgen_codec,
-} as const;
+function _buildCodec() {
+  return {
+    ..._protocol_codec,
+    ...dogwood_kit_codec,
+    ...auth_card_codec,
+    ...sched_db_codec,
+    ...wallet_codec,
+    ...dogwood_rpc_codec,
+    ...event_rpc_codec,
+    ...auth_rpc_codec,
+    ...test_rpc_codec,
+    ...discovery_codec,
+    ...config_codec,
+    ...dogwood_codec,
+    ...scp_codec,
+    ...scp_config_codec,
+    ...scp_control_codec,
+    ...scp_handle_codec,
+    ...rpc_types_codec,
+    ...parallel_codec,
+    ...nomination_codec,
+    ...db_sched_codec,
+    ...exec_sched_codec,
+    ...consensus_codec,
+    ...sched_coord_codec,
+    ...coord_sched_codec,
+    ...catchup_codec,
+    ...repair_codec,
+    ...loadgen_codec,
+  } as const;
+}
+
+type _Codec = ReturnType<typeof _buildCodec>;
+let _cached: _Codec | undefined;
+function _resolve(): _Codec {
+  return (_cached ??= _buildCodec());
+}
+
+export const codec: _Codec = new Proxy({} as _Codec, {
+  get(_, prop) { return (_resolve() as any)[prop]; },
+  has(_, prop) { return prop in _resolve(); },
+  ownKeys() { return Reflect.ownKeys(_resolve()); },
+  getOwnPropertyDescriptor(_, prop) {
+    return Object.getOwnPropertyDescriptor(_resolve(), prop);
+  },
+});
