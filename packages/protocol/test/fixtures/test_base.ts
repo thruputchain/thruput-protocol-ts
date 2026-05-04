@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, Uint32Codec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -202,18 +202,12 @@ const _TestScores: XdrCodec<TestScores> = {
   },
 };
 
-// x23c bug: OptionCodec() emitted without inner codec; supply uint32 manually
-const _Uint32Codec: XdrCodec<bigint> = {
-  encode(w, val) { w.writeUint32(val); },
-  decode(r) { return r.readUint32(); },
-};
-
 const _TestOptional: XdrCodec<TestOptional> = {
   encode(w, val) {
-    OptionCodec(_Uint32Codec).encode(w, val.maybe_value);
+    OptionCodec(Uint32Codec).encode(w, val.maybe_value);
   },
   decode(r) {
-    const maybe_value = OptionCodec(_Uint32Codec).decode(r);
+    const maybe_value = OptionCodec(Uint32Codec).decode(r);
     return { maybe_value };
   },
 };

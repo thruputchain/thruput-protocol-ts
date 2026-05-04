@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -151,7 +151,7 @@ const _SCPValue: XdrCodec<SCPValue> = {
 
 const _SCPValues = VarArrayCodec(() => proto.codec.SCPValue, Number(0xFFFFFFFF)) as XdrCodec<SCPValues>;
 
-const _SCPOptValue = OptionCodec(() => proto.codec.SCPValue) as XdrCodec<SCPOptValue>;
+const _SCPOptValue = OptionCodec(() => _SCPValue) as XdrCodec<SCPOptValue>;
 
 const _SCPBallot: XdrCodec<SCPBallot> = {
   encode(w, val) {
@@ -188,16 +188,16 @@ const _SCPStatementPrepare: XdrCodec<SCPStatementPrepare> = {
   encode(w, val) {
     proto.codec.SCPHash.encode(w, val.quorum_set_hash);
     proto.codec.SCPBallot.encode(w, val.ballot);
-    OptionCodec(proto.codec.SCPBallot).encode(w, val.prepared);
-    OptionCodec(proto.codec.SCPBallot).encode(w, val.prepared_prime);
+    OptionCodec(_SCPBallot).encode(w, val.prepared);
+    OptionCodec(_SCPBallot).encode(w, val.prepared_prime);
     proto.codec.SCPCount.encode(w, val.n_c);
     proto.codec.SCPCount.encode(w, val.n_h);
   },
   decode(r) {
     const quorum_set_hash = proto.codec.SCPHash.decode(r);
     const ballot = proto.codec.SCPBallot.decode(r);
-    const prepared = OptionCodec(proto.codec.SCPBallot).decode(r);
-    const prepared_prime = OptionCodec(proto.codec.SCPBallot).decode(r);
+    const prepared = OptionCodec(_SCPBallot).decode(r);
+    const prepared_prime = OptionCodec(_SCPBallot).decode(r);
     const n_c = proto.codec.SCPCount.decode(r);
     const n_h = proto.codec.SCPCount.decode(r);
     return { quorum_set_hash, ballot, prepared, prepared_prime, n_c, n_h };
@@ -317,7 +317,7 @@ const _SCPQuorumSet: XdrCodec<SCPQuorumSet> = {
   },
 };
 
-const _SCPOptQuorumSet = OptionCodec(() => proto.codec.SCPQuorumSet) as XdrCodec<SCPOptQuorumSet>;
+const _SCPOptQuorumSet = OptionCodec(() => _SCPQuorumSet) as XdrCodec<SCPOptQuorumSet>;
 
 export const codec = {
   SCPHash: _SCPHash,

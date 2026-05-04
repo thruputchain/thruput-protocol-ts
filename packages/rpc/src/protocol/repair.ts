@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5cf47b904e892062b9ef9ce2ab5b08809d319f6e
+// Generated from x23c commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -10,9 +10,7 @@ import * as proto from "./index.js";
 
 export interface MissingTransactions {
   transaction_hashes: proto.SignedTransactionHash[];
-  height: proto.BlockHeight;
-  cv_hash: proto.ConsensusValueHash;
-  block_hash: proto.BlockHash;
+  cue: proto.ConsensusValueCue;
 }
 
 export interface MissingTransactionsEnvelope {
@@ -26,11 +24,6 @@ export interface RepairedTransactions {
 }
 
 
-export interface repair_missing_cv_args {
-  arg0: proto.ConsensusValueHash;
-  arg1: proto.BlockHeight;
-}
-
 
 //
 // XDR Codecs below this point
@@ -39,16 +32,12 @@ export interface repair_missing_cv_args {
 const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.transaction_hashes);
-    proto.codec.BlockHeight.encode(w, val.height);
-    proto.codec.ConsensusValueHash.encode(w, val.cv_hash);
-    proto.codec.BlockHash.encode(w, val.block_hash);
+    proto.codec.ConsensusValueCue.encode(w, val.cue);
   },
   decode(r) {
     const transaction_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
-    const height = proto.codec.BlockHeight.decode(r);
-    const cv_hash = proto.codec.ConsensusValueHash.decode(r);
-    const block_hash = proto.codec.BlockHash.decode(r);
-    return { transaction_hashes, height, cv_hash, block_hash };
+    const cue = proto.codec.ConsensusValueCue.decode(r);
+    return { transaction_hashes, cue };
   },
 };
 
@@ -76,18 +65,6 @@ const _RepairedTransactions: XdrCodec<RepairedTransactions> = {
   },
 };
 
-const _repair_missing_cv_args: XdrCodec<repair_missing_cv_args> = {
-  encode(w, val) {
-    proto.codec.ConsensusValueHash.encode(w, val.arg0);
-    proto.codec.BlockHeight.encode(w, val.arg1);
-  },
-  decode(r) {
-    const arg0 = proto.codec.ConsensusValueHash.decode(r);
-    const arg1 = proto.codec.BlockHeight.decode(r);
-    return { arg0, arg1 };
-  },
-};
-
 export const codec = {
   MissingTransactions: _MissingTransactions,
   MissingTransactionsEnvelope: _MissingTransactionsEnvelope,
@@ -100,7 +77,7 @@ export const RepairProgram: RpcProgramMeta = {
   methods: {
     repair_null: { proc: 0, request: VoidCodec, response: VoidCodec },
     repair_missing_txs: { proc: 10, request: _MissingTransactionsEnvelope, response: _RepairedTransactions },
-    repair_missing_cv: { proc: 20, request: _repair_missing_cv_args, response: proto.codec.OptConsensusValue as XdrCodec<proto.OptConsensusValue> },
+    repair_missing_cv: { proc: 20, request: proto.codec.ConsensusValueCue as XdrCodec<proto.ConsensusValueCue>, response: proto.codec.OptConsensusValue as XdrCodec<proto.OptConsensusValue> },
     repair_missing_scp_envelopes: { proc: 30, request: proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: proto.codec.SCPEnvelopes as XdrCodec<proto.SCPEnvelopes> },
   },
 };
