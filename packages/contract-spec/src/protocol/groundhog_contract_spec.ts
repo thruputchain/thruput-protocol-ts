@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: ad83b3f82af341f97adcda39e036f417732fe1f4
+// Generated from x23c commit: b516a2309c47d23e003572fcd5df7834a31d42e9
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -42,6 +42,7 @@ export enum ContractTypeKind {
   Named = 14,
   U8 = 15,
   Array = 16,
+  SignedToken = 17,
 }
 
 export type ContractType =
@@ -56,13 +57,18 @@ export type ContractType =
   | { v: proto.ContractTypeKind.String }
   | { v: proto.ContractTypeKind.Bytes }
   | { v: proto.ContractTypeKind.Address }
-  | { v: proto.ContractTypeKind.Option; option_inner: proto.ContractType | null }
+  | { v: proto.ContractTypeKind.Option; option_inner: proto.ContractType }
   | { v: proto.ContractTypeKind.Vector; vector: proto.ContractVectorType }
   | { v: proto.ContractTypeKind.Tuple; tuple: proto.ContractType[] }
   | { v: proto.ContractTypeKind.Named; named: proto.ContractSpecString }
   | { v: proto.ContractTypeKind.U8 }
   | { v: proto.ContractTypeKind.Array; array: proto.ContractArrayType }
+  | { v: proto.ContractTypeKind.SignedToken; signed_token_preimage: proto.ContractSignedTokenPreimage }
 ;
+
+export interface ContractSignedTokenPreimage {
+  preimage_type: proto.ContractType;
+}
 
 export interface ContractExceptionType {
   selector: bigint;
@@ -234,7 +240,7 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.Address:
         break;
       case proto.ContractTypeKind.Option:
-        OptionCodec(_ContractType).encode(w, val.option_inner);
+        proto.codec.ContractType.encode(w, val.option_inner);
         break;
       case proto.ContractTypeKind.Vector:
         proto.codec.ContractVectorType.encode(w, val.vector);
@@ -249,6 +255,9 @@ const _ContractType: XdrCodec<ContractType> = {
         break;
       case proto.ContractTypeKind.Array:
         proto.codec.ContractArrayType.encode(w, val.array);
+        break;
+      case proto.ContractTypeKind.SignedToken:
+        proto.codec.ContractSignedTokenPreimage.encode(w, val.signed_token_preimage);
         break;
     }
   },
@@ -278,7 +287,7 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.Address:
         return { v } as ContractType;
       case proto.ContractTypeKind.Option:
-        const option_inner = OptionCodec(_ContractType).decode(r);
+        const option_inner = proto.codec.ContractType.decode(r);
         return { v, option_inner };
       case proto.ContractTypeKind.Vector:
         const vector = proto.codec.ContractVectorType.decode(r);
@@ -294,9 +303,22 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.Array:
         const array = proto.codec.ContractArrayType.decode(r);
         return { v, array };
+      case proto.ContractTypeKind.SignedToken:
+        const signed_token_preimage = proto.codec.ContractSignedTokenPreimage.decode(r);
+        return { v, signed_token_preimage };
       default:
         throw new Error(`Unknown ContractType discriminant: ${v}`);
     }
+  },
+};
+
+const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
+  encode(w, val) {
+    proto.codec.ContractType.encode(w, val.preimage_type);
+  },
+  decode(r) {
+    const preimage_type = proto.codec.ContractType.decode(r);
+    return { preimage_type };
   },
 };
 
@@ -576,6 +598,7 @@ export const codec = {
   ContractVectorType: _ContractVectorType,
   ContractTypeKind: _ContractTypeKind,
   ContractType: _ContractType,
+  ContractSignedTokenPreimage: _ContractSignedTokenPreimage,
   ContractExceptionType: _ContractExceptionType,
   ContractField: _ContractField,
   ContractSpecMethod: _ContractSpecMethod,
