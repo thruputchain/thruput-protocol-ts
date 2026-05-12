@@ -42,6 +42,7 @@ export enum SchedulerValidationOutcome {
   SchedulerValidationExecutorFailed = 4,
   SchedulerValidationTooLateToValidate = 5,
   SchedulerValidationUnknownParentBlock = 6,
+  SchedulerValidationMalformed = 7,
 }
 
 export interface SchedulerValidationBlock {
@@ -57,6 +58,7 @@ export type SchedulerValidationResult =
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationInvalid }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationUnknownParentBlock }
+  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationMalformed }
 ;
 
 export enum SchedulerCommitOutcome {
@@ -183,6 +185,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
       case proto.SchedulerValidationOutcome.SchedulerValidationInvalid:
       case proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate:
       case proto.SchedulerValidationOutcome.SchedulerValidationUnknownParentBlock:
+      case proto.SchedulerValidationOutcome.SchedulerValidationMalformed:
         break;
     }
   },
@@ -200,6 +203,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
       case proto.SchedulerValidationOutcome.SchedulerValidationInvalid:
       case proto.SchedulerValidationOutcome.SchedulerValidationTooLateToValidate:
       case proto.SchedulerValidationOutcome.SchedulerValidationUnknownParentBlock:
+      case proto.SchedulerValidationOutcome.SchedulerValidationMalformed:
         return { outcome } as SchedulerValidationResult;
       default:
         throw new Error(`Unknown SchedulerValidationResult discriminant: ${outcome}`);
