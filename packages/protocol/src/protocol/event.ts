@@ -29,6 +29,7 @@ export interface TxEmittedEvent {
 export interface TxEventLog {
   proposed_tx_hash: proto.SHA256Hash;
   exec_result: proto.ExecResult;
+  root_output: proto.InvocationFrameOutput;
   events: proto.TxEmittedEvent[];
 }
 
@@ -67,13 +68,15 @@ const _TxEventLog: XdrCodec<TxEventLog> = {
   encode(w, val) {
     proto.codec.SHA256Hash.encode(w, val.proposed_tx_hash);
     proto.codec.ExecResult.encode(w, val.exec_result);
+    proto.codec.InvocationFrameOutput.encode(w, val.root_output);
     VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).encode(w, val.events);
   },
   decode(r) {
     const proposed_tx_hash = proto.codec.SHA256Hash.decode(r);
     const exec_result = proto.codec.ExecResult.decode(r);
+    const root_output = proto.codec.InvocationFrameOutput.decode(r);
     const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).decode(r);
-    return { proposed_tx_hash, exec_result, events };
+    return { proposed_tx_hash, exec_result, root_output, events };
   },
 };
 
