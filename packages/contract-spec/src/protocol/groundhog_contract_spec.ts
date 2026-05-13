@@ -15,12 +15,12 @@ export function contractSpecString(val: string): ContractSpecString {
 
 
 export interface ContractArrayType {
-  element: proto.ContractType | null;
+  element: proto.ContractType;
   len: bigint;
 }
 
 export interface ContractVectorType {
-  element: proto.ContractType | null;
+  element: proto.ContractType;
   max_len: bigint;
 }
 
@@ -186,11 +186,11 @@ const _ContractSpecString: XdrCodec<ContractSpecString> = {
 
 const _ContractArrayType: XdrCodec<ContractArrayType> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.element);
+    proto.codec.ContractType.encode(w, val.element);
     w.writeUint32(val.len);
   },
   decode(r) {
-    const element = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
+    const element = proto.codec.ContractType.decode(r);
     const len = r.readUint32();
     return { element, len };
   },
@@ -198,11 +198,11 @@ const _ContractArrayType: XdrCodec<ContractArrayType> = {
 
 const _ContractVectorType: XdrCodec<ContractVectorType> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.element);
+    proto.codec.ContractType.encode(w, val.element);
     w.writeUint32(val.max_len);
   },
   decode(r) {
-    const element = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
+    const element = proto.codec.ContractType.decode(r);
     const max_len = r.readUint32();
     return { element, max_len };
   },
