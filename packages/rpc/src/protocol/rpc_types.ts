@@ -39,6 +39,7 @@ export enum RPCError {
 export enum BlockExecutionMode {
   kBlockExecutionModeValidation = 0,
   kBlockExecutionModeProposal = 1,
+  kBlockExecutionModeViewing = 2,
 }
 
 export type StorageCost = proto.int128_xdr & { readonly __brand: "StorageCost" };
