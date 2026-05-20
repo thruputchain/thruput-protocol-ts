@@ -82,6 +82,16 @@ export type ExpectedDBTip =
   | { error: number }
 ;
 
+export interface ViewingSnapshot {
+  block_id: proto.BlockID;
+  tip: proto.DbTip;
+}
+
+export type ExpectedViewingSnapshot =
+  | { error: proto.RPCError.kRPCNone; snapshot: proto.ViewingSnapshot }
+  | { error: number }
+;
+
 export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: "ContractAddressBatch" };
 export function contractAddressBatch(val: proto.ContractAddress[]): ContractAddressBatch {
   return val as ContractAddressBatch;
@@ -324,6 +334,45 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
   },
 };
 
+const _ViewingSnapshot: XdrCodec<ViewingSnapshot> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.block_id);
+    proto.codec.DbTip.encode(w, val.tip);
+  },
+  decode(r) {
+    const block_id = proto.codec.BlockID.decode(r);
+    const tip = proto.codec.DbTip.decode(r);
+    return { block_id, tip };
+  },
+};
+
+const _ExpectedViewingSnapshot: XdrCodec<ExpectedViewingSnapshot> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.error));
+    switch (val.error) {
+      case proto.RPCError.kRPCNone:
+      {
+        const v = val as { error: number; snapshot: proto.ViewingSnapshot };
+        if (v.snapshot === undefined) {
+          throw new Error("ExpectedViewingSnapshot encode: snapshot is undefined");
+        }
+        proto.codec.ViewingSnapshot.encode(w, v.snapshot);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const error = Number(r.readInt32());
+    switch (error) {
+      case proto.RPCError.kRPCNone:
+        const snapshot = proto.codec.ViewingSnapshot.decode(r);
+        return { error, snapshot };
+      default:
+        return { error };
+    }
+  },
+};
+
 const _ContractAddressBatch = VarArrayCodec(() => proto.codec.ContractAddress, Number(0xFFFFFFFF)) as XdrCodec<ContractAddressBatch>;
 
 export const codec = {
@@ -340,6 +389,8 @@ export const codec = {
   ExpectedRetrocausalQueueBlock: _ExpectedRetrocausalQueueBlock,
   ExpectedQueueEntry: _ExpectedQueueEntry,
   ExpectedDBTip: _ExpectedDBTip,
+  ViewingSnapshot: _ViewingSnapshot,
+  ExpectedViewingSnapshot: _ExpectedViewingSnapshot,
   ContractAddressBatch: _ContractAddressBatch,
 } as const;
 
