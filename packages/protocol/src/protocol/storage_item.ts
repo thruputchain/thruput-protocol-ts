@@ -375,11 +375,11 @@ const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = {
 const _ReplayCacheData: XdrCodec<ReplayCacheData> = {
   encode(w, val) {
     w.writeUint32(BigInt(val.nonces.length));
-    for (const _item of val.nonces) w.writeInt64(_item);
+    for (const _item of val.nonces) w.writeUint64(_item);
   },
   decode(r) {
     const _nonces_len = Number(r.readUint32());
-    const nonces = Array.from({ length: _nonces_len }, () => r.readInt64());
+    const nonces = Array.from({ length: _nonces_len }, () => r.readUint64());
     return { nonces };
   },
 };
