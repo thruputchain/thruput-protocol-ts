@@ -44,6 +44,7 @@ export interface RetrocausalQueueInsertDelta {
 export interface RetrocausalQueueDelta {
   consume: proto.RetrocausalQueueConsumeDelta | null;
   insert: proto.RetrocausalQueueInsertDelta;
+  observed_concurrent_entries: proto.QueueEntry[];
 }
 
 
@@ -120,11 +121,13 @@ const _RetrocausalQueueDelta: XdrCodec<RetrocausalQueueDelta> = {
   encode(w, val) {
     OptionCodec(_RetrocausalQueueConsumeDelta).encode(w, val.consume);
     proto.codec.RetrocausalQueueInsertDelta.encode(w, val.insert);
+    VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).encode(w, val.observed_concurrent_entries);
   },
   decode(r) {
     const consume = OptionCodec(_RetrocausalQueueConsumeDelta).decode(r);
     const insert = proto.codec.RetrocausalQueueInsertDelta.decode(r);
-    return { consume, insert };
+    const observed_concurrent_entries = VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).decode(r);
+    return { consume, insert, observed_concurrent_entries };
   },
 };
 
