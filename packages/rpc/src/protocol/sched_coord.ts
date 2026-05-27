@@ -11,6 +11,7 @@ import * as proto from "./index.js";
 export enum CoordinatorRegistrationOutcome {
   CoordinatorRegistrationOK = 0,
   CoordinatorRegistrationInvalidProtocol = 1,
+  CoordinatorRegistrationAlreadyRegistered = 2,
 }
 
 export interface CoordCard {
