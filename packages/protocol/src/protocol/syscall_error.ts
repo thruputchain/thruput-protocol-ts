@@ -19,8 +19,6 @@ export enum SyscallErrorCode {
   kSyscallErrorCodeInvalidSyscallInput = 7,
   kSyscallErrorCodeStorageKeyNotExist = 8,
   kSyscallErrorCodeNoRetrocausalQueueEntry = 9,
-  kSyscallErrorCodeDeterministicWasm = -1,
-  kSyscallErrorCodeFrameReverted = -2,
 }
 
 
