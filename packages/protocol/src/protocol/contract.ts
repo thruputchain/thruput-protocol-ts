@@ -9,19 +9,21 @@ import * as proto from "./index.js";
 
 
 export interface ContractBlob {
-  wasm: Uint8Array;
+  data: Uint8Array;
 }
 
 export enum ContractType {
   kWasmi = 0,
   kNative = 1,
   kMockTest = 2,
+  kRv32 = 3,
 }
 
 export type Contract =
   | { contract_type: proto.ContractType.kWasmi; wasmi_contract: proto.ContractBlob }
   | { contract_type: proto.ContractType.kNative; native_contract_id: proto.HogexecPrecompiledNativeContracts }
   | { contract_type: proto.ContractType.kMockTest; mock_contract_id: bigint }
+  | { contract_type: proto.ContractType.kRv32; rv32_contract: proto.ContractBlob }
 ;
 
 export interface ContractDeploymentHashPreimage {
@@ -69,11 +71,11 @@ export interface AddressMetadata {
 
 const _ContractBlob: XdrCodec<ContractBlob> = {
   encode(w, val) {
-    w.writeVarOpaque(val.wasm, Number(0xFFFFFFFF));
+    w.writeVarOpaque(val.data, Number(0xFFFFFFFF));
   },
   decode(r) {
-    const wasm = r.readVarOpaque(Number(0xFFFFFFFF));
-    return { wasm };
+    const data = r.readVarOpaque(Number(0xFFFFFFFF));
+    return { data };
   },
 };
 
@@ -95,6 +97,9 @@ const _Contract: XdrCodec<Contract> = {
       case proto.ContractType.kMockTest:
         w.writeInt32(val.mock_contract_id);
         break;
+      case proto.ContractType.kRv32:
+        proto.codec.ContractBlob.encode(w, val.rv32_contract);
+        break;
     }
   },
   decode(r) {
@@ -109,6 +114,9 @@ const _Contract: XdrCodec<Contract> = {
       case proto.ContractType.kMockTest:
         const mock_contract_id = r.readInt32();
         return { contract_type, mock_contract_id };
+      case proto.ContractType.kRv32:
+        const rv32_contract = proto.codec.ContractBlob.decode(r);
+        return { contract_type, rv32_contract };
       default:
         throw new Error(`Unknown Contract discriminant: ${contract_type}`);
     }
