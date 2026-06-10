@@ -12,7 +12,8 @@
     "types": ["node"],
     "lib": ["ES2022"],
     "paths": {
-      "@groundhogchain/xdr": ["../xdr/src/index.ts"]
+      "@groundhogchain/xdr": ["../xdr/src/index.ts"],
+      "@groundhogchain/protocol": ["../protocol/src/index.ts"]
     }
   },
   "include": ["src"],

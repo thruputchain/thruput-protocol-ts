@@ -1,11 +1,19 @@
 // Barrel — add new .x files here when they're added to generate.sh
+//
+// Unlike the rpc barrel, this does NOT `export *` from
+// @groundhogchain/protocol: both packages define ContractType (and friends),
+// so only the cross-package types the generated code references are
+// re-exported here.
+export { type Topic, topic } from "@groundhogchain/protocol";
 export * from "./groundhog_contract_spec.js";
 
 // Merged codec namespace
+import { codec as _protocol_codec } from "@groundhogchain/protocol";
 import { codec as groundhog_contract_spec_codec } from "./groundhog_contract_spec.js";
 
 function _buildCodec() {
   return {
+    Topic: _protocol_codec.Topic,
     ...groundhog_contract_spec_codec,
   } as const;
 }
