@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from x23c commit: b89462754658cb15bd45d5f4bfaf76372e55a454
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -143,9 +143,17 @@ export type ContractTypeDef =
   | { v: proto.ContractTypeDefKind.TypeDefUnion; union_def: proto.ContractUnionDef }
 ;
 
+export interface ContractEventDef {
+  name: proto.ContractSpecString;
+  signature: proto.Topic;
+  topics: proto.ContractField[];
+  fields: proto.ContractField[];
+}
+
 export interface ContractSpec {
   interfaces: proto.ContractSpecInterface[];
   type_defs: proto.ContractTypeDef[];
+  events: proto.ContractEventDef[];
 }
 
 export interface SpecInterfaceFragment {
@@ -165,6 +173,8 @@ export enum SpecFragmentKind {
   SpecMethod = 1,
   SpecTypeDef = 2,
   ExportedSpecTypeDef = 3,
+  SpecEvent = 4,
+  ExportedSpecEvent = 5,
 }
 
 export type SpecFragment =
@@ -172,6 +182,8 @@ export type SpecFragment =
   | { v: proto.SpecFragmentKind.SpecMethod; method_fragment: proto.SpecMethodFragment }
   | { v: proto.SpecFragmentKind.SpecTypeDef; type_def: proto.ContractTypeDef }
   | { v: proto.SpecFragmentKind.ExportedSpecTypeDef; type_def: proto.ContractTypeDef }
+  | { v: proto.SpecFragmentKind.SpecEvent; event_def: proto.ContractEventDef }
+  | { v: proto.SpecFragmentKind.ExportedSpecEvent; event_def: proto.ContractEventDef }
 ;
 
 
@@ -512,15 +524,33 @@ const _ContractTypeDef: XdrCodec<ContractTypeDef> = {
   },
 };
 
+const _ContractEventDef: XdrCodec<ContractEventDef> = {
+  encode(w, val) {
+    proto.codec.ContractSpecString.encode(w, val.name);
+    proto.codec.Topic.encode(w, val.signature);
+    VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.topics);
+    VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.fields);
+  },
+  decode(r) {
+    const name = proto.codec.ContractSpecString.decode(r);
+    const signature = proto.codec.Topic.decode(r);
+    const topics = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
+    const fields = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
+    return { name, signature, topics, fields };
+  },
+};
+
 const _ContractSpec: XdrCodec<ContractSpec> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.ContractSpecInterface, Number(0xFFFFFFFF)).encode(w, val.interfaces);
     VarArrayCodec(proto.codec.ContractTypeDef, Number(0xFFFFFFFF)).encode(w, val.type_defs);
+    VarArrayCodec(proto.codec.ContractEventDef, Number(0xFFFFFFFF)).encode(w, val.events);
   },
   decode(r) {
     const interfaces = VarArrayCodec(proto.codec.ContractSpecInterface, Number(0xFFFFFFFF)).decode(r);
     const type_defs = VarArrayCodec(proto.codec.ContractTypeDef, Number(0xFFFFFFFF)).decode(r);
-    return { interfaces, type_defs };
+    const events = VarArrayCodec(proto.codec.ContractEventDef, Number(0xFFFFFFFF)).decode(r);
+    return { interfaces, type_defs, events };
   },
 };
 
@@ -571,6 +601,10 @@ const _SpecFragment: XdrCodec<SpecFragment> = {
       case proto.SpecFragmentKind.ExportedSpecTypeDef:
         proto.codec.ContractTypeDef.encode(w, val.type_def);
         break;
+      case proto.SpecFragmentKind.SpecEvent:
+      case proto.SpecFragmentKind.ExportedSpecEvent:
+        proto.codec.ContractEventDef.encode(w, val.event_def);
+        break;
     }
   },
   decode(r) {
@@ -586,6 +620,10 @@ const _SpecFragment: XdrCodec<SpecFragment> = {
       case proto.SpecFragmentKind.ExportedSpecTypeDef:
         const type_def = proto.codec.ContractTypeDef.decode(r);
         return { v, type_def };
+      case proto.SpecFragmentKind.SpecEvent:
+      case proto.SpecFragmentKind.ExportedSpecEvent:
+        const event_def = proto.codec.ContractEventDef.decode(r);
+        return { v, event_def };
       default:
         throw new Error(`Unknown SpecFragment discriminant: ${v}`);
     }
@@ -612,6 +650,7 @@ export const codec = {
   ContractUnionDef: _ContractUnionDef,
   ContractTypeDefKind: _ContractTypeDefKind,
   ContractTypeDef: _ContractTypeDef,
+  ContractEventDef: _ContractEventDef,
   ContractSpec: _ContractSpec,
   SpecInterfaceFragment: _SpecInterfaceFragment,
   SpecMethodFragment: _SpecMethodFragment,
