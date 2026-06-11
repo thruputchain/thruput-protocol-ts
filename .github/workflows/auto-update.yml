@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Generate hogd read token
         id: hogd-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
@@ -25,14 +25,14 @@ jobs:
           repositories: hogd
 
       - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.10.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
             ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
           ssh-key: ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
