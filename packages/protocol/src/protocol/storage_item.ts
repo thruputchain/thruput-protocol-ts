@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from x23c commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -89,7 +89,7 @@ export const kReplayCacheHeightsMaxLen = 4000n;
 
 export const kReplayCacheNoncesMaxLen = 8000n;
 
-export const kRetrocausalQueueBlockEntriesMaxLen = 1000n;
+export const kRetrocausalQueueBlockEntriesMaxLen = 250n;
 
 export interface ReplayCacheHeightCount {
   height: proto.BlockHeight;
