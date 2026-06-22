@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from x23c commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -26,6 +26,11 @@ export type TxInfoResult =
 export type IdentifiedEventBatch = proto.IdentifiedEvent[] & { readonly __brand: "IdentifiedEventBatch" };
 export function identifiedEventBatch(val: proto.IdentifiedEvent[]): IdentifiedEventBatch {
   return val as IdentifiedEventBatch;
+}
+
+export type TxInfoBatch = proto.TxInfo[] & { readonly __brand: "TxInfoBatch" };
+export function txInfoBatch(val: proto.TxInfo[]): TxInfoBatch {
+  return val as TxInfoBatch;
 }
 
 export const kMaxContractAddressesPerEventFilter = 5n;
@@ -63,6 +68,21 @@ export interface EventQuery {
 
 export interface EventPage {
   events: proto.IdentifiedEventBatch;
+  cursor: proto.PaginationCursor;
+  latest_block: proto.BlockHeight;
+  oldest_block: proto.BlockHeight;
+}
+
+export interface TransactionQuery {
+  address: proto.ContractAddress | null;
+  order: proto.IterationOrder;
+  anchor: proto.BlockAnchor;
+  cursor: proto.PaginationCursor;
+  limit: bigint;
+}
+
+export interface TransactionPage {
+  transactions: proto.TxInfoBatch;
   cursor: proto.PaginationCursor;
   latest_block: proto.BlockHeight;
   oldest_block: proto.BlockHeight;
@@ -142,6 +162,8 @@ const _TxInfoResult: XdrCodec<TxInfoResult> = {
 
 const _IdentifiedEventBatch = VarArrayCodec(() => proto.codec.IdentifiedEvent, Number(0xFFFFFFFF)) as XdrCodec<IdentifiedEventBatch>;
 
+const _TxInfoBatch = VarArrayCodec(() => proto.codec.TxInfo, Number(0xFFFFFFFF)) as XdrCodec<TxInfoBatch>;
+
 const _ContractAddressList = VarArrayCodec(() => proto.codec.ContractAddress, Number(proto.kMaxContractAddressesPerEventFilter)) as XdrCodec<ContractAddressList>;
 
 const _EventTopicFilter: XdrCodec<EventTopicFilter> = {
@@ -206,6 +228,40 @@ const _EventPage: XdrCodec<EventPage> = {
   },
 };
 
+const _TransactionQuery: XdrCodec<TransactionQuery> = {
+  encode(w, val) {
+    OptionCodec(proto.codec.ContractAddress as XdrCodec<proto.ContractAddress>).encode(w, val.address);
+    proto.codec.IterationOrder.encode(w, val.order);
+    proto.codec.BlockAnchor.encode(w, val.anchor);
+    proto.codec.PaginationCursor.encode(w, val.cursor);
+    w.writeUint32(val.limit);
+  },
+  decode(r) {
+    const address = OptionCodec(proto.codec.ContractAddress as XdrCodec<proto.ContractAddress>).decode(r);
+    const order = proto.codec.IterationOrder.decode(r);
+    const anchor = proto.codec.BlockAnchor.decode(r);
+    const cursor = proto.codec.PaginationCursor.decode(r);
+    const limit = r.readUint32();
+    return { address, order, anchor, cursor, limit };
+  },
+};
+
+const _TransactionPage: XdrCodec<TransactionPage> = {
+  encode(w, val) {
+    proto.codec.TxInfoBatch.encode(w, val.transactions);
+    proto.codec.PaginationCursor.encode(w, val.cursor);
+    proto.codec.BlockHeight.encode(w, val.latest_block);
+    proto.codec.BlockHeight.encode(w, val.oldest_block);
+  },
+  decode(r) {
+    const transactions = proto.codec.TxInfoBatch.decode(r);
+    const cursor = proto.codec.PaginationCursor.decode(r);
+    const latest_block = proto.codec.BlockHeight.decode(r);
+    const oldest_block = proto.codec.BlockHeight.decode(r);
+    return { transactions, cursor, latest_block, oldest_block };
+  },
+};
+
 const _IndexerBlockExplorerIntroOutcome: XdrCodec<IndexerBlockExplorerIntroOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IndexerBlockExplorerIntroOutcome; },
@@ -242,12 +298,15 @@ export const codec = {
   TxInfoOutcome: _TxInfoOutcome,
   TxInfoResult: _TxInfoResult,
   IdentifiedEventBatch: _IdentifiedEventBatch,
+  TxInfoBatch: _TxInfoBatch,
   ContractAddressList: _ContractAddressList,
   EventTopicFilter: _EventTopicFilter,
   EventFilter: _EventFilter,
   EventFilterList: _EventFilterList,
   EventQuery: _EventQuery,
   EventPage: _EventPage,
+  TransactionQuery: _TransactionQuery,
+  TransactionPage: _TransactionPage,
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
   IndexerCard: _IndexerCard,
@@ -260,6 +319,7 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
     indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.Protocol as XdrCodec<proto.Protocol>, response: () => _IndexerBlockExplorerIntroOutcome },
     get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
     get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
+    get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPage },
   },
 };
 
