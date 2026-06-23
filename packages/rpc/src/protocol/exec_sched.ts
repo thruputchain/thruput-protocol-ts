@@ -33,7 +33,7 @@ export function execValidateBatchResult(val: proto.ExecResult[]): ExecValidateBa
 
 export interface executorsched_propose_transaction_args {
   arg0: proto.BlockID;
-  arg1: proto.Transaction;
+  arg1: proto.SignedTransaction;
 }
 
 export interface executorsched_validate_transaction_args {
@@ -43,7 +43,7 @@ export interface executorsched_validate_transaction_args {
 
 export interface executorsched_propose_batch_args {
   arg0: proto.BlockID;
-  arg1: proto.TransactionBatch;
+  arg1: proto.SignedTransactionBatch;
 }
 
 export interface executorsched_validate_batch_args {
@@ -96,11 +96,11 @@ const _ExecValidateBatchResult = VarArrayCodec(() => proto.codec.ExecResult, Num
 const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_transaction_args> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
-    proto.codec.Transaction.encode(w, val.arg1);
+    proto.codec.SignedTransaction.encode(w, val.arg1);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
-    const arg1 = proto.codec.Transaction.decode(r);
+    const arg1 = proto.codec.SignedTransaction.decode(r);
     return { arg0, arg1 };
   },
 };
@@ -120,11 +120,11 @@ const _executorsched_validate_transaction_args: XdrCodec<executorsched_validate_
 const _executorsched_propose_batch_args: XdrCodec<executorsched_propose_batch_args> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
-    proto.codec.TransactionBatch.encode(w, val.arg1);
+    proto.codec.SignedTransactionBatch.encode(w, val.arg1);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
-    const arg1 = proto.codec.TransactionBatch.decode(r);
+    const arg1 = proto.codec.SignedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
 };
