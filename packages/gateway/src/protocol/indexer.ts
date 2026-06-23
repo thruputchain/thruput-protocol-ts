@@ -103,6 +103,7 @@ export function txEventLogBatch(val: proto.TxEventLog[]): TxEventLogBatch {
 export interface indexer_event_process_events_args {
   arg0: proto.BlockHeight;
   arg1: proto.TxEventLogBatch;
+  arg2: proto.ProposedTransactionBatch;
 }
 
 export interface IndexerCard {
@@ -273,11 +274,13 @@ const _indexer_event_process_events_args: XdrCodec<indexer_event_process_events_
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.arg0);
     proto.codec.TxEventLogBatch.encode(w, val.arg1);
+    proto.codec.ProposedTransactionBatch.encode(w, val.arg2);
   },
   decode(r) {
     const arg0 = proto.codec.BlockHeight.decode(r);
     const arg1 = proto.codec.TxEventLogBatch.decode(r);
-    return { arg0, arg1 };
+    const arg2 = proto.codec.ProposedTransactionBatch.decode(r);
+    return { arg0, arg1, arg2 };
   },
 };
 

@@ -15,11 +15,6 @@ export type ExecProposeResult =
   | { result: number }
 ;
 
-export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: "ProposedTransactionBatch" };
-export function proposedTransactionBatch(val: proto.ProposedTransaction[]): ProposedTransactionBatch {
-  return val as ProposedTransactionBatch;
-}
-
 export type ExecProposeBatchResult = proto.ExecProposeResult[] & { readonly __brand: "ExecProposeBatchResult" };
 export function execProposeBatchResult(val: proto.ExecProposeResult[]): ExecProposeBatchResult {
   return val as ExecProposeBatchResult;
@@ -87,8 +82,6 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
   },
 };
 
-const _ProposedTransactionBatch = VarArrayCodec(() => proto.codec.ProposedTransaction, Number(0xFFFFFFFF)) as XdrCodec<ProposedTransactionBatch>;
-
 const _ExecProposeBatchResult = VarArrayCodec(() => proto.codec.ExecProposeResult, Number(0xFFFFFFFF)) as XdrCodec<ExecProposeBatchResult>;
 
 const _ExecValidateBatchResult = VarArrayCodec(() => proto.codec.ExecResult, Number(0xFFFFFFFF)) as XdrCodec<ExecValidateBatchResult>;
@@ -143,7 +136,6 @@ const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_
 
 export const codec = {
   ExecProposeResult: _ExecProposeResult,
-  ProposedTransactionBatch: _ProposedTransactionBatch,
   ExecProposeBatchResult: _ExecProposeBatchResult,
   ExecValidateBatchResult: _ExecValidateBatchResult,
 } as const;

@@ -103,6 +103,11 @@ export interface ProposedTransaction {
   nondeterministic_proposal_data: proto.NondeterministicProposalData;
 }
 
+export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: "ProposedTransactionBatch" };
+export function proposedTransactionBatch(val: proto.ProposedTransaction[]): ProposedTransactionBatch {
+  return val as ProposedTransactionBatch;
+}
+
 export enum TransactionStatistic {
   GasRemaining = 0,
 }
@@ -267,6 +272,8 @@ const _ProposedTransaction: XdrCodec<ProposedTransaction> = {
   },
 };
 
+const _ProposedTransactionBatch = VarArrayCodec(() => proto.codec.ProposedTransaction, Number(0xFFFFFFFF)) as XdrCodec<ProposedTransactionBatch>;
+
 const _TransactionStatistic: XdrCodec<TransactionStatistic> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as TransactionStatistic; },
@@ -290,6 +297,7 @@ export const codec = {
   SignedTransactionHashBatch: _SignedTransactionHashBatch,
   NondeterministicProposalData: _NondeterministicProposalData,
   ProposedTransaction: _ProposedTransaction,
+  ProposedTransactionBatch: _ProposedTransactionBatch,
   TransactionStatistic: _TransactionStatistic,
 } as const;
 
