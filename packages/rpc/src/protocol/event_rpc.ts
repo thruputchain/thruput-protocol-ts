@@ -13,6 +13,7 @@ export interface eventexecutor_emit_event_args {
   arg0: proto.BlockID;
   arg1: proto.TransactionID;
   arg2: proto.TxEventLog;
+  arg3: proto.ProposedTransaction;
 }
 
 export type EventBlockResult =
@@ -36,12 +37,14 @@ const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = 
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.TransactionID.encode(w, val.arg1);
     proto.codec.TxEventLog.encode(w, val.arg2);
+    proto.codec.ProposedTransaction.encode(w, val.arg3);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
     const arg1 = proto.codec.TransactionID.decode(r);
     const arg2 = proto.codec.TxEventLog.decode(r);
-    return { arg0, arg1, arg2 };
+    const arg3 = proto.codec.ProposedTransaction.decode(r);
+    return { arg0, arg1, arg2, arg3 };
   },
 };
 
