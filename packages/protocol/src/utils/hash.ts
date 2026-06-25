@@ -70,10 +70,12 @@ export function majorVersionFromSemver(versionStr: string): string {
 /**
  * Derive a contract entrypoint ID.
  *
- * EntrypointID = SHA-256(interfaceName || majorVersion(versionStr) || methodName)[0..8]
+ * EntrypointID = SHA-256(interfaceName :: majorVersion(versionStr) :: methodName)[0..8]
  *
  * If interfaceName is null, uses "_unnamed_interface" as the domain separator.
- * The concatenation is raw UTF-8 bytes, not XDR-encoded.
+ * Fields are joined with literal `::` separators (raw UTF-8, not XDR-encoded).
+ * The separators are required to prevent field-boundary collisions, e.g.
+ * interface "Foo1" + major "2" vs "Foo" + "12" would otherwise hash identically.
  *
  * Matches the Rust SDK's `contract_entrypoint_id` function.
  */
@@ -86,14 +88,7 @@ export async function deriveEntrypointID(
   const majorVersion = majorVersionFromSemver(versionStr);
 
   const encoder = new TextEncoder();
-  const nameBytes = encoder.encode(name);
-  const versionBytes = encoder.encode(majorVersion);
-  const methodBytes = encoder.encode(methodName);
-
-  const combined = new Uint8Array(nameBytes.length + versionBytes.length + methodBytes.length);
-  combined.set(nameBytes, 0);
-  combined.set(versionBytes, nameBytes.length);
-  combined.set(methodBytes, nameBytes.length + versionBytes.length);
+  const combined = encoder.encode(`${name}::${majorVersion}::${methodName}`);
 
   const digest = await sha256(combined);
   return contractEntrypointID(digest.slice(0, 8));

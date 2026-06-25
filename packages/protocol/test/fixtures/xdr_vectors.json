@@ -405,13 +405,18 @@
       }
     },
     {
-      "expected_hex": "aabbccddeeff001122334455667788990102030405060708090a0b0c0d0e0f10deadbeefcafebabe00000000000f4240000000000000000000000064000000000000002a000000000000000000000000",
+      "expected_hex": "aabbccddeeff001122334455667788990102030405060708090a0b0c0d0e0f10deadbeefcafebabe00000000000f4240000000000000000000000064000000000000002a0000000000000000000000ff00000005",
       "name": "transaction_minimal",
       "type": "Transaction",
       "value": {
-        "auth_claims": [],
+        "auth_claim": {
+          "value": {
+            "allowed_keys": "255",
+            "required_weight": "5"
+          },
+          "variant": "kSourceAddressAuthData"
+        },
         "contracts_to_deploy": [],
-        "gas_claims": [],
         "invocation": {
           "calldata": "",
           "entrypoint": "deadbeefcafebabe",
