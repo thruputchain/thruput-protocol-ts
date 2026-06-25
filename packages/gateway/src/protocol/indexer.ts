@@ -10,6 +10,7 @@ import * as proto from "./index.js";
 
 export interface TxInfo {
   height: proto.BlockHeight;
+  tx: proto.ProposedTransaction;
   events: proto.TxEventLog;
 }
 
@@ -120,12 +121,14 @@ export interface IndexerCard {
 const _TxInfo: XdrCodec<TxInfo> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.height);
+    proto.codec.ProposedTransaction.encode(w, val.tx);
     proto.codec.TxEventLog.encode(w, val.events);
   },
   decode(r) {
     const height = proto.codec.BlockHeight.decode(r);
+    const tx = proto.codec.ProposedTransaction.decode(r);
     const events = proto.codec.TxEventLog.decode(r);
-    return { height, events };
+    return { height, tx, events };
   },
 };
 
