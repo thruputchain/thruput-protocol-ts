@@ -168,6 +168,11 @@ export interface SpecMethodFragment {
   method: proto.ContractSpecMethod;
 }
 
+export interface SpecInterfaceAnchor {
+  interface_name: proto.ContractSpecString;
+  interface_version: proto.ContractSpecString;
+}
+
 export enum SpecFragmentKind {
   SpecInterface = 0,
   SpecMethod = 1,
@@ -175,6 +180,7 @@ export enum SpecFragmentKind {
   ExportedSpecTypeDef = 3,
   SpecEvent = 4,
   ExportedSpecEvent = 5,
+  InterfaceAnchor = 6,
 }
 
 export type SpecFragment =
@@ -184,6 +190,7 @@ export type SpecFragment =
   | { v: proto.SpecFragmentKind.ExportedSpecTypeDef; type_def: proto.ContractTypeDef }
   | { v: proto.SpecFragmentKind.SpecEvent; event_def: proto.ContractEventDef }
   | { v: proto.SpecFragmentKind.ExportedSpecEvent; event_def: proto.ContractEventDef }
+  | { v: proto.SpecFragmentKind.InterfaceAnchor; interface_anchor: proto.SpecInterfaceAnchor }
 ;
 
 
@@ -582,6 +589,18 @@ const _SpecMethodFragment: XdrCodec<SpecMethodFragment> = {
   },
 };
 
+const _SpecInterfaceAnchor: XdrCodec<SpecInterfaceAnchor> = {
+  encode(w, val) {
+    proto.codec.ContractSpecString.encode(w, val.interface_name);
+    proto.codec.ContractSpecString.encode(w, val.interface_version);
+  },
+  decode(r) {
+    const interface_name = proto.codec.ContractSpecString.decode(r);
+    const interface_version = proto.codec.ContractSpecString.decode(r);
+    return { interface_name, interface_version };
+  },
+};
+
 const _SpecFragmentKind: XdrCodec<SpecFragmentKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as SpecFragmentKind; },
@@ -605,6 +624,9 @@ const _SpecFragment: XdrCodec<SpecFragment> = {
       case proto.SpecFragmentKind.ExportedSpecEvent:
         proto.codec.ContractEventDef.encode(w, val.event_def);
         break;
+      case proto.SpecFragmentKind.InterfaceAnchor:
+        proto.codec.SpecInterfaceAnchor.encode(w, val.interface_anchor);
+        break;
     }
   },
   decode(r) {
@@ -624,6 +646,9 @@ const _SpecFragment: XdrCodec<SpecFragment> = {
       case proto.SpecFragmentKind.ExportedSpecEvent:
         const event_def = proto.codec.ContractEventDef.decode(r);
         return { v, event_def };
+      case proto.SpecFragmentKind.InterfaceAnchor:
+        const interface_anchor = proto.codec.SpecInterfaceAnchor.decode(r);
+        return { v, interface_anchor };
       default:
         throw new Error(`Unknown SpecFragment discriminant: ${v}`);
     }
@@ -654,6 +679,7 @@ export const codec = {
   ContractSpec: _ContractSpec,
   SpecInterfaceFragment: _SpecInterfaceFragment,
   SpecMethodFragment: _SpecMethodFragment,
+  SpecInterfaceAnchor: _SpecInterfaceAnchor,
   SpecFragmentKind: _SpecFragmentKind,
   SpecFragment: _SpecFragment,
 } as const;
