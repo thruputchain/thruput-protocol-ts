@@ -9,7 +9,7 @@ import * as proto from "./index.js";
 
 
 export interface CatchupBlock {
-  consensus_value: proto.ConsensusValue;
+  consensus_basis: proto.ConsensusBasis;
   signed_transactions: proto.ParallelSignedTransactionBatch;
 }
 
@@ -48,13 +48,13 @@ export interface SignedCatchupBlocksResult {
 
 const _CatchupBlock: XdrCodec<CatchupBlock> = {
   encode(w, val) {
-    proto.codec.ConsensusValue.encode(w, val.consensus_value);
+    proto.codec.ConsensusBasis.encode(w, val.consensus_basis);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.signed_transactions);
   },
   decode(r) {
-    const consensus_value = proto.codec.ConsensusValue.decode(r);
+    const consensus_basis = proto.codec.ConsensusBasis.decode(r);
     const signed_transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
-    return { consensus_value, signed_transactions };
+    return { consensus_basis, signed_transactions };
   },
 };
 

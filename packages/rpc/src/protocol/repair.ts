@@ -10,7 +10,7 @@ import * as proto from "./index.js";
 
 export interface MissingTransactions {
   transaction_hashes: proto.SignedTransactionHash[];
-  cue: proto.ConsensusValueCue;
+  consensus_value: proto.ConsensusValue;
 }
 
 export interface MissingTransactionsEnvelope {
@@ -32,12 +32,12 @@ export interface RepairedTransactions {
 const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
     VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.transaction_hashes);
-    proto.codec.ConsensusValueCue.encode(w, val.cue);
+    proto.codec.ConsensusValue.encode(w, val.consensus_value);
   },
   decode(r) {
     const transaction_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
-    const cue = proto.codec.ConsensusValueCue.decode(r);
-    return { transaction_hashes, cue };
+    const consensus_value = proto.codec.ConsensusValue.decode(r);
+    return { transaction_hashes, consensus_value };
   },
 };
 
@@ -77,7 +77,7 @@ export const RepairProgram: RpcProgramMeta = {
   methods: {
     repair_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
     repair_missing_txs: { proc: 10, request: () => _MissingTransactionsEnvelope, response: () => _RepairedTransactions },
-    repair_missing_cv: { proc: 20, request: () => proto.codec.ConsensusValueCue as XdrCodec<proto.ConsensusValueCue>, response: () => proto.codec.OptConsensusValue as XdrCodec<proto.OptConsensusValue> },
+    repair_missing_basis: { proc: 20, request: () => proto.codec.ConsensusValue as XdrCodec<proto.ConsensusValue>, response: () => proto.codec.OptConsensusBasis as XdrCodec<proto.OptConsensusBasis> },
     repair_missing_scp_envelopes: { proc: 30, request: () => proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: () => proto.codec.SCPEnvelopes as XdrCodec<proto.SCPEnvelopes> },
   },
 };
