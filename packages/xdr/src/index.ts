@@ -1,3 +1,13 @@
+/**
+ * XDR and CXS serialization primitives used by the Groundhog protocol packages.
+ *
+ * Use this package when you need direct access to readers, writers, codecs, or
+ * serialization helpers. Most application code should prefer the higher-level
+ * protocol and client packages.
+ *
+ * @module @groundhogchain/xdr
+ */
+
 export {
   XdrWriter,
 } from "./xdr/writer.js";

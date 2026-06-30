@@ -1,3 +1,12 @@
+/**
+ * ONC-RPC client APIs and generated RPC protocol definitions.
+ *
+ * Use this package to call Groundhog ONC-RPC services and to work with the RPC
+ * request and response types generated from the protocol XDR definitions.
+ *
+ * @module @groundhogchain/rpc
+ */
+
 // ONC-RPC client
 export * from "./onc/index.js";
 
