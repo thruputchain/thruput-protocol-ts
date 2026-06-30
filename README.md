@@ -16,6 +16,24 @@ XDR definitions in the `protocol/` submodule.
 
 All packages are published to GitHub Packages with `access: restricted`.
 
+Most application code should prefer `@groundhogchain/client`. These protocol
+packages are lower-level building blocks for serialization, generated protocol
+types, RPC access, contract specs, and gateway/indexer types.
+
+## Import surfaces
+
+Import from the package barrels and documented subpaths:
+
+- `@groundhogchain/xdr`
+- `@groundhogchain/protocol`
+- `@groundhogchain/protocol/utils`
+- `@groundhogchain/contract-spec`
+- `@groundhogchain/rpc`
+- `@groundhogchain/gateway`
+
+Avoid importing from generated files under `packages/*/src/protocol/` directly.
+Those files are implementation output from code generation and may be rewritten.
+
 ## Repo layout
 
 ```
@@ -55,20 +73,20 @@ The generated site is written to `docs/api/`, which is ignored by git. The API
 reference is generated from the public package entrypoints rather than every
 generated implementation file.
 
-Most application code should prefer `@groundhogchain/client`. These protocol
-packages are lower-level building blocks for serialization, generated protocol
-types, RPC access, contract specs, and gateway/indexer types.
-
 ## Regenerating from XDR
 
-After updating the `protocol/` submodule, regenerate the TypeScript sources:
+Protocol types under `packages/*/src/protocol/*.ts` are generated from XDR
+definitions in the `protocol/` submodule. After updating that submodule,
+regenerate the TypeScript sources with:
 
 ```sh
 XDRC=/path/to/x23c ./scripts/generate.sh
 ```
 
-Only files under `src/protocol/` (and the noted test fixtures) are overwritten —
-the hand-written `src/index.ts` barrels are not.
+Generation also updates the generated test fixtures noted in
+`scripts/generate.sh`. Hand-written barrels such as `packages/*/src/index.ts`
+and `packages/protocol/src/utils/index.ts` are the intended import surfaces and
+are not overwritten by the generator.
 
 ## Releasing
 
