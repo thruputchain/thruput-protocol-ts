@@ -1,9 +1,15 @@
 {
+  "name": "protocol-ts",
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "npm run build --workspaces",
+    "docs": "typedoc",
+    "docs:check": "typedoc --emit none",
     "test": "npm run test --workspaces",
     "typecheck": "npm run typecheck --workspaces"
+  },
+  "devDependencies": {
+    "typedoc": "0.28.19"
   }
 }

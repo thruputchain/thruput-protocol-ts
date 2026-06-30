@@ -2,17 +2,17 @@
 
 TypeScript bindings for the Groundhog blockchain protocol. This is a private npm
 monorepo that publishes five `@groundhogchain/*` packages, generated from the
-XDR definitions in the [`protocol/`](./protocol) submodule.
+XDR definitions in the `protocol/` submodule.
 
 ## Packages
 
 | Package | Description | Depends on |
 |---|---|---|
-| [`@groundhogchain/xdr`](./packages/xdr) | XDR/CXS serialization framework | — |
-| [`@groundhogchain/protocol`](./packages/protocol) | Core protocol types | `xdr` |
-| [`@groundhogchain/contract-spec`](./packages/contract-spec) | Contract spec AST types | `xdr` |
-| [`@groundhogchain/rpc`](./packages/rpc) | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
-| [`@groundhogchain/gateway`](./packages/gateway) | Gateway/indexer types | `xdr`, `protocol` |
+| `@groundhogchain/xdr` | XDR/CXS serialization framework | — |
+| `@groundhogchain/protocol` | Core protocol types | `xdr` |
+| `@groundhogchain/contract-spec` | Contract spec AST types | `xdr` |
+| `@groundhogchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
+| `@groundhogchain/gateway` | Gateway/indexer types | `xdr`, `protocol` |
 
 All packages are published to GitHub Packages with `access: restricted`.
 
@@ -36,6 +36,28 @@ npm run build      # build all workspaces
 npm test           # vitest across all workspaces
 npm run typecheck
 ```
+
+## API docs
+
+Generate the local API reference with:
+
+```sh
+npm run docs
+```
+
+Validate the TypeDoc configuration without writing output with:
+
+```sh
+npm run docs:check
+```
+
+The generated site is written to `docs/api/`, which is ignored by git. The API
+reference is generated from the public package entrypoints rather than every
+generated implementation file.
+
+Most application code should prefer `@groundhogchain/client`. These protocol
+packages are lower-level building blocks for serialization, generated protocol
+types, RPC access, contract specs, and gateway/indexer types.
 
 ## Regenerating from XDR
 
