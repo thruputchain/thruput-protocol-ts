@@ -20,6 +20,8 @@ async function sha256(data: Uint8Array): Promise<Uint8Array> {
  * Hash a SignedTransaction to produce its transaction ID.
  *
  * The transaction hash is SHA-256 of the XDR-encoded SignedTransaction.
+ *
+ * @param stx Signed transaction to hash.
  */
 export async function hashSignedTransaction(stx: SignedTransaction): Promise<SHA256Hash> {
   const bytes = serialize(stx, codec.SignedTransaction);
@@ -32,6 +34,10 @@ export async function hashSignedTransaction(stx: SignedTransaction): Promise<SHA
  *
  * ContractAddress = SHA-256(deployer_address || nonce || contract_hash)
  * under XDR encoding (i.e., SHA-256 of the serialized ContractDeploymentHashPreimage).
+ *
+ * @param deployer Address deploying the contract.
+ * @param nonce Deployment nonce.
+ * @param contractHash Hash of the contract code or artifact.
  */
 export async function deriveContractAddress(
   deployer: ContractAddress,
@@ -54,6 +60,8 @@ export async function deriveContractAddress(
  * - "0.9.2" → "0.9" (major is 0, minor is non-zero)
  * - "0.0.2" → "0.0.2" (0.0.z is always considered major)
  * - "0.0.0" → "0.0.0"
+ *
+ * @param versionStr Semantic version string with at least major, minor, and patch components.
  */
 export function majorVersionFromSemver(versionStr: string): string {
   const parts = versionStr.split(".");
@@ -78,6 +86,10 @@ export function majorVersionFromSemver(versionStr: string): string {
  * interface "Foo1" + major "2" vs "Foo" + "12" would otherwise hash identically.
  *
  * Matches the Rust SDK's `contract_entrypoint_id` function.
+ *
+ * @param interfaceName Interface name, or `null` for the unnamed interface domain.
+ * @param versionStr Semantic version used to derive the major-version domain.
+ * @param methodName Contract method name.
  */
 export async function deriveEntrypointID(
   interfaceName: string | null,

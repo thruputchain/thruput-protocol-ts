@@ -17,13 +17,17 @@ const UH_MAX = 62;
 const IH_MAX = 31;
 const IH_MIN = -31;
 
+/** Reads compact XDR serialization (CXS) bytes. */
 export class CxsReader implements IReader {
   private pos: number = 0;
 
+  /** Create a reader over a CXS byte array. */
   constructor(private data: Uint8Array) {}
 
+  /** Current byte offset in the input. */
   get position(): number { return this.pos; }
 
+  /** Number of unread bytes remaining in the input. */
   get remaining(): number { return this.data.length - this.pos; }
 
   private ensure(n: number): void {
@@ -129,6 +133,7 @@ export class CxsReader implements IReader {
 
   // --- IReader interface ---
 
+  /** Read a signed 32-bit integer from CXS variable-length encoding. */
   readInt32(): bigint {
     const n = this.readSigned();
     if (n < -0x80000000n || n > 0x7FFFFFFFn) {
@@ -137,6 +142,7 @@ export class CxsReader implements IReader {
     return n;
   }
 
+  /** Read an unsigned 32-bit integer from CXS variable-length encoding. */
   readUint32(): bigint {
     const n = this.readUnsigned();
     if (n > 0xFFFFFFFFn) {
@@ -145,26 +151,31 @@ export class CxsReader implements IReader {
     return n;
   }
 
+  /** Read a signed 64-bit integer from CXS variable-length encoding. */
   readInt64(): bigint {
     return this.readSigned();
   }
 
+  /** Read an unsigned 64-bit integer from CXS variable-length encoding. */
   readUint64(): bigint {
     return this.readUnsigned();
   }
 
+  /** Read a signed 128-bit integer. */
   readInt128(): bigint {
     const highbits = this.readInt64();
     const lowbits = this.readUint64();
     return (highbits << 64n) | lowbits;
   }
 
+  /** Read an unsigned 128-bit integer. */
   readUint128(): bigint {
     const highbits = this.readUint64();
     const lowbits = this.readUint64();
     return (highbits << 64n) | lowbits;
   }
 
+  /** Read a CXS bool and reject values other than `0` and `1`. */
   readBool(): boolean {
     const val = this.readInt32();
     if (val !== 0n && val !== 1n) {
@@ -174,6 +185,7 @@ export class CxsReader implements IReader {
   }
 
   // No padding in CXS
+  /** Read fixed-length opaque bytes without padding. */
   readFixedOpaque(len: number): Uint8Array {
     this.ensure(len);
     const result = this.data.subarray(this.pos, this.pos + len);
@@ -181,6 +193,7 @@ export class CxsReader implements IReader {
     return result;
   }
 
+  /** Read length-prefixed opaque bytes bounded by `max`. */
   readVarOpaque(max: number): Uint8Array {
     const len = Number(this.readUint32());
     if (len > max) {
@@ -189,6 +202,7 @@ export class CxsReader implements IReader {
     return this.readFixedOpaque(len);
   }
 
+  /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
   readString(max: number): string {
     const bytes = this.readVarOpaque(max);
     return textDecoder.decode(bytes);

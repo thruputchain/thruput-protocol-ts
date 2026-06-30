@@ -23,14 +23,17 @@ const UH_MAX = 62;   // unsigned
 const IH_MAX = 31;   // signed positive
 const IH_MIN = -31;  // signed negative
 
+/** Writes compact XDR serialization (CXS) bytes. */
 export class CxsWriter implements IWriter {
   private buf: Uint8Array;
   private pos: number = 0;
 
+  /** Create a writer with an optional initial buffer capacity. */
   constructor(capacity: number = INITIAL_CAPACITY) {
     this.buf = new Uint8Array(capacity);
   }
 
+  /** Return the written bytes without unused buffer capacity. */
   finish(): Uint8Array {
     return this.buf.slice(0, this.pos);
   }
@@ -97,6 +100,7 @@ export class CxsWriter implements IWriter {
     }
   }
 
+  /** Write a signed 32-bit integer using CXS variable-length encoding. */
   writeInt32(val: bigint): void {
     if (val < -0x80000000n || val > 0x7FFFFFFFn) {
       throw new Error(`int32 overflow: ${val}`);
@@ -104,6 +108,7 @@ export class CxsWriter implements IWriter {
     this.writeSignedI32(Number(val));
   }
 
+  /** Write a signed 64-bit integer using CXS variable-length encoding. */
   writeInt64(val: bigint): void {
     if (val < -(1n << 63n) || val > (1n << 63n) - 1n) {
       throw new Error(`int64 overflow: ${val}`);
@@ -123,6 +128,7 @@ export class CxsWriter implements IWriter {
     }
   }
 
+  /** Write a signed 128-bit integer as high signed 64 bits followed by low unsigned 64 bits. */
   writeInt128(val: bigint): void {
     if (val < -(1n << 127n) || val > (1n << 127n) - 1n) {
       throw new Error(`int128 overflow: ${val}`);
@@ -173,6 +179,7 @@ export class CxsWriter implements IWriter {
     }
   }
 
+  /** Write an unsigned 32-bit integer using CXS variable-length encoding. */
   writeUint32(val: bigint): void {
     if (val < 0n || val > 0xFFFFFFFFn) {
       throw new Error(`uint32 overflow: ${val}`);
@@ -180,6 +187,7 @@ export class CxsWriter implements IWriter {
     this.writeUnsignedU32(Number(val));
   }
 
+  /** Write an unsigned 64-bit integer using CXS variable-length encoding. */
   writeUint64(val: bigint): void {
     if (val < 0n || val > 0xFFFFFFFFFFFFFFFFn) {
       throw new Error(`uint64 overflow: ${val}`);
@@ -198,6 +206,7 @@ export class CxsWriter implements IWriter {
     }
   }
 
+  /** Write an unsigned 128-bit integer as two unsigned 64-bit words. */
   writeUint128(val: bigint): void {
     if (val < 0n || val > (1n << 128n) - 1n) {
       throw new Error(`uint128 overflow: ${val}`);
@@ -208,12 +217,14 @@ export class CxsWriter implements IWriter {
     this.writeUint64(lowbits);
   }
 
+  /** Write a boolean as CXS int32 value `0` or `1`. */
   writeBool(val: boolean): void {
     this.writeInt32(val ? 1n : 0n);
   }
 
   // --- Opaque / string (no padding in CXS) ---
 
+  /** Write fixed-length opaque bytes without padding. */
   writeFixedOpaque(val: Uint8Array, len: number): void {
     if (val.length !== len) {
       throw new Error(`fixed opaque length mismatch: expected ${len}, got ${val.length}`);
@@ -221,6 +232,7 @@ export class CxsWriter implements IWriter {
     this.putBytes(val);
   }
 
+  /** Write length-prefixed opaque bytes, bounded by `max`, without padding. */
   writeVarOpaque(val: Uint8Array, max: number): void {
     if (val.length > max) {
       throw new Error(`var opaque exceeds max: ${val.length} > ${max}`);
@@ -229,6 +241,7 @@ export class CxsWriter implements IWriter {
     this.putBytes(val);
   }
 
+  /** UTF-8 encode and write a length-prefixed string bounded by `max` bytes. */
   writeString(val: string, max: number): void {
     const encoded = textEncoder.encode(val);
     this.writeVarOpaque(encoded, max);

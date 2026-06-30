@@ -4,6 +4,14 @@
 
 const hexChars = "0123456789abcdef";
 
+/**
+ * Encode bytes as a lowercase hexadecimal string without a `0x` prefix.
+ *
+ * @example
+ * ```ts
+ * toHex(new Uint8Array([0, 255])); // "00ff"
+ * ```
+ */
 export function toHex(bytes: Uint8Array): string {
   let out = "";
   for (let i = 0; i < bytes.length; i++) {
@@ -13,6 +21,12 @@ export function toHex(bytes: Uint8Array): string {
   return out;
 }
 
+/**
+ * Decode a hexadecimal string into bytes.
+ *
+ * Accepts uppercase or lowercase digits and rejects odd-length strings or
+ * non-hex characters.
+ */
 export function fromHex(hex: string): Uint8Array {
   if (hex.length % 2 !== 0) {
     throw new Error(`Invalid hex string: odd length ${hex.length}`);

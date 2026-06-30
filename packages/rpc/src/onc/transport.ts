@@ -10,6 +10,7 @@
 export interface RpcTransport {
   /** Send an ONC-RPC call and receive the reply bytes. */
   call(requestBytes: Uint8Array): Promise<Uint8Array>;
+  /** Close the underlying transport and reject or discard pending calls. */
   close(): void;
 }
 
@@ -24,6 +25,7 @@ export class WebSocketTransport implements RpcTransport {
   private pending: Map<number, { resolve: (data: Uint8Array) => void; reject: (err: Error) => void }> = new Map();
   private ready: Promise<void>;
 
+  /** Connect to an ONC-RPC WebSocket endpoint. */
   constructor(url: string) {
     this.ws = new WebSocket(url);
     this.ws.binaryType = "arraybuffer";
@@ -53,6 +55,7 @@ export class WebSocketTransport implements RpcTransport {
     };
   }
 
+  /** Send one encoded ONC-RPC call message and wait for the matching reply. */
   async call(requestBytes: Uint8Array): Promise<Uint8Array> {
     await this.ready;
     // Extract xid from the request (first 4 bytes)
@@ -65,6 +68,7 @@ export class WebSocketTransport implements RpcTransport {
     });
   }
 
+  /** Close the WebSocket connection. */
   close(): void {
     this.ws.close();
   }
