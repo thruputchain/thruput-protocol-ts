@@ -1,0 +1,21 @@
+{
+  "name": "@groundhogchain/protocol-ts",
+  "entryPoints": [
+    "packages/xdr/src/index.ts",
+    "packages/protocol/src/index.ts",
+    "packages/protocol/src/utils/index.ts",
+    "packages/contract-spec/src/index.ts",
+    "packages/rpc/src/index.ts",
+    "packages/gateway/src/index.ts"
+  ],
+  "out": "docs/api",
+  "tsconfig": "tsconfig.docs.json",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "cleanOutputDir": true,
+  "githubPages": true,
+  "treatWarningsAsErrors": true
+}

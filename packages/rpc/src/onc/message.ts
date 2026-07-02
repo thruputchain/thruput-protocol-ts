@@ -29,6 +29,11 @@ let nextXid = 1;
  *   auth_cred: AUTH_NONE (flavor=0, length=0)
  *   auth_verf: AUTH_NONE (flavor=0, length=0)
  *   body: opaque bytes (the serialized request)
+ *
+ * @param programId ONC-RPC program identifier.
+ * @param version ONC-RPC program version.
+ * @param procedure Procedure number within the program.
+ * @param body Serialized request body.
  */
 export function buildCallMessage(
   programId: number,
@@ -59,6 +64,8 @@ export function buildCallMessage(
  * Parse an ONC-RPC reply message, returning the body bytes.
  *
  * Throws on RPC-level errors (rejected, program mismatch, etc.)
+ *
+ * @param data Encoded ONC-RPC reply message.
  */
 export function parseReplyMessage(data: Uint8Array): { xid: number; body: Uint8Array } {
   const r = new XdrReader(data);

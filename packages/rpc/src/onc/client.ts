@@ -19,11 +19,18 @@ import { buildCallMessage, parseReplyMessage } from "./message.js";
  * ```
  */
 export class RpcClient {
+  /** Create a client for one generated RPC program over a transport. */
   constructor(
     private transport: RpcTransport,
     private program: RpcProgramMeta,
   ) {}
 
+  /**
+   * Call a generated RPC method by name.
+   *
+   * The request and response bodies are encoded and decoded with the method
+   * codecs from the supplied `RpcProgramMeta`.
+   */
   async call<Req, Resp>(
     methodName: string,
     request: Req,
@@ -49,11 +56,13 @@ export class RpcClient {
     return deserialize(body, respCodec);
   }
 
+  /** Close the underlying transport. */
   close(): void {
     this.transport.close();
   }
 }
 
+/** Create an ONC-RPC client for a generated program metadata object. */
 export function createRpcClient(transport: RpcTransport, program: RpcProgramMeta): RpcClient {
   return new RpcClient(transport, program);
 }

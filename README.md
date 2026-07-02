@@ -2,19 +2,37 @@
 
 TypeScript bindings for the Groundhog blockchain protocol. This is a private npm
 monorepo that publishes five `@groundhogchain/*` packages, generated from the
-XDR definitions in the [`protocol/`](./protocol) submodule.
+XDR definitions in the `protocol/` submodule.
 
 ## Packages
 
 | Package | Description | Depends on |
 |---|---|---|
-| [`@groundhogchain/xdr`](./packages/xdr) | XDR/CXS serialization framework | — |
-| [`@groundhogchain/protocol`](./packages/protocol) | Core protocol types | `xdr` |
-| [`@groundhogchain/contract-spec`](./packages/contract-spec) | Contract spec AST types | `xdr` |
-| [`@groundhogchain/rpc`](./packages/rpc) | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
-| [`@groundhogchain/gateway`](./packages/gateway) | Gateway/indexer types | `xdr`, `protocol` |
+| `@groundhogchain/xdr` | XDR/CXS serialization framework | — |
+| `@groundhogchain/protocol` | Core protocol types | `xdr` |
+| `@groundhogchain/contract-spec` | Contract spec AST types | `xdr` |
+| `@groundhogchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
+| `@groundhogchain/gateway` | Gateway/indexer types | `xdr`, `protocol` |
 
 All packages are published to GitHub Packages with `access: restricted`.
+
+Most application code should prefer `@groundhogchain/client`. These protocol
+packages are lower-level building blocks for serialization, generated protocol
+types, RPC access, contract specs, and gateway/indexer types.
+
+## Import surfaces
+
+Import from the package barrels and documented subpaths:
+
+- `@groundhogchain/xdr`
+- `@groundhogchain/protocol`
+- `@groundhogchain/protocol/utils`
+- `@groundhogchain/contract-spec`
+- `@groundhogchain/rpc`
+- `@groundhogchain/gateway`
+
+Avoid importing from generated files under `packages/*/src/protocol/` directly.
+Those files are implementation output from code generation and may be rewritten.
 
 ## Repo layout
 
@@ -37,16 +55,38 @@ npm test           # vitest across all workspaces
 npm run typecheck
 ```
 
+## API docs
+
+Generate the local API reference with:
+
+```sh
+npm run docs
+```
+
+Validate the TypeDoc configuration without writing output with:
+
+```sh
+npm run docs:check
+```
+
+The generated site is written to `docs/api/`, which is ignored by git. The API
+reference is generated from the public package entrypoints rather than every
+generated implementation file.
+
 ## Regenerating from XDR
 
-After updating the `protocol/` submodule, regenerate the TypeScript sources:
+Protocol types under `packages/*/src/protocol/*.ts` are generated from XDR
+definitions in the `protocol/` submodule. After updating that submodule,
+regenerate the TypeScript sources with:
 
 ```sh
 XDRC=/path/to/x23c ./scripts/generate.sh
 ```
 
-Only files under `src/protocol/` (and the noted test fixtures) are overwritten —
-the hand-written `src/index.ts` barrels are not.
+Generation also updates the generated test fixtures noted in
+`scripts/generate.sh`. Hand-written barrels such as `packages/*/src/index.ts`
+and `packages/protocol/src/utils/index.ts` are the intended import surfaces and
+are not overwritten by the generator.
 
 ## Releasing
 
