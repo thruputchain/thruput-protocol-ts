@@ -250,12 +250,12 @@ const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = {
   encode(w, val) {
     w.writeVarOpaque(val.nondeterministic_bits, Number(0xFFFFFFFF));
     w.writeUint32(val.nondeterministic_bit_count);
-    VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).encode(w, val.observed_queue_entry_sequence);
+    VarArrayCodec(proto.codec.QueueEntry, Number(proto.kMaxConcurrentRcqReadsPerTx)).encode(w, val.observed_queue_entry_sequence);
   },
   decode(r) {
     const nondeterministic_bits = r.readVarOpaque(Number(0xFFFFFFFF));
     const nondeterministic_bit_count = r.readUint32();
-    const observed_queue_entry_sequence = VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).decode(r);
+    const observed_queue_entry_sequence = VarArrayCodec(proto.codec.QueueEntry, Number(proto.kMaxConcurrentRcqReadsPerTx)).decode(r);
     return { nondeterministic_bits, nondeterministic_bit_count, observed_queue_entry_sequence };
   },
 };
