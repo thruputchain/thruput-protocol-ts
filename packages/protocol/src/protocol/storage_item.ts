@@ -89,8 +89,6 @@ export const kReplayCacheHeightsMaxLen = 4000n;
 
 export const kReplayCacheNoncesMaxLen = 8000n;
 
-export const kRetrocausalQueueBlockEntriesMaxLen = 250n;
-
 export interface ReplayCacheHeightCount {
   height: proto.BlockHeight;
   nonce_count: bigint;
@@ -255,11 +253,11 @@ const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
 
 const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
   encode(w, val) {
-    VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).encode(w, val.auth_data_change_signers);
+    VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(proto.kMaxSigners)).encode(w, val.auth_data_change_signers);
     OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).encode(w, val.new_required_weight);
   },
   decode(r) {
-    const auth_data_change_signers = VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(0xFFFFFFFF)).decode(r);
+    const auth_data_change_signers = VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(proto.kMaxSigners)).decode(r);
     const new_required_weight = OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).decode(r);
     return { auth_data_change_signers, new_required_weight };
   },
