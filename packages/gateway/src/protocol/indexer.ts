@@ -75,7 +75,6 @@ export interface EventPage {
 }
 
 export interface TransactionQuery {
-  address: proto.ContractAddress | null;
   order: proto.IterationOrder;
   anchor: proto.BlockAnchor;
   cursor: proto.PaginationCursor;
@@ -84,6 +83,31 @@ export interface TransactionQuery {
 
 export interface TransactionPage {
   transactions: proto.TxInfoBatch;
+  cursor: proto.PaginationCursor;
+  latest_block: proto.BlockHeight;
+  oldest_block: proto.BlockHeight;
+}
+
+export interface TransactionRef {
+  tx_hash: proto.SignedTransactionHash;
+  height: proto.BlockHeight;
+}
+
+export type TransactionRefBatch = proto.TransactionRef[] & { readonly __brand: "TransactionRefBatch" };
+export function transactionRefBatch(val: proto.TransactionRef[]): TransactionRefBatch {
+  return val as TransactionRefBatch;
+}
+
+export interface AddressTransactionQuery {
+  address: proto.ContractAddress;
+  order: proto.IterationOrder;
+  anchor: proto.BlockAnchor;
+  cursor: proto.PaginationCursor;
+  limit: bigint;
+}
+
+export interface TransactionRefPage {
+  refs: proto.TransactionRefBatch;
   cursor: proto.PaginationCursor;
   latest_block: proto.BlockHeight;
   oldest_block: proto.BlockHeight;
@@ -234,19 +258,17 @@ const _EventPage: XdrCodec<EventPage> = {
 
 const _TransactionQuery: XdrCodec<TransactionQuery> = {
   encode(w, val) {
-    OptionCodec(proto.codec.ContractAddress as XdrCodec<proto.ContractAddress>).encode(w, val.address);
     proto.codec.IterationOrder.encode(w, val.order);
     proto.codec.BlockAnchor.encode(w, val.anchor);
     proto.codec.PaginationCursor.encode(w, val.cursor);
     w.writeUint32(val.limit);
   },
   decode(r) {
-    const address = OptionCodec(proto.codec.ContractAddress as XdrCodec<proto.ContractAddress>).decode(r);
     const order = proto.codec.IterationOrder.decode(r);
     const anchor = proto.codec.BlockAnchor.decode(r);
     const cursor = proto.codec.PaginationCursor.decode(r);
     const limit = r.readUint32();
-    return { address, order, anchor, cursor, limit };
+    return { order, anchor, cursor, limit };
   },
 };
 
@@ -263,6 +285,54 @@ const _TransactionPage: XdrCodec<TransactionPage> = {
     const latest_block = proto.codec.BlockHeight.decode(r);
     const oldest_block = proto.codec.BlockHeight.decode(r);
     return { transactions, cursor, latest_block, oldest_block };
+  },
+};
+
+const _TransactionRef: XdrCodec<TransactionRef> = {
+  encode(w, val) {
+    proto.codec.SignedTransactionHash.encode(w, val.tx_hash);
+    proto.codec.BlockHeight.encode(w, val.height);
+  },
+  decode(r) {
+    const tx_hash = proto.codec.SignedTransactionHash.decode(r);
+    const height = proto.codec.BlockHeight.decode(r);
+    return { tx_hash, height };
+  },
+};
+
+const _TransactionRefBatch = VarArrayCodec(() => proto.codec.TransactionRef, Number(0xFFFFFFFF)) as XdrCodec<TransactionRefBatch>;
+
+const _AddressTransactionQuery: XdrCodec<AddressTransactionQuery> = {
+  encode(w, val) {
+    proto.codec.ContractAddress.encode(w, val.address);
+    proto.codec.IterationOrder.encode(w, val.order);
+    proto.codec.BlockAnchor.encode(w, val.anchor);
+    proto.codec.PaginationCursor.encode(w, val.cursor);
+    w.writeUint32(val.limit);
+  },
+  decode(r) {
+    const address = proto.codec.ContractAddress.decode(r);
+    const order = proto.codec.IterationOrder.decode(r);
+    const anchor = proto.codec.BlockAnchor.decode(r);
+    const cursor = proto.codec.PaginationCursor.decode(r);
+    const limit = r.readUint32();
+    return { address, order, anchor, cursor, limit };
+  },
+};
+
+const _TransactionRefPage: XdrCodec<TransactionRefPage> = {
+  encode(w, val) {
+    proto.codec.TransactionRefBatch.encode(w, val.refs);
+    proto.codec.PaginationCursor.encode(w, val.cursor);
+    proto.codec.BlockHeight.encode(w, val.latest_block);
+    proto.codec.BlockHeight.encode(w, val.oldest_block);
+  },
+  decode(r) {
+    const refs = proto.codec.TransactionRefBatch.decode(r);
+    const cursor = proto.codec.PaginationCursor.decode(r);
+    const latest_block = proto.codec.BlockHeight.decode(r);
+    const oldest_block = proto.codec.BlockHeight.decode(r);
+    return { refs, cursor, latest_block, oldest_block };
   },
 };
 
@@ -313,6 +383,10 @@ export const codec = {
   EventPage: _EventPage,
   TransactionQuery: _TransactionQuery,
   TransactionPage: _TransactionPage,
+  TransactionRef: _TransactionRef,
+  TransactionRefBatch: _TransactionRefBatch,
+  AddressTransactionQuery: _AddressTransactionQuery,
+  TransactionRefPage: _TransactionRefPage,
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
   IndexerCard: _IndexerCard,
@@ -326,6 +400,7 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
     get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
     get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
     get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPage },
+    get_transactions_by_address: { proc: 5, request: () => _AddressTransactionQuery, response: () => _TransactionRefPage },
   },
 };
 
