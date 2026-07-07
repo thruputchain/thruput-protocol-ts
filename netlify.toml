@@ -3,4 +3,5 @@
   publish = "docs/api"
 
 [build.environment]
+  GIT_SUBMODULES = "false"
   NODE_VERSION = "22"
