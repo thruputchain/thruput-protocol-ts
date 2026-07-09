@@ -1,13 +1,18 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from x23c commit: 21ee49e9b2a76b0fa98de8a0837954f4f9d61f19
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
+
+export interface eventexecutor_report_tx_failure_args {
+  arg0: proto.SignedTransactionHash;
+  arg1: proto.TxFailureDiagnostic;
+}
 
 export interface eventexecutor_emit_event_args {
   arg0: proto.BlockID;
@@ -31,6 +36,18 @@ export interface eventsched_close_block_args {
 //
 // XDR Codecs below this point
 //
+
+const _eventexecutor_report_tx_failure_args: XdrCodec<eventexecutor_report_tx_failure_args> = {
+  encode(w, val) {
+    proto.codec.SignedTransactionHash.encode(w, val.arg0);
+    proto.codec.TxFailureDiagnostic.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.SignedTransactionHash.decode(r);
+    const arg1 = proto.codec.TxFailureDiagnostic.decode(r);
+    return { arg0, arg1 };
+  },
+};
 
 const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = {
   encode(w, val) {
@@ -98,6 +115,7 @@ export const EventExecutorProgram: RpcProgramMeta = {
     eventexecutor_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
     eventexecutor_open_block: { proc: 31, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
     eventexecutor_close_block: { proc: 32, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventexecutor_report_tx_failure: { proc: 33, request: () => _eventexecutor_report_tx_failure_args, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
     eventexecutor_emit_event: { proc: 30, request: () => _eventexecutor_emit_event_args, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
   },
 };

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from x23c commit: 21ee49e9b2a76b0fa98de8a0837954f4f9d61f19
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -17,10 +17,12 @@ export interface TxInfo {
 export enum TxInfoOutcome {
   TxInfoFound = 0,
   TxInfoNotFound = 1,
+  TxInfoRecentFailure = 2,
 }
 
 export type TxInfoResult =
   | { outcome: proto.TxInfoOutcome.TxInfoFound; info: proto.TxInfo }
+  | { outcome: proto.TxInfoOutcome.TxInfoRecentFailure; recent_failure: proto.TxFailureDiagnostic }
   | { outcome: number }
 ;
 
@@ -131,6 +133,11 @@ export interface indexer_event_process_events_args {
   arg2: proto.ProposedTransactionBatch;
 }
 
+export interface indexer_event_report_tx_failure_args {
+  arg0: proto.SignedTransactionHash;
+  arg1: proto.TxFailureDiagnostic;
+}
+
 export interface IndexerCard {
   protocol: proto.Protocol;
   address_for_event: proto.ServerAddress;
@@ -174,6 +181,15 @@ const _TxInfoResult: XdrCodec<TxInfoResult> = {
         proto.codec.TxInfo.encode(w, v.info);
         break;
       }
+      case proto.TxInfoOutcome.TxInfoRecentFailure:
+      {
+        const v = val as { outcome: number; recent_failure: proto.TxFailureDiagnostic };
+        if (v.recent_failure === undefined) {
+          throw new Error("TxInfoResult encode: recent_failure is undefined");
+        }
+        proto.codec.TxFailureDiagnostic.encode(w, v.recent_failure);
+        break;
+      }
     }
   },
   decode(r) {
@@ -182,6 +198,9 @@ const _TxInfoResult: XdrCodec<TxInfoResult> = {
       case proto.TxInfoOutcome.TxInfoFound:
         const info = proto.codec.TxInfo.decode(r);
         return { outcome, info };
+      case proto.TxInfoOutcome.TxInfoRecentFailure:
+        const recent_failure = proto.codec.TxFailureDiagnostic.decode(r);
+        return { outcome, recent_failure };
       default:
         return { outcome };
     }
@@ -357,6 +376,18 @@ const _indexer_event_process_events_args: XdrCodec<indexer_event_process_events_
   },
 };
 
+const _indexer_event_report_tx_failure_args: XdrCodec<indexer_event_report_tx_failure_args> = {
+  encode(w, val) {
+    proto.codec.SignedTransactionHash.encode(w, val.arg0);
+    proto.codec.TxFailureDiagnostic.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.SignedTransactionHash.decode(r);
+    const arg1 = proto.codec.TxFailureDiagnostic.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
 const _IndexerCard: XdrCodec<IndexerCard> = {
   encode(w, val) {
     proto.codec.Protocol.encode(w, val.protocol);
@@ -409,6 +440,7 @@ export const IndexerEventProgram: RpcProgramMeta = {
   version: 1,
   methods: {
     indexer_event_process_events: { proc: 0, request: () => _indexer_event_process_events_args, response: () => VoidCodec },
+    indexer_event_report_tx_failure: { proc: 1, request: () => _indexer_event_report_tx_failure_args, response: () => VoidCodec },
   },
 };
 
