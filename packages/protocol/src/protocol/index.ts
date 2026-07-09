@@ -1,5 +1,6 @@
 // Barrel — add new .x files here when they're added to generate.sh
 export * from "./types.js";
+export * from "./db_conflict.js";
 export * from "./contract.js";
 export * from "./exec_result.js";
 export * from "./event.js";
@@ -19,6 +20,7 @@ export * from "./network.js";
 
 // Merged codec namespace
 import { codec as types_codec } from "./types.js";
+import { codec as db_conflict_codec } from "./db_conflict.js";
 import { codec as contract_codec } from "./contract.js";
 import { codec as exec_result_codec } from "./exec_result.js";
 import { codec as event_codec } from "./event.js";
@@ -42,6 +44,7 @@ import { codec as network_codec } from "./network.js";
 function _buildCodec() {
   return {
     ...types_codec,
+    ...db_conflict_codec,
     ...contract_codec,
     ...exec_result_codec,
     ...event_codec,
