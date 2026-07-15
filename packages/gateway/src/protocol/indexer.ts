@@ -143,6 +143,12 @@ export interface IndexerCard {
   address_for_event: proto.ServerAddress;
 }
 
+export enum EventIndexerIntroOutcome {
+  EventIntroSuccess = 0,
+  EventIntroMismatchedProtocol = 1,
+  EventIntroConnectFailed = 2,
+}
+
 
 
 //
@@ -400,6 +406,11 @@ const _IndexerCard: XdrCodec<IndexerCard> = {
   },
 };
 
+const _EventIndexerIntroOutcome: XdrCodec<EventIndexerIntroOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as EventIndexerIntroOutcome; },
+};
+
 export const codec = {
   TxInfo: _TxInfo,
   TxInfoOutcome: _TxInfoOutcome,
@@ -421,6 +432,7 @@ export const codec = {
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
   IndexerCard: _IndexerCard,
+  EventIndexerIntroOutcome: _EventIndexerIntroOutcome,
 } as const;
 
 export const IndexerBlockExplorerProgram: RpcProgramMeta = {
@@ -448,7 +460,7 @@ export const EventIndexerProgram: RpcProgramMeta = {
   programId: 0x4321aaac,
   version: 1,
   methods: {
-    event_indexer_intro: { proc: 0, request: () => _IndexerCard, response: () => VoidCodec },
+    event_indexer_intro: { proc: 0, request: () => _IndexerCard, response: () => _EventIndexerIntroOutcome },
   },
 };
 
