@@ -47,52 +47,52 @@ function makeTestTransaction(): SignedTransaction {
 }
 
 describe("hashSignedTransaction", () => {
-  it("returns a 32-byte SHA256Hash", async () => {
+  it("returns a 32-byte SHA256Hash", () => {
     const stx = makeTestTransaction();
-    const hash = await hashSignedTransaction(stx);
+    const hash = hashSignedTransaction(stx);
     expect(hash.length).toBe(32);
   });
 
-  it("is deterministic", async () => {
+  it("is deterministic", () => {
     const stx = makeTestTransaction();
-    const hash1 = await hashSignedTransaction(stx);
-    const hash2 = await hashSignedTransaction(stx);
+    const hash1 = hashSignedTransaction(stx);
+    const hash2 = hashSignedTransaction(stx);
     expect(toHex(hash1)).toBe(toHex(hash2));
   });
 
-  it("changes when transaction content changes", async () => {
+  it("changes when transaction content changes", () => {
     const stx1 = makeTestTransaction();
     const stx2 = makeTestTransaction();
     stx2.tx.uniquifier.nonce = 99999n;
-    const hash1 = await hashSignedTransaction(stx1);
-    const hash2 = await hashSignedTransaction(stx2);
+    const hash1 = hashSignedTransaction(stx1);
+    const hash2 = hashSignedTransaction(stx2);
     expect(toHex(hash1)).not.toBe(toHex(hash2));
   });
 });
 
 describe("deriveContractAddress", () => {
-  it("returns a 32-byte ContractAddress", async () => {
+  it("returns a 32-byte ContractAddress", () => {
     const deployer = contractAddress(new Uint8Array(32).fill(0x01));
     const nonce = sha256Hash(new Uint8Array(32).fill(0x02));
     const contractHash = sha256Hash(new Uint8Array(32).fill(0x03));
-    const addr = await deriveContractAddress(deployer, nonce, contractHash);
+    const addr = deriveContractAddress(deployer, nonce, contractHash);
     expect(addr.length).toBe(32);
   });
 
-  it("is deterministic", async () => {
+  it("is deterministic", () => {
     const deployer = contractAddress(new Uint8Array(32).fill(0x01));
     const nonce = sha256Hash(new Uint8Array(32).fill(0x02));
     const contractHash = sha256Hash(new Uint8Array(32).fill(0x03));
-    const addr1 = await deriveContractAddress(deployer, nonce, contractHash);
-    const addr2 = await deriveContractAddress(deployer, nonce, contractHash);
+    const addr1 = deriveContractAddress(deployer, nonce, contractHash);
+    const addr2 = deriveContractAddress(deployer, nonce, contractHash);
     expect(toHex(addr1)).toBe(toHex(addr2));
   });
 
-  it("changes when nonce changes", async () => {
+  it("changes when nonce changes", () => {
     const deployer = contractAddress(new Uint8Array(32).fill(0x01));
     const contractHash = sha256Hash(new Uint8Array(32).fill(0x03));
-    const addr1 = await deriveContractAddress(deployer, sha256Hash(new Uint8Array(32).fill(0x02)), contractHash);
-    const addr2 = await deriveContractAddress(deployer, sha256Hash(new Uint8Array(32).fill(0xFF)), contractHash);
+    const addr1 = deriveContractAddress(deployer, sha256Hash(new Uint8Array(32).fill(0x02)), contractHash);
+    const addr2 = deriveContractAddress(deployer, sha256Hash(new Uint8Array(32).fill(0xFF)), contractHash);
     expect(toHex(addr1)).not.toBe(toHex(addr2));
   });
 });
@@ -108,38 +108,38 @@ describe("majorVersionFromSemver", () => {
 });
 
 describe("deriveEntrypointID", () => {
-  it("returns an 8-byte ContractEntrypointID", async () => {
-    const id = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+  it("returns an 8-byte ContractEntrypointID", () => {
+    const id = deriveEntrypointID("ERC20", "1.0.0", "transfer");
     expect(id.length).toBe(8);
   });
 
-  it("is deterministic", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
+  it("is deterministic", () => {
+    const id1 = deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = deriveEntrypointID("ERC20", "1.0.0", "transfer");
     expect(toHex(id1)).toBe(toHex(id2));
   });
 
-  it("different method names produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "1.0.0", "approve");
+  it("different method names produce different IDs", () => {
+    const id1 = deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = deriveEntrypointID("ERC20", "1.0.0", "approve");
     expect(toHex(id1)).not.toBe(toHex(id2));
   });
 
-  it("different versions produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
-    const id2 = await deriveEntrypointID("ERC20", "2.0.0", "transfer");
+  it("different versions produce different IDs", () => {
+    const id1 = deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = deriveEntrypointID("ERC20", "2.0.0", "transfer");
     expect(toHex(id1)).not.toBe(toHex(id2));
   });
 
-  it("different interface names produce different IDs", async () => {
-    const id1 = await deriveEntrypointID("ERC20", "1.0.0", "transfer");
-    const id2 = await deriveEntrypointID("Governance", "1.0.0", "transfer");
+  it("different interface names produce different IDs", () => {
+    const id1 = deriveEntrypointID("ERC20", "1.0.0", "transfer");
+    const id2 = deriveEntrypointID("Governance", "1.0.0", "transfer");
     expect(toHex(id1)).not.toBe(toHex(id2));
   });
 
-  it("null interface uses _unnamed_interface", async () => {
-    const id1 = await deriveEntrypointID(null, "1.0.0", "transfer");
-    const id2 = await deriveEntrypointID("_unnamed_interface", "1.0.0", "transfer");
+  it("null interface uses _unnamed_interface", () => {
+    const id1 = deriveEntrypointID(null, "1.0.0", "transfer");
+    const id2 = deriveEntrypointID("_unnamed_interface", "1.0.0", "transfer");
     expect(toHex(id1)).toBe(toHex(id2));
   });
 });

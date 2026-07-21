@@ -46,8 +46,8 @@ describe("cross-SDK: entrypoint ID derivation", () => {
   for (const vec of data.vectors) {
     const label = `${vec.interface ?? "null"}/${vec.version_str}/${vec.method}`;
 
-    it(`matches Rust SDK: ${label}`, async () => {
-      const id = await deriveEntrypointID(vec.interface, vec.version_str, vec.method);
+    it(`matches Rust SDK: ${label}`, () => {
+      const id = deriveEntrypointID(vec.interface, vec.version_str, vec.method);
       // The Rust side outputs uppercase hex as a 16-char string (u64 big-endian)
       const tsHex = toHex(id).toUpperCase().padStart(16, "0");
       expect(tsHex).toBe(vec.expected_id);
