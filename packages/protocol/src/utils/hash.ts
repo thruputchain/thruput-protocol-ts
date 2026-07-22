@@ -1,20 +1,16 @@
 /**
  * SHA-256 hashing utilities for protocol operations.
  *
- * Uses the Web Crypto API (available in browsers and Node.js 16+).
+ * Uses @noble/hashes for synchronous, cross-runtime hashing.
  */
 
+import { sha256 } from "@noble/hashes/sha2.js";
 import { serialize } from "@groundhogchain/xdr";
 import { codec } from "../protocol/index.js";
 import type { SignedTransaction, SHA256Hash, ContractAddress, ContractEntrypointID } from "../protocol/index.js";
 import { sha256Hash } from "../protocol/types.js";
 import { contractAddress } from "../protocol/types.js";
 import { contractEntrypointID } from "../protocol/contract.js";
-
-async function sha256(data: Uint8Array): Promise<Uint8Array> {
-  const digest = await crypto.subtle.digest("SHA-256", data as Uint8Array<ArrayBuffer>);
-  return new Uint8Array(digest);
-}
 
 /**
  * Hash a SignedTransaction to produce its transaction ID.
@@ -23,10 +19,9 @@ async function sha256(data: Uint8Array): Promise<Uint8Array> {
  *
  * @param stx Signed transaction to hash.
  */
-export async function hashSignedTransaction(stx: SignedTransaction): Promise<SHA256Hash> {
+export function hashSignedTransaction(stx: SignedTransaction): SHA256Hash {
   const bytes = serialize(stx, codec.SignedTransaction);
-  const digest = await sha256(bytes);
-  return sha256Hash(digest);
+  return sha256Hash(sha256(bytes));
 }
 
 /**
@@ -39,17 +34,16 @@ export async function hashSignedTransaction(stx: SignedTransaction): Promise<SHA
  * @param nonce Deployment nonce.
  * @param contractHash Hash of the contract code or artifact.
  */
-export async function deriveContractAddress(
+export function deriveContractAddress(
   deployer: ContractAddress,
   nonce: SHA256Hash,
   contractHash: SHA256Hash,
-): Promise<ContractAddress> {
+): ContractAddress {
   const preimage = serialize(
     { deployer_address: deployer, nonce, contract_hash: contractHash },
     codec.ContractDeploymentHashPreimage,
   );
-  const digest = await sha256(preimage);
-  return contractAddress(digest);
+  return contractAddress(sha256(preimage));
 }
 
 /**
@@ -91,17 +85,17 @@ export function majorVersionFromSemver(versionStr: string): string {
  * @param versionStr Semantic version used to derive the major-version domain.
  * @param methodName Contract method name.
  */
-export async function deriveEntrypointID(
+export function deriveEntrypointID(
   interfaceName: string | null,
   versionStr: string,
   methodName: string,
-): Promise<ContractEntrypointID> {
+): ContractEntrypointID {
   const name = interfaceName ?? "_unnamed_interface";
   const majorVersion = majorVersionFromSemver(versionStr);
 
   const encoder = new TextEncoder();
   const combined = encoder.encode(`${name}::${majorVersion}::${methodName}`);
 
-  const digest = await sha256(combined);
+  const digest = sha256(combined);
   return contractEntrypointID(digest.slice(0, 8));
 }
