@@ -26,6 +26,16 @@ export type TxInfoResult =
   | { outcome: number }
 ;
 
+export enum BlockLookupOutcome {
+  BlockFound = 0,
+  BlockNotFound = 1,
+}
+
+export type BlockLookupResult =
+  | { outcome: proto.BlockLookupOutcome.BlockFound; header: proto.BlockHeader }
+  | { outcome: number }
+;
+
 export type IdentifiedEventBatch = proto.IdentifiedEvent[] & { readonly __brand: "IdentifiedEventBatch" };
 export function identifiedEventBatch(val: proto.IdentifiedEvent[]): IdentifiedEventBatch {
   return val as IdentifiedEventBatch;
@@ -104,6 +114,13 @@ export interface AddressTransactionQuery {
   address: proto.ContractAddress;
   order: proto.IterationOrder;
   anchor: proto.BlockAnchor;
+  cursor: proto.PaginationCursor;
+  limit: bigint;
+}
+
+export interface BlockTransactionQuery {
+  height: proto.BlockHeight;
+  order: proto.IterationOrder;
   cursor: proto.PaginationCursor;
   limit: bigint;
 }
@@ -207,6 +224,38 @@ const _TxInfoResult: XdrCodec<TxInfoResult> = {
       case proto.TxInfoOutcome.TxInfoRecentFailure:
         const recent_failure = proto.codec.TxFailureDiagnostic.decode(r);
         return { outcome, recent_failure };
+      default:
+        return { outcome };
+    }
+  },
+};
+
+const _BlockLookupOutcome: XdrCodec<BlockLookupOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as BlockLookupOutcome; },
+};
+
+const _BlockLookupResult: XdrCodec<BlockLookupResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.BlockLookupOutcome.BlockFound:
+      {
+        const v = val as { outcome: number; header: proto.BlockHeader };
+        if (v.header === undefined) {
+          throw new Error("BlockLookupResult encode: header is undefined");
+        }
+        proto.codec.BlockHeader.encode(w, v.header);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.BlockLookupOutcome.BlockFound:
+        const header = proto.codec.BlockHeader.decode(r);
+        return { outcome, header };
       default:
         return { outcome };
     }
@@ -345,6 +394,22 @@ const _AddressTransactionQuery: XdrCodec<AddressTransactionQuery> = {
   },
 };
 
+const _BlockTransactionQuery: XdrCodec<BlockTransactionQuery> = {
+  encode(w, val) {
+    proto.codec.BlockHeight.encode(w, val.height);
+    proto.codec.IterationOrder.encode(w, val.order);
+    proto.codec.PaginationCursor.encode(w, val.cursor);
+    w.writeUint32(val.limit);
+  },
+  decode(r) {
+    const height = proto.codec.BlockHeight.decode(r);
+    const order = proto.codec.IterationOrder.decode(r);
+    const cursor = proto.codec.PaginationCursor.decode(r);
+    const limit = r.readUint32();
+    return { height, order, cursor, limit };
+  },
+};
+
 const _TransactionRefPage: XdrCodec<TransactionRefPage> = {
   encode(w, val) {
     proto.codec.TransactionRefBatch.encode(w, val.refs);
@@ -415,6 +480,8 @@ export const codec = {
   TxInfo: _TxInfo,
   TxInfoOutcome: _TxInfoOutcome,
   TxInfoResult: _TxInfoResult,
+  BlockLookupOutcome: _BlockLookupOutcome,
+  BlockLookupResult: _BlockLookupResult,
   IdentifiedEventBatch: _IdentifiedEventBatch,
   TxInfoBatch: _TxInfoBatch,
   ContractAddressList: _ContractAddressList,
@@ -428,6 +495,7 @@ export const codec = {
   TransactionRef: _TransactionRef,
   TransactionRefBatch: _TransactionRefBatch,
   AddressTransactionQuery: _AddressTransactionQuery,
+  BlockTransactionQuery: _BlockTransactionQuery,
   TransactionRefPage: _TransactionRefPage,
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
@@ -441,9 +509,11 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
   methods: {
     indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.Protocol as XdrCodec<proto.Protocol>, response: () => _IndexerBlockExplorerIntroOutcome },
     get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
+    get_block_by_height: { proc: 2, request: () => proto.codec.BlockHeight as XdrCodec<proto.BlockHeight>, response: () => _BlockLookupResult },
     get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
     get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPage },
     get_transactions_by_address: { proc: 5, request: () => _AddressTransactionQuery, response: () => _TransactionRefPage },
+    get_transactions_by_block: { proc: 6, request: () => _BlockTransactionQuery, response: () => _TransactionRefPage },
   },
 };
 
