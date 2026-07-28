@@ -11,7 +11,8 @@
     "lib": ["ES2022", "DOM"],
     "paths": {
       "@groundhogchain/xdr": ["../xdr/src/index.ts"],
-      "@groundhogchain/protocol": ["../protocol/src/index.ts"]
+      "@groundhogchain/protocol": ["../protocol/src/index.ts"],
+      "@groundhogchain/rpc": ["../rpc/src/index.ts"]
     }
   },
   "include": ["src"],

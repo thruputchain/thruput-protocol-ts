@@ -10,7 +10,8 @@
     "paths": {
       "@groundhogchain/xdr": ["./packages/xdr/src/index.ts"],
       "@groundhogchain/protocol": ["./packages/protocol/src/index.ts"],
-      "@groundhogchain/protocol/utils": ["./packages/protocol/src/utils/index.ts"]
+      "@groundhogchain/protocol/utils": ["./packages/protocol/src/utils/index.ts"],
+      "@groundhogchain/rpc": ["./packages/rpc/src/index.ts"]
     }
   },
   "include": ["packages/*/src/**/*.ts"],

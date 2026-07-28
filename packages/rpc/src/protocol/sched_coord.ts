@@ -15,24 +15,24 @@ export enum CoordinatorRegistrationOutcome {
 }
 
 export interface CoordCard {
-  protocol: proto.Protocol;
+  protocol: proto.ProtocolCommit;
   address_for_sched: proto.ServerAddress;
 }
 
-export enum SchedulerNominationOutcome {
-  SchedulerNominationOK = 0,
-  SchedulerNominationError = 1,
+export enum SchedulerProposalOutcome {
+  SchedulerProposalOK = 0,
+  SchedulerProposalError = 1,
 }
 
-export interface SchedulerNominatedBlock {
+export interface SchedulerProposedBlock {
   block_id: proto.BlockID;
   txs: proto.ParallelSignedTransactionBatch;
-  nomination: proto.Nomination;
+  proposal: proto.Proposal;
 }
 
-export type SchedulerNominationResult =
-  | { outcome: proto.SchedulerNominationOutcome.SchedulerNominationOK; nominated_block: proto.SchedulerNominatedBlock }
-  | { outcome: proto.SchedulerNominationOutcome.SchedulerNominationError }
+export type SchedulerProposalResult =
+  | { outcome: proto.SchedulerProposalOutcome.SchedulerProposalOK; proposed_block: proto.SchedulerProposedBlock }
+  | { outcome: proto.SchedulerProposalOutcome.SchedulerProposalError }
 ;
 
 export enum SchedulerValidationOutcome {
@@ -47,7 +47,7 @@ export enum SchedulerValidationOutcome {
 }
 
 export interface SchedulerValidationBlock {
-  db_tip: proto.DbTip;
+  block_id: proto.BlockID;
   signed_transactions: proto.ParallelSignedTransactionBatch;
 }
 
@@ -65,6 +65,7 @@ export type SchedulerValidationResult =
 export enum SchedulerCommitOutcome {
   SchedulerCommitOK = 0,
   SchedulerCommitBlockNotFound = 1,
+  SchedulerCommitInvalidConsensusValue = 2,
 }
 
 export enum SchedulerGetTipOutcome {
@@ -83,9 +84,19 @@ export interface schedulercoord_submit_vetted_args {
   arg1: proto.ParallelSignedTransactionBatch;
 }
 
-export interface schedulercoord_validate_args {
-  arg0: proto.DbTip;
-  arg1: proto.Nomination;
+export interface schedulercoord_propose_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.ProposalContext;
+}
+
+export interface schedulercoord_validate_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.Proposal;
+}
+
+export interface schedulercoord_commit_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.ConsensusValue;
 }
 
 
@@ -100,56 +111,56 @@ const _CoordinatorRegistrationOutcome: XdrCodec<CoordinatorRegistrationOutcome> 
 
 const _CoordCard: XdrCodec<CoordCard> = {
   encode(w, val) {
-    proto.codec.Protocol.encode(w, val.protocol);
+    proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.ServerAddress.encode(w, val.address_for_sched);
   },
   decode(r) {
-    const protocol = proto.codec.Protocol.decode(r);
+    const protocol = proto.codec.ProtocolCommit.decode(r);
     const address_for_sched = proto.codec.ServerAddress.decode(r);
     return { protocol, address_for_sched };
   },
 };
 
-const _SchedulerNominationOutcome: XdrCodec<SchedulerNominationOutcome> = {
+const _SchedulerProposalOutcome: XdrCodec<SchedulerProposalOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
-  decode(r) { return Number(r.readInt32()) as SchedulerNominationOutcome; },
+  decode(r) { return Number(r.readInt32()) as SchedulerProposalOutcome; },
 };
 
-const _SchedulerNominatedBlock: XdrCodec<SchedulerNominatedBlock> = {
+const _SchedulerProposedBlock: XdrCodec<SchedulerProposedBlock> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.block_id);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.txs);
-    proto.codec.Nomination.encode(w, val.nomination);
+    proto.codec.Proposal.encode(w, val.proposal);
   },
   decode(r) {
     const block_id = proto.codec.BlockID.decode(r);
     const txs = proto.codec.ParallelSignedTransactionBatch.decode(r);
-    const nomination = proto.codec.Nomination.decode(r);
-    return { block_id, txs, nomination };
+    const proposal = proto.codec.Proposal.decode(r);
+    return { block_id, txs, proposal };
   },
 };
 
-const _SchedulerNominationResult: XdrCodec<SchedulerNominationResult> = {
+const _SchedulerProposalResult: XdrCodec<SchedulerProposalResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
-      case proto.SchedulerNominationOutcome.SchedulerNominationOK:
-        proto.codec.SchedulerNominatedBlock.encode(w, val.nominated_block);
+      case proto.SchedulerProposalOutcome.SchedulerProposalOK:
+        proto.codec.SchedulerProposedBlock.encode(w, val.proposed_block);
         break;
-      case proto.SchedulerNominationOutcome.SchedulerNominationError:
+      case proto.SchedulerProposalOutcome.SchedulerProposalError:
         break;
     }
   },
   decode(r) {
     const outcome = Number(r.readInt32());
     switch (outcome) {
-      case proto.SchedulerNominationOutcome.SchedulerNominationOK:
-        const nominated_block = proto.codec.SchedulerNominatedBlock.decode(r);
-        return { outcome, nominated_block };
-      case proto.SchedulerNominationOutcome.SchedulerNominationError:
-        return { outcome } as SchedulerNominationResult;
+      case proto.SchedulerProposalOutcome.SchedulerProposalOK:
+        const proposed_block = proto.codec.SchedulerProposedBlock.decode(r);
+        return { outcome, proposed_block };
+      case proto.SchedulerProposalOutcome.SchedulerProposalError:
+        return { outcome } as SchedulerProposalResult;
       default:
-        throw new Error(`Unknown SchedulerNominationResult discriminant: ${outcome}`);
+        throw new Error(`Unknown SchedulerProposalResult discriminant: ${outcome}`);
     }
   },
 };
@@ -161,13 +172,13 @@ const _SchedulerValidationOutcome: XdrCodec<SchedulerValidationOutcome> = {
 
 const _SchedulerValidationBlock: XdrCodec<SchedulerValidationBlock> = {
   encode(w, val) {
-    proto.codec.DbTip.encode(w, val.db_tip);
+    proto.codec.BlockID.encode(w, val.block_id);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.signed_transactions);
   },
   decode(r) {
-    const db_tip = proto.codec.DbTip.decode(r);
+    const block_id = proto.codec.BlockID.decode(r);
     const signed_transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
-    return { db_tip, signed_transactions };
+    return { block_id, signed_transactions };
   },
 };
 
@@ -259,14 +270,38 @@ const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_
   },
 };
 
-const _schedulercoord_validate_args: XdrCodec<schedulercoord_validate_args> = {
+const _schedulercoord_propose_block_args: XdrCodec<schedulercoord_propose_block_args> = {
   encode(w, val) {
-    proto.codec.DbTip.encode(w, val.arg0);
-    proto.codec.Nomination.encode(w, val.arg1);
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ProposalContext.encode(w, val.arg1);
   },
   decode(r) {
-    const arg0 = proto.codec.DbTip.decode(r);
-    const arg1 = proto.codec.Nomination.decode(r);
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ProposalContext.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
+const _schedulercoord_validate_block_args: XdrCodec<schedulercoord_validate_block_args> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.Proposal.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.Proposal.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
+const _schedulercoord_commit_block_args: XdrCodec<schedulercoord_commit_block_args> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ConsensusValue.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
 };
@@ -274,9 +309,9 @@ const _schedulercoord_validate_args: XdrCodec<schedulercoord_validate_args> = {
 export const codec = {
   CoordinatorRegistrationOutcome: _CoordinatorRegistrationOutcome,
   CoordCard: _CoordCard,
-  SchedulerNominationOutcome: _SchedulerNominationOutcome,
-  SchedulerNominatedBlock: _SchedulerNominatedBlock,
-  SchedulerNominationResult: _SchedulerNominationResult,
+  SchedulerProposalOutcome: _SchedulerProposalOutcome,
+  SchedulerProposedBlock: _SchedulerProposedBlock,
+  SchedulerProposalResult: _SchedulerProposalResult,
   SchedulerValidationOutcome: _SchedulerValidationOutcome,
   SchedulerValidationBlock: _SchedulerValidationBlock,
   SchedulerValidationResult: _SchedulerValidationResult,
@@ -293,9 +328,9 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedulercoord_intro_coord: { proc: 1, request: () => _CoordCard, response: () => _CoordinatorRegistrationOutcome },
     schedulercoord_submit_unvetted: { proc: 2, request: () => proto.codec.ParallelSignedTransactionBatch as XdrCodec<proto.ParallelSignedTransactionBatch>, response: () => VoidCodec },
     schedulercoord_submit_vetted: { proc: 3, request: () => _schedulercoord_submit_vetted_args, response: () => VoidCodec },
-    schedulercoord_nominate: { proc: 4, request: () => proto.codec.DbTip as XdrCodec<proto.DbTip>, response: () => _SchedulerNominationResult },
-    schedulercoord_validate: { proc: 5, request: () => _schedulercoord_validate_args, response: () => _SchedulerValidationResult },
-    schedulercoord_commit_block: { proc: 6, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _SchedulerCommitOutcome },
+    schedulercoord_propose_block: { proc: 4, request: () => _schedulercoord_propose_block_args, response: () => _SchedulerProposalResult },
+    schedulercoord_validate_block: { proc: 5, request: () => _schedulercoord_validate_block_args, response: () => _SchedulerValidationResult },
+    schedulercoord_commit_block: { proc: 6, request: () => _schedulercoord_commit_block_args, response: () => _SchedulerCommitOutcome },
     schedcoord_get_tip: { proc: 7, request: () => VoidCodec, response: () => _SchedulerGetTipResult },
     schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
     schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.SignedTransactionHashBatch as XdrCodec<proto.SignedTransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },

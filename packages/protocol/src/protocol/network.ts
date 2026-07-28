@@ -18,9 +18,9 @@ export function upid(data: Uint8Array): UPID {
   return data as UPID;
 }
 
-export type Protocol = string & { readonly __brand: "Protocol" };
-export function protocol(val: string): Protocol {
-  return val as Protocol;
+export type ProtocolCommit = string & { readonly __brand: "ProtocolCommit" };
+export function protocolCommit(val: string): ProtocolCommit {
+  return val as ProtocolCommit;
 }
 
 
@@ -38,14 +38,14 @@ const _UPID: XdrCodec<UPID> = {
   decode(r) { return upid(r.readFixedOpaque(8)); },
 };
 
-const _Protocol: XdrCodec<Protocol> = {
+const _ProtocolCommit: XdrCodec<ProtocolCommit> = {
   encode(w, val) { w.writeString(val, Number(0xFFFFFFFF)); },
-  decode(r) { return protocol(r.readString(Number(0xFFFFFFFF))); },
+  decode(r) { return protocolCommit(r.readString(Number(0xFFFFFFFF))); },
 };
 
 export const codec = {
   ServerAddress: _ServerAddress,
   UPID: _UPID,
-  Protocol: _Protocol,
+  ProtocolCommit: _ProtocolCommit,
 } as const;
 

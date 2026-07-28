@@ -14,7 +14,8 @@ export * from "./standard_asset_events.js";
 export * from "./address_auth.js";
 export * from "./storage_item.js";
 export * from "./precompiles.js";
-export * from "./block.js";
+export * from "./header.js";
+export * from "./validator.js";
 export * from "./invoke_flag.js";
 export * from "./network.js";
 
@@ -34,7 +35,8 @@ import { codec as standard_asset_events_codec } from "./standard_asset_events.js
 import { codec as address_auth_codec } from "./address_auth.js";
 import { codec as storage_item_codec } from "./storage_item.js";
 import { codec as precompiles_codec } from "./precompiles.js";
-import { codec as block_codec } from "./block.js";
+import { codec as header_codec } from "./header.js";
+import { codec as validator_codec } from "./validator.js";
 import { codec as invoke_flag_codec } from "./invoke_flag.js";
 import { codec as network_codec } from "./network.js";
 
@@ -58,7 +60,8 @@ function _buildCodec() {
     ...address_auth_codec,
     ...storage_item_codec,
     ...precompiles_codec,
-    ...block_codec,
+    ...header_codec,
+    ...validator_codec,
     ...invoke_flag_codec,
     ...network_codec,
   } as const;

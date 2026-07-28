@@ -14,11 +14,9 @@ export function blockID(val: bigint): BlockID {
 }
 
 export interface DbTip {
-  height: proto.BlockHeight;
-  block_hash: proto.BlockHash;
-  events_hash: proto.SHA256Hash;
-  db_hash: proto.DbHash;
   id: proto.BlockID;
+  storage_long_hash: proto.StorageLongHash;
+  value: proto.ConsensusValue;
 }
 
 export type TransactionID = bigint & { readonly __brand: "TransactionID" };
@@ -83,7 +81,7 @@ export type ExpectedDBTip =
 ;
 
 export interface ViewingSnapshot {
-  block_id: proto.BlockID;
+  viewing_block_id: proto.BlockID;
   tip: proto.DbTip;
 }
 
@@ -109,19 +107,15 @@ const _BlockID: XdrCodec<BlockID> = {
 
 const _DbTip: XdrCodec<DbTip> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.height);
-    proto.codec.BlockHash.encode(w, val.block_hash);
-    proto.codec.SHA256Hash.encode(w, val.events_hash);
-    proto.codec.DbHash.encode(w, val.db_hash);
     proto.codec.BlockID.encode(w, val.id);
+    proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
+    proto.codec.ConsensusValue.encode(w, val.value);
   },
   decode(r) {
-    const height = proto.codec.BlockHeight.decode(r);
-    const block_hash = proto.codec.BlockHash.decode(r);
-    const events_hash = proto.codec.SHA256Hash.decode(r);
-    const db_hash = proto.codec.DbHash.decode(r);
     const id = proto.codec.BlockID.decode(r);
-    return { height, block_hash, events_hash, db_hash, id };
+    const storage_long_hash = proto.codec.StorageLongHash.decode(r);
+    const value = proto.codec.ConsensusValue.decode(r);
+    return { id, storage_long_hash, value };
   },
 };
 
@@ -336,13 +330,13 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
 
 const _ViewingSnapshot: XdrCodec<ViewingSnapshot> = {
   encode(w, val) {
-    proto.codec.BlockID.encode(w, val.block_id);
+    proto.codec.BlockID.encode(w, val.viewing_block_id);
     proto.codec.DbTip.encode(w, val.tip);
   },
   decode(r) {
-    const block_id = proto.codec.BlockID.decode(r);
+    const viewing_block_id = proto.codec.BlockID.decode(r);
     const tip = proto.codec.DbTip.decode(r);
-    return { block_id, tip };
+    return { viewing_block_id, tip };
   },
 };
 

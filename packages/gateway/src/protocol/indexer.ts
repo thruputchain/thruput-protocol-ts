@@ -32,7 +32,7 @@ export enum BlockLookupOutcome {
 }
 
 export type BlockLookupResult =
-  | { outcome: proto.BlockLookupOutcome.BlockFound; header: proto.BlockHeader }
+  | { outcome: proto.BlockLookupOutcome.BlockFound; value: proto.ConsensusValue }
   | { outcome: number }
 ;
 
@@ -156,7 +156,7 @@ export interface indexer_event_report_tx_failure_args {
 }
 
 export interface IndexerCard {
-  protocol: proto.Protocol;
+  protocol: proto.ProtocolCommit;
   address_for_event: proto.ServerAddress;
 }
 
@@ -241,11 +241,11 @@ const _BlockLookupResult: XdrCodec<BlockLookupResult> = {
     switch (val.outcome) {
       case proto.BlockLookupOutcome.BlockFound:
       {
-        const v = val as { outcome: number; header: proto.BlockHeader };
-        if (v.header === undefined) {
-          throw new Error("BlockLookupResult encode: header is undefined");
+        const v = val as { outcome: number; value: proto.ConsensusValue };
+        if (v.value === undefined) {
+          throw new Error("BlockLookupResult encode: value is undefined");
         }
-        proto.codec.BlockHeader.encode(w, v.header);
+        proto.codec.ConsensusValue.encode(w, v.value);
         break;
       }
     }
@@ -254,8 +254,8 @@ const _BlockLookupResult: XdrCodec<BlockLookupResult> = {
     const outcome = Number(r.readInt32());
     switch (outcome) {
       case proto.BlockLookupOutcome.BlockFound:
-        const header = proto.codec.BlockHeader.decode(r);
-        return { outcome, header };
+        const value = proto.codec.ConsensusValue.decode(r);
+        return { outcome, value };
       default:
         return { outcome };
     }
@@ -461,11 +461,11 @@ const _indexer_event_report_tx_failure_args: XdrCodec<indexer_event_report_tx_fa
 
 const _IndexerCard: XdrCodec<IndexerCard> = {
   encode(w, val) {
-    proto.codec.Protocol.encode(w, val.protocol);
+    proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.ServerAddress.encode(w, val.address_for_event);
   },
   decode(r) {
-    const protocol = proto.codec.Protocol.decode(r);
+    const protocol = proto.codec.ProtocolCommit.decode(r);
     const address_for_event = proto.codec.ServerAddress.decode(r);
     return { protocol, address_for_event };
   },
@@ -507,7 +507,7 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
   programId: 0x4321aaaa,
   version: 1,
   methods: {
-    indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.Protocol as XdrCodec<proto.Protocol>, response: () => _IndexerBlockExplorerIntroOutcome },
+    indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.ProtocolCommit as XdrCodec<proto.ProtocolCommit>, response: () => _IndexerBlockExplorerIntroOutcome },
     get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
     get_block_by_height: { proc: 2, request: () => proto.codec.BlockHeight as XdrCodec<proto.BlockHeight>, response: () => _BlockLookupResult },
     get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
