@@ -17,6 +17,11 @@ export interface int128_xdr {
   lowbits: bigint;
 }
 
+export type Protocol = bigint & { readonly __brand: "Protocol" };
+export function protocol(val: bigint): Protocol {
+  return val as Protocol;
+}
+
 export type TimePoint = bigint & { readonly __brand: "TimePoint" };
 export function timePoint(val: bigint): TimePoint {
   return val as TimePoint;
@@ -76,15 +81,40 @@ export function sha256Hash(data: Uint8Array): SHA256Hash {
   return data as SHA256Hash;
 }
 
-export type DbHash = Uint8Array & { readonly __brand: "DbHash" };
-export function dbHash(data: Uint8Array): DbHash {
-  if (data.length !== 2048) throw new Error(`DbHash must be exactly 2048 bytes, got ${data.length}`);
-  return data as DbHash;
+export type ConsensusValueHash = proto.SHA256Hash & { readonly __brand: "ConsensusValueHash" };
+export function consensusValueHash(val: proto.SHA256Hash): ConsensusValueHash {
+  return val as ConsensusValueHash;
 }
 
-export type BlockHash = proto.SHA256Hash & { readonly __brand: "BlockHash" };
-export function blockHash(val: proto.SHA256Hash): BlockHash {
-  return val as BlockHash;
+export type NetworkHash = proto.SHA256Hash & { readonly __brand: "NetworkHash" };
+export function networkHash(val: proto.SHA256Hash): NetworkHash {
+  return val as NetworkHash;
+}
+
+export type StorageLongHash = Uint8Array & { readonly __brand: "StorageLongHash" };
+export function storageLongHash(data: Uint8Array): StorageLongHash {
+  if (data.length !== 2048) throw new Error(`StorageLongHash must be exactly 2048 bytes, got ${data.length}`);
+  return data as StorageLongHash;
+}
+
+export type StorageShortHash = proto.SHA256Hash & { readonly __brand: "StorageShortHash" };
+export function storageShortHash(val: proto.SHA256Hash): StorageShortHash {
+  return val as StorageShortHash;
+}
+
+export type TxsHash = proto.SHA256Hash & { readonly __brand: "TxsHash" };
+export function txsHash(val: proto.SHA256Hash): TxsHash {
+  return val as TxsHash;
+}
+
+export type EventsHash = proto.SHA256Hash & { readonly __brand: "EventsHash" };
+export function eventsHash(val: proto.SHA256Hash): EventsHash {
+  return val as EventsHash;
+}
+
+export type ProposalHeaderHash = proto.SHA256Hash & { readonly __brand: "ProposalHeaderHash" };
+export function proposalHeaderHash(val: proto.SHA256Hash): ProposalHeaderHash {
+  return val as ProposalHeaderHash;
 }
 
 export type ContractAddress = Uint8Array & { readonly __brand: "ContractAddress" };
@@ -156,6 +186,11 @@ const _int128_xdr: XdrCodec<int128_xdr> = {
     const lowbits = r.readUint64();
     return { highbits, lowbits };
   },
+};
+
+const _Protocol: XdrCodec<Protocol> = {
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return protocol(r.readUint32()); },
 };
 
 const _TimePoint: XdrCodec<TimePoint> = {
@@ -280,14 +315,39 @@ const _SHA256Hash: XdrCodec<SHA256Hash> = {
   decode(r) { return sha256Hash(r.readFixedOpaque(32)); },
 };
 
-const _DbHash: XdrCodec<DbHash> = {
-  encode(w, val) { w.writeFixedOpaque(val, 2048); },
-  decode(r) { return dbHash(r.readFixedOpaque(2048)); },
+const _ConsensusValueHash: XdrCodec<ConsensusValueHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return consensusValueHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
-const _BlockHash: XdrCodec<BlockHash> = {
+const _NetworkHash: XdrCodec<NetworkHash> = {
   encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return blockHash(proto.codec.SHA256Hash.decode(r)); },
+  decode(r) { return networkHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
+const _StorageLongHash: XdrCodec<StorageLongHash> = {
+  encode(w, val) { w.writeFixedOpaque(val, 2048); },
+  decode(r) { return storageLongHash(r.readFixedOpaque(2048)); },
+};
+
+const _StorageShortHash: XdrCodec<StorageShortHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return storageShortHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
+const _TxsHash: XdrCodec<TxsHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return txsHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
+const _EventsHash: XdrCodec<EventsHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return eventsHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
+const _ProposalHeaderHash: XdrCodec<ProposalHeaderHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return proposalHeaderHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
 const _ContractAddress: XdrCodec<ContractAddress> = {
@@ -362,6 +422,7 @@ const _BlockHeight: XdrCodec<BlockHeight> = {
 export const codec = {
   uint128_xdr: _uint128_xdr,
   int128_xdr: _int128_xdr,
+  Protocol: _Protocol,
   TimePoint: _TimePoint,
   RuntimeMemoryLength: _RuntimeMemoryLength,
   GasAmount: _GasAmount,
@@ -374,8 +435,13 @@ export const codec = {
   SecretKey: _SecretKey,
   ExtensionPoint: _ExtensionPoint,
   SHA256Hash: _SHA256Hash,
-  DbHash: _DbHash,
-  BlockHash: _BlockHash,
+  ConsensusValueHash: _ConsensusValueHash,
+  NetworkHash: _NetworkHash,
+  StorageLongHash: _StorageLongHash,
+  StorageShortHash: _StorageShortHash,
+  TxsHash: _TxsHash,
+  EventsHash: _EventsHash,
+  ProposalHeaderHash: _ProposalHeaderHash,
   ContractAddress: _ContractAddress,
   StorageKeyType: _StorageKeyType,
   StorageKeyContractData: _StorageKeyContractData,

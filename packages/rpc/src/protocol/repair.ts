@@ -77,7 +77,7 @@ export const RepairProgram: RpcProgramMeta = {
   methods: {
     repair_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
     repair_missing_txs: { proc: 10, request: () => _MissingTransactionsEnvelope, response: () => _RepairedTransactions },
-    repair_missing_basis: { proc: 20, request: () => proto.codec.ConsensusValue as XdrCodec<proto.ConsensusValue>, response: () => proto.codec.OptConsensusBasis as XdrCodec<proto.OptConsensusBasis> },
+    repair_missing_proposal: { proc: 20, request: () => proto.codec.ConsensusValue as XdrCodec<proto.ConsensusValue>, response: () => proto.codec.OptProposal as XdrCodec<proto.OptProposal> },
     repair_missing_scp_envelopes: { proc: 30, request: () => proto.codec.SCPSlotIndex as XdrCodec<proto.SCPSlotIndex>, response: () => proto.codec.SCPEnvelopes as XdrCodec<proto.SCPEnvelopes> },
   },
 };

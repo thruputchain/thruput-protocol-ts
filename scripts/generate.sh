@@ -15,8 +15,8 @@ echo "-- Using XDRC=${XDRC} --" >&2
 core_protos=(
   types.x db_conflict.x contract.x exec_result.x event.x genesis.x transaction.x
   retrocausal_queue.x storage_cost.x syscall_error.x auth_claim.x
-  standard_asset_events.x address_auth.x storage_item.x precompiles.x block.x
-  invoke_flag.x network.x
+  standard_asset_events.x address_auth.x storage_item.x precompiles.x header.x
+  validator.x invoke_flag.x network.x
 )
 
 rpc_protos=(
@@ -24,7 +24,7 @@ rpc_protos=(
   wallet.x dogwood_rpc.x event_rpc.x auth_rpc.x test_rpc.x
   discovery.x config.x dogwood.x
   scp.x scp_config.x scp_control.x scp_handle.x
-  rpc_types.x parallel.x nomination.x db_sched.x exec_sched.x
+  rpc_types.x parallel.x proposal.x db_sched.x exec_sched.x
   consensus.x sched_coord.x coord_sched.x catchup.x repair.x loadgen.x
 )
 

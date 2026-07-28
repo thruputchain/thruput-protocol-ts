@@ -17,7 +17,7 @@ export * from "./scp_control.js";
 export * from "./scp_handle.js";
 export * from "./rpc_types.js";
 export * from "./parallel.js";
-export * from "./nomination.js";
+export * from "./proposal.js";
 export * from "./db_sched.js";
 export * from "./exec_sched.js";
 export * from "./consensus.js";
@@ -46,7 +46,7 @@ import { codec as scp_control_codec } from "./scp_control.js";
 import { codec as scp_handle_codec } from "./scp_handle.js";
 import { codec as rpc_types_codec } from "./rpc_types.js";
 import { codec as parallel_codec } from "./parallel.js";
-import { codec as nomination_codec } from "./nomination.js";
+import { codec as proposal_codec } from "./proposal.js";
 import { codec as db_sched_codec } from "./db_sched.js";
 import { codec as exec_sched_codec } from "./exec_sched.js";
 import { codec as consensus_codec } from "./consensus.js";
@@ -76,7 +76,7 @@ function _buildCodec() {
     ...scp_handle_codec,
     ...rpc_types_codec,
     ...parallel_codec,
-    ...nomination_codec,
+    ...proposal_codec,
     ...db_sched_codec,
     ...exec_sched_codec,
     ...consensus_codec,

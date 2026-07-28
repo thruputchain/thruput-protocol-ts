@@ -9,7 +9,7 @@ import * as proto from "./index.js";
 
 
 export interface AuthCard {
-  protocol: proto.Protocol;
+  protocol: proto.ProtocolCommit;
   upid: proto.UPID;
   address_for_db: proto.ServerAddress;
   address_for_mempool: proto.ServerAddress;
@@ -22,13 +22,13 @@ export interface AuthCard {
 
 const _AuthCard: XdrCodec<AuthCard> = {
   encode(w, val) {
-    proto.codec.Protocol.encode(w, val.protocol);
+    proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.UPID.encode(w, val.upid);
     proto.codec.ServerAddress.encode(w, val.address_for_db);
     proto.codec.ServerAddress.encode(w, val.address_for_mempool);
   },
   decode(r) {
-    const protocol = proto.codec.Protocol.decode(r);
+    const protocol = proto.codec.ProtocolCommit.decode(r);
     const upid = proto.codec.UPID.decode(r);
     const address_for_db = proto.codec.ServerAddress.decode(r);
     const address_for_mempool = proto.codec.ServerAddress.decode(r);

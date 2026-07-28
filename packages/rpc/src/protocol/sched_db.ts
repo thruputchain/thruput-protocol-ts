@@ -9,7 +9,7 @@ import * as proto from "./index.js";
 
 
 export interface ShardCard {
-  protocol: proto.Protocol;
+  protocol: proto.ProtocolCommit;
   upid: proto.UPID;
   block_height: proto.BlockHeight;
   address_for_exec: proto.ServerAddress;
@@ -35,7 +35,7 @@ export interface HogsTransferred {
 
 const _ShardCard: XdrCodec<ShardCard> = {
   encode(w, val) {
-    proto.codec.Protocol.encode(w, val.protocol);
+    proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.UPID.encode(w, val.upid);
     proto.codec.BlockHeight.encode(w, val.block_height);
     proto.codec.ServerAddress.encode(w, val.address_for_exec);
@@ -43,7 +43,7 @@ const _ShardCard: XdrCodec<ShardCard> = {
     proto.codec.ServerAddress.encode(w, val.address_for_auth);
   },
   decode(r) {
-    const protocol = proto.codec.Protocol.decode(r);
+    const protocol = proto.codec.ProtocolCommit.decode(r);
     const upid = proto.codec.UPID.decode(r);
     const block_height = proto.codec.BlockHeight.decode(r);
     const address_for_exec = proto.codec.ServerAddress.decode(r);

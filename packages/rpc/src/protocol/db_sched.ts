@@ -48,8 +48,13 @@ export type DbAddressAuthDataBatchResult =
   | { result: number }
 ;
 
+export interface DbBlockOk {
+  storage_hash: proto.StorageShortHash;
+  storage_long_hash: proto.StorageLongHash;
+}
+
 export type DbBlockResult =
-  | { result: proto.DbSchedResult.DbSchedResultOK; db_hash: proto.DbHash }
+  | { result: proto.DbSchedResult.DbSchedResultOK; block: proto.DbBlockOk }
   | { result: number }
 ;
 
@@ -76,15 +81,12 @@ export interface dbsched_create_snapshot_args {
 
 export interface dbsched_commit_snapshot_args {
   arg0: proto.BlockID;
-  arg1: proto.BlockHash;
-  arg2: proto.SHA256Hash;
+  arg1: proto.ConsensusValue;
 }
 
 export interface dbsched_load_genesis_configuration_args {
   arg0: proto.GenesisConfiguration;
-  arg1: bigint;
-  arg2: proto.SHA256Hash;
-  arg3: proto.SHA256Hash;
+  arg1: proto.ConsensusValue;
 }
 
 
@@ -169,17 +171,29 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
   },
 };
 
+const _DbBlockOk: XdrCodec<DbBlockOk> = {
+  encode(w, val) {
+    proto.codec.StorageShortHash.encode(w, val.storage_hash);
+    proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
+  },
+  decode(r) {
+    const storage_hash = proto.codec.StorageShortHash.decode(r);
+    const storage_long_hash = proto.codec.StorageLongHash.decode(r);
+    return { storage_hash, storage_long_hash };
+  },
+};
+
 const _DbBlockResult: XdrCodec<DbBlockResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: number; db_hash: proto.DbHash };
-        if (v.db_hash === undefined) {
-          throw new Error("DbBlockResult encode: db_hash is undefined");
+        const v = val as { result: number; block: proto.DbBlockOk };
+        if (v.block === undefined) {
+          throw new Error("DbBlockResult encode: block is undefined");
         }
-        proto.codec.DbHash.encode(w, v.db_hash);
+        proto.codec.DbBlockOk.encode(w, v.block);
         break;
       }
     }
@@ -188,8 +202,8 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
     const result = Number(r.readInt32());
     switch (result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        const db_hash = proto.codec.DbHash.decode(r);
-        return { result, db_hash };
+        const block = proto.codec.DbBlockOk.decode(r);
+        return { result, block };
       default:
         return { result };
     }
@@ -257,30 +271,24 @@ const _dbsched_create_snapshot_args: XdrCodec<dbsched_create_snapshot_args> = {
 const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
-    proto.codec.BlockHash.encode(w, val.arg1);
-    proto.codec.SHA256Hash.encode(w, val.arg2);
+    proto.codec.ConsensusValue.encode(w, val.arg1);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
-    const arg1 = proto.codec.BlockHash.decode(r);
-    const arg2 = proto.codec.SHA256Hash.decode(r);
-    return { arg0, arg1, arg2 };
+    const arg1 = proto.codec.ConsensusValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
 const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_configuration_args> = {
   encode(w, val) {
     proto.codec.GenesisConfiguration.encode(w, val.arg0);
-    w.writeUint64(val.arg1);
-    proto.codec.SHA256Hash.encode(w, val.arg2);
-    proto.codec.SHA256Hash.encode(w, val.arg3);
+    proto.codec.ConsensusValue.encode(w, val.arg1);
   },
   decode(r) {
     const arg0 = proto.codec.GenesisConfiguration.decode(r);
-    const arg1 = r.readUint64();
-    const arg2 = proto.codec.SHA256Hash.decode(r);
-    const arg3 = proto.codec.SHA256Hash.decode(r);
-    return { arg0, arg1, arg2, arg3 };
+    const arg1 = proto.codec.ConsensusValue.decode(r);
+    return { arg0, arg1 };
   },
 };
 
@@ -291,6 +299,7 @@ export const codec = {
   HogAgeResult: _HogAgeResult,
   HogAgeResults: _HogAgeResults,
   DbAddressAuthDataBatchResult: _DbAddressAuthDataBatchResult,
+  DbBlockOk: _DbBlockOk,
   DbBlockResult: _DbBlockResult,
   DbShardResult: _DbShardResult,
   DbTipResult: _DbTipResult,
