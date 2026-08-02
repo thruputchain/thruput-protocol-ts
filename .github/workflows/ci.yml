@@ -6,6 +6,8 @@ on:
   pull_request:
 
 jobs:
+  # Static checks are runtime-independent, so they run once on the version we
+  # develop against (keep in sync with .nvmrc). Only `test` needs the matrix.
   check:
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +15,7 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: "22"
+          node-version: "24"
           cache: npm
 
       - run: npm ci
@@ -21,11 +23,107 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Docs
+        run: npm run docs:check
+
+      - name: Build
+        run: npm run build
+
+  # We publish libraries, so the runtime is the consumer's choice, not ours.
+  # Test the edges of the supported range: Active LTS and Current (which
+  # catches deprecations before consumers hit them). Note that `22` here
+  # resolves to the latest 22.x, NOT the declared floor — see the `floor` job.
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "24", "26"]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Test
+        run: npm run test
+
+      # vitest transforms src/, so it can pass on a runtime that cannot load
+      # what we actually ship. Build and load dist/ to check the artifacts.
+      - name: Build
+        run: npm run build
+
+      - name: Smoke test
+        run: npm run test:smoke
+
+  # A major-only selector resolves to the newest release of that line, so the
+  # matrix above cannot catch a feature that landed mid-major: a consumer on
+  # the floor we advertise in engines.node would break while CI stayed green.
+  # This is not hypothetical — 5 of our 7 .cjs entry points fail below 22.12.0,
+  # where require() of an ES module is still flagged and @noble/hashes reaches
+  # the CJS build of @groundhogchain/protocol.
+  #
+  # The floor cannot build itself (tsdown requires ^22.18.0 || >=24), so build
+  # on the dev version, then swap the runtime down to the exact floor and
+  # reinstall without devDependencies. That is also the shape a consumer
+  # actually gets: our published artifacts, our production deps, nothing else.
+  floor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Switch to the declared engines.node floor
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22.12.0"
+
+      - name: Reinstall production dependencies only
+        run: npm ci --omit=dev
+
+      - run: node --version
+
+      - name: Smoke test
+        run: npm run test:smoke
+
+  # Node 27 (October 2026) collapses the odd/even split — every major becomes
+  # LTS — and adds a six-month alpha channel specifically so library authors
+  # can find breakage before their consumers do. Non-blocking, and main-only:
+  # an upstream nightly that is broken on arrival must not red-X the branch.
+  test-nightly:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "27-nightly"
+
+      - run: npm ci
+
       - name: Test
         run: npm run test
 
       - name: Build
         run: npm run build
+
+      - name: Smoke test
+        run: npm run test:smoke
 
   cross-sdk:
     runs-on: ubuntu-latest
@@ -38,7 +136,7 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: "22"
+          node-version: "24"
           cache: npm
 
       - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # master as of 2026-06

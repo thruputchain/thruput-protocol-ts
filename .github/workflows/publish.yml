@@ -15,7 +15,7 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
-          node-version: "22"
+          node-version: "24"
           cache: npm
           registry-url: "https://npm.pkg.github.com"
 
@@ -40,11 +40,23 @@ jobs:
           echo "All packages at version $VERSION"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
-      - name: Build
-        run: npm run build
+      # Same gate as CI's `check` and `test` jobs — a release is dispatched
+      # manually and can run on a commit CI never covered, so it re-verifies
+      # rather than trusting a green tick upstream.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Docs
+        run: npm run docs:check
 
       - name: Test
         run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Smoke test
+        run: npm run test:smoke
 
       - name: Tag commit with version
         id: tag

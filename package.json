@@ -7,6 +7,7 @@
     "docs": "typedoc",
     "docs:check": "typedoc --emit none",
     "test": "npm run test --workspaces",
+    "test:smoke": "node scripts/smoke-test.mjs",
     "typecheck": "npm run typecheck --workspaces"
   },
   "devDependencies": {
