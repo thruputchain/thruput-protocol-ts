@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from x23c commit: 2bb863900e285102907f789666495140afed7392
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, Uint32Codec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";

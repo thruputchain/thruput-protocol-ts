@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from x23c commit: 2bb863900e285102907f789666495140afed7392
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -67,7 +67,7 @@ export type ContractType =
 ;
 
 export interface ContractSignedTokenPreimage {
-  preimage_type: proto.ContractType;
+  preimage_type: proto.ContractType | null;
 }
 
 export interface ContractExceptionType {
@@ -333,10 +333,10 @@ const _ContractType: XdrCodec<ContractType> = {
 
 const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
   encode(w, val) {
-    proto.codec.ContractType.encode(w, val.preimage_type);
+    OptionCodec(_ContractType).encode(w, val.preimage_type);
   },
   decode(r) {
-    const preimage_type = proto.codec.ContractType.decode(r);
+    const preimage_type = OptionCodec(_ContractType).decode(r);
     return { preimage_type };
   },
 };
