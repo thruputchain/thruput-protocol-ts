@@ -10,6 +10,7 @@ import * as proto from "./index.js";
 export enum HogexecPrecompiledNativeContracts {
   kNativeContractHogToken = 0,
   kNativeContractInitialTokenClaim = 1,
+  kNativeContractDefaultWallet = 2,
 }
 
 
