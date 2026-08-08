@@ -28,6 +28,7 @@ export function initialConfigurationList(val: proto.InitialConfigurationEntry[])
 export interface GenesisConfiguration {
   initial_config: proto.InitialConfigurationList;
   storage_cost_model: proto.StorageCostModelXdr;
+  default_wallet: proto.DeployedContractHash;
 }
 
 export enum GenesisContractAddresses {
@@ -75,11 +76,13 @@ const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
   encode(w, val) {
     proto.codec.InitialConfigurationList.encode(w, val.initial_config);
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
+    proto.codec.DeployedContractHash.encode(w, val.default_wallet);
   },
   decode(r) {
     const initial_config = proto.codec.InitialConfigurationList.decode(r);
     const storage_cost_model = proto.codec.StorageCostModelXdr.decode(r);
-    return { initial_config, storage_cost_model };
+    const default_wallet = proto.codec.DeployedContractHash.decode(r);
+    return { initial_config, storage_cost_model, default_wallet };
   },
 };
 
