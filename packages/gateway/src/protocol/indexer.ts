@@ -143,27 +143,119 @@ export function txEventLogBatch(val: proto.TxEventLog[]): TxEventLogBatch {
   return val as TxEventLogBatch;
 }
 
-
-export interface indexer_event_process_events_args {
-  arg0: proto.BlockHeight;
-  arg1: proto.TxEventLogBatch;
-  arg2: proto.ProposedTransactionBatch;
-}
-
-export interface indexer_event_report_tx_failure_args {
-  arg0: proto.SignedTransactionHash;
-  arg1: proto.TxFailureDiagnostic;
-}
-
-export interface IndexerCard {
+export interface IndexerOutboxOrigin {
   protocol: proto.ProtocolCommit;
-  address_for_event: proto.ServerAddress;
+  epoch_sequence: bigint;
+  first_height: proto.BlockHeight;
+  first_prev_hash: proto.ConsensusValueHash;
 }
 
-export enum EventIndexerIntroOutcome {
-  EventIntroSuccess = 0,
-  EventIntroMismatchedProtocol = 1,
-  EventIntroConnectFailed = 2,
+export interface IndexerCommittedBlockPayload {
+  format_version: bigint;
+  consensus_value: proto.ConsensusValue;
+  proposal_txs: proto.ProposalTxs;
+  event_logs: proto.TxEventLogBatch;
+  tx_bodies: proto.ProposedTransactionBatch;
+}
+
+export interface IndexerCommittedBlockIdentity {
+  consensus_hash: proto.ConsensusValueHash;
+  payload_digest: proto.SHA256Hash;
+}
+
+export interface IndexerCommittedBlock {
+  payload: proto.IndexerCommittedBlockPayload;
+  identity: proto.IndexerCommittedBlockIdentity;
+}
+
+export interface IndexerInitializedProgress {
+  origin: proto.IndexerOutboxOrigin;
+  contiguous_height: proto.BlockHeight;
+  last_consensus_hash: proto.ConsensusValueHash;
+  last_payload_digest: proto.SHA256Hash;
+}
+
+export enum IndexerProgressState {
+  IndexerProgressUninitialized = 0,
+  IndexerProgressInitialized = 1,
+}
+
+export type IndexerProgress =
+  | { state: proto.IndexerProgressState.IndexerProgressInitialized; initialized: proto.IndexerInitializedProgress }
+  | { state: number }
+;
+
+export type IndexerFailureMessage = string & { readonly __brand: "IndexerFailureMessage" };
+export function indexerFailureMessage(val: string): IndexerFailureMessage {
+  return val as IndexerFailureMessage;
+}
+
+export enum IndexerEpochOutcome {
+  IndexerEpochInitialized = 0,
+  IndexerEpochUnchanged = 1,
+  IndexerEpochConflict = 2,
+  IndexerEpochInternalFailure = 3,
+}
+
+export type IndexerEpochResult =
+  | { outcome: proto.IndexerEpochOutcome.IndexerEpochInitialized; progress: proto.IndexerInitializedProgress }
+  | { outcome: proto.IndexerEpochOutcome.IndexerEpochUnchanged; progress: proto.IndexerInitializedProgress }
+  | { outcome: number; diagnostic: proto.IndexerFailureMessage }
+;
+
+export interface IndexerHeightGap {
+  expected_height: proto.BlockHeight;
+}
+
+export enum IndexerBlockApplyOutcome {
+  IndexerBlockApplied = 0,
+  IndexerBlockDuplicate = 1,
+  IndexerBlockGap = 2,
+  IndexerBlockOriginMismatch = 3,
+  IndexerBlockContentConflict = 4,
+  IndexerBlockInternalFailure = 5,
+}
+
+export type IndexerBlockApplyResult =
+  | { outcome: proto.IndexerBlockApplyOutcome.IndexerBlockApplied; progress: proto.IndexerInitializedProgress }
+  | { outcome: proto.IndexerBlockApplyOutcome.IndexerBlockDuplicate; progress: proto.IndexerInitializedProgress }
+  | { outcome: proto.IndexerBlockApplyOutcome.IndexerBlockGap; gap: proto.IndexerHeightGap }
+  | { outcome: number; diagnostic: proto.IndexerFailureMessage }
+;
+
+export interface EventIndexerPullRequest {
+  protocol: proto.ProtocolCommit;
+  progress: proto.IndexerProgress;
+}
+
+export interface EventIndexerPulledBlock {
+  origin: proto.IndexerOutboxOrigin;
+  block: proto.IndexerCommittedBlock;
+}
+
+export enum EventIndexerPullOutcome {
+  EventIndexerPullBlock = 0,
+  EventIndexerPullCaughtUp = 1,
+  EventIndexerPullNotReady = 2,
+  EventIndexerPullMismatchedProtocol = 3,
+  EventIndexerPullProgressConflict = 4,
+  EventIndexerPullInternalFailure = 5,
+}
+
+export type EventIndexerPullResult =
+  | { outcome: proto.EventIndexerPullOutcome.EventIndexerPullBlock; pulled_block: proto.EventIndexerPulledBlock }
+  | { outcome: proto.EventIndexerPullOutcome.EventIndexerPullCaughtUp; origin: proto.IndexerOutboxOrigin }
+  | { outcome: number; diagnostic: proto.IndexerFailureMessage }
+;
+
+export interface IndexerTxFailureNotice {
+  tx_hash: proto.SignedTransactionHash;
+  diagnostic: proto.TxFailureDiagnostic;
+}
+
+export type IndexerTxFailureNoticeBatch = proto.IndexerTxFailureNotice[] & { readonly __brand: "IndexerTxFailureNoticeBatch" };
+export function indexerTxFailureNoticeBatch(val: proto.IndexerTxFailureNotice[]): IndexerTxFailureNoticeBatch {
+  return val as IndexerTxFailureNoticeBatch;
 }
 
 
@@ -433,48 +525,315 @@ const _IndexerBlockExplorerIntroOutcome: XdrCodec<IndexerBlockExplorerIntroOutco
 
 const _TxEventLogBatch = VarArrayCodec(() => proto.codec.TxEventLog, Number(0xFFFFFFFF)) as XdrCodec<TxEventLogBatch>;
 
-const _indexer_event_process_events_args: XdrCodec<indexer_event_process_events_args> = {
-  encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.arg0);
-    proto.codec.TxEventLogBatch.encode(w, val.arg1);
-    proto.codec.ProposedTransactionBatch.encode(w, val.arg2);
-  },
-  decode(r) {
-    const arg0 = proto.codec.BlockHeight.decode(r);
-    const arg1 = proto.codec.TxEventLogBatch.decode(r);
-    const arg2 = proto.codec.ProposedTransactionBatch.decode(r);
-    return { arg0, arg1, arg2 };
-  },
-};
-
-const _indexer_event_report_tx_failure_args: XdrCodec<indexer_event_report_tx_failure_args> = {
-  encode(w, val) {
-    proto.codec.SignedTransactionHash.encode(w, val.arg0);
-    proto.codec.TxFailureDiagnostic.encode(w, val.arg1);
-  },
-  decode(r) {
-    const arg0 = proto.codec.SignedTransactionHash.decode(r);
-    const arg1 = proto.codec.TxFailureDiagnostic.decode(r);
-    return { arg0, arg1 };
-  },
-};
-
-const _IndexerCard: XdrCodec<IndexerCard> = {
+const _IndexerOutboxOrigin: XdrCodec<IndexerOutboxOrigin> = {
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
-    proto.codec.ServerAddress.encode(w, val.address_for_event);
+    w.writeUint64(val.epoch_sequence);
+    proto.codec.BlockHeight.encode(w, val.first_height);
+    proto.codec.ConsensusValueHash.encode(w, val.first_prev_hash);
   },
   decode(r) {
     const protocol = proto.codec.ProtocolCommit.decode(r);
-    const address_for_event = proto.codec.ServerAddress.decode(r);
-    return { protocol, address_for_event };
+    const epoch_sequence = r.readUint64();
+    const first_height = proto.codec.BlockHeight.decode(r);
+    const first_prev_hash = proto.codec.ConsensusValueHash.decode(r);
+    return { protocol, epoch_sequence, first_height, first_prev_hash };
   },
 };
 
-const _EventIndexerIntroOutcome: XdrCodec<EventIndexerIntroOutcome> = {
-  encode(w, val) { w.writeInt32(BigInt(val)); },
-  decode(r) { return Number(r.readInt32()) as EventIndexerIntroOutcome; },
+const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = {
+  encode(w, val) {
+    w.writeUint32(val.format_version);
+    proto.codec.ConsensusValue.encode(w, val.consensus_value);
+    proto.codec.ProposalTxs.encode(w, val.proposal_txs);
+    proto.codec.TxEventLogBatch.encode(w, val.event_logs);
+    proto.codec.ProposedTransactionBatch.encode(w, val.tx_bodies);
+  },
+  decode(r) {
+    const format_version = r.readUint32();
+    const consensus_value = proto.codec.ConsensusValue.decode(r);
+    const proposal_txs = proto.codec.ProposalTxs.decode(r);
+    const event_logs = proto.codec.TxEventLogBatch.decode(r);
+    const tx_bodies = proto.codec.ProposedTransactionBatch.decode(r);
+    return { format_version, consensus_value, proposal_txs, event_logs, tx_bodies };
+  },
 };
+
+const _IndexerCommittedBlockIdentity: XdrCodec<IndexerCommittedBlockIdentity> = {
+  encode(w, val) {
+    proto.codec.ConsensusValueHash.encode(w, val.consensus_hash);
+    proto.codec.SHA256Hash.encode(w, val.payload_digest);
+  },
+  decode(r) {
+    const consensus_hash = proto.codec.ConsensusValueHash.decode(r);
+    const payload_digest = proto.codec.SHA256Hash.decode(r);
+    return { consensus_hash, payload_digest };
+  },
+};
+
+const _IndexerCommittedBlock: XdrCodec<IndexerCommittedBlock> = {
+  encode(w, val) {
+    proto.codec.IndexerCommittedBlockPayload.encode(w, val.payload);
+    proto.codec.IndexerCommittedBlockIdentity.encode(w, val.identity);
+  },
+  decode(r) {
+    const payload = proto.codec.IndexerCommittedBlockPayload.decode(r);
+    const identity = proto.codec.IndexerCommittedBlockIdentity.decode(r);
+    return { payload, identity };
+  },
+};
+
+const _IndexerInitializedProgress: XdrCodec<IndexerInitializedProgress> = {
+  encode(w, val) {
+    proto.codec.IndexerOutboxOrigin.encode(w, val.origin);
+    proto.codec.BlockHeight.encode(w, val.contiguous_height);
+    proto.codec.ConsensusValueHash.encode(w, val.last_consensus_hash);
+    proto.codec.SHA256Hash.encode(w, val.last_payload_digest);
+  },
+  decode(r) {
+    const origin = proto.codec.IndexerOutboxOrigin.decode(r);
+    const contiguous_height = proto.codec.BlockHeight.decode(r);
+    const last_consensus_hash = proto.codec.ConsensusValueHash.decode(r);
+    const last_payload_digest = proto.codec.SHA256Hash.decode(r);
+    return { origin, contiguous_height, last_consensus_hash, last_payload_digest };
+  },
+};
+
+const _IndexerProgressState: XdrCodec<IndexerProgressState> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as IndexerProgressState; },
+};
+
+const _IndexerProgress: XdrCodec<IndexerProgress> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.state));
+    switch (val.state) {
+      case proto.IndexerProgressState.IndexerProgressInitialized:
+      {
+        const v = val as { state: number; initialized: proto.IndexerInitializedProgress };
+        if (v.initialized === undefined) {
+          throw new Error("IndexerProgress encode: initialized is undefined");
+        }
+        proto.codec.IndexerInitializedProgress.encode(w, v.initialized);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const state = Number(r.readInt32());
+    switch (state) {
+      case proto.IndexerProgressState.IndexerProgressInitialized:
+        const initialized = proto.codec.IndexerInitializedProgress.decode(r);
+        return { state, initialized };
+      default:
+        return { state };
+    }
+  },
+};
+
+const _IndexerFailureMessage: XdrCodec<IndexerFailureMessage> = {
+  encode(w, val) { w.writeString(val, Number(1024)); },
+  decode(r) { return indexerFailureMessage(r.readString(Number(1024))); },
+};
+
+const _IndexerEpochOutcome: XdrCodec<IndexerEpochOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as IndexerEpochOutcome; },
+};
+
+const _IndexerEpochResult: XdrCodec<IndexerEpochResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.IndexerEpochOutcome.IndexerEpochInitialized:
+      case proto.IndexerEpochOutcome.IndexerEpochUnchanged:
+      {
+        const v = val as { outcome: number; progress: proto.IndexerInitializedProgress };
+        if (v.progress === undefined) {
+          throw new Error("IndexerEpochResult encode: progress is undefined");
+        }
+        proto.codec.IndexerInitializedProgress.encode(w, v.progress);
+        break;
+      }
+      default: {
+        const v = val as { outcome: number; diagnostic: proto.IndexerFailureMessage };
+        if (v.diagnostic === undefined) {
+          throw new Error("IndexerEpochResult encode: default arm but diagnostic is undefined");
+        }
+        proto.codec.IndexerFailureMessage.encode(w, v.diagnostic);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.IndexerEpochOutcome.IndexerEpochInitialized:
+      case proto.IndexerEpochOutcome.IndexerEpochUnchanged:
+        const progress = proto.codec.IndexerInitializedProgress.decode(r);
+        return { outcome, progress };
+      default:
+        const diagnostic = proto.codec.IndexerFailureMessage.decode(r);
+        return { outcome, diagnostic };
+    }
+  },
+};
+
+const _IndexerHeightGap: XdrCodec<IndexerHeightGap> = {
+  encode(w, val) {
+    proto.codec.BlockHeight.encode(w, val.expected_height);
+  },
+  decode(r) {
+    const expected_height = proto.codec.BlockHeight.decode(r);
+    return { expected_height };
+  },
+};
+
+const _IndexerBlockApplyOutcome: XdrCodec<IndexerBlockApplyOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as IndexerBlockApplyOutcome; },
+};
+
+const _IndexerBlockApplyResult: XdrCodec<IndexerBlockApplyResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.IndexerBlockApplyOutcome.IndexerBlockApplied:
+      case proto.IndexerBlockApplyOutcome.IndexerBlockDuplicate:
+      {
+        const v = val as { outcome: number; progress: proto.IndexerInitializedProgress };
+        if (v.progress === undefined) {
+          throw new Error("IndexerBlockApplyResult encode: progress is undefined");
+        }
+        proto.codec.IndexerInitializedProgress.encode(w, v.progress);
+        break;
+      }
+      case proto.IndexerBlockApplyOutcome.IndexerBlockGap:
+      {
+        const v = val as { outcome: number; gap: proto.IndexerHeightGap };
+        if (v.gap === undefined) {
+          throw new Error("IndexerBlockApplyResult encode: gap is undefined");
+        }
+        proto.codec.IndexerHeightGap.encode(w, v.gap);
+        break;
+      }
+      default: {
+        const v = val as { outcome: number; diagnostic: proto.IndexerFailureMessage };
+        if (v.diagnostic === undefined) {
+          throw new Error("IndexerBlockApplyResult encode: default arm but diagnostic is undefined");
+        }
+        proto.codec.IndexerFailureMessage.encode(w, v.diagnostic);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.IndexerBlockApplyOutcome.IndexerBlockApplied:
+      case proto.IndexerBlockApplyOutcome.IndexerBlockDuplicate:
+        const progress = proto.codec.IndexerInitializedProgress.decode(r);
+        return { outcome, progress };
+      case proto.IndexerBlockApplyOutcome.IndexerBlockGap:
+        const gap = proto.codec.IndexerHeightGap.decode(r);
+        return { outcome, gap };
+      default:
+        const diagnostic = proto.codec.IndexerFailureMessage.decode(r);
+        return { outcome, diagnostic };
+    }
+  },
+};
+
+const _EventIndexerPullRequest: XdrCodec<EventIndexerPullRequest> = {
+  encode(w, val) {
+    proto.codec.ProtocolCommit.encode(w, val.protocol);
+    proto.codec.IndexerProgress.encode(w, val.progress);
+  },
+  decode(r) {
+    const protocol = proto.codec.ProtocolCommit.decode(r);
+    const progress = proto.codec.IndexerProgress.decode(r);
+    return { protocol, progress };
+  },
+};
+
+const _EventIndexerPulledBlock: XdrCodec<EventIndexerPulledBlock> = {
+  encode(w, val) {
+    proto.codec.IndexerOutboxOrigin.encode(w, val.origin);
+    proto.codec.IndexerCommittedBlock.encode(w, val.block);
+  },
+  decode(r) {
+    const origin = proto.codec.IndexerOutboxOrigin.decode(r);
+    const block = proto.codec.IndexerCommittedBlock.decode(r);
+    return { origin, block };
+  },
+};
+
+const _EventIndexerPullOutcome: XdrCodec<EventIndexerPullOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as EventIndexerPullOutcome; },
+};
+
+const _EventIndexerPullResult: XdrCodec<EventIndexerPullResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.EventIndexerPullOutcome.EventIndexerPullBlock:
+      {
+        const v = val as { outcome: number; pulled_block: proto.EventIndexerPulledBlock };
+        if (v.pulled_block === undefined) {
+          throw new Error("EventIndexerPullResult encode: pulled_block is undefined");
+        }
+        proto.codec.EventIndexerPulledBlock.encode(w, v.pulled_block);
+        break;
+      }
+      case proto.EventIndexerPullOutcome.EventIndexerPullCaughtUp:
+      {
+        const v = val as { outcome: number; origin: proto.IndexerOutboxOrigin };
+        if (v.origin === undefined) {
+          throw new Error("EventIndexerPullResult encode: origin is undefined");
+        }
+        proto.codec.IndexerOutboxOrigin.encode(w, v.origin);
+        break;
+      }
+      default: {
+        const v = val as { outcome: number; diagnostic: proto.IndexerFailureMessage };
+        if (v.diagnostic === undefined) {
+          throw new Error("EventIndexerPullResult encode: default arm but diagnostic is undefined");
+        }
+        proto.codec.IndexerFailureMessage.encode(w, v.diagnostic);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.EventIndexerPullOutcome.EventIndexerPullBlock:
+        const pulled_block = proto.codec.EventIndexerPulledBlock.decode(r);
+        return { outcome, pulled_block };
+      case proto.EventIndexerPullOutcome.EventIndexerPullCaughtUp:
+        const origin = proto.codec.IndexerOutboxOrigin.decode(r);
+        return { outcome, origin };
+      default:
+        const diagnostic = proto.codec.IndexerFailureMessage.decode(r);
+        return { outcome, diagnostic };
+    }
+  },
+};
+
+const _IndexerTxFailureNotice: XdrCodec<IndexerTxFailureNotice> = {
+  encode(w, val) {
+    proto.codec.SignedTransactionHash.encode(w, val.tx_hash);
+    proto.codec.TxFailureDiagnostic.encode(w, val.diagnostic);
+  },
+  decode(r) {
+    const tx_hash = proto.codec.SignedTransactionHash.decode(r);
+    const diagnostic = proto.codec.TxFailureDiagnostic.decode(r);
+    return { tx_hash, diagnostic };
+  },
+};
+
+const _IndexerTxFailureNoticeBatch = VarArrayCodec(() => proto.codec.IndexerTxFailureNotice, Number(256)) as XdrCodec<IndexerTxFailureNoticeBatch>;
 
 export const codec = {
   TxInfo: _TxInfo,
@@ -499,8 +858,25 @@ export const codec = {
   TransactionRefPage: _TransactionRefPage,
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
-  IndexerCard: _IndexerCard,
-  EventIndexerIntroOutcome: _EventIndexerIntroOutcome,
+  IndexerOutboxOrigin: _IndexerOutboxOrigin,
+  IndexerCommittedBlockPayload: _IndexerCommittedBlockPayload,
+  IndexerCommittedBlockIdentity: _IndexerCommittedBlockIdentity,
+  IndexerCommittedBlock: _IndexerCommittedBlock,
+  IndexerInitializedProgress: _IndexerInitializedProgress,
+  IndexerProgressState: _IndexerProgressState,
+  IndexerProgress: _IndexerProgress,
+  IndexerFailureMessage: _IndexerFailureMessage,
+  IndexerEpochOutcome: _IndexerEpochOutcome,
+  IndexerEpochResult: _IndexerEpochResult,
+  IndexerHeightGap: _IndexerHeightGap,
+  IndexerBlockApplyOutcome: _IndexerBlockApplyOutcome,
+  IndexerBlockApplyResult: _IndexerBlockApplyResult,
+  EventIndexerPullRequest: _EventIndexerPullRequest,
+  EventIndexerPulledBlock: _EventIndexerPulledBlock,
+  EventIndexerPullOutcome: _EventIndexerPullOutcome,
+  EventIndexerPullResult: _EventIndexerPullResult,
+  IndexerTxFailureNotice: _IndexerTxFailureNotice,
+  IndexerTxFailureNoticeBatch: _IndexerTxFailureNoticeBatch,
 } as const;
 
 export const IndexerBlockExplorerProgram: RpcProgramMeta = {
@@ -517,20 +893,12 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
   },
 };
 
-export const IndexerEventProgram: RpcProgramMeta = {
-  programId: 0x4321aaab,
-  version: 1,
-  methods: {
-    indexer_event_process_events: { proc: 0, request: () => _indexer_event_process_events_args, response: () => VoidCodec },
-    indexer_event_report_tx_failure: { proc: 1, request: () => _indexer_event_report_tx_failure_args, response: () => VoidCodec },
-  },
-};
-
 export const EventIndexerProgram: RpcProgramMeta = {
   programId: 0x4321aaac,
   version: 1,
   methods: {
-    event_indexer_intro: { proc: 0, request: () => _IndexerCard, response: () => _EventIndexerIntroOutcome },
+    event_indexer_pull_next: { proc: 10, request: () => _EventIndexerPullRequest, response: () => _EventIndexerPullResult },
+    event_indexer_pull_tx_failures: { proc: 11, request: () => VoidCodec, response: () => _IndexerTxFailureNoticeBatch },
   },
 };
 
