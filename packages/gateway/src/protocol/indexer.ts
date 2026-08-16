@@ -671,7 +671,7 @@ const _IndexerEpochResult: XdrCodec<IndexerEpochResult> = {
       case proto.IndexerEpochOutcome.IndexerEpochInitialized:
       case proto.IndexerEpochOutcome.IndexerEpochUnchanged:
         const progress = proto.codec.IndexerInitializedProgress.decode(r);
-        return { outcome, progress };
+        return { outcome, progress } as IndexerEpochResult;
       default:
         const diagnostic = proto.codec.IndexerFailureMessage.decode(r);
         return { outcome, diagnostic };
@@ -733,7 +733,7 @@ const _IndexerBlockApplyResult: XdrCodec<IndexerBlockApplyResult> = {
       case proto.IndexerBlockApplyOutcome.IndexerBlockApplied:
       case proto.IndexerBlockApplyOutcome.IndexerBlockDuplicate:
         const progress = proto.codec.IndexerInitializedProgress.decode(r);
-        return { outcome, progress };
+        return { outcome, progress } as IndexerBlockApplyResult;
       case proto.IndexerBlockApplyOutcome.IndexerBlockGap:
         const gap = proto.codec.IndexerHeightGap.decode(r);
         return { outcome, gap };
