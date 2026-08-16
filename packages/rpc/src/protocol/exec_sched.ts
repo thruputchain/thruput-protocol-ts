@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 2bb863900e285102907f789666495140afed7392
+// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -75,7 +75,7 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
       case proto.ExecResult.ExecResultTxDeterministicError:
       case proto.ExecResult.ExecResultTxRootFrameReverted:
         const proposal_data = proto.codec.NondeterministicProposalData.decode(r);
-        return { result, proposal_data };
+        return { result, proposal_data } as ExecProposeResult;
       default:
         return { result };
     }
