@@ -30,6 +30,12 @@ export type EventBlockResult =
 export interface eventsched_close_block_args {
   arg0: proto.BlockID;
   arg1: proto.BlockHeight;
+  arg2: proto.ProposalTxs;
+}
+
+export interface eventsched_commit_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.ConsensusValue;
 }
 
 
@@ -96,10 +102,24 @@ const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = {
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockHeight.encode(w, val.arg1);
+    proto.codec.ProposalTxs.encode(w, val.arg2);
   },
   decode(r) {
     const arg0 = proto.codec.BlockID.decode(r);
     const arg1 = proto.codec.BlockHeight.decode(r);
+    const arg2 = proto.codec.ProposalTxs.decode(r);
+    return { arg0, arg1, arg2 };
+  },
+};
+
+const _eventsched_commit_block_args: XdrCodec<eventsched_commit_block_args> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.ConsensusValue.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
 };
@@ -127,7 +147,8 @@ export const EventSchedProgram: RpcProgramMeta = {
     eventsched_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
     eventsched_open_block: { proc: 10, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
     eventsched_close_block: { proc: 30, request: () => _eventsched_close_block_args, response: () => _EventBlockResult },
-    eventsched_commit_block: { proc: 31, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventsched_commit_block: { proc: 31, request: () => _eventsched_commit_block_args, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
+    eventsched_confirm_committed_block: { proc: 32, request: () => proto.codec.ConsensusValue as XdrCodec<proto.ConsensusValue>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
     eventsched_abandon_block: { proc: 40, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.RPCError as XdrCodec<proto.RPCError> },
   },
 };
