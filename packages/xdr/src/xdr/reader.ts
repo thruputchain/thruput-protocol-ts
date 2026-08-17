@@ -85,7 +85,9 @@ export class XdrReader implements IReader {
   readFixedOpaque(len: number): Uint8Array {
     const padded = (len + 3) & ~3;
     this.ensure(padded);
-    const result = this.data.slice(this.pos, this.pos + len);
+    // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
+    // returns an aliasing view, and this.data may be a Buffer.
+    const result = new Uint8Array(this.data.subarray(this.pos, this.pos + len));
     this.pos += padded;
     return result;
   }
