@@ -1,4 +1,5 @@
 import type { IReader } from "./codec.js";
+import { paddedLen } from "./padding.js";
 
 const textDecoder = new TextDecoder();
 
@@ -106,8 +107,4 @@ export class XdrReader implements IReader {
     const bytes = this.readVarOpaque(max);
     return textDecoder.decode(bytes);
   }
-}
-
-function paddedLen(len: number): number {
-  return len + ((4 - (len % 4)) % 4);
 }
