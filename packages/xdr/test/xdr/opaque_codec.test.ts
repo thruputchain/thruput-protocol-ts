@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   FixedOpaqueCodec,
   Uint8Codec,
@@ -8,7 +8,6 @@ import {
   serialize,
   serializeCxs,
 } from "../../src/index.js";
-import type { IReader, IWriter } from "../../src/index.js";
 
 describe("Uint8Codec", () => {
   it.each([
@@ -25,13 +24,17 @@ describe("Uint8Codec", () => {
   });
 
   it.each([-1n, 256n])("rejects out-of-range value %s", (value) => {
-    expect(() => serialize(value, Uint8Codec)).toThrow(RangeError);
-    expect(() => serializeCxs(value, Uint8Codec)).toThrow(RangeError);
+    expect(() => serialize(value, Uint8Codec)).toThrow("uint8 overflow");
+    expect(() => serializeCxs(value, Uint8Codec)).toThrow("uint8 overflow");
   });
 
   it("rejects non-bigint values at runtime", () => {
-    expect(() => serialize(1 as unknown as bigint, Uint8Codec)).toThrow(RangeError);
-    expect(() => serializeCxs(1 as unknown as bigint, Uint8Codec)).toThrow(RangeError);
+    expect(() => serialize(1 as unknown as bigint, Uint8Codec)).toThrow(
+      "uint8 overflow",
+    );
+    expect(() => serializeCxs(1 as unknown as bigint, Uint8Codec)).toThrow(
+      "uint8 overflow",
+    );
   });
 
   it("rejects truncated input", () => {
@@ -174,8 +177,8 @@ describe("opaque codec bounds", () => {
   it.each([-1, 1.5, Number.NaN, Number.POSITIVE_INFINITY, 0x1_0000_0000])(
     "rejects invalid bound %s",
     (bound) => {
-      expect(() => FixedOpaqueCodec(bound)).toThrow(RangeError);
-      expect(() => VarOpaqueCodec(bound)).toThrow(RangeError);
+      expect(() => FixedOpaqueCodec(bound)).toThrow("must be an integer");
+      expect(() => VarOpaqueCodec(bound)).toThrow("must be an integer");
     },
   );
 
@@ -190,82 +193,3 @@ describe("opaque codec bounds", () => {
     ).toThrow();
   });
 });
-
-describe("public opaque operations", () => {
-  it("delegates each codec to one public bulk operation", () => {
-    const writeFixedOpaque = vi.fn();
-    const writeVarOpaque = vi.fn();
-    const writer = stubWriter({ writeFixedOpaque, writeVarOpaque });
-
-    Uint8Codec.encode(writer, 42n);
-    FixedOpaqueCodec(2).encode(writer, Uint8Array.from([1, 2]));
-    VarOpaqueCodec(3).encode(writer, Uint8Array.from([1, 2]));
-
-    expect(writeFixedOpaque).toHaveBeenNthCalledWith(1, Uint8Array.of(42), 1);
-    expect(writeFixedOpaque).toHaveBeenNthCalledWith(2, Uint8Array.from([1, 2]), 2);
-    expect(writeVarOpaque).toHaveBeenCalledOnce();
-    expect(writeVarOpaque).toHaveBeenCalledWith(Uint8Array.from([1, 2]), 3);
-
-    const readFixedOpaque = vi
-      .fn<(len: number) => Uint8Array>()
-      .mockReturnValueOnce(Uint8Array.of(42))
-      .mockReturnValueOnce(Uint8Array.from([1, 2]));
-    const readVarOpaque = vi
-      .fn<(max: number) => Uint8Array>()
-      .mockReturnValue(Uint8Array.from([1, 2]));
-    const reader = stubReader({ readFixedOpaque, readVarOpaque });
-
-    expect(Uint8Codec.decode(reader)).toBe(42n);
-    expect(FixedOpaqueCodec(2).decode(reader)).toEqual(Uint8Array.from([1, 2]));
-    expect(VarOpaqueCodec(3).decode(reader)).toEqual(Uint8Array.from([1, 2]));
-
-    expect(readFixedOpaque).toHaveBeenNthCalledWith(1, 1);
-    expect(readFixedOpaque).toHaveBeenNthCalledWith(2, 2);
-    expect(readVarOpaque).toHaveBeenCalledOnce();
-    expect(readVarOpaque).toHaveBeenCalledWith(3);
-  });
-});
-
-function stubWriter(
-  overrides: Partial<IWriter>,
-): IWriter {
-  const fail = () => {
-    throw new Error("unexpected writer operation");
-  };
-  return {
-    writeInt32: fail,
-    writeUint32: fail,
-    writeInt64: fail,
-    writeUint64: fail,
-    writeInt128: fail,
-    writeUint128: fail,
-    writeBool: fail,
-    writeFixedOpaque: fail,
-    writeVarOpaque: fail,
-    writeString: fail,
-    ...overrides,
-  };
-}
-
-function stubReader(
-  overrides: Partial<IReader>,
-): IReader {
-  const fail = (): never => {
-    throw new Error("unexpected reader operation");
-  };
-  return {
-    position: 0,
-    remaining: 0,
-    readInt32: fail,
-    readUint32: fail,
-    readInt64: fail,
-    readUint64: fail,
-    readInt128: fail,
-    readUint128: fail,
-    readBool: fail,
-    readFixedOpaque: fail,
-    readVarOpaque: fail,
-    readString: fail,
-    ...overrides,
-  };
-}

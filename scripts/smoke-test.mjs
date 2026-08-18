@@ -19,8 +19,8 @@ const packagesDir = new URL("packages/", root);
 const failures = [];
 let checked = 0;
 const requiredExports = {
-  "@groundhogchain/protocol": {
-    ".": ["HOG_ADDRESS"],
+  "@groundhogchain/xdr": {
+    ".": ["Uint8Codec", "FixedOpaqueCodec", "VarOpaqueCodec"],
   },
 };
 
