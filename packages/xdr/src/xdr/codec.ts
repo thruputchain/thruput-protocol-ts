@@ -46,9 +46,9 @@ export interface IReader {
   readUint128(): bigint;
   /** Read a boolean value. */
   readBool(): boolean;
-  /** Read exactly `len` opaque bytes. */
+  /** Read exactly `len` opaque bytes into a caller-owned copy. */
   readFixedOpaque(len: number): Uint8Array;
-  /** Read length-prefixed opaque bytes bounded by `max`. */
+  /** Read length-prefixed opaque bytes bounded by `max` into a caller-owned copy. */
   readVarOpaque(max: number): Uint8Array;
   /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
   readString(max: number): string;

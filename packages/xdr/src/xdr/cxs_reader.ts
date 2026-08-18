@@ -185,15 +185,17 @@ export class CxsReader implements IReader {
   }
 
   // No padding in CXS
-  /** Read fixed-length opaque bytes without padding. */
+  /** Read fixed-length opaque bytes without padding into a caller-owned copy. */
   readFixedOpaque(len: number): Uint8Array {
     this.ensure(len);
-    const result = this.data.subarray(this.pos, this.pos + len);
+    // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
+    // returns an aliasing view, and this.data may be a Buffer.
+    const result = new Uint8Array(this.data.subarray(this.pos, this.pos + len));
     this.pos += len;
     return result;
   }
 
-  /** Read length-prefixed opaque bytes bounded by `max`. */
+  /** Read length-prefixed opaque bytes bounded by `max` into a caller-owned copy. */
   readVarOpaque(max: number): Uint8Array {
     const len = Number(this.readUint32());
     if (len > max) {
