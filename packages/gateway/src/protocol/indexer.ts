@@ -101,7 +101,7 @@ export interface TransactionPage {
 }
 
 export interface TransactionRef {
-  tx_hash: proto.SignedTransactionHash;
+  tx_hash: proto.TransactionHash;
   height: proto.BlockHeight;
 }
 
@@ -249,7 +249,7 @@ export type EventIndexerPullResult =
 ;
 
 export interface IndexerTxFailureNotice {
-  tx_hash: proto.SignedTransactionHash;
+  tx_hash: proto.TransactionHash;
   diagnostic: proto.TxFailureDiagnostic;
 }
 
@@ -456,11 +456,11 @@ const _TransactionPage: XdrCodec<TransactionPage> = {
 
 const _TransactionRef: XdrCodec<TransactionRef> = {
   encode(w, val) {
-    proto.codec.SignedTransactionHash.encode(w, val.tx_hash);
+    proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.BlockHeight.encode(w, val.height);
   },
   decode(r) {
-    const tx_hash = proto.codec.SignedTransactionHash.decode(r);
+    const tx_hash = proto.codec.TransactionHash.decode(r);
     const height = proto.codec.BlockHeight.decode(r);
     return { tx_hash, height };
   },
@@ -823,11 +823,11 @@ const _EventIndexerPullResult: XdrCodec<EventIndexerPullResult> = {
 
 const _IndexerTxFailureNotice: XdrCodec<IndexerTxFailureNotice> = {
   encode(w, val) {
-    proto.codec.SignedTransactionHash.encode(w, val.tx_hash);
+    proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.TxFailureDiagnostic.encode(w, val.diagnostic);
   },
   decode(r) {
-    const tx_hash = proto.codec.SignedTransactionHash.decode(r);
+    const tx_hash = proto.codec.TransactionHash.decode(r);
     const diagnostic = proto.codec.TxFailureDiagnostic.decode(r);
     return { tx_hash, diagnostic };
   },
@@ -884,7 +884,7 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
   version: 1,
   methods: {
     indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.ProtocolCommit as XdrCodec<proto.ProtocolCommit>, response: () => _IndexerBlockExplorerIntroOutcome },
-    get_transaction_info: { proc: 1, request: () => proto.codec.SignedTransactionHash as XdrCodec<proto.SignedTransactionHash>, response: () => _TxInfoResult },
+    get_transaction_info: { proc: 1, request: () => proto.codec.TransactionHash as XdrCodec<proto.TransactionHash>, response: () => _TxInfoResult },
     get_block_by_height: { proc: 2, request: () => proto.codec.BlockHeight as XdrCodec<proto.BlockHeight>, response: () => _BlockLookupResult },
     get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
     get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPage },

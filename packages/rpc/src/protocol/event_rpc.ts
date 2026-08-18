@@ -10,7 +10,7 @@ import * as proto from "./index.js";
 
 
 export interface eventexecutor_report_tx_failure_args {
-  arg0: proto.SignedTransactionHash;
+  arg0: proto.TransactionHash;
   arg1: proto.TxFailureDiagnostic;
 }
 
@@ -45,11 +45,11 @@ export interface eventsched_commit_block_args {
 
 const _eventexecutor_report_tx_failure_args: XdrCodec<eventexecutor_report_tx_failure_args> = {
   encode(w, val) {
-    proto.codec.SignedTransactionHash.encode(w, val.arg0);
+    proto.codec.TransactionHash.encode(w, val.arg0);
     proto.codec.TxFailureDiagnostic.encode(w, val.arg1);
   },
   decode(r) {
-    const arg0 = proto.codec.SignedTransactionHash.decode(r);
+    const arg0 = proto.codec.TransactionHash.decode(r);
     const arg1 = proto.codec.TxFailureDiagnostic.decode(r);
     return { arg0, arg1 };
   },

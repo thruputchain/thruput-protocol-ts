@@ -19,9 +19,9 @@ export function parallelSignedTransactionBatch(val: proto.ParallelBatch): Parall
   return val as ParallelSignedTransactionBatch;
 }
 
-export type ParallelSignedTransactionHashBatch = proto.ParallelBatch & { readonly __brand: "ParallelSignedTransactionHashBatch" };
-export function parallelSignedTransactionHashBatch(val: proto.ParallelBatch): ParallelSignedTransactionHashBatch {
-  return val as ParallelSignedTransactionHashBatch;
+export type ParallelTransactionHashBatch = proto.ParallelBatch & { readonly __brand: "ParallelTransactionHashBatch" };
+export function parallelTransactionHashBatch(val: proto.ParallelBatch): ParallelTransactionHashBatch {
+  return val as ParallelTransactionHashBatch;
 }
 
 export type ParallelNondeterministicProposalDataBatch = proto.ParallelBatch & { readonly __brand: "ParallelNondeterministicProposalDataBatch" };
@@ -57,9 +57,9 @@ const _ParallelSignedTransactionBatch: XdrCodec<ParallelSignedTransactionBatch> 
   decode(r) { return parallelSignedTransactionBatch(proto.codec.ParallelBatch.decode(r)); },
 };
 
-const _ParallelSignedTransactionHashBatch: XdrCodec<ParallelSignedTransactionHashBatch> = {
+const _ParallelTransactionHashBatch: XdrCodec<ParallelTransactionHashBatch> = {
   encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },
-  decode(r) { return parallelSignedTransactionHashBatch(proto.codec.ParallelBatch.decode(r)); },
+  decode(r) { return parallelTransactionHashBatch(proto.codec.ParallelBatch.decode(r)); },
 };
 
 const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterministicProposalDataBatch> = {
@@ -70,7 +70,7 @@ const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterminis
 export const codec = {
   ParallelBatch: _ParallelBatch,
   ParallelSignedTransactionBatch: _ParallelSignedTransactionBatch,
-  ParallelSignedTransactionHashBatch: _ParallelSignedTransactionHashBatch,
+  ParallelTransactionHashBatch: _ParallelTransactionHashBatch,
   ParallelNondeterministicProposalDataBatch: _ParallelNondeterministicProposalDataBatch,
 } as const;
 

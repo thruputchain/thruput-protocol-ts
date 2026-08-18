@@ -10,7 +10,7 @@ import * as proto from "./index.js";
 
 export interface ProposalTxs {
   ext: proto.ExtensionPoint;
-  hash: proto.ParallelSignedTransactionHashBatch;
+  hash: proto.ParallelTransactionHashBatch;
   nondeterministic_data: proto.ParallelNondeterministicProposalDataBatch;
 }
 
@@ -41,12 +41,12 @@ export interface PrevProposalSummary {
 const _ProposalTxs: XdrCodec<ProposalTxs> = {
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
-    proto.codec.ParallelSignedTransactionHashBatch.encode(w, val.hash);
+    proto.codec.ParallelTransactionHashBatch.encode(w, val.hash);
     proto.codec.ParallelNondeterministicProposalDataBatch.encode(w, val.nondeterministic_data);
   },
   decode(r) {
     const ext = proto.codec.ExtensionPoint.decode(r);
-    const hash = proto.codec.ParallelSignedTransactionHashBatch.decode(r);
+    const hash = proto.codec.ParallelTransactionHashBatch.decode(r);
     const nondeterministic_data = proto.codec.ParallelNondeterministicProposalDataBatch.decode(r);
     return { ext, hash, nondeterministic_data };
   },
