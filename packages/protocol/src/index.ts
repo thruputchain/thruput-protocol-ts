@@ -14,5 +14,8 @@ export * from "@groundhogchain/xdr";
 // Protocol types + codecs (unified)
 export * from "./protocol/index.js";
 
+// Protocol-defined constants
+export { HOG_ADDRESS } from "./constants.js";
+
 // Utilities (also available via "@groundhogchain/protocol/utils" for tree-shaking)
 export * from "./utils/index.js";
