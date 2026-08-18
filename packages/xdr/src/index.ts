@@ -27,6 +27,7 @@ export {
 export {
   VoidCodec,
   BoolCodec,
+  Uint8Codec,
   Int32Codec,
   Uint32Codec,
   Int64Codec,
@@ -36,6 +37,8 @@ export {
   OptionCodec,
   VarArrayCodec,
   FixedArrayCodec,
+  FixedOpaqueCodec,
+  VarOpaqueCodec,
   serialize,
   deserialize,
   serializeCxs,

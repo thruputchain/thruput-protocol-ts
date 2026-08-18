@@ -133,5 +133,5 @@ export class XdrWriter implements IWriter {
 }
 
 function paddedLen(len: number): number {
-  return (len + 3) & ~3;
+  return len + ((4 - (len % 4)) % 4);
 }
