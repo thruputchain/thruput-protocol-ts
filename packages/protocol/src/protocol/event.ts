@@ -27,14 +27,14 @@ export interface TxEmittedEvent {
 }
 
 export interface TxEventLog {
-  proposed_tx_hash: proto.SHA256Hash;
+  tx_hash: proto.TransactionHash;
   exec_result: proto.ExecResult;
   root_output: proto.InvocationFrameOutput;
   events: proto.TxEmittedEvent[];
 }
 
 export interface IdentifiedEvent {
-  proposed_tx_hash: proto.SHA256Hash;
+  tx_hash: proto.TransactionHash;
   block_height: proto.BlockHeight;
   sequence_number: bigint;
   emitted_event: proto.TxEmittedEvent;
@@ -66,33 +66,33 @@ const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = {
 
 const _TxEventLog: XdrCodec<TxEventLog> = {
   encode(w, val) {
-    proto.codec.SHA256Hash.encode(w, val.proposed_tx_hash);
+    proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.ExecResult.encode(w, val.exec_result);
     proto.codec.InvocationFrameOutput.encode(w, val.root_output);
     VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).encode(w, val.events);
   },
   decode(r) {
-    const proposed_tx_hash = proto.codec.SHA256Hash.decode(r);
+    const tx_hash = proto.codec.TransactionHash.decode(r);
     const exec_result = proto.codec.ExecResult.decode(r);
     const root_output = proto.codec.InvocationFrameOutput.decode(r);
     const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).decode(r);
-    return { proposed_tx_hash, exec_result, root_output, events };
+    return { tx_hash, exec_result, root_output, events };
   },
 };
 
 const _IdentifiedEvent: XdrCodec<IdentifiedEvent> = {
   encode(w, val) {
-    proto.codec.SHA256Hash.encode(w, val.proposed_tx_hash);
+    proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.BlockHeight.encode(w, val.block_height);
     w.writeUint32(val.sequence_number);
     proto.codec.TxEmittedEvent.encode(w, val.emitted_event);
   },
   decode(r) {
-    const proposed_tx_hash = proto.codec.SHA256Hash.decode(r);
+    const tx_hash = proto.codec.TransactionHash.decode(r);
     const block_height = proto.codec.BlockHeight.decode(r);
     const sequence_number = r.readUint32();
     const emitted_event = proto.codec.TxEmittedEvent.decode(r);
-    return { proposed_tx_hash, block_height, sequence_number, emitted_event };
+    return { tx_hash, block_height, sequence_number, emitted_event };
   },
 };
 

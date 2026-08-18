@@ -57,9 +57,9 @@ export interface DecoratedSignature {
   signature: proto.Signature;
 }
 
-export type SignedTransactionHash = proto.SHA256Hash & { readonly __brand: "SignedTransactionHash" };
-export function signedTransactionHash(val: proto.SHA256Hash): SignedTransactionHash {
-  return val as SignedTransactionHash;
+export type TransactionHash = proto.SHA256Hash & { readonly __brand: "TransactionHash" };
+export function transactionHash(val: proto.SHA256Hash): TransactionHash {
+  return val as TransactionHash;
 }
 
 export interface SignedTransaction {
@@ -87,9 +87,9 @@ export function optSignedTransactionBatch(val: proto.OptSignedTransaction[]): Op
   return val as OptSignedTransactionBatch;
 }
 
-export type SignedTransactionHashBatch = proto.SignedTransactionHash[] & { readonly __brand: "SignedTransactionHashBatch" };
-export function signedTransactionHashBatch(val: proto.SignedTransactionHash[]): SignedTransactionHashBatch {
-  return val as SignedTransactionHashBatch;
+export type TransactionHashBatch = proto.TransactionHash[] & { readonly __brand: "TransactionHashBatch" };
+export function transactionHashBatch(val: proto.TransactionHash[]): TransactionHashBatch {
+  return val as TransactionHashBatch;
 }
 
 export interface NondeterministicProposalData {
@@ -219,9 +219,9 @@ const _DecoratedSignature: XdrCodec<DecoratedSignature> = {
   },
 };
 
-const _SignedTransactionHash: XdrCodec<SignedTransactionHash> = {
+const _TransactionHash: XdrCodec<TransactionHash> = {
   encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return signedTransactionHash(proto.codec.SHA256Hash.decode(r)); },
+  decode(r) { return transactionHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
 const _SignedTransaction: XdrCodec<SignedTransaction> = {
@@ -244,7 +244,7 @@ const _OptSignedTransaction = OptionCodec(() => _SignedTransaction) as XdrCodec<
 
 const _OptSignedTransactionBatch = VarArrayCodec(() => proto.codec.OptSignedTransaction, Number(0xFFFFFFFF)) as XdrCodec<OptSignedTransactionBatch>;
 
-const _SignedTransactionHashBatch = VarArrayCodec(() => proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)) as XdrCodec<SignedTransactionHashBatch>;
+const _TransactionHashBatch = VarArrayCodec(() => proto.codec.TransactionHash, Number(0xFFFFFFFF)) as XdrCodec<TransactionHashBatch>;
 
 const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = {
   encode(w, val) {
@@ -288,13 +288,13 @@ export const codec = {
   Uniquifier: _Uniquifier,
   Transaction: _Transaction,
   DecoratedSignature: _DecoratedSignature,
-  SignedTransactionHash: _SignedTransactionHash,
+  TransactionHash: _TransactionHash,
   SignedTransaction: _SignedTransaction,
   TransactionBatch: _TransactionBatch,
   SignedTransactionBatch: _SignedTransactionBatch,
   OptSignedTransaction: _OptSignedTransaction,
   OptSignedTransactionBatch: _OptSignedTransactionBatch,
-  SignedTransactionHashBatch: _SignedTransactionHashBatch,
+  TransactionHashBatch: _TransactionHashBatch,
   NondeterministicProposalData: _NondeterministicProposalData,
   ProposedTransaction: _ProposedTransaction,
   ProposedTransactionBatch: _ProposedTransactionBatch,
