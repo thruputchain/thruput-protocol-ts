@@ -5,6 +5,9 @@ import {
 } from "./protocol/index.js";
 
 const hogAddressBytes = new Uint8Array(32);
+
+// Genesis addresses encode their enum value as a big-endian uint32
+// in the final four bytes.
 new DataView(hogAddressBytes.buffer).setUint32(
   hogAddressBytes.byteLength - 4,
   GenesisContractAddresses.kAddressPrecompiledHogToken,
