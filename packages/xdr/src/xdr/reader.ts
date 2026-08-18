@@ -83,7 +83,7 @@ export class XdrReader implements IReader {
 
   /** Read fixed-length opaque bytes into a caller-owned copy, skipping XDR zero padding. */
   readFixedOpaque(len: number): Uint8Array {
-    const padded = (len + 3) & ~3;
+    const padded = paddedLen(len);
     this.ensure(padded);
     // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
     // returns an aliasing view, and this.data may be a Buffer.
@@ -106,4 +106,8 @@ export class XdrReader implements IReader {
     const bytes = this.readVarOpaque(max);
     return textDecoder.decode(bytes);
   }
+}
+
+function paddedLen(len: number): number {
+  return len + ((4 - (len % 4)) % 4);
 }
