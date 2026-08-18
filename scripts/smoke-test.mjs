@@ -18,6 +18,11 @@ const packagesDir = new URL("packages/", root);
 
 const failures = [];
 let checked = 0;
+const requiredExports = {
+  "@groundhogchain/xdr": {
+    ".": ["Uint8Codec", "FixedOpaqueCodec", "VarOpaqueCodec"],
+  },
+};
 
 for (const dir of readdirSync(fileURLToPath(packagesDir)).sort()) {
   const pkgRoot = new URL(`${dir}/`, packagesDir);
@@ -45,6 +50,18 @@ for (const dir of readdirSync(fileURLToPath(packagesDir)).sort()) {
         if (names.length === 0) {
           failures.push(`${label}: loaded but exported nothing`);
         }
+        for (const name of requiredExports[pkg.name]?.[subpath] ?? []) {
+          if (!names.includes(name)) {
+            failures.push(`${label}: missing ${name}`);
+          }
+        }
+        if (
+          pkg.name === "@groundhogchain/protocol" &&
+          subpath === "." &&
+          !isHogAddress(mod.HOG_ADDRESS)
+        ) {
+          failures.push(`${label}: HOG_ADDRESS has incorrect bytes`);
+        }
       } catch (err) {
         failures.push(`${label}: ${err.message}`);
       }
@@ -67,3 +84,11 @@ if (failures.length > 0) {
 console.log(
   `Smoke test passed on Node ${process.version}: ${checked} entry points loaded from dist/.`,
 );
+
+function isHogAddress(value) {
+  return (
+    value instanceof Uint8Array &&
+    value.length === 32 &&
+    value.every((byte, index) => byte === (index === 31 ? 1 : 0))
+  );
+}

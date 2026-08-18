@@ -1,4 +1,5 @@
 import type { IWriter } from "./codec.js";
+import { paddedLen } from "./padding.js";
 
 const INITIAL_CAPACITY = 256;
 const textEncoder = new TextEncoder();
@@ -130,8 +131,4 @@ export class XdrWriter implements IWriter {
     const encoded = textEncoder.encode(val);
     this.writeVarOpaque(encoded, max);
   }
-}
-
-function paddedLen(len: number): number {
-  return (len + 3) & ~3;
 }

@@ -74,6 +74,19 @@ export const BoolCodec: XdrCodec<boolean> = {
   decode(r) { return r.readBool(); },
 };
 
+/** Codec for unsigned 8-bit integers, represented as `bigint`. */
+export const Uint8Codec: XdrCodec<bigint> = {
+  encode(w, val) {
+    if (typeof val !== "bigint" || val < 0n || val > 0xffn) {
+      throw new Error(`uint8 overflow: ${String(val)}`);
+    }
+    w.writeFixedOpaque(Uint8Array.of(Number(val)), 1);
+  },
+  decode(r) {
+    return BigInt(r.readFixedOpaque(1)[0]);
+  },
+};
+
 /** Codec for signed 32-bit integers, represented as `bigint`. */
 export const Int32Codec: XdrCodec<bigint> = {
   encode(w, val) { w.writeInt32(val); },
@@ -181,6 +194,38 @@ export function FixedArrayCodec<T>(inner: LazyCodec<T>, len: number): XdrCodec<T
       return Array.from({ length: len }, () => c.decode(r));
     },
   };
+}
+
+/** Codec for exactly `len` opaque bytes. */
+export function FixedOpaqueCodec(len: number): XdrCodec<Uint8Array> {
+  assertOpaqueBound("fixed opaque length", len);
+  return {
+    encode(w, val) {
+      w.writeFixedOpaque(val, len);
+    },
+    decode(r) {
+      return r.readFixedOpaque(len);
+    },
+  };
+}
+
+/** Codec for length-prefixed opaque bytes bounded by `max`. */
+export function VarOpaqueCodec(max: number): XdrCodec<Uint8Array> {
+  assertOpaqueBound("variable opaque maximum", max);
+  return {
+    encode(w, val) {
+      w.writeVarOpaque(val, max);
+    },
+    decode(r) {
+      return r.readVarOpaque(max);
+    },
+  };
+}
+
+function assertOpaqueBound(name: string, value: number): void {
+  if (!Number.isInteger(value) || value < 0 || value > 0xffffffff) {
+    throw new Error(`${name} must be an integer between 0 and 4294967295, got ${value}`);
+  }
 }
 
 /** Metadata for a single RPC method generated from XDR `program` blocks. */
