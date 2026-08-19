@@ -74,7 +74,12 @@ export const BoolCodec: XdrCodec<boolean> = {
   decode(r) { return r.readBool(); },
 };
 
-/** Codec for unsigned 8-bit integers, represented as `bigint`. */
+/**
+ * Codec for unsigned 8-bit integers, represented as `bigint`.
+ *
+ * Scalar U8 values use the XDR/CXS uint32 wire representation with an enforced
+ * range of `0..=255`. U8 arrays and vectors use opaque codecs instead.
+ */
 export const Uint8Codec: XdrCodec<bigint> = {
   encode(w, val) {
     assertUint8(val);
