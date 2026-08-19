@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   FixedOpaqueCodec,
   Uint8Codec,
+  Uint32Codec,
   VarOpaqueCodec,
   deserialize,
   deserializeCxs,
@@ -12,13 +13,15 @@ import {
 describe("Uint8Codec", () => {
   it.each([
     [0n, [0x00, 0x00, 0x00, 0x00], [0x00]],
-    [255n, [0xff, 0x00, 0x00, 0x00], [0xff]],
+    [62n, [0x00, 0x00, 0x00, 0x3e], [0x3e]],
+    [63n, [0x00, 0x00, 0x00, 0x3f], [0x3f, 0x3f]],
+    [255n, [0x00, 0x00, 0x00, 0xff], [0x3f, 0xff]],
   ])("encodes %s in XDR and CXS", (value, xdr, cxs) => {
     expect(serialize(value, Uint8Codec)).toEqual(Uint8Array.from(xdr));
     expect(serializeCxs(value, Uint8Codec)).toEqual(Uint8Array.from(cxs));
   });
 
-  it.each([0n, 1n, 127n, 255n])("round-trips %s", (value) => {
+  it.each([0n, 1n, 62n, 63n, 127n, 255n])("round-trips %s", (value) => {
     expect(deserialize(serialize(value, Uint8Codec), Uint8Codec)).toBe(value);
     expect(deserializeCxs(serializeCxs(value, Uint8Codec), Uint8Codec)).toBe(value);
   });
@@ -38,8 +41,17 @@ describe("Uint8Codec", () => {
   });
 
   it("rejects truncated input", () => {
-    expect(() => deserialize(new Uint8Array([0xff]), Uint8Codec)).toThrow();
+    expect(() => deserialize(new Uint8Array([0, 0, 0]), Uint8Codec)).toThrow();
     expect(() => deserializeCxs(new Uint8Array(), Uint8Codec)).toThrow();
+  });
+
+  it("rejects decoded uint32 values above the uint8 range", () => {
+    expect(() =>
+      deserialize(serialize(256n, Uint32Codec), Uint8Codec),
+    ).toThrow("uint8 overflow: 256");
+    expect(() =>
+      deserializeCxs(serializeCxs(256n, Uint32Codec), Uint8Codec),
+    ).toThrow("uint8 overflow: 256");
   });
 });
 
