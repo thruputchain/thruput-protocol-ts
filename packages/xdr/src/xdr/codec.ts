@@ -77,15 +77,21 @@ export const BoolCodec: XdrCodec<boolean> = {
 /** Codec for unsigned 8-bit integers, represented as `bigint`. */
 export const Uint8Codec: XdrCodec<bigint> = {
   encode(w, val) {
-    if (typeof val !== "bigint" || val < 0n || val > 0xffn) {
-      throw new Error(`uint8 overflow: ${String(val)}`);
-    }
-    w.writeFixedOpaque(Uint8Array.of(Number(val)), 1);
+    assertUint8(val);
+    w.writeUint32(val);
   },
   decode(r) {
-    return BigInt(r.readFixedOpaque(1)[0]);
+    const val = r.readUint32();
+    assertUint8(val);
+    return val;
   },
 };
+
+function assertUint8(val: bigint): void {
+  if (typeof val !== "bigint" || val < 0n || val > 0xffn) {
+    throw new Error(`uint8 overflow: ${String(val)}`);
+  }
+}
 
 /** Codec for signed 32-bit integers, represented as `bigint`. */
 export const Int32Codec: XdrCodec<bigint> = {
