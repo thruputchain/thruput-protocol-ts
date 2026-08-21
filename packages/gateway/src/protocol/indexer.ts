@@ -153,7 +153,6 @@ export interface IndexerOutboxOrigin {
 export interface IndexerCommittedBlockPayload {
   format_version: bigint;
   consensus_value: proto.ConsensusValue;
-  proposal_txs: proto.ProposalTxs;
   event_logs: proto.TxEventLogBatch;
   tx_bodies: proto.ProposedTransactionBatch;
 }
@@ -545,17 +544,15 @@ const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = {
   encode(w, val) {
     w.writeUint32(val.format_version);
     proto.codec.ConsensusValue.encode(w, val.consensus_value);
-    proto.codec.ProposalTxs.encode(w, val.proposal_txs);
     proto.codec.TxEventLogBatch.encode(w, val.event_logs);
     proto.codec.ProposedTransactionBatch.encode(w, val.tx_bodies);
   },
   decode(r) {
     const format_version = r.readUint32();
     const consensus_value = proto.codec.ConsensusValue.decode(r);
-    const proposal_txs = proto.codec.ProposalTxs.decode(r);
     const event_logs = proto.codec.TxEventLogBatch.decode(r);
     const tx_bodies = proto.codec.ProposedTransactionBatch.decode(r);
-    return { format_version, consensus_value, proposal_txs, event_logs, tx_bodies };
+    return { format_version, consensus_value, event_logs, tx_bodies };
   },
 };
 
