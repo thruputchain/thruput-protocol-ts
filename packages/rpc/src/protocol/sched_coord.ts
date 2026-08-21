@@ -78,6 +78,31 @@ export type SchedulerGetTipResult =
   | { outcome: proto.SchedulerGetTipOutcome.SchedulerGetTipNoGenesisBlock }
 ;
 
+export interface GenesisCeremonyRequest {
+  expected_parent_height: proto.BlockHeight;
+  expected_parent_value_hash: proto.ConsensusValueHash;
+  context: proto.ProposalContext;
+  transactions: proto.ParallelSignedTransactionBatch;
+}
+
+export enum GenesisCeremonyOutcome {
+  GenesisCeremonyCommitted = 0,
+  GenesisCeremonyParentMismatch = 2,
+  GenesisCeremonyBatchMismatch = 3,
+  GenesisCeremonyInvalidTransaction = 4,
+  GenesisCeremonyExecutionFailed = 5,
+}
+
+export interface GenesisCeremonyCommit {
+  db_tip: proto.DbTip;
+  proposal_txs: proto.ProposalTxs;
+}
+
+export type GenesisCeremonyResult =
+  | { outcome: proto.GenesisCeremonyOutcome.GenesisCeremonyCommitted; commit: proto.GenesisCeremonyCommit }
+  | { outcome: number }
+;
+
 
 export interface schedulercoord_submit_vetted_args {
   arg0: proto.ValidatorID;
@@ -258,6 +283,66 @@ const _SchedulerGetTipResult: XdrCodec<SchedulerGetTipResult> = {
   },
 };
 
+const _GenesisCeremonyRequest: XdrCodec<GenesisCeremonyRequest> = {
+  encode(w, val) {
+    proto.codec.BlockHeight.encode(w, val.expected_parent_height);
+    proto.codec.ConsensusValueHash.encode(w, val.expected_parent_value_hash);
+    proto.codec.ProposalContext.encode(w, val.context);
+    proto.codec.ParallelSignedTransactionBatch.encode(w, val.transactions);
+  },
+  decode(r) {
+    const expected_parent_height = proto.codec.BlockHeight.decode(r);
+    const expected_parent_value_hash = proto.codec.ConsensusValueHash.decode(r);
+    const context = proto.codec.ProposalContext.decode(r);
+    const transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
+    return { expected_parent_height, expected_parent_value_hash, context, transactions };
+  },
+};
+
+const _GenesisCeremonyOutcome: XdrCodec<GenesisCeremonyOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as GenesisCeremonyOutcome; },
+};
+
+const _GenesisCeremonyCommit: XdrCodec<GenesisCeremonyCommit> = {
+  encode(w, val) {
+    proto.codec.DbTip.encode(w, val.db_tip);
+    proto.codec.ProposalTxs.encode(w, val.proposal_txs);
+  },
+  decode(r) {
+    const db_tip = proto.codec.DbTip.decode(r);
+    const proposal_txs = proto.codec.ProposalTxs.decode(r);
+    return { db_tip, proposal_txs };
+  },
+};
+
+const _GenesisCeremonyResult: XdrCodec<GenesisCeremonyResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.GenesisCeremonyOutcome.GenesisCeremonyCommitted:
+      {
+        const v = val as { outcome: number; commit: proto.GenesisCeremonyCommit };
+        if (v.commit === undefined) {
+          throw new Error("GenesisCeremonyResult encode: commit is undefined");
+        }
+        proto.codec.GenesisCeremonyCommit.encode(w, v.commit);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.GenesisCeremonyOutcome.GenesisCeremonyCommitted:
+        const commit = proto.codec.GenesisCeremonyCommit.decode(r);
+        return { outcome, commit };
+      default:
+        return { outcome };
+    }
+  },
+};
+
 const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_args> = {
   encode(w, val) {
     proto.codec.ValidatorID.encode(w, val.arg0);
@@ -318,6 +403,10 @@ export const codec = {
   SchedulerCommitOutcome: _SchedulerCommitOutcome,
   SchedulerGetTipOutcome: _SchedulerGetTipOutcome,
   SchedulerGetTipResult: _SchedulerGetTipResult,
+  GenesisCeremonyRequest: _GenesisCeremonyRequest,
+  GenesisCeremonyOutcome: _GenesisCeremonyOutcome,
+  GenesisCeremonyCommit: _GenesisCeremonyCommit,
+  GenesisCeremonyResult: _GenesisCeremonyResult,
 } as const;
 
 export const SchedulerCoordProgram: RpcProgramMeta = {
@@ -333,6 +422,8 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedulercoord_commit_block: { proc: 6, request: () => _schedulercoord_commit_block_args, response: () => _SchedulerCommitOutcome },
     schedcoord_get_tip: { proc: 7, request: () => VoidCodec, response: () => _SchedulerGetTipResult },
     schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
+    schedcoord_load_genesis_configuration_v2: { proc: 9, request: () => proto.codec.GenesisConfigurationV2 as XdrCodec<proto.GenesisConfigurationV2>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
+    schedulercoord_commit_genesis_ceremony: { proc: 10, request: () => _GenesisCeremonyRequest, response: () => _GenesisCeremonyResult },
     schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
   },
 };
