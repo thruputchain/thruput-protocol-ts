@@ -31,6 +31,13 @@ export interface GenesisConfiguration {
   default_wallet: proto.DeployedContractHash;
 }
 
+export interface GenesisConfigurationV2 {
+  network_hash: proto.NetworkHash;
+  storage_cost_model: proto.StorageCostModelXdr;
+  root_contract: proto.Contract;
+  default_wallet: proto.DeployedContractHash;
+}
+
 export enum GenesisContractAddresses {
   kAddressNull = 0,
   kAddressPrecompiledHogToken = 1,
@@ -86,6 +93,22 @@ const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
   },
 };
 
+const _GenesisConfigurationV2: XdrCodec<GenesisConfigurationV2> = {
+  encode(w, val) {
+    proto.codec.NetworkHash.encode(w, val.network_hash);
+    proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
+    proto.codec.Contract.encode(w, val.root_contract);
+    proto.codec.DeployedContractHash.encode(w, val.default_wallet);
+  },
+  decode(r) {
+    const network_hash = proto.codec.NetworkHash.decode(r);
+    const storage_cost_model = proto.codec.StorageCostModelXdr.decode(r);
+    const root_contract = proto.codec.Contract.decode(r);
+    const default_wallet = proto.codec.DeployedContractHash.decode(r);
+    return { network_hash, storage_cost_model, root_contract, default_wallet };
+  },
+};
+
 const _GenesisContractAddresses: XdrCodec<GenesisContractAddresses> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as GenesisContractAddresses; },
@@ -96,6 +119,7 @@ export const codec = {
   InitialConfigurationEntry: _InitialConfigurationEntry,
   InitialConfigurationList: _InitialConfigurationList,
   GenesisConfiguration: _GenesisConfiguration,
+  GenesisConfigurationV2: _GenesisConfigurationV2,
   GenesisContractAddresses: _GenesisContractAddresses,
 } as const;
 

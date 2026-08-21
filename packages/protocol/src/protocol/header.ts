@@ -17,6 +17,7 @@ export interface ProposalContext {
 export interface ProposalHeader {
   ext: proto.ExtensionPoint;
   network_hash: proto.NetworkHash;
+  genesis_configuration_hash: proto.GenesisConfigurationHash;
   proposer: proto.ValidatorID;
   block_timepoint: proto.TimePoint;
   block_height: proto.BlockHeight;
@@ -48,6 +49,7 @@ const _ProposalHeader: XdrCodec<ProposalHeader> = {
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     proto.codec.NetworkHash.encode(w, val.network_hash);
+    proto.codec.GenesisConfigurationHash.encode(w, val.genesis_configuration_hash);
     proto.codec.ValidatorID.encode(w, val.proposer);
     proto.codec.TimePoint.encode(w, val.block_timepoint);
     proto.codec.BlockHeight.encode(w, val.block_height);
@@ -58,13 +60,14 @@ const _ProposalHeader: XdrCodec<ProposalHeader> = {
   decode(r) {
     const ext = proto.codec.ExtensionPoint.decode(r);
     const network_hash = proto.codec.NetworkHash.decode(r);
+    const genesis_configuration_hash = proto.codec.GenesisConfigurationHash.decode(r);
     const proposer = proto.codec.ValidatorID.decode(r);
     const block_timepoint = proto.codec.TimePoint.decode(r);
     const block_height = proto.codec.BlockHeight.decode(r);
     const txs_hash = proto.codec.TxsHash.decode(r);
     const storage_hash = proto.codec.StorageShortHash.decode(r);
     const events_hash = proto.codec.EventsHash.decode(r);
-    return { ext, network_hash, proposer, block_timepoint, block_height, txs_hash, storage_hash, events_hash };
+    return { ext, network_hash, genesis_configuration_hash, proposer, block_timepoint, block_height, txs_hash, storage_hash, events_hash };
   },
 };
 

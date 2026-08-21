@@ -91,6 +91,11 @@ export function networkHash(val: proto.SHA256Hash): NetworkHash {
   return val as NetworkHash;
 }
 
+export type GenesisConfigurationHash = proto.SHA256Hash & { readonly __brand: "GenesisConfigurationHash" };
+export function genesisConfigurationHash(val: proto.SHA256Hash): GenesisConfigurationHash {
+  return val as GenesisConfigurationHash;
+}
+
 export type StorageLongHash = Uint8Array & { readonly __brand: "StorageLongHash" };
 export function storageLongHash(data: Uint8Array): StorageLongHash {
   if (data.length !== 2048) throw new Error(`StorageLongHash must be exactly 2048 bytes, got ${data.length}`);
@@ -325,6 +330,11 @@ const _NetworkHash: XdrCodec<NetworkHash> = {
   decode(r) { return networkHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
+const _GenesisConfigurationHash: XdrCodec<GenesisConfigurationHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return genesisConfigurationHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
 const _StorageLongHash: XdrCodec<StorageLongHash> = {
   encode(w, val) { w.writeFixedOpaque(val, 2048); },
   decode(r) { return storageLongHash(r.readFixedOpaque(2048)); },
@@ -437,6 +447,7 @@ export const codec = {
   SHA256Hash: _SHA256Hash,
   ConsensusValueHash: _ConsensusValueHash,
   NetworkHash: _NetworkHash,
+  GenesisConfigurationHash: _GenesisConfigurationHash,
   StorageLongHash: _StorageLongHash,
   StorageShortHash: _StorageShortHash,
   TxsHash: _TxsHash,

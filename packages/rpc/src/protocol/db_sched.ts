@@ -89,6 +89,11 @@ export interface dbsched_load_genesis_configuration_args {
   arg1: proto.ConsensusValue;
 }
 
+export interface dbsched_load_genesis_configuration_v2_args {
+  arg0: proto.GenesisConfigurationV2;
+  arg1: proto.ConsensusValue;
+}
+
 
 //
 // XDR Codecs below this point
@@ -292,6 +297,18 @@ const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_co
   },
 };
 
+const _dbsched_load_genesis_configuration_v2_args: XdrCodec<dbsched_load_genesis_configuration_v2_args> = {
+  encode(w, val) {
+    proto.codec.GenesisConfigurationV2.encode(w, val.arg0);
+    proto.codec.ConsensusValue.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.GenesisConfigurationV2.decode(r);
+    const arg1 = proto.codec.ConsensusValue.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
 export const codec = {
   DbSchedResult: _DbSchedResult,
   HogAge: _HogAge,
@@ -319,6 +336,7 @@ export const DbSchedProgram: RpcProgramMeta = {
     dbsched_abandon_snapshot: { proc: 8, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _DbSchedResult },
     dbsched_load_genesis_configuration: { proc: 9, request: () => _dbsched_load_genesis_configuration_args, response: () => _DbSchedResult },
     dbsched_get_tip: { proc: 10, request: () => VoidCodec, response: () => _DbTipResult },
+    dbsched_load_genesis_configuration_v2: { proc: 11, request: () => _dbsched_load_genesis_configuration_v2_args, response: () => _DbSchedResult },
   },
 };
 
