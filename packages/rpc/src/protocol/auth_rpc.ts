@@ -90,8 +90,13 @@ export enum IntroAuthOutcome {
   kFailure = 1,
 }
 
+export interface MempoolAuthIntroSuccess {
+  shards: proto.ShardCard[];
+  network_hash: proto.NetworkHash;
+}
+
 export type IntroAuthResult =
-  | { outcome: proto.IntroAuthOutcome.kSuccess; shards: proto.ShardCard[] }
+  | { outcome: proto.IntroAuthOutcome.kSuccess; success: proto.MempoolAuthIntroSuccess }
   | { outcome: number }
 ;
 
@@ -258,17 +263,29 @@ const _IntroAuthOutcome: XdrCodec<IntroAuthOutcome> = {
   decode(r) { return Number(r.readInt32()) as IntroAuthOutcome; },
 };
 
+const _MempoolAuthIntroSuccess: XdrCodec<MempoolAuthIntroSuccess> = {
+  encode(w, val) {
+    VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).encode(w, val.shards);
+    proto.codec.NetworkHash.encode(w, val.network_hash);
+  },
+  decode(r) {
+    const shards = VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).decode(r);
+    const network_hash = proto.codec.NetworkHash.decode(r);
+    return { shards, network_hash };
+  },
+};
+
 const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
       case proto.IntroAuthOutcome.kSuccess:
       {
-        const v = val as { outcome: number; shards: proto.ShardCard[] };
-        if (v.shards === undefined) {
-          throw new Error("IntroAuthResult encode: shards is undefined");
+        const v = val as { outcome: number; success: proto.MempoolAuthIntroSuccess };
+        if (v.success === undefined) {
+          throw new Error("IntroAuthResult encode: success is undefined");
         }
-        VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).encode(w, v.shards);
+        proto.codec.MempoolAuthIntroSuccess.encode(w, v.success);
         break;
       }
     }
@@ -277,8 +294,8 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
     const outcome = Number(r.readInt32());
     switch (outcome) {
       case proto.IntroAuthOutcome.kSuccess:
-        const shards = VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).decode(r);
-        return { outcome, shards };
+        const success = proto.codec.MempoolAuthIntroSuccess.decode(r);
+        return { outcome, success };
       default:
         return { outcome };
     }
@@ -308,6 +325,7 @@ export const codec = {
   DBAuthIntroResult: _DBAuthIntroResult,
   DBAuthResultBatch: _DBAuthResultBatch,
   IntroAuthOutcome: _IntroAuthOutcome,
+  MempoolAuthIntroSuccess: _MempoolAuthIntroSuccess,
   IntroAuthResult: _IntroAuthResult,
 } as const;
 
