@@ -10,7 +10,7 @@ const hogAddressBytes = new Uint8Array(32);
 // in the final four bytes.
 new DataView(hogAddressBytes.buffer).setUint32(
   hogAddressBytes.byteLength - 4,
-  GenesisContractAddresses.kAddressPrecompiledHogToken,
+  GenesisContractAddresses.kAddressNativeToken,
   false,
 );
 

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -34,7 +34,7 @@ export function loadgenContextID(val: bigint): LoadgenContextID {
 }
 
 export interface LoadgenSuccessResult {
-  genesis_configuration: proto.GenesisConfigurationV2;
+  genesis_configuration: proto.GenesisConfiguration;
   genesis_ceremony_txs: proto.InitializationBlock;
   initialization_txs: proto.InitializationBlock[];
   context_id: proto.LoadgenContextID;
@@ -121,13 +121,13 @@ const _LoadgenContextID: XdrCodec<LoadgenContextID> = {
 
 const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = {
   encode(w, val) {
-    proto.codec.GenesisConfigurationV2.encode(w, val.genesis_configuration);
+    proto.codec.GenesisConfiguration.encode(w, val.genesis_configuration);
     proto.codec.InitializationBlock.encode(w, val.genesis_ceremony_txs);
     VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).encode(w, val.initialization_txs);
     proto.codec.LoadgenContextID.encode(w, val.context_id);
   },
   decode(r) {
-    const genesis_configuration = proto.codec.GenesisConfigurationV2.decode(r);
+    const genesis_configuration = proto.codec.GenesisConfiguration.decode(r);
     const genesis_ceremony_txs = proto.codec.InitializationBlock.decode(r);
     const initialization_txs = VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).decode(r);
     const context_id = proto.codec.LoadgenContextID.decode(r);

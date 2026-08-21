@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -422,7 +422,6 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedulercoord_commit_block: { proc: 6, request: () => _schedulercoord_commit_block_args, response: () => _SchedulerCommitOutcome },
     schedcoord_get_tip: { proc: 7, request: () => VoidCodec, response: () => _SchedulerGetTipResult },
     schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
-    schedcoord_load_genesis_configuration_v2: { proc: 9, request: () => proto.codec.GenesisConfigurationV2 as XdrCodec<proto.GenesisConfigurationV2>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
     schedulercoord_commit_genesis_ceremony: { proc: 10, request: () => _GenesisCeremonyRequest, response: () => _GenesisCeremonyResult },
     schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
   },

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -86,11 +86,6 @@ export interface dbsched_commit_snapshot_args {
 
 export interface dbsched_load_genesis_configuration_args {
   arg0: proto.GenesisConfiguration;
-  arg1: proto.ConsensusValue;
-}
-
-export interface dbsched_load_genesis_configuration_v2_args {
-  arg0: proto.GenesisConfigurationV2;
   arg1: proto.ConsensusValue;
 }
 
@@ -297,18 +292,6 @@ const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_co
   },
 };
 
-const _dbsched_load_genesis_configuration_v2_args: XdrCodec<dbsched_load_genesis_configuration_v2_args> = {
-  encode(w, val) {
-    proto.codec.GenesisConfigurationV2.encode(w, val.arg0);
-    proto.codec.ConsensusValue.encode(w, val.arg1);
-  },
-  decode(r) {
-    const arg0 = proto.codec.GenesisConfigurationV2.decode(r);
-    const arg1 = proto.codec.ConsensusValue.decode(r);
-    return { arg0, arg1 };
-  },
-};
-
 export const codec = {
   DbSchedResult: _DbSchedResult,
   HogAge: _HogAge,
@@ -336,7 +319,6 @@ export const DbSchedProgram: RpcProgramMeta = {
     dbsched_abandon_snapshot: { proc: 8, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _DbSchedResult },
     dbsched_load_genesis_configuration: { proc: 9, request: () => _dbsched_load_genesis_configuration_args, response: () => _DbSchedResult },
     dbsched_get_tip: { proc: 10, request: () => VoidCodec, response: () => _DbTipResult },
-    dbsched_load_genesis_configuration_v2: { proc: 11, request: () => _dbsched_load_genesis_configuration_v2_args, response: () => _DbSchedResult },
   },
 };
 
