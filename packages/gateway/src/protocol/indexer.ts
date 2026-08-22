@@ -159,7 +159,6 @@ export interface IndexerCommittedBlockPayload {
 
 export interface IndexerCommittedBlockIdentity {
   consensus_hash: proto.ConsensusValueHash;
-  payload_digest: proto.SHA256Hash;
 }
 
 export interface IndexerCommittedBlock {
@@ -171,7 +170,6 @@ export interface IndexerInitializedProgress {
   origin: proto.IndexerOutboxOrigin;
   contiguous_height: proto.BlockHeight;
   last_consensus_hash: proto.ConsensusValueHash;
-  last_payload_digest: proto.SHA256Hash;
 }
 
 export enum IndexerProgressState {
@@ -559,12 +557,10 @@ const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = {
 const _IndexerCommittedBlockIdentity: XdrCodec<IndexerCommittedBlockIdentity> = {
   encode(w, val) {
     proto.codec.ConsensusValueHash.encode(w, val.consensus_hash);
-    proto.codec.SHA256Hash.encode(w, val.payload_digest);
   },
   decode(r) {
     const consensus_hash = proto.codec.ConsensusValueHash.decode(r);
-    const payload_digest = proto.codec.SHA256Hash.decode(r);
-    return { consensus_hash, payload_digest };
+    return { consensus_hash };
   },
 };
 
@@ -585,14 +581,12 @@ const _IndexerInitializedProgress: XdrCodec<IndexerInitializedProgress> = {
     proto.codec.IndexerOutboxOrigin.encode(w, val.origin);
     proto.codec.BlockHeight.encode(w, val.contiguous_height);
     proto.codec.ConsensusValueHash.encode(w, val.last_consensus_hash);
-    proto.codec.SHA256Hash.encode(w, val.last_payload_digest);
   },
   decode(r) {
     const origin = proto.codec.IndexerOutboxOrigin.decode(r);
     const contiguous_height = proto.codec.BlockHeight.decode(r);
     const last_consensus_hash = proto.codec.ConsensusValueHash.decode(r);
-    const last_payload_digest = proto.codec.SHA256Hash.decode(r);
-    return { origin, contiguous_height, last_consensus_hash, last_payload_digest };
+    return { origin, contiguous_height, last_consensus_hash };
   },
 };
 
