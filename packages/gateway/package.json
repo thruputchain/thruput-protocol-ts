@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/gateway",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Groundhog gateway and indexer protocol types",
   "type": "module",
   "files": [
@@ -28,9 +28,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.7.1",
-    "@groundhogchain/protocol": "0.7.1",
-    "@groundhogchain/rpc": "0.7.1"
+    "@groundhogchain/xdr": "0.8.0",
+    "@groundhogchain/protocol": "0.8.0",
+    "@groundhogchain/rpc": "0.8.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
