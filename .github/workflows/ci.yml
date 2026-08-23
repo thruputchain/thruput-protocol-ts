@@ -148,9 +148,6 @@ jobs:
       - name: Install groundhog-test-vectors
         run: cargo install groundhog-test-vectors --registry groundhog
 
-      - name: Generate entrypoint vectors
-        run: groundhog-test-vectors entrypoint-id > packages/protocol/test/fixtures/entrypoint_vectors.json
-
       - name: Generate XDR vectors
         run: groundhog-test-vectors xdr > packages/protocol/test/fixtures/xdr_vectors.json
 
