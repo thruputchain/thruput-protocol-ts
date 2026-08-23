@@ -1,45 +1,45 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type SCPHash = Uint8Array & { readonly __brand: "SCPHash" };
+export type SCPHash = Uint8Array & { readonly __brand: { readonly SCPHash: true } };
 export function scpHash(data: Uint8Array): SCPHash {
   if (data.length !== 32) throw new Error(`SCPHash must be exactly 32 bytes, got ${data.length}`);
   return data as SCPHash;
 }
 
-export type SCPNodeID = proto.PublicKey & { readonly __brand: "SCPNodeID" };
+export type SCPNodeID = (NonNullable<proto.PublicKey> & { readonly __brand: { readonly SCPNodeID: true } }) | Extract<proto.PublicKey, null>;
 export function scpNodeID(val: proto.PublicKey): SCPNodeID {
   return val as SCPNodeID;
 }
 
-export type SCPCount = bigint & { readonly __brand: "SCPCount" };
+export type SCPCount = bigint & { readonly __brand: { readonly SCPCount: true } };
 export function scpCount(val: bigint): SCPCount {
   return val as SCPCount;
 }
 
-export type SCPSlotIndex = bigint & { readonly __brand: "SCPSlotIndex" };
+export type SCPSlotIndex = bigint & { readonly __brand: { readonly SCPSlotIndex: true } };
 export function scpSlotIndex(val: bigint): SCPSlotIndex {
   return val as SCPSlotIndex;
 }
 
-export type SCPValue = Uint8Array & { readonly __brand: "SCPValue" };
+export type SCPValue = Uint8Array & { readonly __brand: { readonly SCPValue: true } };
 export function scpValue(data: Uint8Array): SCPValue {
   return data as SCPValue;
 }
 
-export type SCPValues = proto.SCPValue[] & { readonly __brand: "SCPValues" };
+export type SCPValues = proto.SCPValue[] & { readonly __brand: { readonly SCPValues: true } };
 export function scpValues(val: proto.SCPValue[]): SCPValues {
   return val as SCPValues;
 }
 
-export type SCPOptValue = (proto.SCPValue | null) & { readonly __brand: "SCPOptValue" };
+export type SCPOptValue = (proto.SCPValue & { readonly __brand: { readonly SCPOptValue: true } }) | null;
 export function scpOptValue(val: proto.SCPValue | null): SCPOptValue {
   return val as SCPOptValue;
 }
@@ -103,7 +103,7 @@ export interface SCPEnvelope {
   signature: proto.Signature;
 }
 
-export type SCPEnvelopes = proto.SCPEnvelope[] & { readonly __brand: "SCPEnvelopes" };
+export type SCPEnvelopes = proto.SCPEnvelope[] & { readonly __brand: { readonly SCPEnvelopes: true } };
 export function scpEnvelopes(val: proto.SCPEnvelope[]): SCPEnvelopes {
   return val as SCPEnvelopes;
 }
@@ -114,7 +114,7 @@ export interface SCPQuorumSet {
   inner_sets: proto.SCPQuorumSet[];
 }
 
-export type SCPOptQuorumSet = (proto.SCPQuorumSet | null) & { readonly __brand: "SCPOptQuorumSet" };
+export type SCPOptQuorumSet = (proto.SCPQuorumSet & { readonly __brand: { readonly SCPOptQuorumSet: true } }) | null;
 export function scpOptQuorumSet(val: proto.SCPQuorumSet | null): SCPOptQuorumSet {
   return val as SCPOptQuorumSet;
 }

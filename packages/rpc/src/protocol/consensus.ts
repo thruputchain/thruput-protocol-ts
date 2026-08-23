@@ -1,14 +1,14 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type Upgrade = Uint8Array & { readonly __brand: "Upgrade" };
+export type Upgrade = Uint8Array & { readonly __brand: { readonly Upgrade: true } };
 export function upgrade(data: Uint8Array): Upgrade {
   if (data.length > Number(128)) throw new Error(`Upgrade exceeds max length 128, got ${data.length}`);
   return data as Upgrade;

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -13,7 +13,7 @@ export interface PublicKeyConfig {
   max_weight: proto.Weight;
 }
 
-export type PublicKeyConfigOpt = (proto.PublicKeyConfig | null) & { readonly __brand: "PublicKeyConfigOpt" };
+export type PublicKeyConfigOpt = (proto.PublicKeyConfig & { readonly __brand: { readonly PublicKeyConfigOpt: true } }) | null;
 export function publicKeyConfigOpt(val: proto.PublicKeyConfig | null): PublicKeyConfigOpt {
   return val as PublicKeyConfigOpt;
 }

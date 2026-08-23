@@ -1,14 +1,14 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type BlockID = bigint & { readonly __brand: "BlockID" };
+export type BlockID = bigint & { readonly __brand: { readonly BlockID: true } };
 export function blockID(val: bigint): BlockID {
   return val as BlockID;
 }
@@ -20,7 +20,7 @@ export interface DbTip {
   default_wallet: proto.DeployedContractHash;
 }
 
-export type TransactionID = bigint & { readonly __brand: "TransactionID" };
+export type TransactionID = bigint & { readonly __brand: { readonly TransactionID: true } };
 export function transactionID(val: bigint): TransactionID {
   return val as TransactionID;
 }
@@ -41,7 +41,7 @@ export enum BlockExecutionMode {
   kBlockExecutionModeViewing = 2,
 }
 
-export type StorageCost = proto.int128_xdr & { readonly __brand: "StorageCost" };
+export type StorageCost = (NonNullable<proto.int128_xdr> & { readonly __brand: { readonly StorageCost: true } }) | Extract<proto.int128_xdr, null>;
 export function storageCost(val: proto.int128_xdr): StorageCost {
   return val as StorageCost;
 }
@@ -91,7 +91,7 @@ export type ExpectedViewingSnapshot =
   | { error: number }
 ;
 
-export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: "ContractAddressBatch" };
+export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: { readonly ContractAddressBatch: true } };
 export function contractAddressBatch(val: proto.ContractAddress[]): ContractAddressBatch {
   return val as ContractAddressBatch;
 }

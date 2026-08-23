@@ -1,25 +1,25 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type ValidatorID = Uint8Array & { readonly __brand: "ValidatorID" };
+export type ValidatorID = Uint8Array & { readonly __brand: { readonly ValidatorID: true } };
 export function validatorID(data: Uint8Array): ValidatorID {
   if (data.length !== 32) throw new Error(`ValidatorID must be exactly 32 bytes, got ${data.length}`);
   return data as ValidatorID;
 }
 
-export type ValidatorPublicKey = proto.Ed25519PublicKey & { readonly __brand: "ValidatorPublicKey" };
+export type ValidatorPublicKey = (NonNullable<proto.Ed25519PublicKey> & { readonly __brand: { readonly ValidatorPublicKey: true } }) | Extract<proto.Ed25519PublicKey, null>;
 export function validatorPublicKey(val: proto.Ed25519PublicKey): ValidatorPublicKey {
   return val as ValidatorPublicKey;
 }
 
-export type ValidatorSecretKey = proto.Ed25519SecretKey & { readonly __brand: "ValidatorSecretKey" };
+export type ValidatorSecretKey = (NonNullable<proto.Ed25519SecretKey> & { readonly __brand: { readonly ValidatorSecretKey: true } }) | Extract<proto.Ed25519SecretKey, null>;
 export function validatorSecretKey(val: proto.Ed25519SecretKey): ValidatorSecretKey {
   return val as ValidatorSecretKey;
 }

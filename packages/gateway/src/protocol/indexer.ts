@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -36,12 +36,12 @@ export type BlockLookupResult =
   | { outcome: number }
 ;
 
-export type IdentifiedEventBatch = proto.IdentifiedEvent[] & { readonly __brand: "IdentifiedEventBatch" };
+export type IdentifiedEventBatch = proto.IdentifiedEvent[] & { readonly __brand: { readonly IdentifiedEventBatch: true } };
 export function identifiedEventBatch(val: proto.IdentifiedEvent[]): IdentifiedEventBatch {
   return val as IdentifiedEventBatch;
 }
 
-export type TxInfoBatch = proto.TxInfo[] & { readonly __brand: "TxInfoBatch" };
+export type TxInfoBatch = proto.TxInfo[] & { readonly __brand: { readonly TxInfoBatch: true } };
 export function txInfoBatch(val: proto.TxInfo[]): TxInfoBatch {
   return val as TxInfoBatch;
 }
@@ -50,7 +50,7 @@ export const kMaxContractAddressesPerEventFilter = 5n;
 
 export const kMaxEventFiltersPerQuery = 5n;
 
-export type ContractAddressList = proto.ContractAddress[] & { readonly __brand: "ContractAddressList" };
+export type ContractAddressList = proto.ContractAddress[] & { readonly __brand: { readonly ContractAddressList: true } };
 export function contractAddressList(val: proto.ContractAddress[]): ContractAddressList {
   return val as ContractAddressList;
 }
@@ -66,7 +66,7 @@ export interface EventFilter {
   topics: proto.EventTopicFilter;
 }
 
-export type EventFilterList = proto.EventFilter[] & { readonly __brand: "EventFilterList" };
+export type EventFilterList = proto.EventFilter[] & { readonly __brand: { readonly EventFilterList: true } };
 export function eventFilterList(val: proto.EventFilter[]): EventFilterList {
   return val as EventFilterList;
 }
@@ -105,7 +105,7 @@ export interface TransactionRef {
   height: proto.BlockHeight;
 }
 
-export type TransactionRefBatch = proto.TransactionRef[] & { readonly __brand: "TransactionRefBatch" };
+export type TransactionRefBatch = proto.TransactionRef[] & { readonly __brand: { readonly TransactionRefBatch: true } };
 export function transactionRefBatch(val: proto.TransactionRef[]): TransactionRefBatch {
   return val as TransactionRefBatch;
 }
@@ -138,7 +138,7 @@ export enum IndexerBlockExplorerIntroOutcome {
 }
 
 
-export type TxEventLogBatch = proto.TxEventLog[] & { readonly __brand: "TxEventLogBatch" };
+export type TxEventLogBatch = proto.TxEventLog[] & { readonly __brand: { readonly TxEventLogBatch: true } };
 export function txEventLogBatch(val: proto.TxEventLog[]): TxEventLogBatch {
   return val as TxEventLogBatch;
 }
@@ -182,7 +182,7 @@ export type IndexerProgress =
   | { state: number }
 ;
 
-export type IndexerFailureMessage = string & { readonly __brand: "IndexerFailureMessage" };
+export type IndexerFailureMessage = string & { readonly __brand: { readonly IndexerFailureMessage: true } };
 export function indexerFailureMessage(val: string): IndexerFailureMessage {
   return val as IndexerFailureMessage;
 }
@@ -250,7 +250,7 @@ export interface IndexerTxFailureNotice {
   diagnostic: proto.TxFailureDiagnostic;
 }
 
-export type IndexerTxFailureNoticeBatch = proto.IndexerTxFailureNotice[] & { readonly __brand: "IndexerTxFailureNoticeBatch" };
+export type IndexerTxFailureNoticeBatch = proto.IndexerTxFailureNotice[] & { readonly __brand: { readonly IndexerTxFailureNoticeBatch: true } };
 export function indexerTxFailureNoticeBatch(val: proto.IndexerTxFailureNotice[]): IndexerTxFailureNoticeBatch {
   return val as IndexerTxFailureNoticeBatch;
 }

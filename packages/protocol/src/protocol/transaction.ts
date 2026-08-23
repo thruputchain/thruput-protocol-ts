@@ -1,21 +1,21 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type Calldata = Uint8Array & { readonly __brand: "Calldata" };
+export type Calldata = Uint8Array & { readonly __brand: { readonly Calldata: true } };
 export function calldata(data: Uint8Array): Calldata {
   return data as Calldata;
 }
 
 export const kMaxReturnBufferLen = 1024n;
 
-export type ReturnBuffer = Uint8Array & { readonly __brand: "ReturnBuffer" };
+export type ReturnBuffer = Uint8Array & { readonly __brand: { readonly ReturnBuffer: true } };
 export function returnBuffer(data: Uint8Array): ReturnBuffer {
   if (data.length > Number(kMaxReturnBufferLen)) throw new Error(`ReturnBuffer exceeds max length kMaxReturnBufferLen, got ${data.length}`);
   return data as ReturnBuffer;
@@ -57,7 +57,7 @@ export interface DecoratedSignature {
   signature: proto.Signature;
 }
 
-export type TransactionHash = proto.SHA256Hash & { readonly __brand: "TransactionHash" };
+export type TransactionHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly TransactionHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function transactionHash(val: proto.SHA256Hash): TransactionHash {
   return val as TransactionHash;
 }
@@ -67,27 +67,27 @@ export interface SignedTransaction {
   signatures: proto.DecoratedSignature[];
 }
 
-export type TransactionBatch = proto.Transaction[] & { readonly __brand: "TransactionBatch" };
+export type TransactionBatch = proto.Transaction[] & { readonly __brand: { readonly TransactionBatch: true } };
 export function transactionBatch(val: proto.Transaction[]): TransactionBatch {
   return val as TransactionBatch;
 }
 
-export type SignedTransactionBatch = proto.SignedTransaction[] & { readonly __brand: "SignedTransactionBatch" };
+export type SignedTransactionBatch = proto.SignedTransaction[] & { readonly __brand: { readonly SignedTransactionBatch: true } };
 export function signedTransactionBatch(val: proto.SignedTransaction[]): SignedTransactionBatch {
   return val as SignedTransactionBatch;
 }
 
-export type OptSignedTransaction = (proto.SignedTransaction | null) & { readonly __brand: "OptSignedTransaction" };
+export type OptSignedTransaction = (proto.SignedTransaction & { readonly __brand: { readonly OptSignedTransaction: true } }) | null;
 export function optSignedTransaction(val: proto.SignedTransaction | null): OptSignedTransaction {
   return val as OptSignedTransaction;
 }
 
-export type OptSignedTransactionBatch = proto.OptSignedTransaction[] & { readonly __brand: "OptSignedTransactionBatch" };
+export type OptSignedTransactionBatch = proto.OptSignedTransaction[] & { readonly __brand: { readonly OptSignedTransactionBatch: true } };
 export function optSignedTransactionBatch(val: proto.OptSignedTransaction[]): OptSignedTransactionBatch {
   return val as OptSignedTransactionBatch;
 }
 
-export type TransactionHashBatch = proto.TransactionHash[] & { readonly __brand: "TransactionHashBatch" };
+export type TransactionHashBatch = proto.TransactionHash[] & { readonly __brand: { readonly TransactionHashBatch: true } };
 export function transactionHashBatch(val: proto.TransactionHash[]): TransactionHashBatch {
   return val as TransactionHashBatch;
 }
@@ -103,7 +103,7 @@ export interface ProposedTransaction {
   nondeterministic_proposal_data: proto.NondeterministicProposalData;
 }
 
-export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: "ProposedTransactionBatch" };
+export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: { readonly ProposedTransactionBatch: true } };
 export function proposedTransactionBatch(val: proto.ProposedTransaction[]): ProposedTransactionBatch {
   return val as ProposedTransactionBatch;
 }

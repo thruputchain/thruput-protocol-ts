@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -14,17 +14,17 @@ export interface ParallelBatch {
   xdr: Uint8Array;
 }
 
-export type ParallelSignedTransactionBatch = proto.ParallelBatch & { readonly __brand: "ParallelSignedTransactionBatch" };
+export type ParallelSignedTransactionBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelSignedTransactionBatch: true } }) | Extract<proto.ParallelBatch, null>;
 export function parallelSignedTransactionBatch(val: proto.ParallelBatch): ParallelSignedTransactionBatch {
   return val as ParallelSignedTransactionBatch;
 }
 
-export type ParallelTransactionHashBatch = proto.ParallelBatch & { readonly __brand: "ParallelTransactionHashBatch" };
+export type ParallelTransactionHashBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelTransactionHashBatch: true } }) | Extract<proto.ParallelBatch, null>;
 export function parallelTransactionHashBatch(val: proto.ParallelBatch): ParallelTransactionHashBatch {
   return val as ParallelTransactionHashBatch;
 }
 
-export type ParallelNondeterministicProposalDataBatch = proto.ParallelBatch & { readonly __brand: "ParallelNondeterministicProposalDataBatch" };
+export type ParallelNondeterministicProposalDataBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelNondeterministicProposalDataBatch: true } }) | Extract<proto.ParallelBatch, null>;
 export function parallelNondeterministicProposalDataBatch(val: proto.ParallelBatch): ParallelNondeterministicProposalDataBatch {
   return val as ParallelNondeterministicProposalDataBatch;
 }

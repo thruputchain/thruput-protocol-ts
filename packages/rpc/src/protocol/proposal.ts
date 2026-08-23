@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -14,7 +14,7 @@ export interface ProposalTxs {
   nondeterministic_data: proto.ParallelNondeterministicProposalDataBatch;
 }
 
-export type ProposalTxsHash = proto.SHA256Hash & { readonly __brand: "ProposalTxsHash" };
+export type ProposalTxsHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly ProposalTxsHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function proposalTxsHash(val: proto.SHA256Hash): ProposalTxsHash {
   return val as ProposalTxsHash;
 }
@@ -24,7 +24,7 @@ export interface Proposal {
   transactions: proto.ProposalTxs;
 }
 
-export type OptProposal = (proto.Proposal | null) & { readonly __brand: "OptProposal" };
+export type OptProposal = (proto.Proposal & { readonly __brand: { readonly OptProposal: true } }) | null;
 export function optProposal(val: proto.Proposal | null): OptProposal {
   return val as OptProposal;
 }

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -14,7 +14,7 @@ export const kMaxEventsPerTransaction = 1000n;
 
 export const kMaxTopics = 3n;
 
-export type Topic = Uint8Array & { readonly __brand: "Topic" };
+export type Topic = Uint8Array & { readonly __brand: { readonly Topic: true } };
 export function topic(data: Uint8Array): Topic {
   if (data.length !== 32) throw new Error(`Topic must be exactly 32 bytes, got ${data.length}`);
   return data as Topic;

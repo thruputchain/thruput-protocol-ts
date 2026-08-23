@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, Uint32Codec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -24,25 +24,25 @@ export enum TestStatusCode {
   Internal = 2,
 }
 
-export type TestHash = Uint8Array & { readonly __brand: "TestHash" };
+export type TestHash = Uint8Array & { readonly __brand: { readonly TestHash: true } };
 export function testHash(data: Uint8Array): TestHash {
   if (data.length !== 32) throw new Error(`TestHash must be exactly 32 bytes, got ${data.length}`);
   return data as TestHash;
 }
 
-export type TestEntrypointId = Uint8Array & { readonly __brand: "TestEntrypointId" };
+export type TestEntrypointId = Uint8Array & { readonly __brand: { readonly TestEntrypointId: true } };
 export function testEntrypointId(data: Uint8Array): TestEntrypointId {
   if (data.length !== 8) throw new Error(`TestEntrypointId must be exactly 8 bytes, got ${data.length}`);
   return data as TestEntrypointId;
 }
 
-export type TestPayload = Uint8Array & { readonly __brand: "TestPayload" };
+export type TestPayload = Uint8Array & { readonly __brand: { readonly TestPayload: true } };
 export function testPayload(data: Uint8Array): TestPayload {
   if (data.length > Number(1024)) throw new Error(`TestPayload exceeds max length 1024, got ${data.length}`);
   return data as TestPayload;
 }
 
-export type TestBlob = Uint8Array & { readonly __brand: "TestBlob" };
+export type TestBlob = Uint8Array & { readonly __brand: { readonly TestBlob: true } };
 export function testBlob(data: Uint8Array): TestBlob {
   return data as TestBlob;
 }
@@ -50,6 +50,16 @@ export function testBlob(data: Uint8Array): TestBlob {
 export interface TestPoint {
   x: bigint;
   y: bigint;
+}
+
+export type TestOptPoint = (proto.TestPoint & { readonly __brand: { readonly TestOptPoint: true } }) | null;
+export function testOptPoint(val: proto.TestPoint | null): TestOptPoint {
+  return val as TestOptPoint;
+}
+
+export type TestOptPointAlias = (NonNullable<proto.TestOptPoint> & { readonly __brand: { readonly TestOptPointAlias: true } }) | Extract<proto.TestOptPoint, null>;
+export function testOptPointAlias(val: proto.TestOptPoint): TestOptPointAlias {
+  return val as TestOptPointAlias;
 }
 
 export type TestMessage =
@@ -119,6 +129,13 @@ const _TestPoint: XdrCodec<TestPoint> = {
     const y = r.readUint32();
     return { x, y };
   },
+};
+
+const _TestOptPoint = OptionCodec(() => _TestPoint) as XdrCodec<TestOptPoint>;
+
+const _TestOptPointAlias: XdrCodec<TestOptPointAlias> = {
+  encode(w, val) { proto.codec.TestOptPoint.encode(w, val); },
+  decode(r) { return testOptPointAlias(proto.codec.TestOptPoint.decode(r)); },
 };
 
 const _TestMessage: XdrCodec<TestMessage> = {
@@ -220,6 +237,8 @@ export const codec = {
   TestPayload: _TestPayload,
   TestBlob: _TestBlob,
   TestPoint: _TestPoint,
+  TestOptPoint: _TestOptPoint,
+  TestOptPointAlias: _TestOptPointAlias,
   TestMessage: _TestMessage,
   TestExtPoint: _TestExtPoint,
   TestMatrix: _TestMatrix,

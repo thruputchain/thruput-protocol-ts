@@ -36,6 +36,11 @@ struct TestPoint {
   unsigned int y;
 };
 
+// -- Pointer typedef, and a scalar typedef whose base is nullable --
+
+typedef TestPoint *TestOptPoint;
+typedef TestOptPoint TestOptPointAlias;
+
 // -- Int-discriminated unions (no cross-type refs) --
 
 union TestMessage switch (int tag) {
