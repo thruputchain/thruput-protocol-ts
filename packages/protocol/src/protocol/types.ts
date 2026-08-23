@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -17,39 +17,39 @@ export interface int128_xdr {
   lowbits: bigint;
 }
 
-export type Protocol = bigint & { readonly __brand: "Protocol" };
+export type Protocol = bigint & { readonly __brand: { readonly Protocol: true } };
 export function protocol(val: bigint): Protocol {
   return val as Protocol;
 }
 
-export type TimePoint = bigint & { readonly __brand: "TimePoint" };
+export type TimePoint = bigint & { readonly __brand: { readonly TimePoint: true } };
 export function timePoint(val: bigint): TimePoint {
   return val as TimePoint;
 }
 
-export type RuntimeMemoryLength = bigint & { readonly __brand: "RuntimeMemoryLength" };
+export type RuntimeMemoryLength = bigint & { readonly __brand: { readonly RuntimeMemoryLength: true } };
 export function runtimeMemoryLength(val: bigint): RuntimeMemoryLength {
   return val as RuntimeMemoryLength;
 }
 
-export type GasAmount = bigint & { readonly __brand: "GasAmount" };
+export type GasAmount = bigint & { readonly __brand: { readonly GasAmount: true } };
 export function gasAmount(val: bigint): GasAmount {
   return val as GasAmount;
 }
 
-export type Ed25519Signature = Uint8Array & { readonly __brand: "Ed25519Signature" };
+export type Ed25519Signature = Uint8Array & { readonly __brand: { readonly Ed25519Signature: true } };
 export function ed25519Signature(data: Uint8Array): Ed25519Signature {
   if (data.length !== 64) throw new Error(`Ed25519Signature must be exactly 64 bytes, got ${data.length}`);
   return data as Ed25519Signature;
 }
 
-export type Ed25519PublicKey = Uint8Array & { readonly __brand: "Ed25519PublicKey" };
+export type Ed25519PublicKey = Uint8Array & { readonly __brand: { readonly Ed25519PublicKey: true } };
 export function ed25519PublicKey(data: Uint8Array): Ed25519PublicKey {
   if (data.length !== 32) throw new Error(`Ed25519PublicKey must be exactly 32 bytes, got ${data.length}`);
   return data as Ed25519PublicKey;
 }
 
-export type Ed25519SecretKey = Uint8Array & { readonly __brand: "Ed25519SecretKey" };
+export type Ed25519SecretKey = Uint8Array & { readonly __brand: { readonly Ed25519SecretKey: true } };
 export function ed25519SecretKey(data: Uint8Array): Ed25519SecretKey {
   if (data.length !== 64) throw new Error(`Ed25519SecretKey must be exactly 64 bytes, got ${data.length}`);
   return data as Ed25519SecretKey;
@@ -75,54 +75,54 @@ export type ExtensionPoint =
   | { v: 0 }
 ;
 
-export type SHA256Hash = Uint8Array & { readonly __brand: "SHA256Hash" };
+export type SHA256Hash = Uint8Array & { readonly __brand: { readonly SHA256Hash: true } };
 export function sha256Hash(data: Uint8Array): SHA256Hash {
   if (data.length !== 32) throw new Error(`SHA256Hash must be exactly 32 bytes, got ${data.length}`);
   return data as SHA256Hash;
 }
 
-export type ConsensusValueHash = proto.SHA256Hash & { readonly __brand: "ConsensusValueHash" };
+export type ConsensusValueHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly ConsensusValueHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function consensusValueHash(val: proto.SHA256Hash): ConsensusValueHash {
   return val as ConsensusValueHash;
 }
 
-export type NetworkHash = proto.SHA256Hash & { readonly __brand: "NetworkHash" };
+export type NetworkHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly NetworkHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function networkHash(val: proto.SHA256Hash): NetworkHash {
   return val as NetworkHash;
 }
 
-export type GenesisConfigurationHash = proto.SHA256Hash & { readonly __brand: "GenesisConfigurationHash" };
+export type GenesisConfigurationHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly GenesisConfigurationHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function genesisConfigurationHash(val: proto.SHA256Hash): GenesisConfigurationHash {
   return val as GenesisConfigurationHash;
 }
 
-export type StorageLongHash = Uint8Array & { readonly __brand: "StorageLongHash" };
+export type StorageLongHash = Uint8Array & { readonly __brand: { readonly StorageLongHash: true } };
 export function storageLongHash(data: Uint8Array): StorageLongHash {
   if (data.length !== 2048) throw new Error(`StorageLongHash must be exactly 2048 bytes, got ${data.length}`);
   return data as StorageLongHash;
 }
 
-export type StorageShortHash = proto.SHA256Hash & { readonly __brand: "StorageShortHash" };
+export type StorageShortHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly StorageShortHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function storageShortHash(val: proto.SHA256Hash): StorageShortHash {
   return val as StorageShortHash;
 }
 
-export type TxsHash = proto.SHA256Hash & { readonly __brand: "TxsHash" };
+export type TxsHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly TxsHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function txsHash(val: proto.SHA256Hash): TxsHash {
   return val as TxsHash;
 }
 
-export type EventsHash = proto.SHA256Hash & { readonly __brand: "EventsHash" };
+export type EventsHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly EventsHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function eventsHash(val: proto.SHA256Hash): EventsHash {
   return val as EventsHash;
 }
 
-export type ProposalHeaderHash = proto.SHA256Hash & { readonly __brand: "ProposalHeaderHash" };
+export type ProposalHeaderHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly ProposalHeaderHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function proposalHeaderHash(val: proto.SHA256Hash): ProposalHeaderHash {
   return val as ProposalHeaderHash;
 }
 
-export type ContractAddress = Uint8Array & { readonly __brand: "ContractAddress" };
+export type ContractAddress = Uint8Array & { readonly __brand: { readonly ContractAddress: true } };
 export function contractAddress(data: Uint8Array): ContractAddress {
   if (data.length !== 32) throw new Error(`ContractAddress must be exactly 32 bytes, got ${data.length}`);
   return data as ContractAddress;
@@ -136,7 +136,7 @@ export enum StorageKeyType {
   ReplayCache = 4,
 }
 
-export type StorageKeyContractData = Uint8Array & { readonly __brand: "StorageKeyContractData" };
+export type StorageKeyContractData = Uint8Array & { readonly __brand: { readonly StorageKeyContractData: true } };
 export function storageKeyContractData(data: Uint8Array): StorageKeyContractData {
   if (data.length !== 32) throw new Error(`StorageKeyContractData must be exactly 32 bytes, got ${data.length}`);
   return data as StorageKeyContractData;
@@ -159,7 +159,7 @@ export interface AddressAndKey {
   key: proto.StorageKey;
 }
 
-export type BlockHeight = bigint & { readonly __brand: "BlockHeight" };
+export type BlockHeight = bigint & { readonly __brand: { readonly BlockHeight: true } };
 export function blockHeight(val: bigint): BlockHeight {
   return val as BlockHeight;
 }

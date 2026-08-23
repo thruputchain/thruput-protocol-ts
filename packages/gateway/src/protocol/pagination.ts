@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -25,7 +25,7 @@ export type BlockAnchor =
   | { kind: proto.BlockAnchorKind.AnchorAtHeight; height: proto.BlockHeight }
 ;
 
-export type PaginationCursor = Uint8Array & { readonly __brand: "PaginationCursor" };
+export type PaginationCursor = Uint8Array & { readonly __brand: { readonly PaginationCursor: true } };
 export function paginationCursor(data: Uint8Array): PaginationCursor {
   return data as PaginationCursor;
 }

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -28,7 +28,7 @@ export interface HogAge {
   average_ages: proto.BlockHeight[];
 }
 
-export type HogAgeBatch = proto.HogAge[] & { readonly __brand: "HogAgeBatch" };
+export type HogAgeBatch = proto.HogAge[] & { readonly __brand: { readonly HogAgeBatch: true } };
 export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
   return val as HogAgeBatch;
 }
@@ -38,7 +38,7 @@ export type HogAgeResult =
   | { result: number }
 ;
 
-export type HogAgeResults = proto.HogAgeResult[] & { readonly __brand: "HogAgeResults" };
+export type HogAgeResults = proto.HogAgeResult[] & { readonly __brand: { readonly HogAgeResults: true } };
 export function hogAgeResults(val: proto.HogAgeResult[]): HogAgeResults {
   return val as HogAgeResults;
 }

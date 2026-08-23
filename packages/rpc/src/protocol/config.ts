@@ -1,18 +1,18 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
-export type Milliseconds = bigint & { readonly __brand: "Milliseconds" };
+export type Milliseconds = bigint & { readonly __brand: { readonly Milliseconds: true } };
 export function milliseconds(val: bigint): Milliseconds {
   return val as Milliseconds;
 }
 
-export type Seconds = bigint & { readonly __brand: "Seconds" };
+export type Seconds = bigint & { readonly __brand: { readonly Seconds: true } };
 export function seconds(val: bigint): Seconds {
   return val as Seconds;
 }

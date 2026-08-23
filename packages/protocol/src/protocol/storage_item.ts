@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -20,7 +20,7 @@ export enum StorageItemType {
 
 export const kBytestringMaxLen = 1024n;
 
-export type Bytestring = Uint8Array & { readonly __brand: "Bytestring" };
+export type Bytestring = Uint8Array & { readonly __brand: { readonly Bytestring: true } };
 export function bytestring(data: Uint8Array): Bytestring {
   if (data.length > Number(kBytestringMaxLen)) throw new Error(`Bytestring exceeds max length kBytestringMaxLen, got ${data.length}`);
   return data as Bytestring;
@@ -108,7 +108,7 @@ export enum StorageDeltaFlags {
   ExclusiveLock = 0x00000001,
 }
 
-export type StorageDeltaFlagSet = bigint & { readonly __brand: "StorageDeltaFlagSet" };
+export type StorageDeltaFlagSet = bigint & { readonly __brand: { readonly StorageDeltaFlagSet: true } };
 export function storageDeltaFlagSet(val: bigint): StorageDeltaFlagSet {
   return val as StorageDeltaFlagSet;
 }

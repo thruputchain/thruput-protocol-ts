@@ -1,24 +1,24 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type Weight = bigint & { readonly __brand: "Weight" };
+export type Weight = bigint & { readonly __brand: { readonly Weight: true } };
 export function weight(val: bigint): Weight {
   return val as Weight;
 }
 
-export type BitMap = bigint & { readonly __brand: "BitMap" };
+export type BitMap = bigint & { readonly __brand: { readonly BitMap: true } };
 export function bitMap(val: bigint): BitMap {
   return val as BitMap;
 }
 
-export type KeyID = bigint & { readonly __brand: "KeyID" };
+export type KeyID = bigint & { readonly __brand: { readonly KeyID: true } };
 export function keyID(val: bigint): KeyID {
   return val as KeyID;
 }

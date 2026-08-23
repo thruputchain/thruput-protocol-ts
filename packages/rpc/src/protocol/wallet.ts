@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -16,7 +16,7 @@ export enum WalletTransactionAckType {
   WalletTransactionSubmitted = 1,
 }
 
-export type WalletSubmittedTransactionID = Uint8Array & { readonly __brand: "WalletSubmittedTransactionID" };
+export type WalletSubmittedTransactionID = Uint8Array & { readonly __brand: { readonly WalletSubmittedTransactionID: true } };
 export function walletSubmittedTransactionID(data: Uint8Array): WalletSubmittedTransactionID {
   if (data.length !== 32) throw new Error(`WalletSubmittedTransactionID must be exactly 32 bytes, got ${data.length}`);
   return data as WalletSubmittedTransactionID;

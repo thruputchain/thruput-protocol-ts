@@ -1,13 +1,13 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
-export type DogwoodTreeHash = proto.SHA256Hash & { readonly __brand: "DogwoodTreeHash" };
+export type DogwoodTreeHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly DogwoodTreeHash: true } }) | Extract<proto.SHA256Hash, null>;
 export function dogwoodTreeHash(val: proto.SHA256Hash): DogwoodTreeHash {
   return val as DogwoodTreeHash;
 }
@@ -17,17 +17,17 @@ export interface DogwoodTreeNode {
   children: proto.DogwoodTreeHash[];
 }
 
-export type DogwoodTreeNodes = proto.DogwoodTreeNode[] & { readonly __brand: "DogwoodTreeNodes" };
+export type DogwoodTreeNodes = proto.DogwoodTreeNode[] & { readonly __brand: { readonly DogwoodTreeNodes: true } };
 export function dogwoodTreeNodes(val: proto.DogwoodTreeNode[]): DogwoodTreeNodes {
   return val as DogwoodTreeNodes;
 }
 
-export type DogwoodStreamID = proto.DogwoodInt64 & { readonly __brand: "DogwoodStreamID" };
+export type DogwoodStreamID = (NonNullable<proto.DogwoodInt64> & { readonly __brand: { readonly DogwoodStreamID: true } }) | Extract<proto.DogwoodInt64, null>;
 export function dogwoodStreamID(val: proto.DogwoodInt64): DogwoodStreamID {
   return val as DogwoodStreamID;
 }
 
-export type DogwoodTransmissionID = proto.DogwoodInt64 & { readonly __brand: "DogwoodTransmissionID" };
+export type DogwoodTransmissionID = (NonNullable<proto.DogwoodInt64> & { readonly __brand: { readonly DogwoodTransmissionID: true } }) | Extract<proto.DogwoodInt64, null>;
 export function dogwoodTransmissionID(val: proto.DogwoodInt64): DogwoodTransmissionID {
   return val as DogwoodTransmissionID;
 }

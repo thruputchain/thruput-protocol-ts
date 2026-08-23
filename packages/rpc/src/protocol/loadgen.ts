@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -23,12 +23,12 @@ export type ExperimentConfig =
   | { experiment_type: proto.ExperimentType.kExperimentTypeERC20BasicAuthPayments; erc20_payments: proto.ERC20PaymentsConfig }
 ;
 
-export type InitializationBlock = proto.SignedTransaction[] & { readonly __brand: "InitializationBlock" };
+export type InitializationBlock = proto.SignedTransaction[] & { readonly __brand: { readonly InitializationBlock: true } };
 export function initializationBlock(val: proto.SignedTransaction[]): InitializationBlock {
   return val as InitializationBlock;
 }
 
-export type LoadgenContextID = bigint & { readonly __brand: "LoadgenContextID" };
+export type LoadgenContextID = bigint & { readonly __brand: { readonly LoadgenContextID: true } };
 export function loadgenContextID(val: bigint): LoadgenContextID {
   return val as LoadgenContextID;
 }
