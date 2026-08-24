@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   XdrCodec, serialize, deserialize,
-  OptionCodec, VarArrayCodec, FixedArrayCodec,
+  OptionCodec, VarArrayCodec, FixedArrayCodec, FixedOpaqueCodec, VoidCodec,
   MAX_PREALLOC_BYTES,
 } from "../../src/xdr/codec.js";
 import { XdrWriter } from "../../src/xdr/writer.js";
@@ -136,6 +136,24 @@ describe("VarArrayCodec", () => {
     expect(result[0]).toBe(0n);
     expect(result[len - 1]).toBe(42n);
   }, 30_000);
+
+  it("round-trips zero-width FixedOpaqueCodec(0) elements", () => {
+    // A zero-width element consumes no bytes, so the wire form is only the
+    // 4-byte length prefix. The bounded reserve is 0 (nothing remains after
+    // the prefix) and every element decodes through lazy push-growth; the
+    // decode loop must not gate on remaining input.
+    const ZeroWidth = VarArrayCodec(FixedOpaqueCodec(0), 3);
+    const bytes = serialize([new Uint8Array(0), new Uint8Array(0)], ZeroWidth);
+    expect(bytes).toEqual(new Uint8Array([0, 0, 0, 2]));
+    expect(deserialize(bytes, ZeroWidth)).toEqual([new Uint8Array(0), new Uint8Array(0)]);
+  });
+
+  it("round-trips zero-width VoidCodec elements", () => {
+    const VoidArray = VarArrayCodec(VoidCodec, 3);
+    const bytes = serialize([undefined, undefined, undefined], VoidArray);
+    expect(bytes).toEqual(new Uint8Array([0, 0, 0, 3]));
+    expect(deserialize(bytes, VoidArray)).toHaveLength(3);
+  });
 });
 
 describe("FixedArrayCodec", () => {
