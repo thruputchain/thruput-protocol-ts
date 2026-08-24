@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { XdrWriter } from "../../src/xdr/writer.js";
+import { CxsWriter } from "../../src/xdr/cxs_writer.js";
 
 describe("XdrWriter", () => {
   it("writes uint32", () => {
@@ -88,5 +89,25 @@ describe("XdrWriter", () => {
   it("throws on var opaque exceeding max", () => {
     const w = new XdrWriter();
     expect(() => w.writeVarOpaque(new Uint8Array(101), 100)).toThrow();
+  });
+
+  it("grows from zero initial capacity", () => {
+    const w = new XdrWriter(0);
+    w.writeUint32(42n);
+    w.writeString("hello", 100);
+    const r = w.finish();
+    expect(r.length).toBe(4 + 4 + 8); // uint32 + length prefix + padded "hello"
+    expect(r.subarray(0, 4)).toEqual(new Uint8Array([0, 0, 0, 42]));
+  });
+});
+
+describe("CxsWriter", () => {
+  it("grows from zero initial capacity", () => {
+    const w = new CxsWriter(0);
+    w.writeUint32(42n);
+    w.writeString("hello", 100);
+    const r = w.finish();
+    expect(r.length).toBe(1 + 1 + 5); // header-only u32 + length prefix + "hello"
+    expect(r[0]).toBe(42);
   });
 });

@@ -40,6 +40,28 @@ jobs:
           echo "All packages at version $VERSION"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
+      - name: Validate internal dependency pins
+        run: |
+          set -euo pipefail
+
+          FAIL=0
+          for pkg in packages/*/package.json; do
+            BAD=$(jq -r --arg v "$VERSION" \
+              '.dependencies // {} | to_entries[]
+               | select(.key | startswith("@groundhogchain/"))
+               | select(.value != $v)
+               | "\(.key) pinned to \(.value)"' "$pkg")
+            if [ -n "$BAD" ]; then
+              echo "ERROR: $(jq -r '.name' "$pkg") has internal deps not pinned to $VERSION:"
+              echo "$BAD" | sed 's/^/  /'
+              FAIL=1
+            fi
+          done
+          if [ "$FAIL" -ne 0 ]; then
+            exit 1
+          fi
+          echo "All internal @groundhogchain/* dependencies pinned to $VERSION"
+
       # Same gate as CI's `check` and `test` jobs — a release is dispatched
       # manually and can run on a commit CI never covered, so it re-verifies
       # rather than trusting a green tick upstream.

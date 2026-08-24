@@ -12,8 +12,7 @@
 - Cross-SDK tests are separate from the normal workspace test run: `cd packages/protocol && npx vitest run test/cross-sdk/`.
 
 ## Testing Notes
-- `packages/gateway` has no real test suite yet; its `test` script is just `echo 'no tests yet'`.
-- `packages/protocol`, `packages/rpc`, and `packages/contract-spec` use Vitest config aliases so tests resolve sibling workspace source directly instead of built output.
+- `packages/protocol`, `packages/rpc`, `packages/contract-spec`, and `packages/gateway` use Vitest config aliases so tests resolve sibling workspace source directly instead of built output.
 - Cross-SDK protocol tests require the external Rust tool `groundhog-test-vectors`, which CI installs via `cargo install groundhog-test-vectors --registry groundhog` before regenerating JSON fixtures.
 
 ## Codegen And Generated Files

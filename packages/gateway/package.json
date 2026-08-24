@@ -24,7 +24,8 @@
   },
   "scripts": {
     "build": "tsdown src/index.ts --format esm,cjs --dts",
-    "test": "echo 'no tests yet'",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -35,7 +36,8 @@
   "devDependencies": {
     "@types/node": "25.5.0",
     "tsdown": "0.22.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.1.8"
   },
   "license": "Apache-2.0",
   "repository": {

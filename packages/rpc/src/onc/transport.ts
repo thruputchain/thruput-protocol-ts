@@ -2,9 +2,8 @@
  * ONC-RPC transport abstraction.
  *
  * ONC-RPC (RFC 5531) sends XDR-encoded call/reply messages over a
- * reliable transport. We support:
- * - WebSocket (browsers, Cloudflare Workers)
- * - TCP (Node.js, via record marking per RFC 5531 §11)
+ * reliable transport. The provided implementation is WebSocket-based
+ * (browsers, Cloudflare Workers, Node.js).
  */
 
 export interface RpcTransport {
@@ -37,7 +36,9 @@ export class WebSocketTransport implements RpcTransport {
 
     this.ws.onmessage = (event) => {
       const data = new Uint8Array(event.data as ArrayBuffer);
-      // The xid is the first 4 bytes of the ONC-RPC reply
+      // The xid is the first 4 bytes of the ONC-RPC reply; drop frames
+      // too short to carry one.
+      if (data.byteLength < 4) return;
       const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
       const xid = view.getUint32(0);
       const pending = this.pending.get(xid);

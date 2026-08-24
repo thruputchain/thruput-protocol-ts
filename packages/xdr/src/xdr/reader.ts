@@ -1,7 +1,7 @@
 import type { IReader } from "./codec.js";
 import { paddedLen } from "./padding.js";
 
-const textDecoder = new TextDecoder();
+const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
 /** Reads standard XDR bytes as defined by RFC 4506. */
 export class XdrReader implements IReader {
@@ -82,13 +82,20 @@ export class XdrReader implements IReader {
     return val === 1n;
   }
 
-  /** Read fixed-length opaque bytes into a caller-owned copy, skipping XDR zero padding. */
+  /** Read fixed-length opaque bytes into a caller-owned copy, consuming XDR zero padding. */
   readFixedOpaque(len: number): Uint8Array {
     const padded = paddedLen(len);
     this.ensure(padded);
     // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
     // returns an aliasing view, and this.data may be a Buffer.
     const result = new Uint8Array(this.data.subarray(this.pos, this.pos + len));
+    for (let i = this.pos + len; i < this.pos + padded; i++) {
+      if (this.data[i] !== 0) {
+        throw new Error(
+          `XDR non-zero padding byte 0x${this.data[i].toString(16)} at offset ${i}`
+        );
+      }
+    }
     this.pos += padded;
     return result;
   }
@@ -102,9 +109,11 @@ export class XdrReader implements IReader {
     return this.readFixedOpaque(len);
   }
 
-  /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
+  /**
+   * Read and UTF-8 decode a length-prefixed string bounded by `max` bytes.
+   * Throws `TypeError` on malformed UTF-8 (fatal decode).
+   */
   readString(max: number): string {
-    const bytes = this.readVarOpaque(max);
-    return textDecoder.decode(bytes);
+    return textDecoder.decode(this.readVarOpaque(max));
   }
 }

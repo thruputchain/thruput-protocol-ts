@@ -284,6 +284,18 @@ describe("CXS decoding from known bytes", () => {
     const r = new CxsReader(fromHex("026869"));
     expect(r.readString(100)).toBe("hi");
   });
+
+  it("rejects invalid UTF-8 in strings", () => {
+    // length 2, bytes ff fe: not valid UTF-8
+    const r = new CxsReader(fromHex("02fffe"));
+    expect(() => r.readString(100)).toThrow(TypeError);
+  });
+
+  it("rejects truncated multi-byte UTF-8 sequence in strings", () => {
+    // length 1, byte e2: start of a 3-byte sequence with no continuation
+    const r = new CxsReader(fromHex("01e2"));
+    expect(() => r.readString(100)).toThrow(TypeError);
+  });
 });
 
 describe("CXS minimal encoding validation", () => {
