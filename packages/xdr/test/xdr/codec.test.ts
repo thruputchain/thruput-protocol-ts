@@ -102,6 +102,21 @@ describe("VarArrayCodec", () => {
     const bytes = serialize([1n, 2n, 3n], VarArrayCodec(Uint32Codec, 10));
     expect(() => deserialize(bytes, Max2)).toThrow("exceeds max 2");
   });
+
+  it("throws on decode when a 0xFFFFFFFF length prefix exceeds remaining input", () => {
+    // Forged length prefix of 4294967295 with no element bytes behind it.
+    // Must fail before allocating, not attempt a 4-billion-entry array.
+    const Unbounded = VarArrayCodec(Uint32Codec, 0xffffffff);
+    const bytes = new Uint8Array([0xff, 0xff, 0xff, 0xff]);
+    expect(() => deserialize(bytes, Unbounded)).toThrow(/exceeds remaining input/);
+  });
+
+  it("throws on decode when the length prefix exceeds remaining element bytes", () => {
+    // Claims 3 elements but only 2 bytes of input follow the prefix.
+    const Var = VarArrayCodec(Uint32Codec, 10);
+    const bytes = new Uint8Array([0, 0, 0, 3, 0xaa, 0xbb]);
+    expect(() => deserialize(bytes, Var)).toThrow(/exceeds remaining input/);
+  });
 });
 
 describe("FixedArrayCodec", () => {

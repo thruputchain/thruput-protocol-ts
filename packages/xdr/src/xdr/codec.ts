@@ -184,8 +184,19 @@ export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]
       if (len > max) {
         throw new Error(`VarArray length ${len} exceeds max ${max}`);
       }
+      // Every non-void element consumes at least one input byte, so a length
+      // prefix larger than the remaining input is unsatisfiable. Checking
+      // before building the array prevents attacker-controlled allocation
+      // from a forged length prefix (max is often 0xFFFFFFFF).
+      if (len > r.remaining) {
+        throw new Error(
+          `VarArray length ${len} exceeds remaining input (${r.remaining} bytes)`
+        );
+      }
       const c = resolve(inner);
-      return Array.from({ length: len }, () => c.decode(r));
+      const result: T[] = [];
+      for (let i = 0; i < len; i++) result.push(c.decode(r));
+      return result;
     },
   };
 }
