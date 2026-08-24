@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   XdrCodec, serialize, deserialize,
   OptionCodec, VarArrayCodec, FixedArrayCodec,
+  MAX_PREALLOC_BYTES,
 } from "../../src/xdr/codec.js";
 import { XdrWriter } from "../../src/xdr/writer.js";
 import { XdrReader } from "../../src/xdr/reader.js";
@@ -103,20 +104,38 @@ describe("VarArrayCodec", () => {
     expect(() => deserialize(bytes, Max2)).toThrow("exceeds max 2");
   });
 
-  it("throws on decode when a 0xFFFFFFFF length prefix exceeds remaining input", () => {
+  it("fails fast on a forged 0xFFFFFFFF length prefix without a large allocation", () => {
     // Forged length prefix of 4294967295 with no element bytes behind it.
-    // Must fail before allocating, not attempt a 4-billion-entry array.
+    // The initial reserve is bounded by the remaining input (0 bytes), so
+    // no 4-billion-entry array is attempted; the first element read fails
+    // on exhausted input.
     const Unbounded = VarArrayCodec(Uint32Codec, 0xffffffff);
     const bytes = new Uint8Array([0xff, 0xff, 0xff, 0xff]);
-    expect(() => deserialize(bytes, Unbounded)).toThrow(/exceeds remaining input/);
+    expect(() => deserialize(bytes, Unbounded)).toThrow(/read past end/);
   });
 
-  it("throws on decode when the length prefix exceeds remaining element bytes", () => {
+  it("throws on decode when the input runs out before the claimed length", () => {
     // Claims 3 elements but only 2 bytes of input follow the prefix.
     const Var = VarArrayCodec(Uint32Codec, 10);
     const bytes = new Uint8Array([0, 0, 0, 3, 0xaa, 0xbb]);
-    expect(() => deserialize(bytes, Var)).toThrow(/exceeds remaining input/);
+    expect(() => deserialize(bytes, Var)).toThrow(/read past end/);
   });
+
+  it("decodes a payload larger than the initial pre-allocation reserve", () => {
+    // MAX_PREALLOC_BYTES / 8 bounds the element-slot reserve; a genuine
+    // payload with more elements than that must still decode by growing
+    // lazily past the reserve.
+    const len = MAX_PREALLOC_BYTES / 8 + 3;
+    const bytes = new Uint8Array(4 + 4 * len);
+    const view = new DataView(bytes.buffer);
+    view.setUint32(0, len);
+    view.setUint32(4 + 4 * (len - 1), 42);
+    const Big = VarArrayCodec(Uint32Codec, 0xffffffff);
+    const result = deserialize(bytes, Big);
+    expect(result.length).toBe(len);
+    expect(result[0]).toBe(0n);
+    expect(result[len - 1]).toBe(42n);
+  }, 30_000);
 });
 
 describe("FixedArrayCodec", () => {

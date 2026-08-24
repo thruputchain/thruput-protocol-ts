@@ -25,6 +25,7 @@ export {
 } from "./xdr/cxs_reader.js";
 
 export {
+  MAX_PREALLOC_BYTES,
   VoidCodec,
   BoolCodec,
   Uint8Codec,

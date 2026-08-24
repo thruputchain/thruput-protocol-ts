@@ -168,6 +168,24 @@ export function OptionCodec<T>(inner: LazyCodec<T>): XdrCodec<T | null> {
   };
 }
 
+/**
+ * Maximum number of bytes a decoder may speculatively pre-allocate for a
+ * variable-size container before any element has actually been decoded.
+ *
+ * Mirrors the bounded-reserve pattern used by hogd's x23 deserializer and
+ * the Rust xdrs `MAX_PREALLOC_BYTES`: the untrusted length prefix sizes the
+ * initial reservation only up to this budget, and the container grows
+ * lazily beyond it as elements really decode, so a forged length prefix
+ * cannot force a large up-front allocation.
+ */
+export const MAX_PREALLOC_BYTES = 16 * 1024 * 1024;
+
+// Estimated backing-store bytes per JS array element slot, used to convert
+// MAX_PREALLOC_BYTES into an element-count reserve bound (the analogue of
+// dividing by sizeof(T) in the C++/Rust implementations).
+const ARRAY_SLOT_BYTES = 8;
+const MAX_PREALLOC_SLOTS = MAX_PREALLOC_BYTES / ARRAY_SLOT_BYTES;
+
 /** Codec combinator for XDR variable-length array (u32 length prefix + elements). */
 export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]> {
   return {
@@ -184,18 +202,19 @@ export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]
       if (len > max) {
         throw new Error(`VarArray length ${len} exceeds max ${max}`);
       }
-      // Every non-void element consumes at least one input byte, so a length
-      // prefix larger than the remaining input is unsatisfiable. Checking
-      // before building the array prevents attacker-controlled allocation
-      // from a forged length prefix (max is often 0xFFFFFFFF).
-      if (len > r.remaining) {
-        throw new Error(
-          `VarArray length ${len} exceeds remaining input (${r.remaining} bytes)`
-        );
-      }
       const c = resolve(inner);
-      const result: T[] = [];
-      for (let i = 0; i < len; i++) result.push(c.decode(r));
+      // Bounded reserve, lazy growth — the hogd x23 / Rust xdrs pattern.
+      // The untrusted length prefix sizes the initial allocation only up to
+      // MAX_PREALLOC_BYTES and the bytes actually remaining in the input
+      // (every element consumes at least one byte); the array grows lazily
+      // past the reserve as elements really decode. A forged length prefix
+      // (max is often 0xFFFFFFFF) therefore never causes a large up-front
+      // allocation, and decoding fails naturally when an element read
+      // exhausts the input.
+      const reserve = Math.min(len, r.remaining, MAX_PREALLOC_SLOTS);
+      const result: T[] = new Array(reserve);
+      for (let i = 0; i < reserve; i++) result[i] = c.decode(r);
+      for (let i = reserve; i < len; i++) result.push(c.decode(r));
       return result;
     },
   };
