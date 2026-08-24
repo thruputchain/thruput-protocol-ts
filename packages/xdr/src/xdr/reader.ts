@@ -82,13 +82,20 @@ export class XdrReader implements IReader {
     return val === 1n;
   }
 
-  /** Read fixed-length opaque bytes into a caller-owned copy, skipping XDR zero padding. */
+  /** Read fixed-length opaque bytes into a caller-owned copy, consuming XDR zero padding. */
   readFixedOpaque(len: number): Uint8Array {
     const padded = paddedLen(len);
     this.ensure(padded);
     // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
     // returns an aliasing view, and this.data may be a Buffer.
     const result = new Uint8Array(this.data.subarray(this.pos, this.pos + len));
+    for (let i = this.pos + len; i < this.pos + padded; i++) {
+      if (this.data[i] !== 0) {
+        throw new Error(
+          `XDR non-zero padding byte 0x${this.data[i].toString(16)} at offset ${i}`
+        );
+      }
+    }
     this.pos += padded;
     return result;
   }

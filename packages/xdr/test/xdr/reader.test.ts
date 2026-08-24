@@ -40,6 +40,39 @@ describe("XdrReader", () => {
     expect(result).toEqual(new Uint8Array([0xaa, 0xbb, 0xcc]));
   });
 
+  it("rejects non-zero fixed opaque padding for 1/2/3-byte pad widths", () => {
+    // len 3 -> 1 pad byte
+    expect(() =>
+      new XdrReader(new Uint8Array([0xaa, 0xbb, 0xcc, 0x01])).readFixedOpaque(3)
+    ).toThrow(/non-zero padding/);
+    // len 2 -> 2 pad bytes (second one non-zero)
+    expect(() =>
+      new XdrReader(new Uint8Array([0xaa, 0xbb, 0x00, 0xff])).readFixedOpaque(2)
+    ).toThrow(/non-zero padding/);
+    // len 1 -> 3 pad bytes (first one non-zero)
+    expect(() =>
+      new XdrReader(new Uint8Array([0xaa, 0x01, 0x00, 0x00])).readFixedOpaque(1)
+    ).toThrow(/non-zero padding/);
+  });
+
+  it("accepts zero fixed opaque padding for 1/2/3-byte pad widths", () => {
+    expect(
+      new XdrReader(new Uint8Array([0xaa, 0xbb, 0xcc, 0x00])).readFixedOpaque(3)
+    ).toEqual(new Uint8Array([0xaa, 0xbb, 0xcc]));
+    expect(
+      new XdrReader(new Uint8Array([0xaa, 0xbb, 0x00, 0x00])).readFixedOpaque(2)
+    ).toEqual(new Uint8Array([0xaa, 0xbb]));
+    expect(
+      new XdrReader(new Uint8Array([0xaa, 0x00, 0x00, 0x00])).readFixedOpaque(1)
+    ).toEqual(new Uint8Array([0xaa]));
+  });
+
+  it("rejects non-zero padding on var opaque payloads", () => {
+    // length 2, payload 0xde 0xad, non-zero pad
+    const r = new XdrReader(new Uint8Array([0, 0, 0, 2, 0xde, 0xad, 0x01, 0x00]));
+    expect(() => r.readVarOpaque(100)).toThrow(/non-zero padding/);
+  });
+
   it("reads var opaque", () => {
     const r = new XdrReader(
       new Uint8Array([0, 0, 0, 2, 0xde, 0xad, 0, 0])
