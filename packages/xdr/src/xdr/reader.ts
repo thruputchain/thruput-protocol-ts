@@ -1,7 +1,7 @@
 import type { IReader } from "./codec.js";
 import { paddedLen } from "./padding.js";
 
-const textDecoder = new TextDecoder();
+const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
 /** Reads standard XDR bytes as defined by RFC 4506. */
 export class XdrReader implements IReader {
@@ -112,6 +112,10 @@ export class XdrReader implements IReader {
   /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
   readString(max: number): string {
     const bytes = this.readVarOpaque(max);
-    return textDecoder.decode(bytes);
+    try {
+      return textDecoder.decode(bytes);
+    } catch {
+      throw new Error("XDR string is not valid UTF-8");
+    }
   }
 }

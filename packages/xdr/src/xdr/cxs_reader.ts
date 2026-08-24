@@ -10,7 +10,7 @@
 
 import type { IReader } from "./codec.js";
 
-const textDecoder = new TextDecoder();
+const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
 // Max values that fit in the header byte alone
 const UH_MAX = 62;
@@ -207,6 +207,10 @@ export class CxsReader implements IReader {
   /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
   readString(max: number): string {
     const bytes = this.readVarOpaque(max);
-    return textDecoder.decode(bytes);
+    try {
+      return textDecoder.decode(bytes);
+    } catch {
+      throw new Error("CXS: string is not valid UTF-8");
+    }
   }
 }
