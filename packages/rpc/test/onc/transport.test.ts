@@ -140,6 +140,34 @@ describe("WebSocketTransport", () => {
     await failure;
   });
 
+  it("rejects the older call immediately when a newer call reuses its xid", async () => {
+    const { transport, ws } = connect();
+    const first = transport.call(request(7));
+    await flushSend(ws);
+    const firstFailure = expect(first).rejects.toThrow(/xid 7 reused by a newer call/);
+    const second = transport.call(request(7));
+    await firstFailure;
+    ws.receive(reply(7, [3, 4]));
+    await expect(second).resolves.toEqual(reply(7, [3, 4]));
+  });
+
+  it("does not let the older call's timeout deadline kill the newer call's reply on xid reuse", async () => {
+    vi.useFakeTimers();
+    const { transport, ws } = connect({ timeoutMs: 100 });
+    const first = transport.call(request(7));
+    const firstFailure = expect(first).rejects.toThrow(/xid 7 reused by a newer call/);
+    await vi.advanceTimersByTimeAsync(50);
+    const second = transport.call(request(7));
+    await firstFailure;
+    // Pass the first call's original 100ms deadline; the second call's
+    // pending entry must survive and still receive its reply.
+    await vi.advanceTimersByTimeAsync(60);
+    ws.receive(reply(7, [9]));
+    await expect(second).resolves.toEqual(reply(7, [9]));
+    // Advancing further must not produce an unhandled rejection.
+    await vi.advanceTimersByTimeAsync(200);
+  });
+
   it("rejects when send throws", async () => {
     const { transport, ws } = connect();
     ws.closed = true; // make send() throw without firing onclose
