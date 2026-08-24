@@ -41,7 +41,7 @@ export class CxsWriter implements IWriter {
   private grow(needed: number): void {
     const required = this.pos + needed;
     if (required <= this.buf.length) return;
-    let newCap = this.buf.length * 2;
+    let newCap = Math.max(this.buf.length * 2, 1);
     while (newCap < required) newCap *= 2;
     const newBuf = new Uint8Array(newCap);
     newBuf.set(this.buf);
