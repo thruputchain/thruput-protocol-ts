@@ -34,7 +34,7 @@ export function loadgenContextID(val: bigint): LoadgenContextID {
 }
 
 export interface LoadgenSuccessResult {
-  genesis_configuration: proto.GenesisConfigurationV2;
+  genesis_configuration: proto.GenesisConfiguration;
   genesis_ceremony_txs: proto.InitializationBlock;
   initialization_txs: proto.InitializationBlock[];
   context_id: proto.LoadgenContextID;
@@ -121,13 +121,13 @@ const _LoadgenContextID: XdrCodec<LoadgenContextID> = {
 
 const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = {
   encode(w, val) {
-    proto.codec.GenesisConfigurationV2.encode(w, val.genesis_configuration);
+    proto.codec.GenesisConfiguration.encode(w, val.genesis_configuration);
     proto.codec.InitializationBlock.encode(w, val.genesis_ceremony_txs);
     VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).encode(w, val.initialization_txs);
     proto.codec.LoadgenContextID.encode(w, val.context_id);
   },
   decode(r) {
-    const genesis_configuration = proto.codec.GenesisConfigurationV2.decode(r);
+    const genesis_configuration = proto.codec.GenesisConfiguration.decode(r);
     const genesis_ceremony_txs = proto.codec.InitializationBlock.decode(r);
     const initialization_txs = VarArrayCodec(proto.codec.InitializationBlock, Number(0xFFFFFFFF)).decode(r);
     const context_id = proto.codec.LoadgenContextID.decode(r);
