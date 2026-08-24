@@ -18,9 +18,7 @@ Published to GitHub Packages; configure your `.npmrc` for the
 ```ts
 import { WebSocketTransport, createRpcClient } from "@groundhogchain/rpc";
 
-const transport = new WebSocketTransport("ws://localhost:11234", {
-  timeoutMs: 10_000,
-});
+const transport = new WebSocketTransport("ws://localhost:11234");
 const client = createRpcClient(transport, SomeServiceProgram);
 
 const response = await client.call("someMethod", request);
