@@ -109,18 +109,11 @@ export class XdrReader implements IReader {
     return this.readFixedOpaque(len);
   }
 
-  /** Read and UTF-8 decode a length-prefixed string bounded by `max` bytes. */
+  /**
+   * Read and UTF-8 decode a length-prefixed string bounded by `max` bytes.
+   * Throws `TypeError` on malformed UTF-8 (fatal decode).
+   */
   readString(max: number): string {
-    const bytes = this.readVarOpaque(max);
-    try {
-      return textDecoder.decode(bytes);
-    } catch (err) {
-      // A fatal TextDecoder throws TypeError on malformed input (WHATWG
-      // Encoding spec); anything else would be a bug, so rethrow it.
-      if (err instanceof TypeError) {
-        throw new Error("XDR string is not valid UTF-8");
-      }
-      throw err;
-    }
+    return textDecoder.decode(this.readVarOpaque(max));
   }
 }
