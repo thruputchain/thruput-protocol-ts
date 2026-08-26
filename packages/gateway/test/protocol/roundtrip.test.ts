@@ -15,11 +15,12 @@ import {
   // gateway constructors
   identifiedEventBatch, contractAddressList, eventFilterList,
   transactionRefBatch, txInfoBatch, paginationCursor,
-  IterationOrder, BlockAnchorKind,
+  IterationOrder, BlockAnchorKind, IndexerQueryOutcome,
 } from "../../src/index.js";
 import type {
   IdentifiedEvent, TxInfo, EventFilter, EventQuery, EventPage,
   TransactionRefPage, BlockAnchor, TxEmittedEvent,
+  EventPageResult, TransactionRefPageResult,
 } from "../../src/index.js";
 
 function makeEmittedEvent(): TxEmittedEvent {
@@ -175,6 +176,37 @@ describe("gateway indexer codecs: roundtrip", () => {
     expect(
       deserialize(serialize(val, codec.TransactionRefPage), codec.TransactionRefPage)
     ).toEqual(val);
+  });
+
+  it("round-trips EventPageResult ok arm", () => {
+    const val: EventPageResult = {
+      outcome: IndexerQueryOutcome.IndexerQueryOk,
+      page: {
+        events: identifiedEventBatch([makeIdentifiedEvent()]),
+        cursor: paginationCursor(new Uint8Array([1, 2])),
+        latest_block: blockHeight(200n),
+        oldest_block: blockHeight(1n),
+      },
+    };
+    expect(
+      deserialize(serialize(val, codec.EventPageResult), codec.EventPageResult)
+    ).toEqual(val);
+  });
+
+  it("round-trips failure arms", () => {
+    const outcomes = [
+      IndexerQueryOutcome.IndexerQueryNotReady,
+      IndexerQueryOutcome.IndexerQueryInternalFailure,
+    ];
+    for (const outcome of outcomes) {
+      const val: TransactionRefPageResult = { outcome };
+      expect(
+        deserialize(
+          serialize(val, codec.TransactionRefPageResult),
+          codec.TransactionRefPageResult
+        )
+      ).toEqual(val);
+    }
   });
 });
 

@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 6dbcbef8219de270aae5f8518b53b7651bad79dc
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -131,6 +131,27 @@ export interface TransactionRefPage {
   latest_block: proto.BlockHeight;
   oldest_block: proto.BlockHeight;
 }
+
+export enum IndexerQueryOutcome {
+  IndexerQueryOk = 0,
+  IndexerQueryNotReady = 1,
+  IndexerQueryInternalFailure = 2,
+}
+
+export type EventPageResult =
+  | { outcome: proto.IndexerQueryOutcome.IndexerQueryOk; page: proto.EventPage }
+  | { outcome: number }
+;
+
+export type TransactionPageResult =
+  | { outcome: proto.IndexerQueryOutcome.IndexerQueryOk; page: proto.TransactionPage }
+  | { outcome: number }
+;
+
+export type TransactionRefPageResult =
+  | { outcome: proto.IndexerQueryOutcome.IndexerQueryOk; page: proto.TransactionRefPage }
+  | { outcome: number }
+;
 
 export enum IndexerBlockExplorerIntroOutcome {
   IntroSuccess = 0,
@@ -515,6 +536,92 @@ const _TransactionRefPage: XdrCodec<TransactionRefPage> = {
   },
 };
 
+const _IndexerQueryOutcome: XdrCodec<IndexerQueryOutcome> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as IndexerQueryOutcome; },
+};
+
+const _EventPageResult: XdrCodec<EventPageResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+      {
+        const v = val as { outcome: number; page: proto.EventPage };
+        if (v.page === undefined) {
+          throw new Error("EventPageResult encode: page is undefined");
+        }
+        proto.codec.EventPage.encode(w, v.page);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+        const page = proto.codec.EventPage.decode(r);
+        return { outcome, page };
+      default:
+        return { outcome };
+    }
+  },
+};
+
+const _TransactionPageResult: XdrCodec<TransactionPageResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+      {
+        const v = val as { outcome: number; page: proto.TransactionPage };
+        if (v.page === undefined) {
+          throw new Error("TransactionPageResult encode: page is undefined");
+        }
+        proto.codec.TransactionPage.encode(w, v.page);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+        const page = proto.codec.TransactionPage.decode(r);
+        return { outcome, page };
+      default:
+        return { outcome };
+    }
+  },
+};
+
+const _TransactionRefPageResult: XdrCodec<TransactionRefPageResult> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.outcome));
+    switch (val.outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+      {
+        const v = val as { outcome: number; page: proto.TransactionRefPage };
+        if (v.page === undefined) {
+          throw new Error("TransactionRefPageResult encode: page is undefined");
+        }
+        proto.codec.TransactionRefPage.encode(w, v.page);
+        break;
+      }
+    }
+  },
+  decode(r) {
+    const outcome = Number(r.readInt32());
+    switch (outcome) {
+      case proto.IndexerQueryOutcome.IndexerQueryOk:
+        const page = proto.codec.TransactionRefPage.decode(r);
+        return { outcome, page };
+      default:
+        return { outcome };
+    }
+  },
+};
+
 const _IndexerBlockExplorerIntroOutcome: XdrCodec<IndexerBlockExplorerIntroOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IndexerBlockExplorerIntroOutcome; },
@@ -847,6 +954,10 @@ export const codec = {
   AddressTransactionQuery: _AddressTransactionQuery,
   BlockTransactionQuery: _BlockTransactionQuery,
   TransactionRefPage: _TransactionRefPage,
+  IndexerQueryOutcome: _IndexerQueryOutcome,
+  EventPageResult: _EventPageResult,
+  TransactionPageResult: _TransactionPageResult,
+  TransactionRefPageResult: _TransactionRefPageResult,
   IndexerBlockExplorerIntroOutcome: _IndexerBlockExplorerIntroOutcome,
   TxEventLogBatch: _TxEventLogBatch,
   IndexerOutboxOrigin: _IndexerOutboxOrigin,
@@ -877,10 +988,10 @@ export const IndexerBlockExplorerProgram: RpcProgramMeta = {
     indexer_block_explorer_intro: { proc: 0, request: () => proto.codec.ProtocolCommit as XdrCodec<proto.ProtocolCommit>, response: () => _IndexerBlockExplorerIntroOutcome },
     get_transaction_info: { proc: 1, request: () => proto.codec.TransactionHash as XdrCodec<proto.TransactionHash>, response: () => _TxInfoResult },
     get_block_by_height: { proc: 2, request: () => proto.codec.BlockHeight as XdrCodec<proto.BlockHeight>, response: () => _BlockLookupResult },
-    get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPage },
-    get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPage },
-    get_transactions_by_address: { proc: 5, request: () => _AddressTransactionQuery, response: () => _TransactionRefPage },
-    get_transactions_by_block: { proc: 6, request: () => _BlockTransactionQuery, response: () => _TransactionRefPage },
+    get_events: { proc: 3, request: () => _EventQuery, response: () => _EventPageResult },
+    get_transactions: { proc: 4, request: () => _TransactionQuery, response: () => _TransactionPageResult },
+    get_transactions_by_address: { proc: 5, request: () => _AddressTransactionQuery, response: () => _TransactionRefPageResult },
+    get_transactions_by_block: { proc: 6, request: () => _BlockTransactionQuery, response: () => _TransactionRefPageResult },
   },
 };
 
