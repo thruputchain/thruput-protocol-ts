@@ -2,8 +2,9 @@
 //
 // Fixed-size shapes narrow the real `length` property to a numeric literal, so
 // the required element/byte count is visible in the type and enforced by the
-// compiler. Variable-size shapes carry their bound as an optional phantom
-// `max_length` property: it never exists at runtime (reading it yields
+// compiler; fixed arrays are readonly so that mutation cannot silently break
+// the length the type promises. Variable-size shapes carry their bound as an
+// optional phantom `max_length` property: it never exists at runtime (reading it yields
 // `undefined`, which its optional type admits) and plain arrays remain
 // assignable without a cast — it is documentation surfaced in hover and docs,
 // while the actual bound check happens in the codecs.
@@ -20,9 +21,15 @@ export type FixedBytes<N extends number> = Uint8Array & { readonly length: N };
  * An array that must contain exactly `N` elements.
  *
  * The wire format reads and writes exactly `N` elements for values of this
- * type; the codec throws on any other length.
+ * type; the codec throws on any other length. The array is readonly because
+ * the exact length is part of the type: `push`, `pop`, and `splice` would
+ * leave the runtime length disagreeing with it. Build the value as a plain
+ * array (which is assignable here) and mutate it before it becomes a
+ * `FixedArray`.
  */
-export type FixedArray<T, N extends number> = T[] & { readonly length: N };
+export type FixedArray<T, N extends number> = ReadonlyArray<T> & {
+  readonly length: N;
+};
 
 /**
  * A `Uint8Array` of at most `N` bytes.
