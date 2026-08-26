@@ -55,3 +55,11 @@ export type {
   RpcMethodMeta,
   RpcProgramMeta,
 } from "./xdr/codec.js";
+
+export type {
+  FixedBytes,
+  FixedArray,
+  VarBytes,
+  VarArray,
+  VarString,
+} from "./xdr/length_types.js";

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -15,19 +15,42 @@ export enum DbSchedResult {
 }
 
 export const kHogAgeGroupToSchedule = 0n;
+/**
+ * Type-level value of {@link kHogAgeGroupToSchedule}, for use in array-bound positions.
+ * @hidden
+ */
+export type kHogAgeGroupToSchedule = 0;
 
 export const kHogAgeGroupAlreadyScheduled = 1n;
+/**
+ * Type-level value of {@link kHogAgeGroupAlreadyScheduled}, for use in array-bound positions.
+ * @hidden
+ */
+export type kHogAgeGroupAlreadyScheduled = 1;
 
 export const kHogAgeGroupReceived = 2n;
+/**
+ * Type-level value of {@link kHogAgeGroupReceived}, for use in array-bound positions.
+ * @hidden
+ */
+export type kHogAgeGroupReceived = 2;
 
 export const kHogAgeNumGroups = 3n;
+/**
+ * Type-level value of {@link kHogAgeNumGroups}, for use in array-bound positions.
+ * @hidden
+ */
+export type kHogAgeNumGroups = 3;
 
 export interface HogAge {
   address: proto.ContractAddress;
-  num_hogs: proto.uint128_xdr[];
-  average_ages: proto.BlockHeight[];
+  /** XDR: `uint128_xdr num_hogs[kHogAgeNumGroups]` — exactly {@link kHogAgeNumGroups} elements. */
+  num_hogs: FixedArray<proto.uint128_xdr, proto.kHogAgeNumGroups>;
+  /** XDR: `BlockHeight average_ages[kHogAgeNumGroups]` — exactly {@link kHogAgeNumGroups} elements. */
+  average_ages: FixedArray<proto.BlockHeight, proto.kHogAgeNumGroups>;
 }
 
+/** XDR: `typedef HogAge HogAgeBatch<>`. */
 export type HogAgeBatch = proto.HogAge[] & { readonly __brand: { readonly HogAgeBatch: true } };
 export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
   return val as HogAgeBatch;
@@ -38,6 +61,7 @@ export type HogAgeResult =
   | { result: number }
 ;
 
+/** XDR: `typedef HogAgeResult HogAgeResults<>`. */
 export type HogAgeResults = proto.HogAgeResult[] & { readonly __brand: { readonly HogAgeResults: true } };
 export function hogAgeResults(val: proto.HogAgeResult[]): HogAgeResults {
   return val as HogAgeResults;
@@ -107,8 +131,8 @@ const _HogAge: XdrCodec<HogAge> = {
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const num_hogs = FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).decode(r);
-    const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).decode(r);
+    const num_hogs = FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).decode(r) as FixedArray<proto.uint128_xdr, proto.kHogAgeNumGroups>;
+    const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).decode(r) as FixedArray<proto.BlockHeight, proto.kHogAgeNumGroups>;
     return { address, num_hogs, average_ages };
   },
 };

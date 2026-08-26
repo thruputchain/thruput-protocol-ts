@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -15,6 +15,7 @@ export enum AuthErrorCode {
   kAuthInternal = 3,
 }
 
+/** XDR: `typedef AuthErrorCode AuthErrorCodeBatch<>`. */
 export type AuthErrorCodeBatch = proto.AuthErrorCode[] & { readonly __brand: { readonly AuthErrorCodeBatch: true } };
 export function authErrorCodeBatch(val: proto.AuthErrorCode[]): AuthErrorCodeBatch {
   return val as AuthErrorCodeBatch;
@@ -36,6 +37,7 @@ export interface KeyChange {
   auth_data: proto.AddressAuthData | null;
 }
 
+/** XDR: `typedef KeyChange KeyChangeBatch<>`. */
 export type KeyChangeBatch = proto.KeyChange[] & { readonly __brand: { readonly KeyChangeBatch: true } };
 export function keyChangeBatch(val: proto.KeyChange[]): KeyChangeBatch {
   return val as KeyChangeBatch;
@@ -69,6 +71,7 @@ export type DBAuthIntroResult =
   | { outcome: number }
 ;
 
+/** XDR: `typedef DBAuthResult DBAuthResultBatch<>`. */
 export type DBAuthResultBatch = proto.DBAuthResult[] & { readonly __brand: { readonly DBAuthResultBatch: true } };
 export function dbAuthResultBatch(val: proto.DBAuthResult[]): DBAuthResultBatch {
   return val as DBAuthResultBatch;
@@ -91,6 +94,7 @@ export enum IntroAuthOutcome {
 }
 
 export interface MempoolAuthIntroSuccess {
+  /** XDR: `ShardCard shards<>`. */
   shards: proto.ShardCard[];
   network_hash: proto.NetworkHash;
 }

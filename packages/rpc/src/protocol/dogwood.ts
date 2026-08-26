@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -14,9 +14,11 @@ export function dogwoodTreeHash(val: proto.SHA256Hash): DogwoodTreeHash {
 
 export interface DogwoodTreeNode {
   node: proto.ValidatorID;
+  /** XDR: `DogwoodTreeHash children<>`. */
   children: proto.DogwoodTreeHash[];
 }
 
+/** XDR: `typedef DogwoodTreeNode DogwoodTreeNodes<>`. */
 export type DogwoodTreeNodes = proto.DogwoodTreeNode[] & { readonly __brand: { readonly DogwoodTreeNodes: true } };
 export function dogwoodTreeNodes(val: proto.DogwoodTreeNode[]): DogwoodTreeNodes {
   return val as DogwoodTreeNodes;
@@ -60,6 +62,7 @@ export interface DogwoodTransmission {
 export interface DogwoodChunk {
   sheaf_index: proto.DogwoodInt32;
   chunk_index: proto.DogwoodInt32;
+  /** XDR: `opaque chunk<>`. */
   chunk: Uint8Array;
 }
 
@@ -75,6 +78,7 @@ export interface DogwoodDelivery {
 }
 
 export interface DogwoodRouting {
+  /** XDR: `DogwoodTreeNodes routes<>`. */
   routes: proto.DogwoodTreeNodes[];
 }
 

@@ -1,20 +1,36 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export const kMaxEventLength = 1024n;
+/**
+ * Type-level value of {@link kMaxEventLength}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxEventLength = 1024;
 
 export const kMaxEventsPerTransaction = 1000n;
+/**
+ * Type-level value of {@link kMaxEventsPerTransaction}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxEventsPerTransaction = 1000;
 
 export const kMaxTopics = 3n;
+/**
+ * Type-level value of {@link kMaxTopics}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxTopics = 3;
 
-export type Topic = Uint8Array & { readonly __brand: { readonly Topic: true } };
+/** XDR: `typedef opaque Topic[32]` — exactly 32 bytes. */
+export type Topic = FixedBytes<32> & { readonly __brand: { readonly Topic: true } };
 export function topic(data: Uint8Array): Topic {
   if (data.length !== 32) throw new Error(`Topic must be exactly 32 bytes, got ${data.length}`);
   return data as Topic;
@@ -23,14 +39,16 @@ export function topic(data: Uint8Array): Topic {
 export interface TxEmittedEvent {
   contract_address: proto.ContractAddress;
   num_topics: bigint;
-  serialized_event: Uint8Array;
+  /** XDR: `opaque serialized_event<kMaxEventLength>` — max {@link kMaxEventLength} bytes. */
+  serialized_event: VarBytes<proto.kMaxEventLength>;
 }
 
 export interface TxEventLog {
   tx_hash: proto.TransactionHash;
   exec_result: proto.ExecResult;
   root_output: proto.InvocationFrameOutput;
-  events: proto.TxEmittedEvent[];
+  /** XDR: `TxEmittedEvent events<kMaxEventsPerTransaction>` — max {@link kMaxEventsPerTransaction} elements. */
+  events: VarArray<proto.TxEmittedEvent, proto.kMaxEventsPerTransaction>;
 }
 
 export interface IdentifiedEvent {

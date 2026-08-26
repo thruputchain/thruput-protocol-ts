@@ -1,16 +1,26 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, Uint32Codec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint32Codec } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export const kTestMaxLen = 1024n;
+/**
+ * Type-level value of {@link kTestMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kTestMaxLen = 1024;
 
 export const kTestVersion = 42n;
+/**
+ * Type-level value of {@link kTestVersion}, for use in array-bound positions.
+ * @hidden
+ */
+export type kTestVersion = 42;
 
 export enum TestColor {
   Red = 0,
@@ -24,24 +34,28 @@ export enum TestStatusCode {
   Internal = 2,
 }
 
-export type TestHash = Uint8Array & { readonly __brand: { readonly TestHash: true } };
+/** XDR: `typedef opaque TestHash[32]` — exactly 32 bytes. */
+export type TestHash = FixedBytes<32> & { readonly __brand: { readonly TestHash: true } };
 export function testHash(data: Uint8Array): TestHash {
   if (data.length !== 32) throw new Error(`TestHash must be exactly 32 bytes, got ${data.length}`);
   return data as TestHash;
 }
 
-export type TestEntrypointId = Uint8Array & { readonly __brand: { readonly TestEntrypointId: true } };
+/** XDR: `typedef opaque TestEntrypointId[8]` — exactly 8 bytes. */
+export type TestEntrypointId = FixedBytes<8> & { readonly __brand: { readonly TestEntrypointId: true } };
 export function testEntrypointId(data: Uint8Array): TestEntrypointId {
   if (data.length !== 8) throw new Error(`TestEntrypointId must be exactly 8 bytes, got ${data.length}`);
   return data as TestEntrypointId;
 }
 
-export type TestPayload = Uint8Array & { readonly __brand: { readonly TestPayload: true } };
+/** XDR: `typedef opaque TestPayload<1024>` — max 1024 bytes. */
+export type TestPayload = VarBytes<1024> & { readonly __brand: { readonly TestPayload: true } };
 export function testPayload(data: Uint8Array): TestPayload {
-  if (data.length > Number(1024)) throw new Error(`TestPayload exceeds max length 1024, got ${data.length}`);
+  if (data.length > 1024) throw new Error(`TestPayload exceeds max length 1024, got ${data.length}`);
   return data as TestPayload;
 }
 
+/** XDR: `typedef opaque TestBlob<>`. */
 export type TestBlob = Uint8Array & { readonly __brand: { readonly TestBlob: true } };
 export function testBlob(data: Uint8Array): TestBlob {
   return data as TestBlob;
@@ -73,11 +87,13 @@ export type TestExtPoint =
 ;
 
 export interface TestMatrix {
-  row: bigint[];
+  /** XDR: `unsigned int row[3]` — exactly 3 elements. */
+  row: FixedArray<bigint, 3>;
 }
 
 export interface TestScores {
-  values: bigint[];
+  /** XDR: `unsigned int values<10>` — max 10 elements. */
+  values: VarArray<bigint, 10>;
 }
 
 export interface TestOptional {
@@ -202,7 +218,7 @@ const _TestMatrix: XdrCodec<TestMatrix> = {
     for (const _item of val.row) w.writeUint32(_item);
   },
   decode(r) {
-    const row = Array.from({ length: Number(3) }, () => r.readUint32());
+    const row = Array.from({ length: Number(3) }, () => r.readUint32()) as FixedArray<bigint, 3>;
     return { row };
   },
 };

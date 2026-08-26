@@ -1,13 +1,14 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 export interface WalletSubmit {
+  /** XDR: `SignedTransaction signed_transactions<>`. */
   signed_transactions: proto.SignedTransaction[];
 }
 
@@ -16,7 +17,8 @@ export enum WalletTransactionAckType {
   WalletTransactionSubmitted = 1,
 }
 
-export type WalletSubmittedTransactionID = Uint8Array & { readonly __brand: { readonly WalletSubmittedTransactionID: true } };
+/** XDR: `typedef opaque WalletSubmittedTransactionID[32]` — exactly 32 bytes. */
+export type WalletSubmittedTransactionID = FixedBytes<32> & { readonly __brand: { readonly WalletSubmittedTransactionID: true } };
 export function walletSubmittedTransactionID(data: Uint8Array): WalletSubmittedTransactionID {
   if (data.length !== 32) throw new Error(`WalletSubmittedTransactionID must be exactly 32 bytes, got ${data.length}`);
   return data as WalletSubmittedTransactionID;
@@ -29,6 +31,7 @@ export type WalletTransactionAck =
 ;
 
 export interface WalletAck {
+  /** XDR: `WalletTransactionAck transaction_acks<>`. */
   transaction_acks: proto.WalletTransactionAck[];
 }
 

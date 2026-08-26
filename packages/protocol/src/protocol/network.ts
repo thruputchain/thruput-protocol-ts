@@ -1,23 +1,26 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
+/** XDR: `typedef string ServerAddress<>`. */
 export type ServerAddress = string & { readonly __brand: { readonly ServerAddress: true } };
 export function serverAddress(val: string): ServerAddress {
   return val as ServerAddress;
 }
 
-export type UPID = Uint8Array & { readonly __brand: { readonly UPID: true } };
+/** XDR: `typedef opaque UPID[8]` — exactly 8 bytes. */
+export type UPID = FixedBytes<8> & { readonly __brand: { readonly UPID: true } };
 export function upid(data: Uint8Array): UPID {
   if (data.length !== 8) throw new Error(`UPID must be exactly 8 bytes, got ${data.length}`);
   return data as UPID;
 }
 
+/** XDR: `typedef string ProtocolCommit<>`. */
 export type ProtocolCommit = string & { readonly __brand: { readonly ProtocolCommit: true } };
 export function protocolCommit(val: string): ProtocolCommit {
   return val as ProtocolCommit;

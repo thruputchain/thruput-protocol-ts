@@ -1,20 +1,22 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 
 
 
 export interface EchoRequest {
   value: bigint;
-  message: string;
+  /** XDR: `string message<256>` — max 256 bytes. */
+  message: VarString<256>;
 }
 
 export interface EchoResponse {
   value: bigint;
-  message: string;
+  /** XDR: `string message<256>` — max 256 bytes. */
+  message: VarString<256>;
 }
 
 export interface AddRequest {

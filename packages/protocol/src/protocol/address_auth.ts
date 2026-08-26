@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -19,13 +19,29 @@ export function publicKeyConfigOpt(val: proto.PublicKeyConfig | null): PublicKey
 }
 
 export const kDefaultNewAddressRequiredWeight = 1n;
+/**
+ * Type-level value of {@link kDefaultNewAddressRequiredWeight}, for use in array-bound positions.
+ * @hidden
+ */
+export type kDefaultNewAddressRequiredWeight = 1;
 
 export const kDefaultNewAddressAcceptedKeys = 0xFFFFFFFFn;
+/**
+ * Type-level value of {@link kDefaultNewAddressAcceptedKeys}, for use in array-bound positions.
+ * @hidden
+ */
+export type kDefaultNewAddressAcceptedKeys = 0xFFFFFFFF;
 
 export const kDefaultNewAddressKeyID = 0n;
+/**
+ * Type-level value of {@link kDefaultNewAddressKeyID}, for use in array-bound positions.
+ * @hidden
+ */
+export type kDefaultNewAddressKeyID = 0;
 
 export interface AddressAuthData {
-  public_keys: proto.PublicKeyConfigOpt[];
+  /** XDR: `PublicKeyConfigOpt public_keys[kMaxSigners]` — exactly {@link kMaxSigners} elements. */
+  public_keys: FixedArray<proto.PublicKeyConfigOpt, proto.kMaxSigners>;
   required_weight: proto.Weight;
   last_written_height: proto.BlockHeight;
 }
@@ -56,7 +72,7 @@ const _AddressAuthData: XdrCodec<AddressAuthData> = {
     proto.codec.BlockHeight.encode(w, val.last_written_height);
   },
   decode(r) {
-    const public_keys = FixedArrayCodec(proto.codec.PublicKeyConfigOpt, Number(proto.kMaxSigners)).decode(r);
+    const public_keys = FixedArrayCodec(proto.codec.PublicKeyConfigOpt, Number(proto.kMaxSigners)).decode(r) as FixedArray<proto.PublicKeyConfigOpt, proto.kMaxSigners>;
     const required_weight = proto.codec.Weight.decode(r);
     const last_written_height = proto.codec.BlockHeight.decode(r);
     return { public_keys, required_weight, last_written_height };

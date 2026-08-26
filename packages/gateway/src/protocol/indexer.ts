@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -36,28 +36,45 @@ export type BlockLookupResult =
   | { outcome: number }
 ;
 
+/** XDR: `typedef IdentifiedEvent IdentifiedEventBatch<>`. */
 export type IdentifiedEventBatch = proto.IdentifiedEvent[] & { readonly __brand: { readonly IdentifiedEventBatch: true } };
 export function identifiedEventBatch(val: proto.IdentifiedEvent[]): IdentifiedEventBatch {
   return val as IdentifiedEventBatch;
 }
 
+/** XDR: `typedef TxInfo TxInfoBatch<>`. */
 export type TxInfoBatch = proto.TxInfo[] & { readonly __brand: { readonly TxInfoBatch: true } };
 export function txInfoBatch(val: proto.TxInfo[]): TxInfoBatch {
   return val as TxInfoBatch;
 }
 
 export const kMaxContractAddressesPerEventFilter = 5n;
+/**
+ * Type-level value of {@link kMaxContractAddressesPerEventFilter}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxContractAddressesPerEventFilter = 5;
 
 export const kMaxEventFiltersPerQuery = 5n;
+/**
+ * Type-level value of {@link kMaxEventFiltersPerQuery}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxEventFiltersPerQuery = 5;
 
-export type ContractAddressList = proto.ContractAddress[] & { readonly __brand: { readonly ContractAddressList: true } };
+/** XDR: `typedef ContractAddress ContractAddressList<kMaxContractAddressesPerEventFilter>` — max {@link kMaxContractAddressesPerEventFilter} elements. */
+export type ContractAddressList = VarArray<proto.ContractAddress, proto.kMaxContractAddressesPerEventFilter> & { readonly __brand: { readonly ContractAddressList: true } };
 export function contractAddressList(val: proto.ContractAddress[]): ContractAddressList {
+  if (val.length > Number(proto.kMaxContractAddressesPerEventFilter)) throw new Error(`ContractAddressList exceeds max length kMaxContractAddressesPerEventFilter, got ${val.length}`);
   return val as ContractAddressList;
 }
 
 export interface EventTopicFilter {
+  /** XDR: `Topic topic0<>`. */
   topic0: proto.Topic[];
+  /** XDR: `Topic topic1<>`. */
   topic1: proto.Topic[];
+  /** XDR: `Topic topic2<>`. */
   topic2: proto.Topic[];
 }
 
@@ -66,8 +83,10 @@ export interface EventFilter {
   topics: proto.EventTopicFilter;
 }
 
-export type EventFilterList = proto.EventFilter[] & { readonly __brand: { readonly EventFilterList: true } };
+/** XDR: `typedef EventFilter EventFilterList<kMaxEventFiltersPerQuery>` — max {@link kMaxEventFiltersPerQuery} elements. */
+export type EventFilterList = VarArray<proto.EventFilter, proto.kMaxEventFiltersPerQuery> & { readonly __brand: { readonly EventFilterList: true } };
 export function eventFilterList(val: proto.EventFilter[]): EventFilterList {
+  if (val.length > Number(proto.kMaxEventFiltersPerQuery)) throw new Error(`EventFilterList exceeds max length kMaxEventFiltersPerQuery, got ${val.length}`);
   return val as EventFilterList;
 }
 
@@ -105,6 +124,7 @@ export interface TransactionRef {
   height: proto.BlockHeight;
 }
 
+/** XDR: `typedef TransactionRef TransactionRefBatch<>`. */
 export type TransactionRefBatch = proto.TransactionRef[] & { readonly __brand: { readonly TransactionRefBatch: true } };
 export function transactionRefBatch(val: proto.TransactionRef[]): TransactionRefBatch {
   return val as TransactionRefBatch;
@@ -138,6 +158,7 @@ export enum IndexerBlockExplorerIntroOutcome {
 }
 
 
+/** XDR: `typedef TxEventLog TxEventLogBatch<>`. */
 export type TxEventLogBatch = proto.TxEventLog[] & { readonly __brand: { readonly TxEventLogBatch: true } };
 export function txEventLogBatch(val: proto.TxEventLog[]): TxEventLogBatch {
   return val as TxEventLogBatch;
@@ -182,7 +203,8 @@ export type IndexerProgress =
   | { state: number }
 ;
 
-export type IndexerFailureMessage = string & { readonly __brand: { readonly IndexerFailureMessage: true } };
+/** XDR: `typedef string IndexerFailureMessage<1024>` — max 1024 bytes. */
+export type IndexerFailureMessage = VarString<1024> & { readonly __brand: { readonly IndexerFailureMessage: true } };
 export function indexerFailureMessage(val: string): IndexerFailureMessage {
   return val as IndexerFailureMessage;
 }
@@ -250,8 +272,10 @@ export interface IndexerTxFailureNotice {
   diagnostic: proto.TxFailureDiagnostic;
 }
 
-export type IndexerTxFailureNoticeBatch = proto.IndexerTxFailureNotice[] & { readonly __brand: { readonly IndexerTxFailureNoticeBatch: true } };
+/** XDR: `typedef IndexerTxFailureNotice IndexerTxFailureNoticeBatch<256>` — max 256 elements. */
+export type IndexerTxFailureNoticeBatch = VarArray<proto.IndexerTxFailureNotice, 256> & { readonly __brand: { readonly IndexerTxFailureNoticeBatch: true } };
 export function indexerTxFailureNoticeBatch(val: proto.IndexerTxFailureNotice[]): IndexerTxFailureNoticeBatch {
+  if (val.length > 256) throw new Error(`IndexerTxFailureNoticeBatch exceeds max length 256, got ${val.length}`);
   return val as IndexerTxFailureNoticeBatch;
 }
 

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -15,11 +15,13 @@ export type ExecProposeResult =
   | { result: number }
 ;
 
+/** XDR: `typedef ExecProposeResult ExecProposeBatchResult<>`. */
 export type ExecProposeBatchResult = proto.ExecProposeResult[] & { readonly __brand: { readonly ExecProposeBatchResult: true } };
 export function execProposeBatchResult(val: proto.ExecProposeResult[]): ExecProposeBatchResult {
   return val as ExecProposeBatchResult;
 }
 
+/** XDR: `typedef ExecResult ExecValidateBatchResult<>`. */
 export type ExecValidateBatchResult = proto.ExecResult[] & { readonly __brand: { readonly ExecValidateBatchResult: true } };
 export function execValidateBatchResult(val: proto.ExecResult[]): ExecValidateBatchResult {
   return val as ExecValidateBatchResult;

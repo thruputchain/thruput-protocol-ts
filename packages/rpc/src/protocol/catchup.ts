@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -20,6 +20,7 @@ export interface CatchupSpan {
 
 export interface CatchupBlocksRequest {
   timestamp: proto.TimePoint;
+  /** XDR: `CatchupSpan spans<>`. */
   spans: proto.CatchupSpan[];
 }
 
@@ -31,6 +32,7 @@ export interface SignedCatchupBlocksRequest {
 
 export interface CatchupBlocksResult {
   timestamp: proto.TimePoint;
+  /** XDR: `CatchupBlock blocks<>`. */
   blocks: proto.CatchupBlock[];
 }
 

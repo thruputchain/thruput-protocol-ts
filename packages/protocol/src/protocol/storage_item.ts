@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -19,10 +19,16 @@ export enum StorageItemType {
 }
 
 export const kBytestringMaxLen = 1024n;
+/**
+ * Type-level value of {@link kBytestringMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kBytestringMaxLen = 1024;
 
-export type Bytestring = Uint8Array & { readonly __brand: { readonly Bytestring: true } };
+/** XDR: `typedef opaque Bytestring<kBytestringMaxLen>` — max {@link kBytestringMaxLen} bytes. */
+export type Bytestring = VarBytes<proto.kBytestringMaxLen> & { readonly __brand: { readonly Bytestring: true } };
 export function bytestring(data: Uint8Array): Bytestring {
-  if (data.length > Number(kBytestringMaxLen)) throw new Error(`Bytestring exceeds max length kBytestringMaxLen, got ${data.length}`);
+  if (data.length > Number(proto.kBytestringMaxLen)) throw new Error(`Bytestring exceeds max length kBytestringMaxLen, got ${data.length}`);
   return data as Bytestring;
 }
 
@@ -61,7 +67,8 @@ export interface AuthDataChangeSigner {
 }
 
 export interface AuthDataChangeArgs {
-  auth_data_change_signers: proto.AuthDataChangeSigner[];
+  /** XDR: `AuthDataChangeSigner auth_data_change_signers<kMaxSigners>` — max {@link kMaxSigners} elements. */
+  auth_data_change_signers: VarArray<proto.AuthDataChangeSigner, proto.kMaxSigners>;
   new_required_weight: proto.Weight | null;
 }
 
@@ -86,8 +93,18 @@ export type StorageDelta =
 ;
 
 export const kReplayCacheHeightsMaxLen = 4000n;
+/**
+ * Type-level value of {@link kReplayCacheHeightsMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kReplayCacheHeightsMaxLen = 4000;
 
 export const kReplayCacheNoncesMaxLen = 8000n;
+/**
+ * Type-level value of {@link kReplayCacheNoncesMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kReplayCacheNoncesMaxLen = 8000;
 
 export interface ReplayCacheHeightCount {
   height: proto.BlockHeight;
@@ -96,11 +113,13 @@ export interface ReplayCacheHeightCount {
 
 export interface ReplayCacheMetadata {
   size: bigint;
-  heights: proto.ReplayCacheHeightCount[];
+  /** XDR: `ReplayCacheHeightCount heights<kReplayCacheNoncesMaxLen>` — max {@link kReplayCacheNoncesMaxLen} elements. */
+  heights: VarArray<proto.ReplayCacheHeightCount, proto.kReplayCacheNoncesMaxLen>;
 }
 
 export interface ReplayCacheData {
-  nonces: bigint[];
+  /** XDR: `unsigned hyper nonces<kReplayCacheNoncesMaxLen>` — max {@link kReplayCacheNoncesMaxLen} elements. */
+  nonces: VarArray<bigint, proto.kReplayCacheNoncesMaxLen>;
 }
 
 export enum StorageDeltaFlags {

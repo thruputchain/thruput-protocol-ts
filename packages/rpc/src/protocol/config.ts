@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -19,6 +19,7 @@ export function seconds(val: bigint): Seconds {
 
 export interface ValidatorConfig {
   private_info: proto.ValidatorPrivateInfo;
+  /** XDR: `ValidatorPublicInfo known_validators<>`. */
   known_validators: proto.ValidatorPublicInfo[];
 }
 

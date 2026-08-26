@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -37,19 +37,22 @@ export function gasAmount(val: bigint): GasAmount {
   return val as GasAmount;
 }
 
-export type Ed25519Signature = Uint8Array & { readonly __brand: { readonly Ed25519Signature: true } };
+/** XDR: `typedef opaque Ed25519Signature[64]` — exactly 64 bytes. */
+export type Ed25519Signature = FixedBytes<64> & { readonly __brand: { readonly Ed25519Signature: true } };
 export function ed25519Signature(data: Uint8Array): Ed25519Signature {
   if (data.length !== 64) throw new Error(`Ed25519Signature must be exactly 64 bytes, got ${data.length}`);
   return data as Ed25519Signature;
 }
 
-export type Ed25519PublicKey = Uint8Array & { readonly __brand: { readonly Ed25519PublicKey: true } };
+/** XDR: `typedef opaque Ed25519PublicKey[32]` — exactly 32 bytes. */
+export type Ed25519PublicKey = FixedBytes<32> & { readonly __brand: { readonly Ed25519PublicKey: true } };
 export function ed25519PublicKey(data: Uint8Array): Ed25519PublicKey {
   if (data.length !== 32) throw new Error(`Ed25519PublicKey must be exactly 32 bytes, got ${data.length}`);
   return data as Ed25519PublicKey;
 }
 
-export type Ed25519SecretKey = Uint8Array & { readonly __brand: { readonly Ed25519SecretKey: true } };
+/** XDR: `typedef opaque Ed25519SecretKey[64]` — exactly 64 bytes. */
+export type Ed25519SecretKey = FixedBytes<64> & { readonly __brand: { readonly Ed25519SecretKey: true } };
 export function ed25519SecretKey(data: Uint8Array): Ed25519SecretKey {
   if (data.length !== 64) throw new Error(`Ed25519SecretKey must be exactly 64 bytes, got ${data.length}`);
   return data as Ed25519SecretKey;
@@ -75,7 +78,8 @@ export type ExtensionPoint =
   | { v: 0 }
 ;
 
-export type SHA256Hash = Uint8Array & { readonly __brand: { readonly SHA256Hash: true } };
+/** XDR: `typedef opaque SHA256Hash[32]` — exactly 32 bytes. */
+export type SHA256Hash = FixedBytes<32> & { readonly __brand: { readonly SHA256Hash: true } };
 export function sha256Hash(data: Uint8Array): SHA256Hash {
   if (data.length !== 32) throw new Error(`SHA256Hash must be exactly 32 bytes, got ${data.length}`);
   return data as SHA256Hash;
@@ -91,7 +95,8 @@ export function networkHash(val: proto.SHA256Hash): NetworkHash {
   return val as NetworkHash;
 }
 
-export type StorageLongHash = Uint8Array & { readonly __brand: { readonly StorageLongHash: true } };
+/** XDR: `typedef opaque StorageLongHash[2048]` — exactly 2048 bytes. */
+export type StorageLongHash = FixedBytes<2048> & { readonly __brand: { readonly StorageLongHash: true } };
 export function storageLongHash(data: Uint8Array): StorageLongHash {
   if (data.length !== 2048) throw new Error(`StorageLongHash must be exactly 2048 bytes, got ${data.length}`);
   return data as StorageLongHash;
@@ -117,7 +122,8 @@ export function proposalHeaderHash(val: proto.SHA256Hash): ProposalHeaderHash {
   return val as ProposalHeaderHash;
 }
 
-export type ContractAddress = Uint8Array & { readonly __brand: { readonly ContractAddress: true } };
+/** XDR: `typedef opaque ContractAddress[32]` — exactly 32 bytes. */
+export type ContractAddress = FixedBytes<32> & { readonly __brand: { readonly ContractAddress: true } };
 export function contractAddress(data: Uint8Array): ContractAddress {
   if (data.length !== 32) throw new Error(`ContractAddress must be exactly 32 bytes, got ${data.length}`);
   return data as ContractAddress;
@@ -131,7 +137,8 @@ export enum StorageKeyType {
   ReplayCache = 4,
 }
 
-export type StorageKeyContractData = Uint8Array & { readonly __brand: { readonly StorageKeyContractData: true } };
+/** XDR: `typedef opaque StorageKeyContractData[32]` — exactly 32 bytes. */
+export type StorageKeyContractData = FixedBytes<32> & { readonly __brand: { readonly StorageKeyContractData: true } };
 export function storageKeyContractData(data: Uint8Array): StorageKeyContractData {
   if (data.length !== 32) throw new Error(`StorageKeyContractData must be exactly 32 bytes, got ${data.length}`);
   return data as StorageKeyContractData;
@@ -148,6 +155,11 @@ export type StorageKey =
 export const kTotalHogSupply = 62_500_000_000n;
 
 export const kHogDivisibility = 10_000_000n;
+/**
+ * Type-level value of {@link kHogDivisibility}, for use in array-bound positions.
+ * @hidden
+ */
+export type kHogDivisibility = 10_000_000;
 
 export interface AddressAndKey {
   address: proto.ContractAddress;

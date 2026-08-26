@@ -1,16 +1,17 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 5e4cd71af221d40113563e054719553ca351f0a9
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type Upgrade = Uint8Array & { readonly __brand: { readonly Upgrade: true } };
+/** XDR: `typedef opaque Upgrade<128>` — max 128 bytes. */
+export type Upgrade = VarBytes<128> & { readonly __brand: { readonly Upgrade: true } };
 export function upgrade(data: Uint8Array): Upgrade {
-  if (data.length > Number(128)) throw new Error(`Upgrade exceeds max length 128, got ${data.length}`);
+  if (data.length > 128) throw new Error(`Upgrade exceeds max length 128, got ${data.length}`);
   return data as Upgrade;
 }
 
@@ -20,7 +21,8 @@ export interface ConsensusValue {
   prev_hash: proto.ConsensusValueHash;
   proposal_header: proto.ProposalHeader;
   proposal_txs_hash: proto.ProposalTxsHash;
-  upgrades: proto.Upgrade[];
+  /** XDR: `Upgrade upgrades<6>` — max 6 elements. */
+  upgrades: VarArray<proto.Upgrade, 6>;
 }
 
 export interface ConsensusBasis {
