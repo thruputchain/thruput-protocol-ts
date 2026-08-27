@@ -75,6 +75,7 @@ export type DbAddressAuthDataBatchResult =
 export interface DbBlockOk {
   storage_hash: proto.StorageShortHash;
   storage_long_hash: proto.StorageLongHash;
+  config_hash_preimage: proto.ConfigHashPreimage;
 }
 
 export type DbBlockResult =
@@ -199,11 +200,13 @@ const _DbBlockOk: XdrCodec<DbBlockOk> = {
   encode(w, val) {
     proto.codec.StorageShortHash.encode(w, val.storage_hash);
     proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
+    proto.codec.ConfigHashPreimage.encode(w, val.config_hash_preimage);
   },
   decode(r) {
     const storage_hash = proto.codec.StorageShortHash.decode(r);
     const storage_long_hash = proto.codec.StorageLongHash.decode(r);
-    return { storage_hash, storage_long_hash };
+    const config_hash_preimage = proto.codec.ConfigHashPreimage.decode(r);
+    return { storage_hash, storage_long_hash, config_hash_preimage };
   },
 };
 
