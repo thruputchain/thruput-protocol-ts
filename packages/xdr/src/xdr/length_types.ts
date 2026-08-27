@@ -143,5 +143,7 @@ export function fixedBytes<N extends number>(
   if (data.length !== length) {
     throw new Error(`FixedBytes expected ${length} bytes, got ${data.length}`);
   }
-  return data.slice() as FixedBytes<N>;
+  // new Uint8Array(...) rather than .slice(): Buffer.prototype.slice
+  // returns an aliasing view, and data may be a Buffer.
+  return new Uint8Array(data) as FixedBytes<N>;
 }

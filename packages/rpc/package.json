@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/rpc",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "ONC-RPC client and protocol RPC type definitions for Groundhog",
   "type": "module",
   "files": [
@@ -29,8 +29,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.8.0",
-    "@groundhogchain/protocol": "0.8.0"
+    "@groundhogchain/xdr": "0.9.0",
+    "@groundhogchain/protocol": "0.9.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
