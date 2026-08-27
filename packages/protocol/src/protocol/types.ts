@@ -95,6 +95,11 @@ export function networkHash(val: proto.SHA256Hash): NetworkHash {
   return val as NetworkHash;
 }
 
+export type ConfigHash = (NonNullable<proto.SHA256Hash> & { readonly __brand: { readonly ConfigHash: true } }) | Extract<proto.SHA256Hash, null>;
+export function configHash(val: proto.SHA256Hash): ConfigHash {
+  return val as ConfigHash;
+}
+
 /** XDR: `typedef opaque StorageLongHash[2048]` — exactly 2048 bytes. */
 export type StorageLongHash = FixedBytes<2048> & { readonly __brand: { readonly StorageLongHash: true } };
 export function storageLongHash(data: Uint8Array): StorageLongHash {
@@ -337,6 +342,11 @@ const _NetworkHash: XdrCodec<NetworkHash> = {
   decode(r) { return networkHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
+const _ConfigHash: XdrCodec<ConfigHash> = {
+  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
+  decode(r) { return configHash(proto.codec.SHA256Hash.decode(r)); },
+};
+
 const _StorageLongHash: XdrCodec<StorageLongHash> = {
   encode(w, val) { w.writeFixedOpaque(val, 2048); },
   decode(r) { return storageLongHash(r.readFixedOpaque(2048)); },
@@ -449,6 +459,7 @@ export const codec = {
   SHA256Hash: _SHA256Hash,
   ConsensusValueHash: _ConsensusValueHash,
   NetworkHash: _NetworkHash,
+  ConfigHash: _ConfigHash,
   StorageLongHash: _StorageLongHash,
   StorageShortHash: _StorageShortHash,
   TxsHash: _TxsHash,
