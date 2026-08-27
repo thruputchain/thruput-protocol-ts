@@ -1,4 +1,5 @@
 import { describe, it, expectTypeOf } from "vitest";
+import { fixedArray } from "@groundhogchain/xdr";
 import type {
   FixedBytes,
   FixedArray,
@@ -38,6 +39,18 @@ describe("fixed-length types", () => {
     expectTypeOf(keys.map((k) => k)).toEqualTypeOf<PublicKeyConfigOpt[]>();
   });
 
+  it("is built from a dynamic array via fixedArray, with no cast", () => {
+    // Array.from infers T[] (length: number), so it cannot be assigned
+    // directly; fixedArray checks the length and narrows the type.
+    const built = Array.from({ length: 21 }, () => null as PublicKeyConfigOpt);
+    expectTypeOf(fixedArray(built, 21)).toEqualTypeOf<
+      FixedArray<PublicKeyConfigOpt, 21>
+    >();
+    expectTypeOf(fixedArray(built, 21)).toExtend<
+      AddressAuthData["public_keys"]
+    >();
+  });
+
   it("a wrong-length plain array is not assignable", () => {
     expectTypeOf<readonly PublicKeyConfigOpt[]>().not.toExtend<
       FixedArray<PublicKeyConfigOpt, 21>
@@ -62,6 +75,16 @@ describe("variable-length types", () => {
     expectTypeOf<VarArray<string, 256>["max_length"]>().toEqualTypeOf<
       256 | undefined
     >();
+  });
+
+  it("do not relate different bounds", () => {
+    // The phantom property makes distinct bounds mutually unassignable. This
+    // is a side effect of annotating the bound, not a designed subtyping
+    // relationship — the plain unbranded value is the interop path.
+    expectTypeOf<VarArray<string, 5>>().not.toExtend<VarArray<string, 10>>();
+    expectTypeOf<VarArray<string, 10>>().not.toExtend<VarArray<string, 5>>();
+    expectTypeOf<string[]>().toExtend<VarArray<string, 5>>();
+    expectTypeOf<string[]>().toExtend<VarArray<string, 10>>();
   });
 
   it("stay mutable, since any length up to the bound is valid", () => {

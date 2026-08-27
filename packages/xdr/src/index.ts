@@ -63,3 +63,7 @@ export type {
   VarArray,
   VarString,
 } from "./xdr/length_types.js";
+
+export {
+  fixedArray,
+} from "./xdr/length_types.js";
