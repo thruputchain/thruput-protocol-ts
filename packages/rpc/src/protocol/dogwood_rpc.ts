@@ -1,12 +1,13 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
+/** XDR: `typedef opaque Bytes<>`. */
 export type Bytes = Uint8Array & { readonly __brand: { readonly Bytes: true } };
 export function bytes(data: Uint8Array): Bytes {
   return data as Bytes;
@@ -20,6 +21,7 @@ export interface DogwoodStandaloneConfig {
 
 export interface DogwoodReceived {
   from: proto.ValidatorID;
+  /** XDR: `opaque payload<>`. */
   payload: Uint8Array;
 }
 

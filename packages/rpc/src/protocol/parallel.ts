@@ -1,16 +1,19 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export interface ParallelBatch {
+  /** XDR: `unsigned int segment_tokens<>`. */
   segment_tokens: bigint[];
+  /** XDR: `unsigned int segment_bytes<>`. */
   segment_bytes: bigint[];
+  /** XDR: `opaque xdr<>`. */
   xdr: Uint8Array;
 }
 

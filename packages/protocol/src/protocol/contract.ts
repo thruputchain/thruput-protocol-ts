@@ -1,14 +1,15 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export interface ContractBlob {
+  /** XDR: `opaque data<>`. */
   data: Uint8Array;
 }
 
@@ -32,11 +33,13 @@ export interface ContractDeploymentHashPreimage {
   contract_hash: proto.SHA256Hash;
 }
 
+/** XDR: `typedef string Identifier<>`. */
 export type Identifier = string & { readonly __brand: { readonly Identifier: true } };
 export function identifier(val: string): Identifier {
   return val as Identifier;
 }
 
+/** XDR: `typedef string SemVer<>`. */
 export type SemVer = string & { readonly __brand: { readonly SemVer: true } };
 export function semVer(val: string): SemVer {
   return val as SemVer;
@@ -47,7 +50,8 @@ export interface ContractInterfaceIDPreimage {
   vers: proto.SemVer;
 }
 
-export type ContractEntrypointID = Uint8Array & { readonly __brand: { readonly ContractEntrypointID: true } };
+/** XDR: `typedef opaque ContractEntrypointID[8]` — exactly 8 bytes. */
+export type ContractEntrypointID = FixedBytes<8> & { readonly __brand: { readonly ContractEntrypointID: true } };
 export function contractEntrypointID(data: Uint8Array): ContractEntrypointID {
   if (data.length !== 8) throw new Error(`ContractEntrypointID must be exactly 8 bytes, got ${data.length}`);
   return data as ContractEntrypointID;

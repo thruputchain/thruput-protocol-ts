@@ -1,14 +1,15 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export interface MissingTransactions {
+  /** XDR: `TransactionHash transaction_hashes<>`. */
   transaction_hashes: proto.TransactionHash[];
   consensus_value: proto.ConsensusValue;
 }
@@ -20,6 +21,7 @@ export interface MissingTransactionsEnvelope {
 }
 
 export interface RepairedTransactions {
+  /** XDR: `SignedTransaction transactions<>`. */
   transactions: proto.SignedTransaction[];
 }
 

@@ -1,14 +1,15 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type ValidatorID = Uint8Array & { readonly __brand: { readonly ValidatorID: true } };
+/** XDR: `typedef opaque ValidatorID[32]` — exactly 32 bytes. */
+export type ValidatorID = FixedBytes<32> & { readonly __brand: { readonly ValidatorID: true } };
 export function validatorID(data: Uint8Array): ValidatorID {
   if (data.length !== 32) throw new Error(`ValidatorID must be exactly 32 bytes, got ${data.length}`);
   return data as ValidatorID;

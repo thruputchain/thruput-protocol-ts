@@ -1,14 +1,15 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
-export type SCPHash = Uint8Array & { readonly __brand: { readonly SCPHash: true } };
+/** XDR: `typedef opaque SCPHash[32]` — exactly 32 bytes. */
+export type SCPHash = FixedBytes<32> & { readonly __brand: { readonly SCPHash: true } };
 export function scpHash(data: Uint8Array): SCPHash {
   if (data.length !== 32) throw new Error(`SCPHash must be exactly 32 bytes, got ${data.length}`);
   return data as SCPHash;
@@ -29,11 +30,13 @@ export function scpSlotIndex(val: bigint): SCPSlotIndex {
   return val as SCPSlotIndex;
 }
 
+/** XDR: `typedef opaque SCPValue<>`. */
 export type SCPValue = Uint8Array & { readonly __brand: { readonly SCPValue: true } };
 export function scpValue(data: Uint8Array): SCPValue {
   return data as SCPValue;
 }
 
+/** XDR: `typedef SCPValue SCPValues<>`. */
 export type SCPValues = proto.SCPValue[] & { readonly __brand: { readonly SCPValues: true } };
 export function scpValues(val: proto.SCPValue[]): SCPValues {
   return val as SCPValues;
@@ -58,7 +61,9 @@ export enum SCPStatementType {
 
 export interface SCPStatementNominate {
   quorum_set_hash: proto.SCPHash;
+  /** XDR: `SCPValue votes<>`. */
   votes: proto.SCPValue[];
+  /** XDR: `SCPValue accepted<>`. */
   accepted: proto.SCPValue[];
 }
 
@@ -103,6 +108,7 @@ export interface SCPEnvelope {
   signature: proto.Signature;
 }
 
+/** XDR: `typedef SCPEnvelope SCPEnvelopes<>`. */
 export type SCPEnvelopes = proto.SCPEnvelope[] & { readonly __brand: { readonly SCPEnvelopes: true } };
 export function scpEnvelopes(val: proto.SCPEnvelope[]): SCPEnvelopes {
   return val as SCPEnvelopes;
@@ -110,7 +116,9 @@ export function scpEnvelopes(val: proto.SCPEnvelope[]): SCPEnvelopes {
 
 export interface SCPQuorumSet {
   threshold: proto.SCPCount;
+  /** XDR: `SCPNodeID validators<>`. */
   validators: proto.SCPNodeID[];
+  /** XDR: `SCPQuorumSet inner_sets<>`. */
   inner_sets: proto.SCPQuorumSet[];
 }
 

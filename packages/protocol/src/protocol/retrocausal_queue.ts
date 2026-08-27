@@ -1,26 +1,43 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
 export const kQueueEntryMaxLen = 256n;
+/**
+ * Type-level value of {@link kQueueEntryMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kQueueEntryMaxLen = 256;
 
-export type QueueEntry = Uint8Array & { readonly __brand: { readonly QueueEntry: true } };
+/** XDR: `typedef opaque QueueEntry<kQueueEntryMaxLen>` — max {@link kQueueEntryMaxLen} bytes. */
+export type QueueEntry = VarBytes<proto.kQueueEntryMaxLen> & { readonly __brand: { readonly QueueEntry: true } };
 export function queueEntry(data: Uint8Array): QueueEntry {
-  if (data.length > Number(kQueueEntryMaxLen)) throw new Error(`QueueEntry exceeds max length kQueueEntryMaxLen, got ${data.length}`);
+  if (data.length > Number(proto.kQueueEntryMaxLen)) throw new Error(`QueueEntry exceeds max length kQueueEntryMaxLen, got ${data.length}`);
   return data as QueueEntry;
 }
 
 export const kMaxConcurrentRcqReadsPerTx = 16384n;
+/**
+ * Type-level value of {@link kMaxConcurrentRcqReadsPerTx}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxConcurrentRcqReadsPerTx = 16384;
 
 export const kRetrocausalQueueBlockEntriesMaxLen = 250n;
+/**
+ * Type-level value of {@link kRetrocausalQueueBlockEntriesMaxLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kRetrocausalQueueBlockEntriesMaxLen = 250;
 
 export interface RetrocausalQueueBlock {
+  /** XDR: `QueueEntry entries<>`. */
   entries: proto.QueueEntry[];
   block_number: bigint;
 }
@@ -38,17 +55,20 @@ export interface RetrocausalQueueMetadata {
 
 export interface RetrocausalQueueConsumeDelta {
   past_block_consume: proto.RetrocausalQueuePastBlockConsumeDelta;
-  current_block_consumed: proto.QueueEntry[];
+  /** XDR: `QueueEntry current_block_consumed<kRetrocausalQueueBlockEntriesMaxLen>` — max {@link kRetrocausalQueueBlockEntriesMaxLen} elements. */
+  current_block_consumed: VarArray<proto.QueueEntry, proto.kRetrocausalQueueBlockEntriesMaxLen>;
 }
 
 export interface RetrocausalQueueInsertDelta {
-  added_entries: proto.QueueEntry[];
+  /** XDR: `QueueEntry added_entries<kRetrocausalQueueBlockEntriesMaxLen>` — max {@link kRetrocausalQueueBlockEntriesMaxLen} elements. */
+  added_entries: VarArray<proto.QueueEntry, proto.kRetrocausalQueueBlockEntriesMaxLen>;
 }
 
 export interface RetrocausalQueueDelta {
   consume: proto.RetrocausalQueueConsumeDelta | null;
   insert: proto.RetrocausalQueueInsertDelta;
-  observed_concurrent_entries: proto.QueueEntry[];
+  /** XDR: `QueueEntry observed_concurrent_entries<kMaxConcurrentRcqReadsPerTx>` — max {@link kMaxConcurrentRcqReadsPerTx} elements. */
+  observed_concurrent_entries: VarArray<proto.QueueEntry, proto.kMaxConcurrentRcqReadsPerTx>;
 }
 
 

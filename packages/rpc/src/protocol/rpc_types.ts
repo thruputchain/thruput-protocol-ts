@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -91,6 +91,7 @@ export type ExpectedViewingSnapshot =
   | { error: number }
 ;
 
+/** XDR: `typedef ContractAddress ContractAddressBatch<>`. */
 export type ContractAddressBatch = proto.ContractAddress[] & { readonly __brand: { readonly ContractAddressBatch: true } };
 export function contractAddressBatch(val: proto.ContractAddress[]): ContractAddressBatch {
   return val as ContractAddressBatch;

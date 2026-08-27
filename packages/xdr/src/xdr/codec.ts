@@ -220,8 +220,17 @@ export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]
   };
 }
 
-/** Codec combinator for XDR fixed-length array (no length prefix, exactly N elements). */
-export function FixedArrayCodec<T>(inner: LazyCodec<T>, len: number): XdrCodec<T[]> {
+/**
+ * Codec combinator for XDR fixed-length array (no length prefix, exactly N elements).
+ *
+ * `encode` accepts a readonly array so that `FixedArray<T, N>` values — whose
+ * exact length is part of their type, and which are therefore readonly — can be
+ * encoded directly. `decode` still produces a mutable array.
+ */
+export function FixedArrayCodec<T>(
+  inner: LazyCodec<T>,
+  len: number,
+): XdrCodec<T[]> & { encode(w: IWriter, val: readonly T[]): void } {
   return {
     encode(w, val) {
       if (val.length !== len) {

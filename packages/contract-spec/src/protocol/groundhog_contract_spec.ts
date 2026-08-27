@@ -1,13 +1,14 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
+/** XDR: `typedef string ContractSpecString<>`. */
 export type ContractSpecString = string & { readonly __brand: { readonly ContractSpecString: true } };
 export function contractSpecString(val: string): ContractSpecString {
   return val as ContractSpecString;
@@ -82,6 +83,7 @@ export interface ContractField {
 
 export interface ContractSpecMethod {
   name: proto.ContractSpecString;
+  /** XDR: `ContractField args<>`. */
   args: proto.ContractField[];
   return_type: proto.ContractType;
 }
@@ -89,12 +91,15 @@ export interface ContractSpecMethod {
 export interface ContractSpecInterface {
   name: proto.ContractSpecString;
   vers: proto.ContractSpecString;
+  /** XDR: `ContractExceptionType throws<>`. */
   throws: proto.ContractExceptionType[];
+  /** XDR: `ContractSpecMethod methods<>`. */
   methods: proto.ContractSpecMethod[];
 }
 
 export interface ContractStructDef {
   name: proto.ContractSpecString;
+  /** XDR: `ContractField fields<>`. */
   fields: proto.ContractField[];
 }
 
@@ -105,6 +110,7 @@ export interface ContractEnumVariant {
 
 export interface ContractEnumDef {
   name: proto.ContractSpecString;
+  /** XDR: `ContractEnumVariant variants<>`. */
   variants: proto.ContractEnumVariant[];
 }
 
@@ -128,6 +134,7 @@ export interface ContractUnionCase {
 
 export interface ContractUnionDef {
   name: proto.ContractSpecString;
+  /** XDR: `ContractUnionCase cases<>`. */
   cases: proto.ContractUnionCase[];
 }
 
@@ -146,13 +153,18 @@ export type ContractTypeDef =
 export interface ContractEventDef {
   name: proto.ContractSpecString;
   signature: proto.Topic;
+  /** XDR: `ContractField topics<>`. */
   topics: proto.ContractField[];
+  /** XDR: `ContractField fields<>`. */
   fields: proto.ContractField[];
 }
 
 export interface ContractSpec {
+  /** XDR: `ContractSpecInterface interfaces<>`. */
   interfaces: proto.ContractSpecInterface[];
+  /** XDR: `ContractTypeDef type_defs<>`. */
   type_defs: proto.ContractTypeDef[];
+  /** XDR: `ContractEventDef events<>`. */
   events: proto.ContractEventDef[];
 }
 

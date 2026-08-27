@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -23,6 +23,7 @@ export type ExperimentConfig =
   | { experiment_type: proto.ExperimentType.kExperimentTypeERC20BasicAuthPayments; erc20_payments: proto.ERC20PaymentsConfig }
 ;
 
+/** XDR: `typedef SignedTransaction InitializationBlock<>`. */
 export type InitializationBlock = proto.SignedTransaction[] & { readonly __brand: { readonly InitializationBlock: true } };
 export function initializationBlock(val: proto.SignedTransaction[]): InitializationBlock {
   return val as InitializationBlock;
@@ -36,6 +37,7 @@ export function loadgenContextID(val: bigint): LoadgenContextID {
 export interface LoadgenSuccessResult {
   genesis_configuration: proto.GenesisConfiguration;
   genesis_ceremony_txs: proto.InitializationBlock;
+  /** XDR: `InitializationBlock initialization_txs<>`. */
   initialization_txs: proto.InitializationBlock[];
   context_id: proto.LoadgenContextID;
 }

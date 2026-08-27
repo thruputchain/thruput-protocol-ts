@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type RpcProgramMeta } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -31,7 +31,9 @@ export interface SignedValidatorInfoSnapshot {
 }
 
 export interface KnownQuorumSets {
+  /** XDR: `SignedQuorumSetSnapshot quorum_set_snapshots<>`. */
   quorum_set_snapshots: proto.SignedQuorumSetSnapshot[];
+  /** XDR: `SignedValidatorInfoSnapshot validator_snapshots<>`. */
   validator_snapshots: proto.SignedValidatorInfoSnapshot[];
 }
 

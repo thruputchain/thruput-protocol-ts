@@ -1,23 +1,30 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from x23c commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec } from "@groundhogchain/xdr";
+import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
 
 
 
+/** XDR: `typedef opaque Calldata<>`. */
 export type Calldata = Uint8Array & { readonly __brand: { readonly Calldata: true } };
 export function calldata(data: Uint8Array): Calldata {
   return data as Calldata;
 }
 
 export const kMaxReturnBufferLen = 1024n;
+/**
+ * Type-level value of {@link kMaxReturnBufferLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kMaxReturnBufferLen = 1024;
 
-export type ReturnBuffer = Uint8Array & { readonly __brand: { readonly ReturnBuffer: true } };
+/** XDR: `typedef opaque ReturnBuffer<kMaxReturnBufferLen>` — max {@link kMaxReturnBufferLen} bytes. */
+export type ReturnBuffer = VarBytes<proto.kMaxReturnBufferLen> & { readonly __brand: { readonly ReturnBuffer: true } };
 export function returnBuffer(data: Uint8Array): ReturnBuffer {
-  if (data.length > Number(kMaxReturnBufferLen)) throw new Error(`ReturnBuffer exceeds max length kMaxReturnBufferLen, got ${data.length}`);
+  if (data.length > Number(proto.kMaxReturnBufferLen)) throw new Error(`ReturnBuffer exceeds max length kMaxReturnBufferLen, got ${data.length}`);
   return data as ReturnBuffer;
 }
 
@@ -48,6 +55,7 @@ export interface Uniquifier {
 export interface Transaction {
   invocation: proto.Invocation;
   uniquifier: proto.Uniquifier;
+  /** XDR: `Contract contracts_to_deploy<>`. */
   contracts_to_deploy: proto.Contract[];
   auth_claim: proto.AuthClaim;
 }
@@ -64,14 +72,17 @@ export function transactionHash(val: proto.SHA256Hash): TransactionHash {
 
 export interface SignedTransaction {
   tx: proto.Transaction;
+  /** XDR: `DecoratedSignature signatures<>`. */
   signatures: proto.DecoratedSignature[];
 }
 
+/** XDR: `typedef Transaction TransactionBatch<>`. */
 export type TransactionBatch = proto.Transaction[] & { readonly __brand: { readonly TransactionBatch: true } };
 export function transactionBatch(val: proto.Transaction[]): TransactionBatch {
   return val as TransactionBatch;
 }
 
+/** XDR: `typedef SignedTransaction SignedTransactionBatch<>`. */
 export type SignedTransactionBatch = proto.SignedTransaction[] & { readonly __brand: { readonly SignedTransactionBatch: true } };
 export function signedTransactionBatch(val: proto.SignedTransaction[]): SignedTransactionBatch {
   return val as SignedTransactionBatch;
@@ -82,20 +93,24 @@ export function optSignedTransaction(val: proto.SignedTransaction | null): OptSi
   return val as OptSignedTransaction;
 }
 
+/** XDR: `typedef OptSignedTransaction OptSignedTransactionBatch<>`. */
 export type OptSignedTransactionBatch = proto.OptSignedTransaction[] & { readonly __brand: { readonly OptSignedTransactionBatch: true } };
 export function optSignedTransactionBatch(val: proto.OptSignedTransaction[]): OptSignedTransactionBatch {
   return val as OptSignedTransactionBatch;
 }
 
+/** XDR: `typedef TransactionHash TransactionHashBatch<>`. */
 export type TransactionHashBatch = proto.TransactionHash[] & { readonly __brand: { readonly TransactionHashBatch: true } };
 export function transactionHashBatch(val: proto.TransactionHash[]): TransactionHashBatch {
   return val as TransactionHashBatch;
 }
 
 export interface NondeterministicProposalData {
+  /** XDR: `opaque nondeterministic_bits<>`. */
   nondeterministic_bits: Uint8Array;
   nondeterministic_bit_count: bigint;
-  observed_queue_entry_sequence: proto.QueueEntry[];
+  /** XDR: `QueueEntry observed_queue_entry_sequence<kMaxConcurrentRcqReadsPerTx>` — max {@link kMaxConcurrentRcqReadsPerTx} elements. */
+  observed_queue_entry_sequence: VarArray<proto.QueueEntry, proto.kMaxConcurrentRcqReadsPerTx>;
 }
 
 export interface ProposedTransaction {
@@ -103,6 +118,7 @@ export interface ProposedTransaction {
   nondeterministic_proposal_data: proto.NondeterministicProposalData;
 }
 
+/** XDR: `typedef ProposedTransaction ProposedTransactionBatch<>`. */
 export type ProposedTransactionBatch = proto.ProposedTransaction[] & { readonly __brand: { readonly ProposedTransactionBatch: true } };
 export function proposedTransactionBatch(val: proto.ProposedTransaction[]): ProposedTransactionBatch {
   return val as ProposedTransactionBatch;
