@@ -66,4 +66,5 @@ export type {
 
 export {
   fixedArray,
+  fixedBytes,
 } from "./xdr/length_types.js";

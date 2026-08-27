@@ -1,5 +1,5 @@
 import { describe, it, expectTypeOf } from "vitest";
-import { fixedArray } from "@groundhogchain/xdr";
+import { fixedArray, fixedBytes } from "@groundhogchain/xdr";
 import type {
   FixedBytes,
   FixedArray,
@@ -54,6 +54,15 @@ describe("fixed-length types", () => {
   it("a wrong-length plain array is not assignable", () => {
     expectTypeOf<readonly PublicKeyConfigOpt[]>().not.toExtend<
       FixedArray<PublicKeyConfigOpt, 21>
+    >();
+  });
+
+  it("is built from a plain Uint8Array via fixedBytes, with no cast", () => {
+    // A plain Uint8Array has length: number, so it is not assignable to a
+    // FixedBytes<N>; fixedBytes checks the length and narrows the type.
+    expectTypeOf<Uint8Array>().not.toExtend<FixedBytes<32>>();
+    expectTypeOf(fixedBytes(new Uint8Array(32), 32)).toEqualTypeOf<
+      FixedBytes<32>
     >();
   });
 

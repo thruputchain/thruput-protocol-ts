@@ -19,6 +19,11 @@
  *
  * The wire format reads and writes exactly `N` bytes for values of this type;
  * the codec throws on any other length.
+ *
+ * `N` is a literal type, so a plain `Uint8Array` — whose `length` is `number`
+ * — is *not* assignable here. Use {@link fixedBytes} to build one, or the
+ * generated factory for a fixed opaque typedef (`sha256Hash(data)` and
+ * friends), both of which check the length at runtime so no cast is needed.
  */
 export type FixedBytes<N extends number> = Uint8Array & { readonly length: N };
 
@@ -107,4 +112,36 @@ export function fixedArray<T, N extends number>(
     );
   }
   return Object.freeze(value.slice()) as FixedArray<T, N>;
+}
+
+/**
+ * Check that `data` is exactly `length` bytes and return it as a
+ * {@link FixedBytes}.
+ *
+ * The byte counterpart to {@link fixedArray}: a fixed length is a literal
+ * type, so a plain `Uint8Array` (length `number`) cannot be assigned to
+ * `FixedBytes<N>` directly. This is the checked construction path.
+ *
+ * ```ts
+ * const salt = fixedBytes(crypto.getRandomValues(new Uint8Array(32)), 32);
+ * ```
+ *
+ * Returns a copy, so later writes through the caller's reference cannot
+ * change the bytes behind the result — the same caller-owned convention the
+ * readers use for `readFixedOpaque`. Copying a view copies only that view's
+ * range. Unlike `fixedArray` the result is not frozen: `Object.freeze` throws
+ * on a non-empty typed array. Nothing is lost by that, since a `Uint8Array`'s
+ * length cannot change through an alias at all — only its contents, which the
+ * copy already isolates.
+ *
+ * @throws if `data.length !== length`.
+ */
+export function fixedBytes<N extends number>(
+  data: Uint8Array,
+  length: N,
+): FixedBytes<N> {
+  if (data.length !== length) {
+    throw new Error(`FixedBytes expected ${length} bytes, got ${data.length}`);
+  }
+  return data.slice() as FixedBytes<N>;
 }
