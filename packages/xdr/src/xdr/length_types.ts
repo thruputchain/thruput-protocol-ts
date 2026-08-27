@@ -86,6 +86,15 @@ export type VarString<N extends number> = string & { readonly max_length?: N };
  * );
  * ```
  *
+ * Returns a frozen copy rather than `value` itself. Returning the argument
+ * would leave the caller's reference aliasing the result, so a later
+ * `source.push(...)` would change the length of a value whose type promises
+ * `N` — the readonly type only stops mutation through the `FixedArray`
+ * reference, not through a retained alias. Freezing also holds the invariant
+ * for callers who reach the value through a cast or from plain JavaScript,
+ * where the type is not enforced at all. The copy is O(N), which is
+ * immaterial for the small fixed arrays XDR declares.
+ *
  * @throws if `value.length !== length`.
  */
 export function fixedArray<T, N extends number>(
@@ -97,5 +106,5 @@ export function fixedArray<T, N extends number>(
       `FixedArray expected ${length} elements, got ${value.length}`,
     );
   }
-  return value as FixedArray<T, N>;
+  return Object.freeze(value.slice()) as FixedArray<T, N>;
 }
