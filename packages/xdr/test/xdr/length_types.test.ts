@@ -64,6 +64,13 @@ describe("fixedBytes", () => {
     expect(src).toEqual(new Uint8Array([1, 2, 3]));
   });
 
+  it("copies a Node Buffer, whose slice() would alias", () => {
+    const src = Buffer.alloc(3, 1);
+    const fixed = fixedBytes(src, 3);
+    fixed.fill(9);
+    expect(src).toEqual(Buffer.alloc(3, 1));
+  });
+
   it("copies only the view's range, not the whole buffer", () => {
     const buf = new Uint8Array([1, 2, 3, 4, 5]);
     const fixed = fixedBytes(buf.subarray(1, 4), 3);
