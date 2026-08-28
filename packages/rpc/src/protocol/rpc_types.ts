@@ -18,6 +18,7 @@ export interface DbTip {
   storage_long_hash: proto.StorageLongHash;
   value: proto.ConsensusValue;
   default_wallet: proto.DeployedContractHash;
+  network_config: proto.NetworkConfig;
 }
 
 export type TransactionID = bigint & { readonly __brand: { readonly TransactionID: true } };
@@ -113,13 +114,15 @@ const _DbTip: XdrCodec<DbTip> = {
     proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
     proto.codec.ConsensusValue.encode(w, val.value);
     proto.codec.DeployedContractHash.encode(w, val.default_wallet);
+    proto.codec.NetworkConfig.encode(w, val.network_config);
   },
   decode(r) {
     const id = proto.codec.BlockID.decode(r);
     const storage_long_hash = proto.codec.StorageLongHash.decode(r);
     const value = proto.codec.ConsensusValue.decode(r);
     const default_wallet = proto.codec.DeployedContractHash.decode(r);
-    return { id, storage_long_hash, value, default_wallet };
+    const network_config = proto.codec.NetworkConfig.decode(r);
+    return { id, storage_long_hash, value, default_wallet, network_config };
   },
 };
 
