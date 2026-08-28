@@ -19,6 +19,7 @@ describe("codec completeness", () => {
       "Invocation", "Transaction", "SignedTransaction",
       "ContractEntrypointID", "Contract",
       "ProposalHeader", "ValidatorID", "NetworkHash",
+      "NetworkConfig", "ConfigHashPreimage",
     ];
     for (const key of expected) {
       expect(codec[key as keyof typeof codec], `codec.${key} missing`).toBeDefined();

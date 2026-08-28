@@ -8,6 +8,7 @@ export * from "./genesis.js";
 export * from "./transaction.js";
 export * from "./retrocausal_queue.js";
 export * from "./storage_cost.js";
+export * from "./network_config.js";
 export * from "./syscall_error.js";
 export * from "./auth_claim.js";
 export * from "./standard_asset_events.js";
@@ -29,6 +30,7 @@ import { codec as genesis_codec } from "./genesis.js";
 import { codec as transaction_codec } from "./transaction.js";
 import { codec as retrocausal_queue_codec } from "./retrocausal_queue.js";
 import { codec as storage_cost_codec } from "./storage_cost.js";
+import { codec as network_config_codec } from "./network_config.js";
 import { codec as syscall_error_codec } from "./syscall_error.js";
 import { codec as auth_claim_codec } from "./auth_claim.js";
 import { codec as standard_asset_events_codec } from "./standard_asset_events.js";
@@ -54,6 +56,7 @@ function _buildCodec() {
     ...transaction_codec,
     ...retrocausal_queue_codec,
     ...storage_cost_codec,
+    ...network_config_codec,
     ...syscall_error_codec,
     ...auth_claim_codec,
     ...standard_asset_events_codec,
