@@ -20,10 +20,6 @@ export interface StorageCostModelXdr {
   balance_cost: bigint;
 }
 
-export interface ConfigHashPreimage {
-  storage_cost_model: proto.StorageCostModelXdr;
-}
-
 
 //
 // XDR Codecs below this point
@@ -55,18 +51,7 @@ const _StorageCostModelXdr: XdrCodec<StorageCostModelXdr> = {
   },
 };
 
-const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
-  encode(w, val) {
-    proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
-  },
-  decode(r) {
-    const storage_cost_model = proto.codec.StorageCostModelXdr.decode(r);
-    return { storage_cost_model };
-  },
-};
-
 export const codec = {
   StorageCostModelXdr: _StorageCostModelXdr,
-  ConfigHashPreimage: _ConfigHashPreimage,
 } as const;
 

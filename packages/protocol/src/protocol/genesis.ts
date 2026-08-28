@@ -11,6 +11,7 @@ import * as proto from "./index.js";
 export interface GenesisConfiguration {
   network_hash: proto.NetworkHash;
   storage_cost_model: proto.StorageCostModelXdr;
+  network_config: proto.NetworkConfig;
   root_contract: proto.Contract;
   default_wallet: proto.DeployedContractHash;
 }
@@ -30,15 +31,17 @@ const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
   encode(w, val) {
     proto.codec.NetworkHash.encode(w, val.network_hash);
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
+    proto.codec.NetworkConfig.encode(w, val.network_config);
     proto.codec.Contract.encode(w, val.root_contract);
     proto.codec.DeployedContractHash.encode(w, val.default_wallet);
   },
   decode(r) {
     const network_hash = proto.codec.NetworkHash.decode(r);
     const storage_cost_model = proto.codec.StorageCostModelXdr.decode(r);
+    const network_config = proto.codec.NetworkConfig.decode(r);
     const root_contract = proto.codec.Contract.decode(r);
     const default_wallet = proto.codec.DeployedContractHash.decode(r);
-    return { network_hash, storage_cost_model, root_contract, default_wallet };
+    return { network_hash, storage_cost_model, network_config, root_contract, default_wallet };
   },
 };
 
