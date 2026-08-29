@@ -20,10 +20,11 @@ export function upid(data: Uint8Array): UPID {
   return data as UPID;
 }
 
-/** XDR: `typedef string ProtocolCommit<>`. */
-export type ProtocolCommit = string & { readonly __brand: { readonly ProtocolCommit: true } };
-export function protocolCommit(val: string): ProtocolCommit {
-  return val as ProtocolCommit;
+/** XDR: `typedef opaque ProtocolCommit[20]` — exactly 20 bytes. */
+export type ProtocolCommit = FixedBytes<20> & { readonly __brand: { readonly ProtocolCommit: true } };
+export function protocolCommit(data: Uint8Array): ProtocolCommit {
+  if (data.length !== 20) throw new Error(`ProtocolCommit must be exactly 20 bytes, got ${data.length}`);
+  return data as ProtocolCommit;
 }
 
 
@@ -42,8 +43,8 @@ const _UPID: XdrCodec<UPID> = {
 };
 
 const _ProtocolCommit: XdrCodec<ProtocolCommit> = {
-  encode(w, val) { w.writeString(val, Number(0xFFFFFFFF)); },
-  decode(r) { return protocolCommit(r.readString(Number(0xFFFFFFFF))); },
+  encode(w, val) { w.writeFixedOpaque(val, 20); },
+  decode(r) { return protocolCommit(r.readFixedOpaque(20)); },
 };
 
 export const codec = {
