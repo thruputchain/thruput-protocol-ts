@@ -20,6 +20,7 @@ export enum SyscallErrorCode {
   kSyscallErrorCodeStorageKeyNotExist = 8,
   kSyscallErrorCodeNoRetrocausalQueueEntry = 9,
   kSyscallErrorCodeRetrocausalQueueReadLimitReached = 10,
+  kSyscallErrorCodeInvokeDepthExceeded = 11,
 }
 
 
