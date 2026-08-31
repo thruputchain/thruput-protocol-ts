@@ -14,14 +14,12 @@ export interface ContractBlob {
 }
 
 export enum ContractType {
-  kWasmi = 0,
   kNative = 1,
   kMockTest = 2,
   kRv32 = 3,
 }
 
 export type Contract =
-  | { contract_type: proto.ContractType.kWasmi; wasmi_contract: proto.ContractBlob }
   | { contract_type: proto.ContractType.kNative; native_contract_id: proto.HogexecPrecompiledNativeContracts }
   | { contract_type: proto.ContractType.kMockTest; mock_contract_id: bigint }
   | { contract_type: proto.ContractType.kRv32; rv32_contract: proto.ContractBlob }
@@ -92,9 +90,6 @@ const _Contract: XdrCodec<Contract> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.contract_type));
     switch (val.contract_type) {
-      case proto.ContractType.kWasmi:
-        proto.codec.ContractBlob.encode(w, val.wasmi_contract);
-        break;
       case proto.ContractType.kNative:
         proto.codec.HogexecPrecompiledNativeContracts.encode(w, val.native_contract_id);
         break;
@@ -109,9 +104,6 @@ const _Contract: XdrCodec<Contract> = {
   decode(r) {
     const contract_type = Number(r.readInt32());
     switch (contract_type) {
-      case proto.ContractType.kWasmi:
-        const wasmi_contract = proto.codec.ContractBlob.decode(r);
-        return { contract_type, wasmi_contract };
       case proto.ContractType.kNative:
         const native_contract_id = proto.codec.HogexecPrecompiledNativeContracts.decode(r);
         return { contract_type, native_contract_id };
