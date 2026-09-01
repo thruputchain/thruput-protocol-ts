@@ -48,6 +48,16 @@ export interface executorsched_validate_batch_args {
   arg1: proto.ProposedTransactionBatch;
 }
 
+export interface executorsched_open_proposal_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.BlockExecutionContext;
+}
+
+export interface executorsched_open_validation_block_args {
+  arg0: proto.BlockID;
+  arg1: proto.BlockExecutionContext;
+}
+
 
 //
 // XDR Codecs below this point
@@ -136,6 +146,30 @@ const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_
   },
 };
 
+const _executorsched_open_proposal_block_args: XdrCodec<executorsched_open_proposal_block_args> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.BlockExecutionContext.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.BlockExecutionContext.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
+const _executorsched_open_validation_block_args: XdrCodec<executorsched_open_validation_block_args> = {
+  encode(w, val) {
+    proto.codec.BlockID.encode(w, val.arg0);
+    proto.codec.BlockExecutionContext.encode(w, val.arg1);
+  },
+  decode(r) {
+    const arg0 = proto.codec.BlockID.decode(r);
+    const arg1 = proto.codec.BlockExecutionContext.decode(r);
+    return { arg0, arg1 };
+  },
+};
+
 export const codec = {
   ExecProposeResult: _ExecProposeResult,
   ExecProposeBatchResult: _ExecProposeBatchResult,
@@ -152,8 +186,8 @@ export const ExecutorSchedProgram: RpcProgramMeta = {
     executorsched_validate_transaction: { proc: 20, request: () => _executorsched_validate_transaction_args, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
     executorsched_propose_batch: { proc: 11, request: () => _executorsched_propose_batch_args, response: () => _ExecProposeBatchResult },
     executorsched_validate_batch: { proc: 21, request: () => _executorsched_validate_batch_args, response: () => _ExecValidateBatchResult },
-    executorsched_open_proposal_block: { proc: 30, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
-    executorsched_open_validation_block: { proc: 40, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_open_proposal_block: { proc: 30, request: () => _executorsched_open_proposal_block_args, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
+    executorsched_open_validation_block: { proc: 40, request: () => _executorsched_open_validation_block_args, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
     executorsched_finish_block: { proc: 50, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => proto.codec.ExecResult as XdrCodec<proto.ExecResult> },
     executorsched_shutdown: { proc: 60, request: () => VoidCodec, response: () => VoidCodec },
   },

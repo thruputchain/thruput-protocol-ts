@@ -13,6 +13,11 @@ export function blockID(val: bigint): BlockID {
   return val as BlockID;
 }
 
+export interface BlockExecutionContext {
+  block_height: proto.BlockHeight;
+  block_timepoint: proto.TimePoint;
+}
+
 export interface DbTip {
   id: proto.BlockID;
   storage_long_hash: proto.StorageLongHash;
@@ -106,6 +111,18 @@ export function contractAddressBatch(val: proto.ContractAddress[]): ContractAddr
 const _BlockID: XdrCodec<BlockID> = {
   encode(w, val) { w.writeUint64(val); },
   decode(r) { return blockID(r.readUint64()); },
+};
+
+const _BlockExecutionContext: XdrCodec<BlockExecutionContext> = {
+  encode(w, val) {
+    proto.codec.BlockHeight.encode(w, val.block_height);
+    proto.codec.TimePoint.encode(w, val.block_timepoint);
+  },
+  decode(r) {
+    const block_height = proto.codec.BlockHeight.decode(r);
+    const block_timepoint = proto.codec.TimePoint.decode(r);
+    return { block_height, block_timepoint };
+  },
 };
 
 const _DbTip: XdrCodec<DbTip> = {
@@ -378,6 +395,7 @@ const _ContractAddressBatch = VarArrayCodec(() => proto.codec.ContractAddress, N
 
 export const codec = {
   BlockID: _BlockID,
+  BlockExecutionContext: _BlockExecutionContext,
   DbTip: _DbTip,
   TransactionID: _TransactionID,
   RPCError: _RPCError,
