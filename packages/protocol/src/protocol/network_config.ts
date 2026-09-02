@@ -8,32 +8,31 @@ import * as proto from "./index.js";
 
 
 
-export interface NetworkConfigV0 {
-  max_sha256_buffers: bigint;
-  max_cross_invoke_depth: bigint;
-}
-
-export interface NetworkConfigV1 {
-  max_sha256_buffers: bigint;
-  max_cross_invoke_depth: bigint;
-  max_new_contracts_per_tx: bigint;
-}
-
-export type NetworkConfig =
-  | { v: 0; v0: proto.NetworkConfigV0 }
-  | { v: 1; v1: proto.NetworkConfigV1 }
-;
-
 export enum ConfigParamID {
   kConfigParamMaxSHA256Buffers = 0,
   kConfigParamMaxCrossInvokeDepth = 1,
   kConfigParamMaxNewContractsPerTx = 2,
 }
 
-export type ConfigUpgrade =
+export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxSHA256Buffers; max_sha256_buffers: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth; max_cross_invoke_depth: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxNewContractsPerTx; max_new_contracts_per_tx: bigint }
+;
+
+export interface NetworkConfigV0 {
+  max_sha256_buffers: bigint;
+  max_cross_invoke_depth: bigint;
+}
+
+export interface NetworkConfigV1 {
+  /** XDR: `ConfigParam params<>`. */
+  params: proto.ConfigParam[];
+}
+
+export type NetworkConfig =
+  | { v: 0; v0: proto.NetworkConfigV0 }
+  | { v: 1; v1: proto.NetworkConfigV1 }
 ;
 
 export interface ConfigHashPreimage {
@@ -45,6 +44,44 @@ export interface ConfigHashPreimage {
 //
 // XDR Codecs below this point
 //
+
+const _ConfigParamID: XdrCodec<ConfigParamID> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as ConfigParamID; },
+};
+
+const _ConfigParam: XdrCodec<ConfigParam> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.param));
+    switch (val.param) {
+      case proto.ConfigParamID.kConfigParamMaxSHA256Buffers:
+        w.writeUint32(val.max_sha256_buffers);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
+        w.writeUint32(val.max_cross_invoke_depth);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
+        w.writeUint32(val.max_new_contracts_per_tx);
+        break;
+    }
+  },
+  decode(r) {
+    const param = Number(r.readInt32());
+    switch (param) {
+      case proto.ConfigParamID.kConfigParamMaxSHA256Buffers:
+        const max_sha256_buffers = r.readUint32();
+        return { param, max_sha256_buffers };
+      case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
+        const max_cross_invoke_depth = r.readUint32();
+        return { param, max_cross_invoke_depth };
+      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
+        const max_new_contracts_per_tx = r.readUint32();
+        return { param, max_new_contracts_per_tx };
+      default:
+        throw new Error(`Unknown ConfigParam discriminant: ${param}`);
+    }
+  },
+};
 
 const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = {
   encode(w, val) {
@@ -60,15 +97,11 @@ const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = {
 
 const _NetworkConfigV1: XdrCodec<NetworkConfigV1> = {
   encode(w, val) {
-    w.writeUint32(val.max_sha256_buffers);
-    w.writeUint32(val.max_cross_invoke_depth);
-    w.writeUint32(val.max_new_contracts_per_tx);
+    VarArrayCodec(proto.codec.ConfigParam, Number(0xFFFFFFFF)).encode(w, val.params);
   },
   decode(r) {
-    const max_sha256_buffers = r.readUint32();
-    const max_cross_invoke_depth = r.readUint32();
-    const max_new_contracts_per_tx = r.readUint32();
-    return { max_sha256_buffers, max_cross_invoke_depth, max_new_contracts_per_tx };
+    const params = VarArrayCodec(proto.codec.ConfigParam, Number(0xFFFFFFFF)).decode(r);
+    return { params };
   },
 };
 
@@ -99,44 +132,6 @@ const _NetworkConfig: XdrCodec<NetworkConfig> = {
   },
 };
 
-const _ConfigParamID: XdrCodec<ConfigParamID> = {
-  encode(w, val) { w.writeInt32(BigInt(val)); },
-  decode(r) { return Number(r.readInt32()) as ConfigParamID; },
-};
-
-const _ConfigUpgrade: XdrCodec<ConfigUpgrade> = {
-  encode(w, val) {
-    w.writeInt32(BigInt(val.param));
-    switch (val.param) {
-      case proto.ConfigParamID.kConfigParamMaxSHA256Buffers:
-        w.writeUint32(val.max_sha256_buffers);
-        break;
-      case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
-        w.writeUint32(val.max_cross_invoke_depth);
-        break;
-      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
-        w.writeUint32(val.max_new_contracts_per_tx);
-        break;
-    }
-  },
-  decode(r) {
-    const param = Number(r.readInt32());
-    switch (param) {
-      case proto.ConfigParamID.kConfigParamMaxSHA256Buffers:
-        const max_sha256_buffers = r.readUint32();
-        return { param, max_sha256_buffers };
-      case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
-        const max_cross_invoke_depth = r.readUint32();
-        return { param, max_cross_invoke_depth };
-      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
-        const max_new_contracts_per_tx = r.readUint32();
-        return { param, max_new_contracts_per_tx };
-      default:
-        throw new Error(`Unknown ConfigUpgrade discriminant: ${param}`);
-    }
-  },
-};
-
 const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
   encode(w, val) {
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
@@ -150,11 +145,11 @@ const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
 };
 
 export const codec = {
+  ConfigParamID: _ConfigParamID,
+  ConfigParam: _ConfigParam,
   NetworkConfigV0: _NetworkConfigV0,
   NetworkConfigV1: _NetworkConfigV1,
   NetworkConfig: _NetworkConfig,
-  ConfigParamID: _ConfigParamID,
-  ConfigUpgrade: _ConfigUpgrade,
   ConfigHashPreimage: _ConfigHashPreimage,
 } as const;
 
