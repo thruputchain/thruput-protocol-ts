@@ -12,16 +12,19 @@ export interface NetworkConfig {
   ext: proto.ExtensionPoint;
   max_sha256_buffers: bigint;
   max_cross_invoke_depth: bigint;
+  max_new_contracts_per_tx: bigint;
 }
 
 export enum ConfigParamID {
   kConfigParamMaxSHA256Buffers = 0,
   kConfigParamMaxCrossInvokeDepth = 1,
+  kConfigParamMaxNewContractsPerTx = 2,
 }
 
 export type ConfigUpgrade =
   | { param: proto.ConfigParamID.kConfigParamMaxSHA256Buffers; max_sha256_buffers: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth; max_cross_invoke_depth: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxNewContractsPerTx; max_new_contracts_per_tx: bigint }
 ;
 
 export interface ConfigHashPreimage {
@@ -39,12 +42,14 @@ const _NetworkConfig: XdrCodec<NetworkConfig> = {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     w.writeUint32(val.max_sha256_buffers);
     w.writeUint32(val.max_cross_invoke_depth);
+    w.writeUint32(val.max_new_contracts_per_tx);
   },
   decode(r) {
     const ext = proto.codec.ExtensionPoint.decode(r);
     const max_sha256_buffers = r.readUint32();
     const max_cross_invoke_depth = r.readUint32();
-    return { ext, max_sha256_buffers, max_cross_invoke_depth };
+    const max_new_contracts_per_tx = r.readUint32();
+    return { ext, max_sha256_buffers, max_cross_invoke_depth, max_new_contracts_per_tx };
   },
 };
 
@@ -63,6 +68,9 @@ const _ConfigUpgrade: XdrCodec<ConfigUpgrade> = {
       case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
         w.writeUint32(val.max_cross_invoke_depth);
         break;
+      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
+        w.writeUint32(val.max_new_contracts_per_tx);
+        break;
     }
   },
   decode(r) {
@@ -74,6 +82,9 @@ const _ConfigUpgrade: XdrCodec<ConfigUpgrade> = {
       case proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth:
         const max_cross_invoke_depth = r.readUint32();
         return { param, max_cross_invoke_depth };
+      case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
+        const max_new_contracts_per_tx = r.readUint32();
+        return { param, max_new_contracts_per_tx };
       default:
         throw new Error(`Unknown ConfigUpgrade discriminant: ${param}`);
     }
