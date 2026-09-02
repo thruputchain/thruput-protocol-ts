@@ -8,12 +8,21 @@ import * as proto from "./index.js";
 
 
 
-export interface NetworkConfig {
-  ext: proto.ExtensionPoint;
+export interface NetworkConfigV0 {
+  max_sha256_buffers: bigint;
+  max_cross_invoke_depth: bigint;
+}
+
+export interface NetworkConfigV1 {
   max_sha256_buffers: bigint;
   max_cross_invoke_depth: bigint;
   max_new_contracts_per_tx: bigint;
 }
+
+export type NetworkConfig =
+  | { v: 0; v0: proto.NetworkConfigV0 }
+  | { v: 1; v1: proto.NetworkConfigV1 }
+;
 
 export enum ConfigParamID {
   kConfigParamMaxSHA256Buffers = 0,
@@ -37,19 +46,56 @@ export interface ConfigHashPreimage {
 // XDR Codecs below this point
 //
 
-const _NetworkConfig: XdrCodec<NetworkConfig> = {
+const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = {
   encode(w, val) {
-    proto.codec.ExtensionPoint.encode(w, val.ext);
+    w.writeUint32(val.max_sha256_buffers);
+    w.writeUint32(val.max_cross_invoke_depth);
+  },
+  decode(r) {
+    const max_sha256_buffers = r.readUint32();
+    const max_cross_invoke_depth = r.readUint32();
+    return { max_sha256_buffers, max_cross_invoke_depth };
+  },
+};
+
+const _NetworkConfigV1: XdrCodec<NetworkConfigV1> = {
+  encode(w, val) {
     w.writeUint32(val.max_sha256_buffers);
     w.writeUint32(val.max_cross_invoke_depth);
     w.writeUint32(val.max_new_contracts_per_tx);
   },
   decode(r) {
-    const ext = proto.codec.ExtensionPoint.decode(r);
     const max_sha256_buffers = r.readUint32();
     const max_cross_invoke_depth = r.readUint32();
     const max_new_contracts_per_tx = r.readUint32();
-    return { ext, max_sha256_buffers, max_cross_invoke_depth, max_new_contracts_per_tx };
+    return { max_sha256_buffers, max_cross_invoke_depth, max_new_contracts_per_tx };
+  },
+};
+
+const _NetworkConfig: XdrCodec<NetworkConfig> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.v));
+    switch (val.v) {
+      case 0:
+        proto.codec.NetworkConfigV0.encode(w, val.v0);
+        break;
+      case 1:
+        proto.codec.NetworkConfigV1.encode(w, val.v1);
+        break;
+    }
+  },
+  decode(r) {
+    const v = Number(r.readInt32());
+    switch (v) {
+      case 0:
+        const v0 = proto.codec.NetworkConfigV0.decode(r);
+        return { v, v0 };
+      case 1:
+        const v1 = proto.codec.NetworkConfigV1.decode(r);
+        return { v, v1 };
+      default:
+        throw new Error(`Unknown NetworkConfig discriminant: ${v}`);
+    }
   },
 };
 
@@ -104,6 +150,8 @@ const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
 };
 
 export const codec = {
+  NetworkConfigV0: _NetworkConfigV0,
+  NetworkConfigV1: _NetworkConfigV1,
   NetworkConfig: _NetworkConfig,
   ConfigParamID: _ConfigParamID,
   ConfigUpgrade: _ConfigUpgrade,
