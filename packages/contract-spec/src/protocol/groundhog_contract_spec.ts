@@ -44,6 +44,8 @@ export enum ContractTypeKind {
   U8 = 15,
   Array = 16,
   SignedToken = 17,
+  U256 = 18,
+  I256 = 19,
 }
 
 export type ContractType =
@@ -65,6 +67,8 @@ export type ContractType =
   | { v: proto.ContractTypeKind.U8 }
   | { v: proto.ContractTypeKind.Array; array: proto.ContractArrayType }
   | { v: proto.ContractTypeKind.SignedToken; signed_token_preimage: proto.ContractSignedTokenPreimage }
+  | { v: proto.ContractTypeKind.U256 }
+  | { v: proto.ContractTypeKind.I256 }
 ;
 
 export interface ContractSignedTokenPreimage {
@@ -253,6 +257,10 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.SignedToken:
         proto.codec.ContractSignedTokenPreimage.encode(w, val.signed_token_preimage);
         break;
+      case proto.ContractTypeKind.U256:
+        break;
+      case proto.ContractTypeKind.I256:
+        break;
     }
   },
   decode(r) {
@@ -300,6 +308,10 @@ const _ContractType: XdrCodec<ContractType> = {
       case proto.ContractTypeKind.SignedToken:
         const signed_token_preimage = proto.codec.ContractSignedTokenPreimage.decode(r);
         return { v, signed_token_preimage };
+      case proto.ContractTypeKind.U256:
+        return { v } as ContractType;
+      case proto.ContractTypeKind.I256:
+        return { v } as ContractType;
       default:
         throw new Error(`Unknown ContractType discriminant: ${v}`);
     }
