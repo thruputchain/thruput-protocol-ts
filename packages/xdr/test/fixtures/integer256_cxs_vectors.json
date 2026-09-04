@@ -1,0 +1,63 @@
+{
+  "provenance": {
+    "repository": "https://github.com/groundhogchain/sdk_rs",
+    "commit": "e5b6713301be25f9e0f54ecf0637fc7aabea84ac",
+    "generator": "xdrs::cxs::encode of sdk::U256 and sdk::I256"
+  },
+  "vectors": [
+    {
+      "name": "u256_zero",
+      "type": "u256",
+      "value": "0",
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "u256_one",
+      "type": "u256",
+      "value": "1",
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000001"
+    },
+    {
+      "name": "u256_high_bit",
+      "type": "u256",
+      "value": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "expected_hex": "8000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "u256_max",
+      "type": "u256",
+      "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+      "expected_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "name": "i256_min",
+      "type": "i256",
+      "value": "-57896044618658097711785492504343953926634992332820282019728792003956564819968",
+      "expected_hex": "8000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "i256_minus_one",
+      "type": "i256",
+      "value": "-1",
+      "expected_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "name": "i256_zero",
+      "type": "i256",
+      "value": "0",
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "name": "i256_one",
+      "type": "i256",
+      "value": "1",
+      "expected_hex": "0000000000000000000000000000000000000000000000000000000000000001"
+    },
+    {
+      "name": "i256_max",
+      "type": "i256",
+      "value": "57896044618658097711785492504343953926634992332820282019728792003956564819967",
+      "expected_hex": "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  ]
+}
