@@ -134,6 +134,60 @@ export const Uint128Codec: XdrCodec<bigint> = {
   decode(r) { return r.readUint128(); },
 };
 
+const UINT256_MODULUS = 1n << 256n;
+const UINT256_MAX = UINT256_MODULUS - 1n;
+const INT256_MIN = -(1n << 255n);
+const INT256_MAX = (1n << 255n) - 1n;
+
+/** Codec for unsigned 256-bit integers as 32 fixed big-endian bytes. */
+export const Uint256Codec: XdrCodec<bigint> = {
+  encode(w, val) {
+    assertInteger256("uint256", val, 0n, UINT256_MAX);
+    w.writeFixedOpaque(encodeUint256(val), 32);
+  },
+  decode(r) {
+    return decodeUint256(r.readFixedOpaque(32));
+  },
+};
+
+/** Codec for signed 256-bit integers as 32 fixed big-endian two's-complement bytes. */
+export const Int256Codec: XdrCodec<bigint> = {
+  encode(w, val) {
+    assertInteger256("int256", val, INT256_MIN, INT256_MAX);
+    w.writeFixedOpaque(encodeUint256(val < 0n ? val + UINT256_MODULUS : val), 32);
+  },
+  decode(r) {
+    const val = decodeUint256(r.readFixedOpaque(32));
+    return val > INT256_MAX ? val - UINT256_MODULUS : val;
+  },
+};
+
+function assertInteger256(
+  name: string,
+  val: bigint,
+  min: bigint,
+  max: bigint,
+): void {
+  if (typeof val !== "bigint" || val < min || val > max) {
+    throw new Error(`${name} overflow: ${String(val)}`);
+  }
+}
+
+function encodeUint256(val: bigint): Uint8Array {
+  const bytes = new Uint8Array(32);
+  for (let i = bytes.length - 1; i >= 0; i--) {
+    bytes[i] = Number(val & 0xffn);
+    val >>= 8n;
+  }
+  return bytes;
+}
+
+function decodeUint256(bytes: Uint8Array): bigint {
+  let val = 0n;
+  for (const byte of bytes) val = (val << 8n) | BigInt(byte);
+  return val;
+}
+
 // Codec references may be passed as thunks (`() => codec`) to break circular
 // dependencies between generated files that all re-export through a barrel
 // module.  At module load time the barrel's `codec` object may not yet be
