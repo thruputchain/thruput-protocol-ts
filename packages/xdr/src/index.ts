@@ -35,6 +35,8 @@ export {
   Uint64Codec,
   Int128Codec,
   Uint128Codec,
+  Int256Codec,
+  Uint256Codec,
   OptionCodec,
   VarArrayCodec,
   FixedArrayCodec,
