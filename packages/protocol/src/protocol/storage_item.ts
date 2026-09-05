@@ -18,17 +18,24 @@ export enum StorageItemType {
   kItemTypeDeleted = -1,
 }
 
-export const kBytestringMaxLen = 1024n;
+export const kBytestringCeilingLen = 65000n;
 /**
- * Type-level value of {@link kBytestringMaxLen}, for use in array-bound positions.
+ * Type-level value of {@link kBytestringCeilingLen}, for use in array-bound positions.
  * @hidden
  */
-export type kBytestringMaxLen = 1024;
+export type kBytestringCeilingLen = 65000;
 
-/** XDR: `typedef opaque Bytestring<kBytestringMaxLen>` — max {@link kBytestringMaxLen} bytes. */
-export type Bytestring = VarBytes<proto.kBytestringMaxLen> & { readonly __brand: { readonly Bytestring: true } };
+export const kDefaultMaxBytestringLen = 1024n;
+/**
+ * Type-level value of {@link kDefaultMaxBytestringLen}, for use in array-bound positions.
+ * @hidden
+ */
+export type kDefaultMaxBytestringLen = 1024;
+
+/** XDR: `typedef opaque Bytestring<kBytestringCeilingLen>` — max {@link kBytestringCeilingLen} bytes. */
+export type Bytestring = VarBytes<proto.kBytestringCeilingLen> & { readonly __brand: { readonly Bytestring: true } };
 export function bytestring(data: Uint8Array): Bytestring {
-  if (data.length > Number(proto.kBytestringMaxLen)) throw new Error(`Bytestring exceeds max length kBytestringMaxLen, got ${data.length}`);
+  if (data.length > Number(proto.kBytestringCeilingLen)) throw new Error(`Bytestring exceeds max length kBytestringCeilingLen, got ${data.length}`);
   return data as Bytestring;
 }
 
@@ -149,8 +156,8 @@ const _StorageItemType: XdrCodec<StorageItemType> = {
 };
 
 const _Bytestring: XdrCodec<Bytestring> = {
-  encode(w, val) { w.writeVarOpaque(val, Number(proto.kBytestringMaxLen)); },
-  decode(r) { return bytestring(r.readVarOpaque(Number(proto.kBytestringMaxLen))); },
+  encode(w, val) { w.writeVarOpaque(val, Number(proto.kBytestringCeilingLen)); },
+  decode(r) { return bytestring(r.readVarOpaque(Number(proto.kBytestringCeilingLen))); },
 };
 
 const _StorageItem: XdrCodec<StorageItem> = {
