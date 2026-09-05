@@ -12,12 +12,14 @@ export enum ConfigParamID {
   kConfigParamMaxSHA256Buffers = 0,
   kConfigParamMaxCrossInvokeDepth = 1,
   kConfigParamMaxNewContractsPerTx = 2,
+  kConfigParamMaxBytestringLen = 3,
 }
 
 export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxSHA256Buffers; max_sha256_buffers: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth; max_cross_invoke_depth: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxNewContractsPerTx; max_new_contracts_per_tx: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxBytestringLen; max_bytestring_len: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -57,6 +59,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
         w.writeUint32(val.max_new_contracts_per_tx);
         break;
+      case proto.ConfigParamID.kConfigParamMaxBytestringLen:
+        w.writeUint32(val.max_bytestring_len);
+        break;
     }
   },
   decode(r) {
@@ -71,6 +76,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxNewContractsPerTx:
         const max_new_contracts_per_tx = r.readUint32();
         return { param, max_new_contracts_per_tx };
+      case proto.ConfigParamID.kConfigParamMaxBytestringLen:
+        const max_bytestring_len = r.readUint32();
+        return { param, max_bytestring_len };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
