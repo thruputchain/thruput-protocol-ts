@@ -217,10 +217,12 @@ export interface IndexerInitializedProgress {
 export enum IndexerProgressState {
   IndexerProgressUninitialized = 0,
   IndexerProgressInitialized = 1,
+  IndexerProgressCaughtUp = 2,
 }
 
 export type IndexerProgress =
   | { state: proto.IndexerProgressState.IndexerProgressInitialized; initialized: proto.IndexerInitializedProgress }
+  | { state: proto.IndexerProgressState.IndexerProgressCaughtUp; initialized: proto.IndexerInitializedProgress }
   | { state: number }
 ;
 
@@ -731,6 +733,7 @@ const _IndexerProgress: XdrCodec<IndexerProgress> = {
     w.writeInt32(BigInt(val.state));
     switch (val.state) {
       case proto.IndexerProgressState.IndexerProgressInitialized:
+      case proto.IndexerProgressState.IndexerProgressCaughtUp:
       {
         const v = val as { state: number; initialized: proto.IndexerInitializedProgress };
         if (v.initialized === undefined) {
@@ -745,8 +748,9 @@ const _IndexerProgress: XdrCodec<IndexerProgress> = {
     const state = Number(r.readInt32());
     switch (state) {
       case proto.IndexerProgressState.IndexerProgressInitialized:
+      case proto.IndexerProgressState.IndexerProgressCaughtUp:
         const initialized = proto.codec.IndexerInitializedProgress.decode(r);
-        return { state, initialized };
+        return { state, initialized } as IndexerProgress;
       default:
         return { state };
     }
