@@ -14,6 +14,7 @@ export enum ExecResult {
   ExecResultTxNonDeterministicError = 3,
   ExecResultFailedGasSponsorship = 100,
   ExecResultTxValidationFailure = 200,
+  ExecResultMalformedTransaction = 201,
   ExecResultSystemError = 300,
   ExecResultUnrecoverable = 400,
 }
