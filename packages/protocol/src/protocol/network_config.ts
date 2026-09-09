@@ -34,6 +34,7 @@ export type NetworkConfig =
 export interface ConfigHashPreimage {
   storage_cost_model: proto.StorageCostModelXdr;
   network_config: proto.NetworkConfig;
+  default_wallet: proto.DeployedContractHash;
 }
 
 
@@ -120,11 +121,13 @@ const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
   encode(w, val) {
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
     proto.codec.NetworkConfig.encode(w, val.network_config);
+    proto.codec.DeployedContractHash.encode(w, val.default_wallet);
   },
   decode(r) {
     const storage_cost_model = proto.codec.StorageCostModelXdr.decode(r);
     const network_config = proto.codec.NetworkConfig.decode(r);
-    return { storage_cost_model, network_config };
+    const default_wallet = proto.codec.DeployedContractHash.decode(r);
+    return { storage_cost_model, network_config, default_wallet };
   },
 };
 
