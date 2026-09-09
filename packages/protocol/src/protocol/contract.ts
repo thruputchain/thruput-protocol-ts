@@ -8,6 +8,13 @@ import * as proto from "./index.js";
 
 
 
+export const kDefaultMaxContractSizeBytes = 262144n;
+/**
+ * Type-level value of {@link kDefaultMaxContractSizeBytes}, for use in array-bound positions.
+ * @hidden
+ */
+export type kDefaultMaxContractSizeBytes = 262144;
+
 export interface ContractBlob {
   /** XDR: `opaque data<>`. */
   data: Uint8Array;

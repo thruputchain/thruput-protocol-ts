@@ -13,6 +13,12 @@ export enum ConfigParamID {
   kConfigParamMaxCrossInvokeDepth = 1,
   kConfigParamMaxNewContractsPerTx = 2,
   kConfigParamMaxBytestringLen = 3,
+  kConfigParamMaxContractSizeBytes = 4,
+  kConfigParamMaxSavepointDepth = 5,
+  kConfigParamMaxSHA256BufferBytes = 6,
+  kConfigParamMaxAuthTokenDepth = 7,
+  kConfigParamMaxRv32CodeBytes = 8,
+  kConfigParamMaxRv32MemoryBytes = 9,
 }
 
 export type ConfigParam =
@@ -20,6 +26,12 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxCrossInvokeDepth; max_cross_invoke_depth: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxNewContractsPerTx; max_new_contracts_per_tx: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxBytestringLen; max_bytestring_len: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxContractSizeBytes; max_contract_size_bytes: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxSavepointDepth; max_savepoint_depth: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxSHA256BufferBytes; max_sha256_buffer_bytes: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxAuthTokenDepth; max_auth_token_depth: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxRv32CodeBytes; max_rv32_code_bytes: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes; max_rv32_memory_bytes: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -63,6 +75,24 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxBytestringLen:
         w.writeUint32(val.max_bytestring_len);
         break;
+      case proto.ConfigParamID.kConfigParamMaxContractSizeBytes:
+        w.writeUint32(val.max_contract_size_bytes);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxSavepointDepth:
+        w.writeUint32(val.max_savepoint_depth);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxSHA256BufferBytes:
+        w.writeUint32(val.max_sha256_buffer_bytes);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxAuthTokenDepth:
+        w.writeUint32(val.max_auth_token_depth);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxRv32CodeBytes:
+        w.writeUint32(val.max_rv32_code_bytes);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes:
+        w.writeUint32(val.max_rv32_memory_bytes);
+        break;
     }
   },
   decode(r) {
@@ -80,6 +110,24 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxBytestringLen:
         const max_bytestring_len = r.readUint32();
         return { param, max_bytestring_len };
+      case proto.ConfigParamID.kConfigParamMaxContractSizeBytes:
+        const max_contract_size_bytes = r.readUint32();
+        return { param, max_contract_size_bytes };
+      case proto.ConfigParamID.kConfigParamMaxSavepointDepth:
+        const max_savepoint_depth = r.readUint32();
+        return { param, max_savepoint_depth };
+      case proto.ConfigParamID.kConfigParamMaxSHA256BufferBytes:
+        const max_sha256_buffer_bytes = r.readUint32();
+        return { param, max_sha256_buffer_bytes };
+      case proto.ConfigParamID.kConfigParamMaxAuthTokenDepth:
+        const max_auth_token_depth = r.readUint32();
+        return { param, max_auth_token_depth };
+      case proto.ConfigParamID.kConfigParamMaxRv32CodeBytes:
+        const max_rv32_code_bytes = r.readUint32();
+        return { param, max_rv32_code_bytes };
+      case proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes:
+        const max_rv32_memory_bytes = r.readUint32();
+        return { param, max_rv32_memory_bytes };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
