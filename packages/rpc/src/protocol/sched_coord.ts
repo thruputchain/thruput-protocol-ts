@@ -66,6 +66,7 @@ export enum SchedulerCommitOutcome {
   SchedulerCommitOK = 0,
   SchedulerCommitBlockNotFound = 1,
   SchedulerCommitInvalidConsensusValue = 2,
+  SchedulerConcurrentCommit = 3,
 }
 
 export enum SchedulerGetTipOutcome {
