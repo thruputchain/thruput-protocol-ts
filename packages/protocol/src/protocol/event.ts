@@ -47,6 +47,7 @@ export interface TxEventLog {
   tx_hash: proto.TransactionHash;
   exec_result: proto.ExecResult;
   root_output: proto.InvocationFrameOutput;
+  gas_consumed: proto.GasAmount;
   /** XDR: `TxEmittedEvent events<kMaxEventsPerTransaction>` — max {@link kMaxEventsPerTransaction} elements. */
   events: VarArray<proto.TxEmittedEvent, proto.kMaxEventsPerTransaction>;
 }
@@ -87,14 +88,16 @@ const _TxEventLog: XdrCodec<TxEventLog> = {
     proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.ExecResult.encode(w, val.exec_result);
     proto.codec.InvocationFrameOutput.encode(w, val.root_output);
+    proto.codec.GasAmount.encode(w, val.gas_consumed);
     VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).encode(w, val.events);
   },
   decode(r) {
     const tx_hash = proto.codec.TransactionHash.decode(r);
     const exec_result = proto.codec.ExecResult.decode(r);
     const root_output = proto.codec.InvocationFrameOutput.decode(r);
+    const gas_consumed = proto.codec.GasAmount.decode(r);
     const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).decode(r);
-    return { tx_hash, exec_result, root_output, events };
+    return { tx_hash, exec_result, root_output, gas_consumed, events };
   },
 };
 
