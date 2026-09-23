@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 5135a63d54ca836265b87b8475a9c06f4d4624e4
+// Generated from x23c commit: e671a3694d7312d78364456bb86ee8a18de1502d
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@groundhogchain/xdr";
 import * as proto from "./index.js";
@@ -9,14 +9,15 @@ import * as proto from "./index.js";
 
 
 export enum DbConflictCode {
-  kDbConflictExclusiveLock = 0,
-  kDbConflictTypeMismatch = 1,
-  kDbConflictValueMismatch = 2,
-  kDbConflictBoundsExceeded = 3,
-  kDbConflictOverflow = 4,
-  kDbConflictReplayProtection = 5,
-  kDbConflictQueueConsumer = 6,
-  kDbConflictCapacityExceeded = 7,
+  ExclusiveLockDenied = 0,
+  TypeMismatch = 1,
+  ValueMismatch = 2,
+  BoundsExceeded = 3,
+  Overflow = 4,
+  ReplayProtection = 5,
+  QueueConsumer = 6,
+  CapacityExceeded = 7,
+  InsufficientFunds = 8,
 }
 
 export enum DbDiagnosticLevel {
