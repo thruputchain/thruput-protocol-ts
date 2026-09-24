@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/contract-spec",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Groundhog contract specification AST types and XDR serialization",
   "type": "module",
   "files": [
@@ -29,8 +29,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.11.0",
-    "@groundhogchain/protocol": "0.11.0"
+    "@groundhogchain/xdr": "0.12.0",
+    "@groundhogchain/protocol": "0.12.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
