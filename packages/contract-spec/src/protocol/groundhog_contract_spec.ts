@@ -14,6 +14,13 @@ export function contractSpecString(val: string): ContractSpecString {
   return val as ContractSpecString;
 }
 
+export interface ContractSpecId {
+  crate_name: proto.ContractSpecString;
+  major: proto.ContractSpecString;
+  module_path: proto.ContractSpecString;
+  declared: proto.ContractSpecString;
+}
+
 
 export interface ContractArrayType {
   element: proto.ContractType;
@@ -63,7 +70,7 @@ export type ContractType =
   | { v: proto.ContractTypeKind.Option; option_inner: proto.ContractType }
   | { v: proto.ContractTypeKind.Vector; vector: proto.ContractVectorType }
   | { v: proto.ContractTypeKind.Tuple; tuple: proto.ContractType[] }
-  | { v: proto.ContractTypeKind.Named; named: proto.ContractSpecString }
+  | { v: proto.ContractTypeKind.Named; named: proto.ContractSpecId }
   | { v: proto.ContractTypeKind.U8 }
   | { v: proto.ContractTypeKind.Array; array: proto.ContractArrayType }
   | { v: proto.ContractTypeKind.SignedToken; signed_token_preimage: proto.ContractSignedTokenPreimage }
@@ -102,7 +109,7 @@ export interface ContractSpecInterface {
 }
 
 export interface ContractStructDef {
-  name: proto.ContractSpecString;
+  name: proto.ContractSpecId;
   /** XDR: `ContractField fields<>`. */
   fields: proto.ContractField[];
 }
@@ -113,7 +120,7 @@ export interface ContractEnumVariant {
 }
 
 export interface ContractEnumDef {
-  name: proto.ContractSpecString;
+  name: proto.ContractSpecId;
   /** XDR: `ContractEnumVariant variants<>`. */
   variants: proto.ContractEnumVariant[];
 }
@@ -137,7 +144,7 @@ export interface ContractUnionCase {
 }
 
 export interface ContractUnionDef {
-  name: proto.ContractSpecString;
+  name: proto.ContractSpecId;
   /** XDR: `ContractUnionCase cases<>`. */
   cases: proto.ContractUnionCase[];
 }
@@ -155,7 +162,7 @@ export type ContractTypeDef =
 ;
 
 export interface ContractEventDef {
-  name: proto.ContractSpecString;
+  name: proto.ContractSpecId;
   signature: proto.Topic;
   /** XDR: `ContractField topics<>`. */
   topics: proto.ContractField[];
@@ -180,6 +187,22 @@ export interface ContractSpec {
 const _ContractSpecString: XdrCodec<ContractSpecString> = {
   encode(w, val) { w.writeString(val, Number(0xFFFFFFFF)); },
   decode(r) { return contractSpecString(r.readString(Number(0xFFFFFFFF))); },
+};
+
+const _ContractSpecId: XdrCodec<ContractSpecId> = {
+  encode(w, val) {
+    proto.codec.ContractSpecString.encode(w, val.crate_name);
+    proto.codec.ContractSpecString.encode(w, val.major);
+    proto.codec.ContractSpecString.encode(w, val.module_path);
+    proto.codec.ContractSpecString.encode(w, val.declared);
+  },
+  decode(r) {
+    const crate_name = proto.codec.ContractSpecString.decode(r);
+    const major = proto.codec.ContractSpecString.decode(r);
+    const module_path = proto.codec.ContractSpecString.decode(r);
+    const declared = proto.codec.ContractSpecString.decode(r);
+    return { crate_name, major, module_path, declared };
+  },
 };
 
 const _ContractArrayType: XdrCodec<ContractArrayType> = {
@@ -247,7 +270,7 @@ const _ContractType: XdrCodec<ContractType> = {
         VarArrayCodec(proto.codec.ContractType, Number(0xFFFFFFFF)).encode(w, val.tuple);
         break;
       case proto.ContractTypeKind.Named:
-        proto.codec.ContractSpecString.encode(w, val.named);
+        proto.codec.ContractSpecId.encode(w, val.named);
         break;
       case proto.ContractTypeKind.U8:
         break;
@@ -298,7 +321,7 @@ const _ContractType: XdrCodec<ContractType> = {
         const tuple = VarArrayCodec(proto.codec.ContractType, Number(0xFFFFFFFF)).decode(r);
         return { v, tuple };
       case proto.ContractTypeKind.Named:
-        const named = proto.codec.ContractSpecString.decode(r);
+        const named = proto.codec.ContractSpecId.decode(r);
         return { v, named };
       case proto.ContractTypeKind.U8:
         return { v } as ContractType;
@@ -384,11 +407,11 @@ const _ContractSpecInterface: XdrCodec<ContractSpecInterface> = {
 
 const _ContractStructDef: XdrCodec<ContractStructDef> = {
   encode(w, val) {
-    proto.codec.ContractSpecString.encode(w, val.name);
+    proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.fields);
   },
   decode(r) {
-    const name = proto.codec.ContractSpecString.decode(r);
+    const name = proto.codec.ContractSpecId.decode(r);
     const fields = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
     return { name, fields };
   },
@@ -408,11 +431,11 @@ const _ContractEnumVariant: XdrCodec<ContractEnumVariant> = {
 
 const _ContractEnumDef: XdrCodec<ContractEnumDef> = {
   encode(w, val) {
-    proto.codec.ContractSpecString.encode(w, val.name);
+    proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractEnumVariant, Number(0xFFFFFFFF)).encode(w, val.variants);
   },
   decode(r) {
-    const name = proto.codec.ContractSpecString.decode(r);
+    const name = proto.codec.ContractSpecId.decode(r);
     const variants = VarArrayCodec(proto.codec.ContractEnumVariant, Number(0xFFFFFFFF)).decode(r);
     return { name, variants };
   },
@@ -470,11 +493,11 @@ const _ContractUnionCase: XdrCodec<ContractUnionCase> = {
 
 const _ContractUnionDef: XdrCodec<ContractUnionDef> = {
   encode(w, val) {
-    proto.codec.ContractSpecString.encode(w, val.name);
+    proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractUnionCase, Number(0xFFFFFFFF)).encode(w, val.cases);
   },
   decode(r) {
-    const name = proto.codec.ContractSpecString.decode(r);
+    const name = proto.codec.ContractSpecId.decode(r);
     const cases = VarArrayCodec(proto.codec.ContractUnionCase, Number(0xFFFFFFFF)).decode(r);
     return { name, cases };
   },
@@ -520,13 +543,13 @@ const _ContractTypeDef: XdrCodec<ContractTypeDef> = {
 
 const _ContractEventDef: XdrCodec<ContractEventDef> = {
   encode(w, val) {
-    proto.codec.ContractSpecString.encode(w, val.name);
+    proto.codec.ContractSpecId.encode(w, val.name);
     proto.codec.Topic.encode(w, val.signature);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.topics);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.fields);
   },
   decode(r) {
-    const name = proto.codec.ContractSpecString.decode(r);
+    const name = proto.codec.ContractSpecId.decode(r);
     const signature = proto.codec.Topic.decode(r);
     const topics = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
     const fields = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
@@ -550,6 +573,7 @@ const _ContractSpec: XdrCodec<ContractSpec> = {
 
 export const codec = {
   ContractSpecString: _ContractSpecString,
+  ContractSpecId: _ContractSpecId,
   ContractArrayType: _ContractArrayType,
   ContractVectorType: _ContractVectorType,
   ContractTypeKind: _ContractTypeKind,
