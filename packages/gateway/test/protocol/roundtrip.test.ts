@@ -87,6 +87,7 @@ function makeTxInfo(): TxInfo {
         status_code: InvocationFrameStatusCode.Return,
         return_buffer: returnBuffer(new Uint8Array([1, 2, 3])),
       },
+      gas_consumed: gasAmount(1234n),
       events: [makeEmittedEvent()],
     },
   };

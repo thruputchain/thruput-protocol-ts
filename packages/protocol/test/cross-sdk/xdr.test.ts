@@ -149,7 +149,7 @@ describe("cross-SDK: XDR serialization", () => {
 
       if (encoded === null) {
         skippedCount++;
-        ctx.skip(`unhandled vector type: ${JSON.stringify(vec.type)}`);
+        return ctx.skip(`unhandled vector type: ${JSON.stringify(vec.type)}`);
       }
 
       expect(toHex(encoded)).toBe(vec.expected_hex);

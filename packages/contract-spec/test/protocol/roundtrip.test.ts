@@ -9,8 +9,18 @@ import {
   ContractTypeKind, ContractUnionCaseKind, ContractTypeDefKind,
 } from "../../src/index.js";
 import type {
-  ContractType, ContractTypeDef, ContractSpec,
+  ContractType, ContractTypeDef, ContractSpec, ContractSpecId,
 } from "../../src/index.js";
+
+/** A declared type identity in the `example` crate's root module. */
+function specId(declared: string): ContractSpecId {
+  return {
+    crate_name: contractSpecString("example"),
+    major: contractSpecString("1"),
+    module_path: contractSpecString(""),
+    declared: contractSpecString(declared),
+  };
+}
 
 /** Vector<Tuple<Option<U32>, Array<U8; 4>>> — recursive through three levels. */
 function makeNestedType(): ContractType {
@@ -40,7 +50,7 @@ describe("contract-spec AST codecs: roundtrip", () => {
       { v: ContractTypeKind.I128 },
       { v: ContractTypeKind.String },
       { v: ContractTypeKind.Address },
-      { v: ContractTypeKind.Named, named: contractSpecString("MyStruct") },
+      { v: ContractTypeKind.Named, named: specId("MyStruct") },
     ];
     for (const val of variants) {
       expect(deserialize(serialize(val, codec.ContractType), codec.ContractType)).toEqual(val);
@@ -90,7 +100,7 @@ describe("contract-spec AST codecs: roundtrip", () => {
       {
         v: ContractTypeDefKind.TypeDefStruct,
         struct_def: {
-          name: contractSpecString("Point"),
+          name: specId("Point"),
           fields: [
             { name: contractSpecString("x"), ty: { v: ContractTypeKind.U64 } },
             { name: contractSpecString("y"), ty: { v: ContractTypeKind.U64 } },
@@ -100,7 +110,7 @@ describe("contract-spec AST codecs: roundtrip", () => {
       {
         v: ContractTypeDefKind.TypeDefEnum,
         enum_def: {
-          name: contractSpecString("Color"),
+          name: specId("Color"),
           variants: [
             { name: contractSpecString("Red"), value: 0n },
             { name: contractSpecString("Green"), value: 1n },
@@ -110,7 +120,7 @@ describe("contract-spec AST codecs: roundtrip", () => {
       {
         v: ContractTypeDefKind.TypeDefUnion,
         union_def: {
-          name: contractSpecString("Shape"),
+          name: specId("Shape"),
           cases: [
             {
               name: contractSpecString("Circle"),
@@ -163,14 +173,14 @@ describe("contract-spec AST codecs: roundtrip", () => {
         {
           v: ContractTypeDefKind.TypeDefStruct,
           struct_def: {
-            name: contractSpecString("State"),
+            name: specId("State"),
             fields: [{ name: contractSpecString("count"), ty: { v: ContractTypeKind.U64 } }],
           },
         },
       ],
       events: [
         {
-          name: contractSpecString("Incremented"),
+          name: specId("Incremented"),
           signature: topic(new Uint8Array(32).fill(0x99)),
           topics: [{ name: contractSpecString("who"), ty: { v: ContractTypeKind.Address } }],
           fields: [{ name: contractSpecString("by"), ty: { v: ContractTypeKind.U32 } }],

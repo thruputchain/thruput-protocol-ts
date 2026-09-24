@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/xdr",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "XDR/CXS serialization framework for Groundhog",
   "type": "module",
   "files": [
@@ -26,7 +26,7 @@
     "build": "tsdown src/index.ts --format esm,cjs --dts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.test.json"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
