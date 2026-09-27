@@ -30,8 +30,8 @@ const _InvokeFlag: XdrCodec<InvokeFlag> = {
 };
 
 const _InvokeFlagSet: XdrCodec<InvokeFlagSet> = {
-  encode(w, val) { w.writeInt32(val); },
-  decode(r) { return invokeFlagSet(r.readInt32()); },
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return invokeFlagSet(r.readUint32()); },
 };
 
 export const codec = {
