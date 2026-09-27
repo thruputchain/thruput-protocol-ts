@@ -414,8 +414,8 @@ const _StorageDeltaFlags: XdrCodec<StorageDeltaFlags> = {
 };
 
 const _StorageDeltaFlagSet: XdrCodec<StorageDeltaFlagSet> = {
-  encode(w, val) { w.writeInt32(val); },
-  decode(r) { return storageDeltaFlagSet(r.readInt32()); },
+  encode(w, val) { w.writeUint32(val); },
+  decode(r) { return storageDeltaFlagSet(r.readUint32()); },
 };
 
 const _FlaggedStorageDelta: XdrCodec<FlaggedStorageDelta> = {
