@@ -10,7 +10,7 @@
     "groundhog",
     "blockchain",
     "xdr",
-    "cxs",
+    "rfc4506",
     "serialization"
   ],
   "type": "module",
