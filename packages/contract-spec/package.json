@@ -2,7 +2,18 @@
   "name": "@groundhogchain/contract-spec",
   "version": "0.12.0",
   "description": "Groundhog contract specification AST types and XDR serialization",
+  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/contract-spec#readme",
+  "bugs": {
+    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+  },
+  "keywords": [
+    "groundhog",
+    "blockchain",
+    "contract-spec",
+    "xdr"
+  ],
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],

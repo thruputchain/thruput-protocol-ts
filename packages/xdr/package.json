@@ -2,7 +2,19 @@
   "name": "@groundhogchain/xdr",
   "version": "0.12.0",
   "description": "XDR/CXS serialization framework for Groundhog",
+  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/xdr#readme",
+  "bugs": {
+    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+  },
+  "keywords": [
+    "groundhog",
+    "blockchain",
+    "xdr",
+    "cxs",
+    "serialization"
+  ],
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],

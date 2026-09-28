@@ -1,8 +1,8 @@
 # protocol-ts
 
-TypeScript bindings for the Groundhog blockchain protocol. This is a private npm
-monorepo that publishes five `@groundhogchain/*` packages, generated from the
-XDR definitions in the `protocol/` submodule.
+TypeScript bindings for the Groundhog blockchain protocol. This is an npm
+workspaces monorepo that publishes five `@groundhogchain/*` packages, generated
+from the XDR definitions in the `protocol/` submodule.
 
 ## Packages
 
@@ -10,9 +10,9 @@ XDR definitions in the `protocol/` submodule.
 |---|---|---|
 | `@groundhogchain/xdr` | XDR/CXS serialization framework | — |
 | `@groundhogchain/protocol` | Core protocol types | `xdr` |
-| `@groundhogchain/contract-spec` | Contract spec AST types | `xdr` |
+| `@groundhogchain/contract-spec` | Contract spec AST types | `xdr`, `protocol` |
 | `@groundhogchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
-| `@groundhogchain/gateway` | Gateway/indexer types | `xdr`, `protocol` |
+| `@groundhogchain/gateway` | Gateway/indexer types | `xdr`, `protocol`, `rpc` |
 
 All packages are published to GitHub Packages with `access: restricted`.
 
@@ -48,12 +48,15 @@ docs/                   # internal docs
 ## Setup & build
 
 ```sh
-git submodule update --init
 npm install
 npm run build      # build all workspaces
 npm test           # vitest across all workspaces
 npm run typecheck
 ```
+
+The generated protocol sources are committed, so the `protocol/` submodule is
+only needed to regenerate them: run `git submodule update --init` before
+following [Regenerating from XDR](#regenerating-from-xdr).
 
 ## API docs
 

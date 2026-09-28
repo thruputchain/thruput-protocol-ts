@@ -2,7 +2,19 @@
   "name": "@groundhogchain/gateway",
   "version": "0.12.0",
   "description": "Groundhog gateway and indexer protocol types",
+  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/gateway#readme",
+  "bugs": {
+    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+  },
+  "keywords": [
+    "groundhog",
+    "blockchain",
+    "gateway",
+    "indexer",
+    "protocol"
+  ],
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
