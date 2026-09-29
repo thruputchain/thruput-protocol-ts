@@ -2,7 +2,19 @@
   "name": "@groundhogchain/rpc",
   "version": "0.12.0",
   "description": "ONC-RPC client and protocol RPC type definitions for Groundhog",
+  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/rpc#readme",
+  "bugs": {
+    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+  },
+  "keywords": [
+    "groundhog",
+    "blockchain",
+    "rpc",
+    "onc-rpc",
+    "protocol"
+  ],
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],

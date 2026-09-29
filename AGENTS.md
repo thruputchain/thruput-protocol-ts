@@ -7,7 +7,7 @@
 
 ## Verified Commands
 - Install with `npm ci` in CI and `npm install` locally.
-- Full verification order used in CI: `npm run typecheck`, `npm run test`, `npm run build`.
+- Full verification order used in the publish workflow: `npm run typecheck`, `npm run docs:check`, `npm run test`, `npm run build`, `npm run test:smoke`. Regular CI splits these across jobs (typecheck, docs:check, build in one; test, build, test:smoke in another).
 - Run one workspace from the repo root with `npm run <script> --workspace @groundhogchain/<pkg>`.
 - Cross-SDK tests are separate from the normal workspace test run: `cd packages/protocol && npx vitest run test/cross-sdk/`.
 
