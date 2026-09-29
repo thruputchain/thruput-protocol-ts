@@ -15,13 +15,13 @@ export function validatorID(data: Uint8Array): ValidatorID {
   return data as ValidatorID;
 }
 
-export type ValidatorPublicKey = (NonNullable<proto.Ed25519PublicKey> & { readonly __brand: { readonly ValidatorPublicKey: true } }) | Extract<proto.Ed25519PublicKey, null>;
-export function validatorPublicKey(val: proto.Ed25519PublicKey): ValidatorPublicKey {
+export type ValidatorPublicKey = (NonNullable<proto.PublicKey> & { readonly __brand: { readonly ValidatorPublicKey: true } }) | Extract<proto.PublicKey, null>;
+export function validatorPublicKey(val: proto.PublicKey): ValidatorPublicKey {
   return val as ValidatorPublicKey;
 }
 
-export type ValidatorSecretKey = (NonNullable<proto.Ed25519SecretKey> & { readonly __brand: { readonly ValidatorSecretKey: true } }) | Extract<proto.Ed25519SecretKey, null>;
-export function validatorSecretKey(val: proto.Ed25519SecretKey): ValidatorSecretKey {
+export type ValidatorSecretKey = (NonNullable<proto.SecretKey> & { readonly __brand: { readonly ValidatorSecretKey: true } }) | Extract<proto.SecretKey, null>;
+export function validatorSecretKey(val: proto.SecretKey): ValidatorSecretKey {
   return val as ValidatorSecretKey;
 }
 
@@ -46,13 +46,13 @@ const _ValidatorID: XdrCodec<ValidatorID> = {
 };
 
 const _ValidatorPublicKey: XdrCodec<ValidatorPublicKey> = {
-  encode(w, val) { proto.codec.Ed25519PublicKey.encode(w, val); },
-  decode(r) { return validatorPublicKey(proto.codec.Ed25519PublicKey.decode(r)); },
+  encode(w, val) { proto.codec.PublicKey.encode(w, val); },
+  decode(r) { return validatorPublicKey(proto.codec.PublicKey.decode(r)); },
 };
 
 const _ValidatorSecretKey: XdrCodec<ValidatorSecretKey> = {
-  encode(w, val) { proto.codec.Ed25519SecretKey.encode(w, val); },
-  decode(r) { return validatorSecretKey(proto.codec.Ed25519SecretKey.decode(r)); },
+  encode(w, val) { proto.codec.SecretKey.encode(w, val); },
+  decode(r) { return validatorSecretKey(proto.codec.SecretKey.decode(r)); },
 };
 
 const _ValidatorPublicInfo: XdrCodec<ValidatorPublicInfo> = {
