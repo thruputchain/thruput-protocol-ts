@@ -37,9 +37,40 @@ export type DbConflictResult =
   | { level: proto.DbDiagnosticLevel.kDbDiagnosticAll; conflicts: proto.DbConflictDiagnostic[] }
 ;
 
+export enum ContractRejectCode {
+  ContractRejectTooMany = 0,
+  ContractRejectBlobTooLarge = 1,
+  ContractRejectNotDeployable = 2,
+  ContractRejectDuplicate = 3,
+  ContractRejectMalformedArtifact = 4,
+  ContractRejectUnsupportedFormat = 5,
+  ContractRejectUnsupportedAbi = 6,
+  ContractRejectGasScheduleMismatch = 7,
+  ContractRejectMemoryTooLarge = 8,
+  ContractRejectCodeSizeInvalid = 9,
+  ContractRejectInitialMemoryInvalid = 10,
+  ContractRejectDigestMismatch = 11,
+  ContractRejectInvalidProgram = 12,
+}
+
+export interface ContractRejectDiagnostic {
+  contract_index: bigint;
+  code: proto.ContractRejectCode;
+}
+
+export enum TxFailureKind {
+  TxFailureDbConflict = 0,
+  TxFailureContractRejected = 1,
+}
+
+export type TxFailureCause =
+  | { kind: proto.TxFailureKind.TxFailureDbConflict; conflict: proto.DbConflictDiagnostic }
+  | { kind: proto.TxFailureKind.TxFailureContractRejected; contract: proto.ContractRejectDiagnostic }
+;
+
 export interface TxFailureDiagnostic {
   attempt_height: proto.BlockHeight;
-  conflict: proto.DbConflictDiagnostic;
+  cause: proto.TxFailureCause;
 }
 
 
@@ -100,15 +131,64 @@ const _DbConflictResult: XdrCodec<DbConflictResult> = {
   },
 };
 
+const _ContractRejectCode: XdrCodec<ContractRejectCode> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as ContractRejectCode; },
+};
+
+const _ContractRejectDiagnostic: XdrCodec<ContractRejectDiagnostic> = {
+  encode(w, val) {
+    w.writeUint32(val.contract_index);
+    proto.codec.ContractRejectCode.encode(w, val.code);
+  },
+  decode(r) {
+    const contract_index = r.readUint32();
+    const code = proto.codec.ContractRejectCode.decode(r);
+    return { contract_index, code };
+  },
+};
+
+const _TxFailureKind: XdrCodec<TxFailureKind> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as TxFailureKind; },
+};
+
+const _TxFailureCause: XdrCodec<TxFailureCause> = {
+  encode(w, val) {
+    w.writeInt32(BigInt(val.kind));
+    switch (val.kind) {
+      case proto.TxFailureKind.TxFailureDbConflict:
+        proto.codec.DbConflictDiagnostic.encode(w, val.conflict);
+        break;
+      case proto.TxFailureKind.TxFailureContractRejected:
+        proto.codec.ContractRejectDiagnostic.encode(w, val.contract);
+        break;
+    }
+  },
+  decode(r) {
+    const kind = Number(r.readInt32());
+    switch (kind) {
+      case proto.TxFailureKind.TxFailureDbConflict:
+        const conflict = proto.codec.DbConflictDiagnostic.decode(r);
+        return { kind, conflict };
+      case proto.TxFailureKind.TxFailureContractRejected:
+        const contract = proto.codec.ContractRejectDiagnostic.decode(r);
+        return { kind, contract };
+      default:
+        throw new Error(`Unknown TxFailureCause discriminant: ${kind}`);
+    }
+  },
+};
+
 const _TxFailureDiagnostic: XdrCodec<TxFailureDiagnostic> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.attempt_height);
-    proto.codec.DbConflictDiagnostic.encode(w, val.conflict);
+    proto.codec.TxFailureCause.encode(w, val.cause);
   },
   decode(r) {
     const attempt_height = proto.codec.BlockHeight.decode(r);
-    const conflict = proto.codec.DbConflictDiagnostic.decode(r);
-    return { attempt_height, conflict };
+    const cause = proto.codec.TxFailureCause.decode(r);
+    return { attempt_height, cause };
   },
 };
 
@@ -117,6 +197,10 @@ export const codec = {
   DbDiagnosticLevel: _DbDiagnosticLevel,
   DbConflictDiagnostic: _DbConflictDiagnostic,
   DbConflictResult: _DbConflictResult,
+  ContractRejectCode: _ContractRejectCode,
+  ContractRejectDiagnostic: _ContractRejectDiagnostic,
+  TxFailureKind: _TxFailureKind,
+  TxFailureCause: _TxFailureCause,
   TxFailureDiagnostic: _TxFailureDiagnostic,
 } as const;
 
