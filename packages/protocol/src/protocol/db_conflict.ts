@@ -18,6 +18,7 @@ export enum DbConflictCode {
   QueueConsumer = 6,
   CapacityExceeded = 7,
   InsufficientFunds = 8,
+  DuplicateSigner = 9,
 }
 
 export enum DbDiagnosticLevel {
