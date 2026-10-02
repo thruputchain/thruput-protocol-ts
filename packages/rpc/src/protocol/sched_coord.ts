@@ -99,6 +99,40 @@ export interface GenesisCeremonyCommit {
   proposal_txs: proto.ProposalTxs;
 }
 
+export enum SchedulerTransactionStatus {
+  SchedulerTransactionNotFound = 0,
+  SchedulerTransactionPending = 1,
+  SchedulerTransactionSucceeded = 2,
+  SchedulerTransactionRetry = 3,
+  SchedulerTransactionDropped = 4,
+}
+
+export enum SchedulerTransactionErrorSource {
+  SchedulerTransactionErrorNone = 0,
+  SchedulerTransactionErrorAuth = 1,
+  SchedulerTransactionErrorScheduler = 2,
+  SchedulerTransactionErrorExecutor = 3,
+}
+
+export enum SchedulerErrorCode {
+  SchedulerErrorCapacity = 1,
+  SchedulerErrorHogAgeUnavailable = 2,
+  SchedulerErrorExpired = 3,
+  SchedulerErrorInsufficientHogs = 4,
+}
+
+export interface SchedulerTransactionOutcome {
+  status: proto.SchedulerTransactionStatus;
+  error_source: proto.SchedulerTransactionErrorSource;
+  error_code: bigint;
+}
+
+/** XDR: `typedef SchedulerTransactionOutcome SchedulerTransactionOutcomeBatch<>`. */
+export type SchedulerTransactionOutcomeBatch = proto.SchedulerTransactionOutcome[] & { readonly __brand: { readonly SchedulerTransactionOutcomeBatch: true } };
+export function schedulerTransactionOutcomeBatch(val: proto.SchedulerTransactionOutcome[]): SchedulerTransactionOutcomeBatch {
+  return val as SchedulerTransactionOutcomeBatch;
+}
+
 export type GenesisCeremonyResult =
   | { outcome: proto.GenesisCeremonyOutcome.GenesisCeremonyCommitted; commit: proto.GenesisCeremonyCommit }
   | { outcome: number }
@@ -317,6 +351,37 @@ const _GenesisCeremonyCommit: XdrCodec<GenesisCeremonyCommit> = {
   },
 };
 
+const _SchedulerTransactionStatus: XdrCodec<SchedulerTransactionStatus> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as SchedulerTransactionStatus; },
+};
+
+const _SchedulerTransactionErrorSource: XdrCodec<SchedulerTransactionErrorSource> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as SchedulerTransactionErrorSource; },
+};
+
+const _SchedulerErrorCode: XdrCodec<SchedulerErrorCode> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as SchedulerErrorCode; },
+};
+
+const _SchedulerTransactionOutcome: XdrCodec<SchedulerTransactionOutcome> = {
+  encode(w, val) {
+    proto.codec.SchedulerTransactionStatus.encode(w, val.status);
+    proto.codec.SchedulerTransactionErrorSource.encode(w, val.error_source);
+    w.writeInt32(val.error_code);
+  },
+  decode(r) {
+    const status = proto.codec.SchedulerTransactionStatus.decode(r);
+    const error_source = proto.codec.SchedulerTransactionErrorSource.decode(r);
+    const error_code = r.readInt32();
+    return { status, error_source, error_code };
+  },
+};
+
+const _SchedulerTransactionOutcomeBatch = VarArrayCodec(() => proto.codec.SchedulerTransactionOutcome, Number(0xFFFFFFFF)) as XdrCodec<SchedulerTransactionOutcomeBatch>;
+
 const _GenesisCeremonyResult: XdrCodec<GenesisCeremonyResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
@@ -407,6 +472,11 @@ export const codec = {
   GenesisCeremonyRequest: _GenesisCeremonyRequest,
   GenesisCeremonyOutcome: _GenesisCeremonyOutcome,
   GenesisCeremonyCommit: _GenesisCeremonyCommit,
+  SchedulerTransactionStatus: _SchedulerTransactionStatus,
+  SchedulerTransactionErrorSource: _SchedulerTransactionErrorSource,
+  SchedulerErrorCode: _SchedulerErrorCode,
+  SchedulerTransactionOutcome: _SchedulerTransactionOutcome,
+  SchedulerTransactionOutcomeBatch: _SchedulerTransactionOutcomeBatch,
   GenesisCeremonyResult: _GenesisCeremonyResult,
 } as const;
 
@@ -425,6 +495,7 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
     schedulercoord_commit_genesis_ceremony: { proc: 10, request: () => _GenesisCeremonyRequest, response: () => _GenesisCeremonyResult },
     schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
+    schedcoord_lookup_transaction_outcomes: { proc: 101, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => _SchedulerTransactionOutcomeBatch },
   },
 };
 
