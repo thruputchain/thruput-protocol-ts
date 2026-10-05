@@ -6,7 +6,7 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize, serializeCxs, deserializeCxs,
   codec, contractSpecString, topic,
-  ContractTypeKind, ContractUnionCaseKind, ContractTypeDefKind,
+  ContractTypeKind, ContractUnionCaseKind, ContractTypeDefKind, ContractMethodEffect,
 } from "../../src/index.js";
 import type {
   ContractType, ContractTypeDef, ContractSpec, ContractSpecId,
@@ -43,6 +43,24 @@ function makeNestedType(): ContractType {
 }
 
 describe("contract-spec AST codecs: roundtrip", () => {
+  it("preserves all declared effects and unknown in method codecs", () => {
+    for (const effect of [
+      ContractMethodEffect.EffectUnknown,
+      ContractMethodEffect.EffectPure,
+      ContractMethodEffect.EffectReadOnly,
+      ContractMethodEffect.EffectStateChanging,
+    ]) {
+      const method = {
+        name: contractSpecString("get"),
+        args: [],
+        return_type: { v: ContractTypeKind.U32 } as ContractType,
+        effect,
+      };
+      const bytes = serialize(method, codec.ContractSpecMethod);
+      expect(deserialize(bytes, codec.ContractSpecMethod)).toEqual(method);
+      expect(Array.from(bytes.slice(-4))).toEqual([0, 0, 0, effect]);
+    }
+  });
   it("round-trips flat ContractType variants", () => {
     const variants: ContractType[] = [
       { v: ContractTypeKind.Void },
@@ -158,11 +176,13 @@ describe("contract-spec AST codecs: roundtrip", () => {
           methods: [
             {
               name: contractSpecString("increment"),
+              effect: ContractMethodEffect.EffectStateChanging,
               args: [{ name: contractSpecString("by"), ty: { v: ContractTypeKind.U32 } }],
               return_type: { v: ContractTypeKind.U64 },
             },
             {
               name: contractSpecString("get"),
+              effect: ContractMethodEffect.EffectReadOnly,
               args: [],
               return_type: makeNestedType(),
             },

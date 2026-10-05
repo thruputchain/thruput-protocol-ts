@@ -92,11 +92,19 @@ export interface ContractField {
   ty: proto.ContractType;
 }
 
+export enum ContractMethodEffect {
+  EffectUnknown = 0,
+  EffectPure = 1,
+  EffectReadOnly = 2,
+  EffectStateChanging = 3,
+}
+
 export interface ContractSpecMethod {
   name: proto.ContractSpecString;
   /** XDR: `ContractField args<>`. */
   args: proto.ContractField[];
   return_type: proto.ContractType;
+  effect: proto.ContractMethodEffect;
 }
 
 export interface ContractSpecInterface {
@@ -375,17 +383,24 @@ const _ContractField: XdrCodec<ContractField> = {
   },
 };
 
+const _ContractMethodEffect: XdrCodec<ContractMethodEffect> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as ContractMethodEffect; },
+};
+
 const _ContractSpecMethod: XdrCodec<ContractSpecMethod> = {
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.args);
     proto.codec.ContractType.encode(w, val.return_type);
+    proto.codec.ContractMethodEffect.encode(w, val.effect);
   },
   decode(r) {
     const name = proto.codec.ContractSpecString.decode(r);
     const args = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
     const return_type = proto.codec.ContractType.decode(r);
-    return { name, args, return_type };
+    const effect = proto.codec.ContractMethodEffect.decode(r);
+    return { name, args, return_type, effect };
   },
 };
 
@@ -581,6 +596,7 @@ export const codec = {
   ContractSignedTokenPreimage: _ContractSignedTokenPreimage,
   ContractExceptionType: _ContractExceptionType,
   ContractField: _ContractField,
+  ContractMethodEffect: _ContractMethodEffect,
   ContractSpecMethod: _ContractSpecMethod,
   ContractSpecInterface: _ContractSpecInterface,
   ContractStructDef: _ContractStructDef,
