@@ -43,11 +43,14 @@ export function keyChangeBatch(val: proto.KeyChange[]): KeyChangeBatch {
   return val as KeyChangeBatch;
 }
 
-
-export interface authdb_forward_key_changes_args {
-  arg0: proto.BlockHeight;
-  arg1: proto.KeyChangeBatch;
+export interface KeyChangeChunk {
+  height: proto.BlockHeight;
+  chunk_index: bigint;
+  chunk_count: bigint;
+  /** XDR: `KeyChange changes<>`. */
+  changes: proto.KeyChange[];
 }
+
 
 export enum DBAuthError {
   kDBAuthSuccess = 0,
@@ -160,15 +163,19 @@ const _KeyChange: XdrCodec<KeyChange> = {
 
 const _KeyChangeBatch = VarArrayCodec(() => proto.codec.KeyChange, Number(0xFFFFFFFF)) as XdrCodec<KeyChangeBatch>;
 
-const _authdb_forward_key_changes_args: XdrCodec<authdb_forward_key_changes_args> = {
+const _KeyChangeChunk: XdrCodec<KeyChangeChunk> = {
   encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.arg0);
-    proto.codec.KeyChangeBatch.encode(w, val.arg1);
+    proto.codec.BlockHeight.encode(w, val.height);
+    w.writeUint32(val.chunk_index);
+    w.writeUint32(val.chunk_count);
+    VarArrayCodec(proto.codec.KeyChange, Number(0xFFFFFFFF)).encode(w, val.changes);
   },
   decode(r) {
-    const arg0 = proto.codec.BlockHeight.decode(r);
-    const arg1 = proto.codec.KeyChangeBatch.decode(r);
-    return { arg0, arg1 };
+    const height = proto.codec.BlockHeight.decode(r);
+    const chunk_index = r.readUint32();
+    const chunk_count = r.readUint32();
+    const changes = VarArrayCodec(proto.codec.KeyChange, Number(0xFFFFFFFF)).decode(r);
+    return { height, chunk_index, chunk_count, changes };
   },
 };
 
@@ -323,6 +330,7 @@ export const codec = {
   AuthErrorCodeBatch: _AuthErrorCodeBatch,
   KeyChange: _KeyChange,
   KeyChangeBatch: _KeyChangeBatch,
+  KeyChangeChunk: _KeyChangeChunk,
   DBAuthError: _DBAuthError,
   DBAuthResult: _DBAuthResult,
   DBAuthIntroOutcome: _DBAuthIntroOutcome,
@@ -346,7 +354,7 @@ export const AuthDBProgram: RpcProgramMeta = {
   programId: 0x8aa87aa8,
   version: 1,
   methods: {
-    authdb_forward_key_changes: { proc: 1, request: () => _authdb_forward_key_changes_args, response: () => VoidCodec },
+    authdb_forward_key_changes_chunk: { proc: 2, request: () => _KeyChangeChunk, response: () => VoidCodec },
   },
 };
 
