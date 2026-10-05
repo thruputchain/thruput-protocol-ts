@@ -22,8 +22,10 @@ export interface Delta {
   hog_delta: proto.int128_xdr;
 }
 
-export interface HogsTransferred {
+export interface HogsTransferredChunk {
   block: proto.BlockHeight;
+  chunk_index: bigint;
+  chunk_count: bigint;
   /** XDR: `Delta deltas<>`. */
   deltas: proto.Delta[];
 }
@@ -66,22 +68,26 @@ const _Delta: XdrCodec<Delta> = {
   },
 };
 
-const _HogsTransferred: XdrCodec<HogsTransferred> = {
+const _HogsTransferredChunk: XdrCodec<HogsTransferredChunk> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block);
+    w.writeUint32(val.chunk_index);
+    w.writeUint32(val.chunk_count);
     VarArrayCodec(proto.codec.Delta, Number(0xFFFFFFFF)).encode(w, val.deltas);
   },
   decode(r) {
     const block = proto.codec.BlockHeight.decode(r);
+    const chunk_index = r.readUint32();
+    const chunk_count = r.readUint32();
     const deltas = VarArrayCodec(proto.codec.Delta, Number(0xFFFFFFFF)).decode(r);
-    return { block, deltas };
+    return { block, chunk_index, chunk_count, deltas };
   },
 };
 
 export const codec = {
   ShardCard: _ShardCard,
   Delta: _Delta,
-  HogsTransferred: _HogsTransferred,
+  HogsTransferredChunk: _HogsTransferredChunk,
 } as const;
 
 export const SchedDbProgram: RpcProgramMeta = {
@@ -89,7 +95,7 @@ export const SchedDbProgram: RpcProgramMeta = {
   version: 1,
   methods: {
     scheddb_intro_shard: { proc: 1, request: () => _ShardCard, response: () => VoidCodec },
-    scheddb_hogs_transferred: { proc: 2, request: () => _HogsTransferred, response: () => VoidCodec },
+    scheddb_hogs_transferred_chunk: { proc: 4, request: () => _HogsTransferredChunk, response: () => VoidCodec },
   },
 };
 
