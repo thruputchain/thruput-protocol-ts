@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/protocol",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Groundhog blockchain protocol types and XDR serialization",
   "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/protocol#readme",
   "bugs": {
@@ -45,7 +45,7 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.12.0",
+    "@groundhogchain/xdr": "0.13.0",
     "@noble/hashes": "2.2.0"
   },
   "devDependencies": {

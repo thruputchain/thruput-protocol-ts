@@ -6,7 +6,7 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize, serializeCxs, deserializeCxs,
   codec, contractSpecString, topic,
-  ContractTypeKind, ContractUnionCaseKind, ContractTypeDefKind,
+  ContractTypeKind, ContractUnionCaseKind, ContractTypeDefKind, ContractMethodEffect,
 } from "../../src/index.js";
 import type {
   ContractType, ContractTypeDef, ContractSpec, ContractSpecId,
@@ -146,7 +146,12 @@ describe("contract-spec AST codecs: roundtrip", () => {
     }
   });
 
-  it("round-trips a full ContractSpec", () => {
+  it.each([
+    null,
+    ContractMethodEffect.EffectPure,
+    ContractMethodEffect.EffectReadOnly,
+    ContractMethodEffect.EffectStateChanging,
+  ])("round-trips a full ContractSpec with method effect %s", (effect) => {
     const val: ContractSpec = {
       interfaces: [
         {
@@ -160,11 +165,13 @@ describe("contract-spec AST codecs: roundtrip", () => {
               name: contractSpecString("increment"),
               args: [{ name: contractSpecString("by"), ty: { v: ContractTypeKind.U32 } }],
               return_type: { v: ContractTypeKind.U64 },
+              effect,
             },
             {
               name: contractSpecString("get"),
               args: [],
               return_type: makeNestedType(),
+              effect: null,
             },
           ],
         },
