@@ -125,6 +125,7 @@ export interface SchedulerTransactionOutcome {
   status: proto.SchedulerTransactionStatus;
   error_source: proto.SchedulerTransactionErrorSource;
   error_code: bigint;
+  height: proto.BlockHeight;
 }
 
 /** XDR: `typedef SchedulerTransactionOutcome SchedulerTransactionOutcomeBatch<>`. */
@@ -371,12 +372,14 @@ const _SchedulerTransactionOutcome: XdrCodec<SchedulerTransactionOutcome> = {
     proto.codec.SchedulerTransactionStatus.encode(w, val.status);
     proto.codec.SchedulerTransactionErrorSource.encode(w, val.error_source);
     w.writeInt32(val.error_code);
+    proto.codec.BlockHeight.encode(w, val.height);
   },
   decode(r) {
     const status = proto.codec.SchedulerTransactionStatus.decode(r);
     const error_source = proto.codec.SchedulerTransactionErrorSource.decode(r);
     const error_code = r.readInt32();
-    return { status, error_source, error_code };
+    const height = proto.codec.BlockHeight.decode(r);
+    return { status, error_source, error_code, height };
   },
 };
 
