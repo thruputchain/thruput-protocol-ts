@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/contract-spec",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Groundhog contract specification AST types and XDR serialization",
   "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/contract-spec#readme",
   "bugs": {
@@ -40,8 +40,8 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.13.0",
-    "@groundhogchain/protocol": "0.13.0"
+    "@groundhogchain/xdr": "0.14.0",
+    "@groundhogchain/protocol": "0.14.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",

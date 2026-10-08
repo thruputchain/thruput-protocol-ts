@@ -1,6 +1,6 @@
 {
   "name": "@groundhogchain/xdr",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "XDR/CXS serialization framework for Groundhog",
   "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/xdr#readme",
   "bugs": {
