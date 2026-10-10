@@ -21,10 +21,9 @@ export const kMaxReturnBufferLen = 1024n;
  */
 export type kMaxReturnBufferLen = 1024;
 
-/** XDR: `typedef opaque ReturnBuffer<kMaxReturnBufferLen>` — max {@link kMaxReturnBufferLen} bytes. */
-export type ReturnBuffer = VarBytes<proto.kMaxReturnBufferLen> & { readonly __brand: { readonly ReturnBuffer: true } };
+/** XDR: `typedef opaque ReturnBuffer<>`. */
+export type ReturnBuffer = Uint8Array & { readonly __brand: { readonly ReturnBuffer: true } };
 export function returnBuffer(data: Uint8Array): ReturnBuffer {
-  if (data.length > Number(proto.kMaxReturnBufferLen)) throw new Error(`ReturnBuffer exceeds max length kMaxReturnBufferLen, got ${data.length}`);
   return data as ReturnBuffer;
 }
 
@@ -139,8 +138,8 @@ const _Calldata: XdrCodec<Calldata> = {
 };
 
 const _ReturnBuffer: XdrCodec<ReturnBuffer> = {
-  encode(w, val) { w.writeVarOpaque(val, Number(proto.kMaxReturnBufferLen)); },
-  decode(r) { return returnBuffer(r.readVarOpaque(Number(proto.kMaxReturnBufferLen))); },
+  encode(w, val) { w.writeVarOpaque(val, Number(0xFFFFFFFF)); },
+  decode(r) { return returnBuffer(r.readVarOpaque(Number(0xFFFFFFFF))); },
 };
 
 const _Invocation: XdrCodec<Invocation> = {

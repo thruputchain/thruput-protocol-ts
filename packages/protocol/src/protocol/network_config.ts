@@ -19,6 +19,9 @@ export enum ConfigParamID {
   kConfigParamMaxAuthTokenDepth = 7,
   kConfigParamMaxRv32CodeBytes = 8,
   kConfigParamMaxRv32MemoryBytes = 9,
+  kConfigParamMaxAuthTokens = 10,
+  kConfigParamMaxCalldataLen = 11,
+  kConfigParamMaxReturnBufferLen = 12,
 }
 
 export type ConfigParam =
@@ -32,6 +35,9 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxAuthTokenDepth; max_auth_token_depth: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxRv32CodeBytes; max_rv32_code_bytes: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes; max_rv32_memory_bytes: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxAuthTokens; max_auth_tokens: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxCalldataLen; max_calldata_len: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxReturnBufferLen; max_return_buffer_len: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -93,6 +99,15 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes:
         w.writeUint32(val.max_rv32_memory_bytes);
         break;
+      case proto.ConfigParamID.kConfigParamMaxAuthTokens:
+        w.writeUint32(val.max_auth_tokens);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxCalldataLen:
+        w.writeUint32(val.max_calldata_len);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxReturnBufferLen:
+        w.writeUint32(val.max_return_buffer_len);
+        break;
     }
   },
   decode(r) {
@@ -128,6 +143,15 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxRv32MemoryBytes:
         const max_rv32_memory_bytes = r.readUint32();
         return { param, max_rv32_memory_bytes };
+      case proto.ConfigParamID.kConfigParamMaxAuthTokens:
+        const max_auth_tokens = r.readUint32();
+        return { param, max_auth_tokens };
+      case proto.ConfigParamID.kConfigParamMaxCalldataLen:
+        const max_calldata_len = r.readUint32();
+        return { param, max_calldata_len };
+      case proto.ConfigParamID.kConfigParamMaxReturnBufferLen:
+        const max_return_buffer_len = r.readUint32();
+        return { param, max_return_buffer_len };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
