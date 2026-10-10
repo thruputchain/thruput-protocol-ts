@@ -14,13 +14,6 @@ export function calldata(data: Uint8Array): Calldata {
   return data as Calldata;
 }
 
-export const kMaxReturnBufferLen = 1024n;
-/**
- * Type-level value of {@link kMaxReturnBufferLen}, for use in array-bound positions.
- * @hidden
- */
-export type kMaxReturnBufferLen = 1024;
-
 /** XDR: `typedef opaque ReturnBuffer<>`. */
 export type ReturnBuffer = Uint8Array & { readonly __brand: { readonly ReturnBuffer: true } };
 export function returnBuffer(data: Uint8Array): ReturnBuffer {
