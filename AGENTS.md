@@ -30,4 +30,4 @@
 
 ## Existing Workflow To Preserve
 - The auto-update workflow bumps the `protocol` submodule to upstream `main`, downloads `x23c`, runs `./scripts/generate.sh`, and opens a PR with the regenerated output. Keep manual regeneration changes aligned with that flow.
-- `.gitmodules` uses the HTTPS URL; the internal-runner workflows rewrite it to SSH so the deploy key is used.
+- `.gitmodules` uses the HTTPS URL; on the internal runner, `webfactory/ssh-agent` maps it to the protocol deploy key.

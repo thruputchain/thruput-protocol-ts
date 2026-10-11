@@ -45,19 +45,21 @@ jobs:
           owner: groundhogchain
           repositories: hogd
 
+      # Check out before loading the deploy key: ssh-agent maps
+      # https://github.com/groundhogchain/protocol* to that key, and the
+      # prefix also matches protocol-ts, which the key cannot read.
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          persist-credentials: false
+
       - name: Setup SSH Agent
         uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
 
-      - name: Fetch protocol submodule over SSH
-        run: git config --global url."git@github.com:groundhogchain/protocol.git".insteadOf https://github.com/groundhogchain/protocol.git
-
-      - name: Checkout
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
-        with:
-          submodules: true
-          persist-credentials: false
+      - name: Fetch protocol submodule
+        run: git submodule update --init --depth 1 protocol
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:

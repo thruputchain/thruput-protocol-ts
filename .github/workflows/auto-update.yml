@@ -31,11 +31,6 @@ jobs:
             ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
             ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
-      # .gitmodules uses the HTTPS URL; this runner fetches the
-      # submodule with the deploy key above instead.
-      - name: Fetch protocol submodule over SSH
-        run: git config --global url."git@github.com:groundhogchain/protocol.git".insteadOf https://github.com/groundhogchain/protocol.git
-
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
