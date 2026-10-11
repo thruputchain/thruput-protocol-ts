@@ -1,5 +1,7 @@
 # Groundhog Protocol TypeScript SDK — Design Spec
 
+> **Archived 2026-10-11.** Internal planning document, last updated 2026-03-18. It describes the repository as it was then (package names, tooling, versions and workflows have since changed) and is kept only for history. See the top-level README for current information.
+
 ## Overview
 
 A TypeScript SDK providing generated protocol types and XDR serialization for the Groundhog blockchain. Primary consumers are browser wallets/dApps and smart contract developer tools. Backend infrastructure stays in Rust.

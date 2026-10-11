@@ -1,5 +1,7 @@
 # Protocol-TS Phase 1 Implementation Plan
 
+> **Archived 2026-10-11.** Internal planning document, last updated 2026-03-18. It describes the repository as it was then (package names, tooling, versions and workflows have since changed) and is kept only for history. See the top-level README for current information.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Set up the `@groundhog/protocol` TypeScript SDK repository with XDR serialization and hand-written representative protocol types.
@@ -25,7 +27,7 @@
 - [ ] **Step 1: Initialize git repo**
 
 ```bash
-cd /Users/geoff/groundhog/protocol-ts
+cd protocol-ts
 git init
 ```
 
