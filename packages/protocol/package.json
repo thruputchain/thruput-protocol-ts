@@ -64,5 +64,8 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "restricted"
+  },
+  "groundhog": {
+    "protocolCommit": "cfcaf864d3c7621b279da3cc8f39020b8fc77296"
   }
 }

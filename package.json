@@ -4,6 +4,7 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "build": "npm run build --workspaces",
+    "codegen:check": "scripts/check-codegen-provenance.sh",
     "docs": "typedoc",
     "docs:check": "typedoc --emit none",
     "test": "npm run test --workspaces",
