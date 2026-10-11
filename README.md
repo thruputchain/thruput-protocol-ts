@@ -16,9 +16,13 @@ from the XDR definitions in the `protocol/` submodule.
 
 All packages are published to GitHub Packages with `access: restricted`.
 
-Most application code should prefer `@groundhogchain/client`. These protocol
-packages are lower-level building blocks for serialization, generated protocol
-types, RPC access, contract specs, and gateway/indexer types.
+Most application code should prefer `@groundhogchain/client`, which lives in
+the separate [client-ts](https://github.com/groundhogchain/client-ts)
+repository and is published to the same GitHub Packages registry
+(`npm install @groundhogchain/client`, with the registry auth described in
+that repo's README). These protocol packages are lower-level building blocks
+for serialization, generated protocol types, RPC access, contract specs, and
+gateway/indexer types.
 
 ## Import surfaces
 
