@@ -20,6 +20,12 @@ echo "-- Using XDRC=${XDRC} --" >&2
 
 PROTOCOL_COMMIT=$(git -C protocol rev-parse HEAD)
 
+# The stamps name PROTOCOL_COMMIT, so the inputs must be exactly that commit.
+if [[ -n $(git -C protocol status --porcelain) ]]; then
+  echo "error: protocol/ has uncommitted changes; commit them in the submodule first so the generated code names a commit that contains its inputs" >&2
+  exit 1
+fi
+
 echo "-- Generating from groundhogchain/protocol@${PROTOCOL_COMMIT} --" >&2
 
 # x23c emits a "DO NOT CHECK IN" banner plus its own commit. These files are
