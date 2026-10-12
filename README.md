@@ -1,4 +1,4 @@
-# protocol-ts
+# Thruput TypeScript protocol bindings
 
 TypeScript bindings for the Thruput blockchain protocol. This is an npm
 workspaces monorepo that publishes five `@thruputchain/*` packages, generated

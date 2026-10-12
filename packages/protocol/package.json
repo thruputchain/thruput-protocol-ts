@@ -2,9 +2,9 @@
   "name": "@thruputchain/protocol",
   "version": "0.15.0",
   "description": "Thruput blockchain protocol types and XDR serialization",
-  "homepage": "https://github.com/thruputchain/protocol-ts/tree/main/packages/protocol#readme",
+  "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/protocol#readme",
   "bugs": {
-    "url": "https://github.com/thruputchain/protocol-ts/issues"
+    "url": "https://github.com/thruputchain/thruput-protocol-ts/issues"
   },
   "keywords": [
     "thruput",
@@ -58,7 +58,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thruputchain/protocol-ts.git",
+    "url": "git+https://github.com/thruputchain/thruput-protocol-ts.git",
     "directory": "packages/protocol"
   },
   "publishConfig": {

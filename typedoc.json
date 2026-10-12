@@ -1,5 +1,5 @@
 {
-  "name": "@thruputchain/protocol-ts",
+  "name": "Thruput TypeScript protocol bindings",
   "entryPoints": [
     "packages/xdr/src/index.ts",
     "packages/protocol/src/index.ts",

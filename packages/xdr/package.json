@@ -2,9 +2,9 @@
   "name": "@thruputchain/xdr",
   "version": "0.15.0",
   "description": "XDR/CXS serialization framework for Thruput",
-  "homepage": "https://github.com/thruputchain/protocol-ts/tree/main/packages/xdr#readme",
+  "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/xdr#readme",
   "bugs": {
-    "url": "https://github.com/thruputchain/protocol-ts/issues"
+    "url": "https://github.com/thruputchain/thruput-protocol-ts/issues"
   },
   "keywords": [
     "thruput",
@@ -49,7 +49,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thruputchain/protocol-ts.git",
+    "url": "git+https://github.com/thruputchain/thruput-protocol-ts.git",
     "directory": "packages/xdr"
   },
   "publishConfig": {

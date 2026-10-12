@@ -1,5 +1,5 @@
 {
-  "name": "protocol-ts",
+  "name": "thruput-protocol-ts",
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {

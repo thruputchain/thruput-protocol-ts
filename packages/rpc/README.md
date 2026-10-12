@@ -30,5 +30,5 @@ by this package.
 
 ## Documentation
 
-See the [protocol-ts repository](https://github.com/thruputchain/protocol-ts)
+See the [Thruput TypeScript protocol repository](https://github.com/thruputchain/thruput-protocol-ts)
 for the full monorepo docs, codegen workflow, and API reference.
