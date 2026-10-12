@@ -96,9 +96,7 @@ Generation also updates the generated test fixtures noted in
 and `packages/protocol/src/utils/index.ts` are the intended import surfaces and
 are not overwritten by the generator.
 
-The generated files are committed and must not be edited by hand. The `Codegen`
-workflow regenerates on every change to generated code, the submodule, or the
-generator, and fails if the output differs from what is committed.
+The generated files are committed and must not be edited by hand.
 
 ### What needs org access
 
@@ -107,9 +105,8 @@ Building and testing from a clone needs nothing beyond npm. Regenerating does:
 - The `protocol/` submodule (`groundhogchain/protocol`) is currently private.
 - x23c, the XDR compiler, is built from `groundhogchain/hogd` (`x23/x23c`) and
   published only as the `latest-x23c` release of that private repository.
-- The `Codegen` and `Auto-update protocol` workflows run on an internal runner
-  with a deploy key and a GitHub App token, so they are skipped for pull
-  requests from forks.
+- The `Auto-update protocol` workflow runs on an internal runner with a deploy
+  key and a GitHub App token.
 - The cross-SDK tests install `groundhog-test-vectors` from the private Cargo
   registry.
 
