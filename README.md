@@ -120,7 +120,7 @@ the same commit.
 
 | Version | Protocol commit | Devnet bundles on the same commit |
 |---|---|---|
-| 0.15.0 (pending) | `cfcaf864` | — |
+| 0.15.0 | `2f521176` | — |
 | 0.14.0 | `6bfe776` | — |
 | 0.13.0 | `db436d0` | — |
 | 0.12.0 | `d2872e9` | 0.1.29-rc.1 |
