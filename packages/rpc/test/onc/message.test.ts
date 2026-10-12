@@ -4,7 +4,7 @@
  * Tests buildCallMessage and parseReplyMessage against the RFC 5531 wire format.
  */
 import { describe, it, expect } from "vitest";
-import { XdrWriter, XdrReader } from "@groundhogchain/xdr";
+import { XdrWriter, XdrReader } from "@thruputchain/xdr";
 import { buildCallMessage, parseReplyMessage } from "../../src/onc/message.js";
 
 function toHex(bytes: Uint8Array): string {

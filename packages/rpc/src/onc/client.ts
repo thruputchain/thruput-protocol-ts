@@ -4,8 +4,8 @@
  * Given a transport and program metadata, provides typed method dispatch.
  */
 
-import { serialize, deserialize, resolve } from "@groundhogchain/xdr";
-import type { XdrCodec, RpcProgramMeta } from "@groundhogchain/xdr";
+import { serialize, deserialize, resolve } from "@thruputchain/xdr";
+import type { XdrCodec, RpcProgramMeta } from "@thruputchain/xdr";
 import type { RpcTransport } from "./transport.js";
 import { buildCallMessage, parseReplyMessage } from "./message.js";
 

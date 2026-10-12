@@ -1,17 +1,17 @@
-# @groundhogchain/contract-spec
+# @thruputchain/contract-spec
 
-Groundhog contract specification AST types and XDR serialization. Models
+Thruput contract specification AST types and XDR serialization. Models
 contract interfaces, methods, type definitions, and events as data, so
 tooling can read and emit contract specs.
 
 ## Install
 
 ```sh
-npm install @groundhogchain/contract-spec
+npm install @thruputchain/contract-spec
 ```
 
 Published to GitHub Packages; configure your `.npmrc` for the
-`@groundhogchain` scope.
+`@thruputchain` scope.
 
 ## Example
 
@@ -19,8 +19,8 @@ Published to GitHub Packages; configure your `.npmrc` for the
 import {
   serialize, deserialize, codec,
   contractSpecString, ContractTypeKind,
-} from "@groundhogchain/contract-spec";
-import type { ContractSpec } from "@groundhogchain/contract-spec";
+} from "@thruputchain/contract-spec";
+import type { ContractSpec } from "@thruputchain/contract-spec";
 
 const spec: ContractSpec = {
   interfaces: [{
@@ -43,5 +43,5 @@ const decoded = deserialize(bytes, codec.ContractSpec);
 
 ## Documentation
 
-See the [protocol-ts repository](https://github.com/groundhogchain/protocol-ts)
+See the [Thruput TypeScript protocol repository](https://github.com/thruputchain/thruput-protocol-ts)
 for the full monorepo docs, codegen workflow, and API reference.

@@ -1,13 +1,13 @@
 {
-  "name": "@groundhogchain/rpc",
-  "version": "0.14.0",
-  "description": "ONC-RPC client and protocol RPC type definitions for Groundhog",
-  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/rpc#readme",
+  "name": "@thruputchain/rpc",
+  "version": "0.15.0",
+  "description": "ONC-RPC client and protocol RPC type definitions for Thruput",
+  "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/rpc#readme",
   "bugs": {
-    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+    "url": "https://github.com/thruputchain/thruput-protocol-ts/issues"
   },
   "keywords": [
-    "groundhog",
+    "thruput",
     "blockchain",
     "rpc",
     "onc-rpc",
@@ -41,8 +41,8 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.14.0",
-    "@groundhogchain/protocol": "0.14.0"
+    "@thruputchain/xdr": "0.15.0",
+    "@thruputchain/protocol": "0.15.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
@@ -53,7 +53,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/groundhogchain/protocol-ts.git",
+    "url": "git+https://github.com/thruputchain/thruput-protocol-ts.git",
     "directory": "packages/rpc"
   },
   "publishConfig": {

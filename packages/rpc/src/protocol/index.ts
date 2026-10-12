@@ -1,5 +1,5 @@
 // Barrel — add new .x files here when they're added to generate.sh
-export * from "@groundhogchain/protocol";
+export * from "@thruputchain/protocol";
 export * from "./dogwood_kit.js";
 export * from "./auth_card.js";
 export * from "./sched_db.js";
@@ -28,7 +28,7 @@ export * from "./repair.js";
 export * from "./loadgen.js";
 
 // Merged codec namespace
-import { codec as _protocol_codec } from "@groundhogchain/protocol";
+import { codec as _protocol_codec } from "@thruputchain/protocol";
 import { codec as dogwood_kit_codec } from "./dogwood_kit.js";
 import { codec as auth_card_codec } from "./auth_card.js";
 import { codec as sched_db_codec } from "./sched_db.js";

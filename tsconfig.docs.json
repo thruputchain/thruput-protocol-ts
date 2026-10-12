@@ -8,10 +8,10 @@
     "types": ["node"],
     "lib": ["ES2022", "DOM"],
     "paths": {
-      "@groundhogchain/xdr": ["./packages/xdr/src/index.ts"],
-      "@groundhogchain/protocol": ["./packages/protocol/src/index.ts"],
-      "@groundhogchain/protocol/utils": ["./packages/protocol/src/utils/index.ts"],
-      "@groundhogchain/rpc": ["./packages/rpc/src/index.ts"]
+      "@thruputchain/xdr": ["./packages/xdr/src/index.ts"],
+      "@thruputchain/protocol": ["./packages/protocol/src/index.ts"],
+      "@thruputchain/protocol/utils": ["./packages/protocol/src/utils/index.ts"],
+      "@thruputchain/rpc": ["./packages/rpc/src/index.ts"]
     }
   },
   "include": ["packages/*/src/**/*.ts"],

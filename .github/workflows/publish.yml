@@ -48,7 +48,7 @@ jobs:
           for pkg in packages/*/package.json; do
             BAD=$(jq -r --arg v "$VERSION" \
               '.dependencies // {} | to_entries[]
-               | select(.key | startswith("@groundhogchain/"))
+               | select(.key | startswith("@thruputchain/"))
                | select(.value != $v)
                | "\(.key) pinned to \(.value)"' "$pkg")
             if [ -n "$BAD" ]; then
@@ -60,7 +60,7 @@ jobs:
           if [ "$FAIL" -ne 0 ]; then
             exit 1
           fi
-          echo "All internal @groundhogchain/* dependencies pinned to $VERSION"
+          echo "All internal @thruputchain/* dependencies pinned to $VERSION"
 
       # Same gate as CI's `check` and `test` jobs — a release is dispatched
       # manually and can run on a commit CI never covered, so it re-verifies

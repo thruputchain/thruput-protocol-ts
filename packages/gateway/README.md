@@ -1,17 +1,17 @@
-# @groundhogchain/gateway
+# @thruputchain/gateway
 
-Gateway and indexer protocol types for Groundhog services: transaction and
+Gateway and indexer protocol types for Thruput services: transaction and
 event lookup records, query/filter types, and pagination primitives, with
 XDR codecs generated from the protocol definitions.
 
 ## Install
 
 ```sh
-npm install @groundhogchain/gateway
+npm install @thruputchain/gateway
 ```
 
 Published to GitHub Packages; configure your `.npmrc` for the
-`@groundhogchain` scope.
+`@thruputchain` scope.
 
 ## Example
 
@@ -20,8 +20,8 @@ import {
   serialize, deserialize, codec,
   eventFilterList, paginationCursor, blockHeight,
   IterationOrder, BlockAnchorKind,
-} from "@groundhogchain/gateway";
-import type { EventQuery } from "@groundhogchain/gateway";
+} from "@thruputchain/gateway";
+import type { EventQuery } from "@thruputchain/gateway";
 
 const query: EventQuery = {
   filters: eventFilterList([]),
@@ -37,5 +37,5 @@ const decoded = deserialize(bytes, codec.EventQuery);
 
 ## Documentation
 
-See the [protocol-ts repository](https://github.com/groundhogchain/protocol-ts)
+See the [Thruput TypeScript protocol repository](https://github.com/thruputchain/thruput-protocol-ts)
 for the full monorepo docs, codegen workflow, and API reference.

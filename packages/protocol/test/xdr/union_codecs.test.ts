@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize, serializeCxs, deserializeCxs,
   XdrWriter,
-} from "@groundhogchain/xdr";
+} from "@thruputchain/xdr";
 import {
   TestColor, TestStatusCode,
   codec,

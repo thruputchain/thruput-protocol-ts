@@ -1,18 +1,18 @@
-# @groundhogchain/protocol
+# @thruputchain/protocol
 
-Core Groundhog protocol types and XDR codecs, generated from the canonical
+Core Thruput protocol types and XDR codecs, generated from the canonical
 XDR definitions in the protocol repository. Includes transactions,
 invocations, events, and the merged `codec` namespace, plus utility helpers
-under `@groundhogchain/protocol/utils`.
+under `@thruputchain/protocol/utils`.
 
 ## Install
 
 ```sh
-npm install @groundhogchain/protocol
+npm install @thruputchain/protocol
 ```
 
 Published to GitHub Packages; configure your `.npmrc` for the
-`@groundhogchain` scope.
+`@thruputchain` scope.
 
 ## Example
 
@@ -20,7 +20,7 @@ Published to GitHub Packages; configure your `.npmrc` for the
 import {
   serialize, deserialize, codec,
   contractAddress, contractEntrypointID, gasAmount, calldata,
-} from "@groundhogchain/protocol";
+} from "@thruputchain/protocol";
 
 const invocation = {
   invoked_address: contractAddress(new Uint8Array(32)),
@@ -34,10 +34,10 @@ const decoded = deserialize(bytes, codec.Invocation);
 ```
 
 Application code should usually prefer the higher-level
-`@groundhogchain/client`; this package is the low-level typed protocol
+`@thruputchain/client`; this package is the low-level typed protocol
 surface.
 
 ## Documentation
 
-See the [protocol-ts repository](https://github.com/groundhogchain/protocol-ts)
+See the [Thruput TypeScript protocol repository](https://github.com/thruputchain/thruput-protocol-ts)
 for the full monorepo docs, codegen workflow, and API reference.

@@ -19,7 +19,7 @@ const packagesDir = new URL("packages/", root);
 const failures = [];
 let checked = 0;
 const requiredExports = {
-  "@groundhogchain/xdr": {
+  "@thruputchain/xdr": {
     ".": ["Uint8Codec", "FixedOpaqueCodec", "VarOpaqueCodec"],
   },
 };
@@ -56,7 +56,7 @@ for (const dir of readdirSync(fileURLToPath(packagesDir)).sort()) {
           }
         }
         if (
-          pkg.name === "@groundhogchain/protocol" &&
+          pkg.name === "@thruputchain/protocol" &&
           subpath === "." &&
           !isHogAddress(mod.HOG_ADDRESS)
         ) {

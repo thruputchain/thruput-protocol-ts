@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize, serializeCxs, deserializeCxs,
-} from "@groundhogchain/xdr";
+} from "@thruputchain/xdr";
 import {
   testHash, testEntrypointId, testPayload, testBlob,
   codec,
