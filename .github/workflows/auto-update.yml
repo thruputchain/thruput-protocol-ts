@@ -31,6 +31,18 @@ jobs:
             ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
             ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
+      - name: Route checkout through the repository write key
+        run: |
+          # The retained write key still has the repository's pre-transfer comment.
+          SELF_KEY_URL=$(git config --global --get-regexp '^url\..*\.insteadof$' |
+            awk '$2 == "git@github.com:groundhogchain/protocol-ts" {
+              sub(/^url\./, "", $1); sub(/\.insteadof$/, "", $1); print $1; exit
+            }')
+          test -n "$SELF_KEY_URL"
+          git config --global \
+            url."${SELF_KEY_URL%:*}:thruputchain/thruput-protocol-ts".insteadOf \
+            git@github.com:thruputchain/thruput-protocol-ts
+
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
