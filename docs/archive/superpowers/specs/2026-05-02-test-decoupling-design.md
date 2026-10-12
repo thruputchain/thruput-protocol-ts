@@ -1,5 +1,7 @@
 # Test Decoupling from Protocol XDR Files
 
+> **Archived 2026-10-11.** Internal planning document, last updated 2026-05-02. It describes the repository as it was then (package names, tooling, versions and workflows have since changed) and is kept only for history. See the top-level README for current information.
+
 Decouple protocol package tests from the `protocol/*.x` submodule so that
 upstream XDR changes don't break CI. Tests use a local kitchen-sink `.x`
 fixture instead.

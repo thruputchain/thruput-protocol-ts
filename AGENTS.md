@@ -17,7 +17,7 @@
 
 ## Codegen And Generated Files
 - The `protocol/` directory is a git submodule (`git submodule update --init` if it is missing).
-- Regenerate with `XDRC=/path/to/x23c ./scripts/generate.sh`.
+- Regenerate with `XDRC=/path/to/x23c ./scripts/generate.sh` (`XDRC` is required). x23c is built from `x23/x23c` in groundhogchain/hogd and published as that repo's `latest-x23c` release.
 - `scripts/generate.sh` overwrites generated files in `packages/protocol/src/protocol/*.ts`, `packages/contract-spec/src/protocol/*.ts`, `packages/rpc/src/protocol/*.ts`, `packages/gateway/src/protocol/*.ts`, plus these fixtures: `packages/rpc/test/fixtures/echo.ts`, `packages/protocol/test/fixtures/test_base.ts`, and `packages/protocol/test/fixtures/test_compound.ts`.
 - The package `src/index.ts` files and the `src/protocol/index.ts` barrels are hand-maintained. When adding a new `.x` file, update both `scripts/generate.sh` and the matching barrel manually.
 - `packages/contract-spec/src/protocol/index.ts` intentionally does not `export *` from `@groundhogchain/protocol`; it only re-exports the narrow protocol symbols needed to avoid name collisions like `ContractType`.
@@ -29,3 +29,4 @@
 
 ## Existing Workflow To Preserve
 - The auto-update workflow bumps the `protocol` submodule to upstream `main`, downloads `x23c`, runs `./scripts/generate.sh`, and opens a PR with the regenerated output. Keep manual regeneration changes aligned with that flow.
+- `.gitmodules` uses the HTTPS URL; on the internal runner, `webfactory/ssh-agent` maps it to the protocol deploy key.

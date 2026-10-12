@@ -8,7 +8,10 @@
 
 set -euo pipefail
 
-[[ -z ${XDRC:-} ]] && XDRC="../../hogd/vscode/x23/x23c/x23c"
+if [[ -z ${XDRC:-} ]]; then
+  echo "error: set XDRC to the x23c binary, e.g. XDRC=/path/to/x23c $0" >&2
+  exit 1
+fi
 
 echo "-- Using XDRC=${XDRC} --" >&2
 

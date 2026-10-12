@@ -46,7 +46,7 @@ packages/<name>/
   src/protocol/*.ts     # generated from protocol/*.x
 protocol/               # git submodule: upstream XDR definitions
 scripts/generate.sh     # regenerates *.ts from *.x via the x23c compiler
-docs/                   # internal docs
+docs/archive/           # historical planning docs, not maintained
 ```
 
 ## Setup & build
@@ -60,7 +60,8 @@ npm run typecheck
 
 The generated protocol sources are committed, so the `protocol/` submodule is
 only needed to regenerate them: run `git submodule update --init` before
-following [Regenerating from XDR](#regenerating-from-xdr).
+following [Regenerating from XDR](#regenerating-from-xdr) (see
+[What needs org access](#what-needs-org-access)).
 
 ## API docs
 
@@ -95,8 +96,41 @@ Generation also updates the generated test fixtures noted in
 and `packages/protocol/src/utils/index.ts` are the intended import surfaces and
 are not overwritten by the generator.
 
+The generated files are committed and must not be edited by hand.
+
+### What needs org access
+
+Building and testing from a clone needs nothing beyond npm. Regenerating does:
+
+- The `protocol/` submodule (`groundhogchain/protocol`) is currently private.
+- x23c, the XDR compiler, is built from `groundhogchain/hogd` (`x23/x23c`) and
+  published only as the `latest-x23c` release of that private repository.
+- The `Auto-update protocol` workflow runs on an internal runner with a deploy
+  key and a GitHub App token.
+- The cross-SDK tests install `groundhog-test-vectors` from the private Cargo
+  registry.
+
+## Protocol commit per release
+
+Each published version is generated from exactly one protocol commit;
+`git rev-parse <tag>:protocol` gives it for any tag. Devnet bundles are the releases cut
+from `groundhogchain/packaging`, whose `release-manifest.toml` pins a protocol
+commit; a bundle and a package version encode the same protocol when they pin
+the same commit.
+
+| Version | Protocol commit | Devnet bundles on the same commit |
+|---|---|---|
+| 0.14.0 | `6bfe776` | — |
+| 0.13.0 | `db436d0` | — |
+| 0.12.0 | `d2872e9` | 0.1.29-rc.1 |
+| 0.11.0 | `b8799ac` | — |
+| 0.10.0 | `a6913f0` | 0.1.25-rc.4, 0.1.25, 0.1.26 |
+| 0.9.0 | `021c335` | — |
+| 0.8.0 | `db2688f` | — |
+
 ## Releasing
 
-Bump versions across all packages in lockstep (see the `bump-version` workflow),
+Bump versions across all packages in lockstep (see the `bump-version` skill),
+add the new version to [Protocol commit per release](#protocol-commit-per-release),
 then publish. Inter-package `dependencies` versions must match the bumped
 version exactly, since publishes go to a private registry.

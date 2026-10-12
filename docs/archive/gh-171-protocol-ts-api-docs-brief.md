@@ -1,8 +1,10 @@
 # GH-171 Brief: Generate and Publish protocol-ts API Docs
 
-## Linear Issue
+> **Archived 2026-10-11.** Internal planning document, last updated 2026-07-01. It describes the repository as it was then (package names, tooling, versions and workflows have since changed) and is kept only for history. See the top-level README for current information.
 
-[GH-171](https://linear.app/grndhg/issue/GH-171/generate-and-publish-protocol-ts-api-docs): Generate and publish protocol-ts API docs
+## Issue
+
+GH-171: Generate and publish protocol-ts API docs
 
 ## Goal
 
@@ -12,11 +14,7 @@ The generated docs should help users understand the public package surfaces with
 
 ## Repo
 
-Work in:
-
-```sh
-~/Work/groundhog-protocol-ts
-```
+Work in the protocol-ts repository root.
 
 This is a private npm workspace monorepo with five published packages:
 

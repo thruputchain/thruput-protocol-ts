@@ -1,5 +1,7 @@
 # Test Decoupling Implementation Plan
 
+> **Archived 2026-10-11.** Internal planning document, last updated 2026-05-02. It describes the repository as it was then (package names, tooling, versions and workflows have since changed) and is kept only for history. See the top-level README for current information.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Decouple protocol package tests from the `protocol/*.x` submodule so upstream XDR changes don't break CI, and clean up dead wallet_kit.ts.
