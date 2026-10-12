@@ -97,7 +97,9 @@ jobs:
           git checkout -b "$BRANCH"
           git add -A
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
-          git push -f -u origin "$BRANCH"
+          git remote get-url origin
+          git config --show-origin --get-regexp '^url\..*\.insteadof$'
+          GIT_SSH_COMMAND="ssh -v" git push -f -u origin "$BRANCH"
 
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
           if [ -n "$EXISTING_PR" ]; then
