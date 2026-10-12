@@ -80,8 +80,8 @@ jobs:
         run: XDRC="$RUNNER_TEMP/x23c" ./scripts/generate.sh
 
       # A difference is either a hand edit to generated output or an x23c
-      # release newer than the one these files were generated with (see the
-      # x23c commit on line 2 of each file); either way, regenerate and commit.
+      # release newer than the one these files were generated with (each file
+      # names its x23c commit); either way, regenerate and commit.
       - name: Check generated code is fresh
         run: |
           if [ -n "$(git status --porcelain)" ]; then
