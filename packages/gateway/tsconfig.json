@@ -10,9 +10,9 @@
     "types": ["node"],
     "lib": ["ES2022", "DOM"],
     "paths": {
-      "@groundhogchain/xdr": ["../xdr/src/index.ts"],
-      "@groundhogchain/protocol": ["../protocol/src/index.ts"],
-      "@groundhogchain/rpc": ["../rpc/src/index.ts"]
+      "@thruputchain/xdr": ["../xdr/src/index.ts"],
+      "@thruputchain/protocol": ["../protocol/src/index.ts"],
+      "@thruputchain/rpc": ["../rpc/src/index.ts"]
     }
   },
   "include": ["src"],

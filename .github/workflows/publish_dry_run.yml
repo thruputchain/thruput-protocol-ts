@@ -16,6 +16,11 @@ jobs:
           cache: npm
           registry-url: "https://npm.pkg.github.com"
 
+      - name: Check package publishing credential
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.THRUPUT_PACKAGES_TOKEN }}
+        run: test -n "$NODE_AUTH_TOKEN" || { echo "Set THRUPUT_PACKAGES_TOKEN with write:packages access to thruputchain"; exit 1; }
+
       - run: npm ci
 
       - name: Validate versions match
@@ -44,7 +49,7 @@ jobs:
           for pkg in packages/*/package.json; do
             BAD=$(jq -r --arg v "$VERSION" \
               '.dependencies // {} | to_entries[]
-               | select(.key | startswith("@groundhogchain/"))
+               | select(.key | startswith("@thruputchain/"))
                | select(.value != $v)
                | "\(.key) pinned to \(.value)"' "$pkg")
             if [ -n "$BAD" ]; then
@@ -56,7 +61,7 @@ jobs:
           if [ "$FAIL" -ne 0 ]; then
             exit 1
           fi
-          echo "All internal @groundhogchain/* dependencies pinned to $VERSION"
+          echo "All internal @thruputchain/* dependencies pinned to $VERSION"
 
       # Mirror publish.yml's gate so the dry run exercises the same checks.
       - name: Typecheck
@@ -77,4 +82,4 @@ jobs:
       - name: Publish dry run
         run: npm publish --workspaces --dry-run
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.THRUPUT_PACKAGES_TOKEN }}

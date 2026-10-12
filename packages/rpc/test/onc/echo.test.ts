@@ -5,8 +5,8 @@
  * in-process, verifying the full codec → RPC → codec pipeline.
  */
 import { describe, it, expect } from "vitest";
-import { serialize, deserialize, XdrWriter, XdrReader } from "@groundhogchain/xdr";
-import type { XdrCodec, RpcProgramMeta } from "@groundhogchain/xdr";
+import { serialize, deserialize, XdrWriter, XdrReader } from "@thruputchain/xdr";
+import type { XdrCodec, RpcProgramMeta } from "@thruputchain/xdr";
 import { buildCallMessage, parseReplyMessage } from "../../src/onc/message.js";
 import { RpcClient, createRpcClient } from "../../src/onc/client.js";
 import type { RpcTransport } from "../../src/onc/transport.js";

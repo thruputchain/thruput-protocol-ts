@@ -1,13 +1,13 @@
 {
-  "name": "@groundhogchain/xdr",
-  "version": "0.14.0",
-  "description": "XDR/CXS serialization framework for Groundhog",
+  "name": "@thruputchain/xdr",
+  "version": "0.15.0",
+  "description": "XDR/CXS serialization framework for Thruput",
   "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/xdr#readme",
   "bugs": {
     "url": "https://github.com/groundhogchain/protocol-ts/issues"
   },
   "keywords": [
-    "groundhog",
+    "thruput",
     "blockchain",
     "xdr",
     "rfc4506",

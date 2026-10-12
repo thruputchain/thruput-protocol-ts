@@ -4,8 +4,8 @@ import path from "path";
 export default defineConfig({
   resolve: {
     alias: {
-      "@groundhogchain/xdr": path.resolve(__dirname, "../xdr/src/index.ts"),
-      "@groundhogchain/protocol": path.resolve(__dirname, "../protocol/src/index.ts"),
+      "@thruputchain/xdr": path.resolve(__dirname, "../xdr/src/index.ts"),
+      "@thruputchain/protocol": path.resolve(__dirname, "../protocol/src/index.ts"),
     },
   },
 });

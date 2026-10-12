@@ -17,7 +17,7 @@ Ask the user which bump type (patch, minor, major) if not specified.
 Current version: !`jq -r .version packages/xdr/package.json`
 
 1. Determine the new version from the current version and the bump type
-2. Update **every** `package.json` under `packages/` — both the top-level `version` field and any `@groundhogchain/*` entries in `dependencies`:
+2. Update **every** `package.json` under `packages/` — both the top-level `version` field and any `@thruputchain/*` entries in `dependencies`:
 
 ```bash
 for f in packages/*/package.json; do
@@ -25,7 +25,7 @@ for f in packages/*/package.json; do
     .version = $v |
     if .dependencies then
       .dependencies |= with_entries(
-        if .key | startswith("@groundhogchain/") then .value = $v else . end
+        if .key | startswith("@thruputchain/") then .value = $v else . end
       )
     else . end
   ' "$f" > tmp.json && mv tmp.json "$f"

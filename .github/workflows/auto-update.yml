@@ -42,6 +42,11 @@ jobs:
           git -C protocol fetch origin main
           git -C protocol checkout origin/main
 
+      - name: Setup Node for import normalization
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "24"
+
       - name: Download x23c
         run: |
           gh release download latest-x23c \

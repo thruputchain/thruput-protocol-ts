@@ -1,12 +1,12 @@
 import { describe, it, expectTypeOf } from "vitest";
-import { fixedArray, fixedBytes } from "@groundhogchain/xdr";
+import { fixedArray, fixedBytes } from "@thruputchain/xdr";
 import type {
   FixedBytes,
   FixedArray,
   VarBytes,
   VarArray,
   VarString,
-} from "@groundhogchain/xdr";
+} from "@thruputchain/xdr";
 import type {
   SHA256Hash,
   AddressAuthData,

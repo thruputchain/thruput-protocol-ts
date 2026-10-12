@@ -1,13 +1,13 @@
 {
-  "name": "@groundhogchain/gateway",
-  "version": "0.14.0",
-  "description": "Groundhog gateway and indexer protocol types",
+  "name": "@thruputchain/gateway",
+  "version": "0.15.0",
+  "description": "Thruput gateway and indexer protocol types",
   "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/gateway#readme",
   "bugs": {
     "url": "https://github.com/groundhogchain/protocol-ts/issues"
   },
   "keywords": [
-    "groundhog",
+    "thruput",
     "blockchain",
     "gateway",
     "indexer",
@@ -41,9 +41,9 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@groundhogchain/xdr": "0.14.0",
-    "@groundhogchain/protocol": "0.14.0",
-    "@groundhogchain/rpc": "0.14.0"
+    "@thruputchain/xdr": "0.15.0",
+    "@thruputchain/protocol": "0.15.0",
+    "@thruputchain/rpc": "0.15.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",

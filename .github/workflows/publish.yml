@@ -19,6 +19,11 @@ jobs:
           cache: npm
           registry-url: "https://npm.pkg.github.com"
 
+      - name: Check package publishing credential
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.THRUPUT_PACKAGES_TOKEN }}
+        run: test -n "$NODE_AUTH_TOKEN" || { echo "Set THRUPUT_PACKAGES_TOKEN with write:packages access to thruputchain"; exit 1; }
+
       - run: npm ci
 
       - name: Validate versions match
@@ -48,7 +53,7 @@ jobs:
           for pkg in packages/*/package.json; do
             BAD=$(jq -r --arg v "$VERSION" \
               '.dependencies // {} | to_entries[]
-               | select(.key | startswith("@groundhogchain/"))
+               | select(.key | startswith("@thruputchain/"))
                | select(.value != $v)
                | "\(.key) pinned to \(.value)"' "$pkg")
             if [ -n "$BAD" ]; then
@@ -60,7 +65,7 @@ jobs:
           if [ "$FAIL" -ne 0 ]; then
             exit 1
           fi
-          echo "All internal @groundhogchain/* dependencies pinned to $VERSION"
+          echo "All internal @thruputchain/* dependencies pinned to $VERSION"
 
       # Same gate as CI's `check` and `test` jobs — a release is dispatched
       # manually and can run on a commit CI never covered, so it re-verifies
@@ -118,4 +123,4 @@ jobs:
       - name: Publish packages
         run: npm publish --workspaces
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.THRUPUT_PACKAGES_TOKEN }}

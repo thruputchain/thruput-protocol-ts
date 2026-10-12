@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   serialize, deserialize,
-} from "@groundhogchain/xdr";
+} from "@thruputchain/xdr";
 import {
   testHash, TestHash,
   testEntrypointId, TestEntrypointId,

@@ -1,5 +1,5 @@
 {
-  "name": "@groundhogchain/protocol-ts",
+  "name": "@thruputchain/protocol-ts",
   "entryPoints": [
     "packages/xdr/src/index.ts",
     "packages/protocol/src/index.ts",

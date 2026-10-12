@@ -1,25 +1,25 @@
 # protocol-ts
 
-TypeScript bindings for the Groundhog blockchain protocol. This is an npm
-workspaces monorepo that publishes five `@groundhogchain/*` packages, generated
+TypeScript bindings for the Thruput blockchain protocol. This is an npm
+workspaces monorepo that publishes five `@thruputchain/*` packages, generated
 from the XDR definitions in the `protocol/` submodule.
 
 ## Packages
 
 | Package | Description | Depends on |
 |---|---|---|
-| `@groundhogchain/xdr` | XDR/CXS serialization framework | — |
-| `@groundhogchain/protocol` | Core protocol types | `xdr` |
-| `@groundhogchain/contract-spec` | Contract spec AST types | `xdr`, `protocol` |
-| `@groundhogchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
-| `@groundhogchain/gateway` | Gateway/indexer types | `xdr`, `protocol`, `rpc` |
+| `@thruputchain/xdr` | XDR/CXS serialization framework | — |
+| `@thruputchain/protocol` | Core protocol types | `xdr` |
+| `@thruputchain/contract-spec` | Contract spec AST types | `xdr`, `protocol` |
+| `@thruputchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
+| `@thruputchain/gateway` | Gateway/indexer types | `xdr`, `protocol`, `rpc` |
 
 All packages are published to GitHub Packages with `access: restricted`.
 
-Most application code should prefer `@groundhogchain/client`, which lives in
+Most application code should prefer `@thruputchain/client`, which lives in
 the separate [client-ts](https://github.com/groundhogchain/client-ts)
 repository and is published to the same GitHub Packages registry
-(`npm install @groundhogchain/client`, with the registry auth described in
+(`npm install @thruputchain/client`, with the registry auth described in
 that repo's README). These protocol packages are lower-level building blocks
 for serialization, generated protocol types, RPC access, contract specs, and
 gateway/indexer types.
@@ -28,12 +28,12 @@ gateway/indexer types.
 
 Import from the package barrels and documented subpaths:
 
-- `@groundhogchain/xdr`
-- `@groundhogchain/protocol`
-- `@groundhogchain/protocol/utils`
-- `@groundhogchain/contract-spec`
-- `@groundhogchain/rpc`
-- `@groundhogchain/gateway`
+- `@thruputchain/xdr`
+- `@thruputchain/protocol`
+- `@thruputchain/protocol/utils`
+- `@thruputchain/contract-spec`
+- `@thruputchain/rpc`
+- `@thruputchain/gateway`
 
 Avoid importing from generated files under `packages/*/src/protocol/` directly.
 Those files are implementation output from code generation and may be rewritten.
@@ -107,7 +107,7 @@ Building and testing from a clone needs nothing beyond npm. Regenerating does:
   published only as the `latest-x23c` release of that private repository.
 - The `Auto-update protocol` workflow runs on an internal runner with a deploy
   key and a GitHub App token.
-- The cross-SDK tests install `groundhog-test-vectors` from the private Cargo
+- The cross-SDK tests install `thruput-test-vectors` from the private Cargo
   registry.
 
 ## Protocol commit per release
@@ -120,6 +120,7 @@ the same commit.
 
 | Version | Protocol commit | Devnet bundles on the same commit |
 |---|---|---|
+| 0.15.0 (pending) | `cfcaf864` | — |
 | 0.14.0 | `6bfe776` | — |
 | 0.13.0 | `db436d0` | — |
 | 0.12.0 | `d2872e9` | 0.1.29-rc.1 |
@@ -134,3 +135,15 @@ Bump versions across all packages in lockstep (see the `bump-version` skill),
 add the new version to [Protocol commit per release](#protocol-commit-per-release),
 then publish. Inter-package `dependencies` versions must match the bumped
 version exactly, since publishes go to a private registry.
+
+## Publishing the renamed packages
+
+The `@thruputchain/*` packages use GitHub Packages. The source repositories
+remain in `groundhogchain`. Before release, configure `THRUPUT_PACKAGES_TOKEN`
+for these workflows with access to the new packages. Publishing requires a
+classic token with `write:packages`; installing requires `read:packages`.
+Do not reuse a repository's `GITHUB_TOKEN` across organizations.
+
+Publish the protocol packages first, then the client, then React. Keep the
+existing `@groundhogchain/*` releases intact. Downstream lockfiles must be
+refreshed against the published packages before their PRs merge.
