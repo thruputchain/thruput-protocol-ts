@@ -79,7 +79,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin git@github.com:groundhogchain/protocol-ts.git
+          git remote set-url origin git@github.com:thruputchain/protocol-ts.git
 
           git checkout -b "$BRANCH"
           git add -A

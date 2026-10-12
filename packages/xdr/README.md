@@ -28,5 +28,5 @@ rather than building codecs by hand.
 
 ## Documentation
 
-See the [protocol-ts repository](https://github.com/groundhogchain/protocol-ts)
+See the [protocol-ts repository](https://github.com/thruputchain/protocol-ts)
 for the full monorepo docs, codegen workflow, and API reference.

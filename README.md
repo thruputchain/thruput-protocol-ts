@@ -17,7 +17,7 @@ from the XDR definitions in the `protocol/` submodule.
 All packages are published to GitHub Packages with `access: restricted`.
 
 Most application code should prefer `@thruputchain/client`, which lives in
-the separate [client-ts](https://github.com/groundhogchain/client-ts)
+the separate [client-ts](https://github.com/thruputchain/client-ts)
 repository and is published to the same GitHub Packages registry
 (`npm install @thruputchain/client`, with the registry auth described in
 that repo's README). These protocol packages are lower-level building blocks
@@ -138,12 +138,13 @@ version exactly, since publishes go to a private registry.
 
 ## Publishing the renamed packages
 
-The `@thruputchain/*` packages use GitHub Packages. The source repositories
-remain in `groundhogchain`. Before release, configure `THRUPUT_PACKAGES_TOKEN`
-for these workflows with access to the new packages. Publishing requires a
-classic token with `write:packages`; installing requires `read:packages`.
-Do not reuse a repository's `GITHUB_TOKEN` across organizations.
+The `@thruputchain/*` packages publish to GitHub Packages from repositories in
+`thruputchain`. Release workflows use the repository's `GITHUB_TOKEN` with
+`packages: write`.
 
-Publish the protocol packages first, then the client, then React. Keep the
-existing `@groundhogchain/*` releases intact. Downstream lockfiles must be
-refreshed against the published packages before their PRs merge.
+Publish the protocol packages first, then the client, then React. Grant the
+client and React repositories Actions read access to the protocol packages,
+and grant React read access to the client package. Refresh downstream lockfiles
+from the published artifacts before merging their PRs.
+
+Existing `@groundhogchain/*` releases retain their original identities.

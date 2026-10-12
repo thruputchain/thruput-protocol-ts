@@ -2,9 +2,9 @@
   "name": "@thruputchain/contract-spec",
   "version": "0.15.0",
   "description": "Thruput contract specification AST types and XDR serialization",
-  "homepage": "https://github.com/groundhogchain/protocol-ts/tree/main/packages/contract-spec#readme",
+  "homepage": "https://github.com/thruputchain/protocol-ts/tree/main/packages/contract-spec#readme",
   "bugs": {
-    "url": "https://github.com/groundhogchain/protocol-ts/issues"
+    "url": "https://github.com/thruputchain/protocol-ts/issues"
   },
   "keywords": [
     "thruput",
@@ -52,7 +52,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/groundhogchain/protocol-ts.git",
+    "url": "git+https://github.com/thruputchain/protocol-ts.git",
     "directory": "packages/contract-spec"
   },
   "publishConfig": {
