@@ -33,6 +33,5 @@ done
 ```
 
 3. Run `npm install` to update `package-lock.json`
-4. Run `npm run codegen:check`; if it fails, the generated code does not match the pinned protocol commit, so stop and ask the user to regenerate first
-5. Add a row for `$NEW_VERSION` at the top of the "Protocol commit per release" table in `README.md`, using the short form of `jq -r .groundhog.protocolCommit packages/protocol/package.json`. List any devnet bundle versions whose `release-manifest.toml` in groundhogchain/packaging pins the same `[protocol] repository_commit`, or `—` if none (ask the user if you cannot check)
-6. Commit with message `v$NEW_VERSION`
+4. Add a row for `$NEW_VERSION` at the top of the "Protocol commit per release" table in `README.md`, using `git rev-parse --short=7 HEAD:protocol`. List any devnet bundle versions whose `release-manifest.toml` in groundhogchain/packaging pins the same `[protocol] repository_commit`, or `—` if none (ask the user if you cannot check)
+5. Commit with message `v$NEW_VERSION`

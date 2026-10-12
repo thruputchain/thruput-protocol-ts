@@ -65,9 +65,6 @@ jobs:
       # Same gate as CI's `check` and `test` jobs — a release is dispatched
       # manually and can run on a commit CI never covered, so it re-verifies
       # rather than trusting a green tick upstream.
-      - name: Codegen provenance
-        run: npm run codegen:check
-
       - name: Typecheck
         run: npm run typecheck
 

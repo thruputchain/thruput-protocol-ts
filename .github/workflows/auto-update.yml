@@ -37,11 +37,6 @@ jobs:
           submodules: recursive
           ssh-key: ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
-      # generate.sh records the protocol commit in package.json with node.
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        with:
-          node-version: "24"
-
       - name: Update protocol submodule to latest main
         run: |
           git -C protocol fetch origin main

@@ -20,12 +20,6 @@ jobs:
 
       - run: npm ci
 
-      # Cheap and credential-free: the generated sources and manifests must
-      # name the protocol commit the submodule is pinned to. codegen.yml does
-      # the full regenerate-and-diff on the internal runner.
-      - name: Codegen provenance
-        run: npm run codegen:check
-
       - name: Typecheck
         run: npm run typecheck
 

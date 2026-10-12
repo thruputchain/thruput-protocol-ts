@@ -7,7 +7,7 @@
 
 ## Verified Commands
 - Install with `npm ci` in CI and `npm install` locally.
-- Full verification order used in the publish workflow: `npm run codegen:check`, `npm run typecheck`, `npm run docs:check`, `npm run test`, `npm run build`, `npm run test:smoke`. Regular CI splits these across jobs (codegen:check, typecheck, docs:check, build in one; test, build, test:smoke in another).
+- Full verification order used in the publish workflow: `npm run typecheck`, `npm run docs:check`, `npm run test`, `npm run build`, `npm run test:smoke`. Regular CI splits these across jobs (typecheck, docs:check, build in one; test, build, test:smoke in another).
 - Run one workspace from the repo root with `npm run <script> --workspace @groundhogchain/<pkg>`.
 - Cross-SDK tests are separate from the normal workspace test run: `cd packages/protocol && npx vitest run test/cross-sdk/`.
 
@@ -18,7 +18,7 @@
 ## Codegen And Generated Files
 - The `protocol/` directory is a git submodule (`git submodule update --init` if it is missing).
 - Regenerate with `XDRC=/path/to/x23c ./scripts/generate.sh` (`XDRC` is required). x23c is built from `x23/x23c` in groundhogchain/hogd and published as that repo's `latest-x23c` release.
-- `generate.sh` writes `groundhog.protocolCommit` into the `protocol`, `contract-spec`, `rpc`, and `gateway` manifests. Never hand-edit generated files or that field; `npm run codegen:check` (in CI) verifies it against the submodule pointer, and the `Codegen` workflow regenerates and diffs.
+- Never hand-edit generated files; the `Codegen` workflow regenerates and diffs.
 - `scripts/generate.sh` overwrites generated files in `packages/protocol/src/protocol/*.ts`, `packages/contract-spec/src/protocol/*.ts`, `packages/rpc/src/protocol/*.ts`, `packages/gateway/src/protocol/*.ts`, plus these fixtures: `packages/rpc/test/fixtures/echo.ts`, `packages/protocol/test/fixtures/test_base.ts`, and `packages/protocol/test/fixtures/test_compound.ts`.
 - The package `src/index.ts` files and the `src/protocol/index.ts` barrels are hand-maintained. When adding a new `.x` file, update both `scripts/generate.sh` and the matching barrel manually.
 - `packages/contract-spec/src/protocol/index.ts` intentionally does not `export *` from `@groundhogchain/protocol`; it only re-exports the narrow protocol symbols needed to avoid name collisions like `ContractType`.

@@ -59,9 +59,6 @@ jobs:
           echo "All internal @groundhogchain/* dependencies pinned to $VERSION"
 
       # Mirror publish.yml's gate so the dry run exercises the same checks.
-      - name: Codegen provenance
-        run: npm run codegen:check
-
       - name: Typecheck
         run: npm run typecheck
 

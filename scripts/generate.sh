@@ -15,13 +15,6 @@ fi
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
-# package.json records the protocol commit, so the inputs must be exactly that commit.
-if [[ -n $(git -C protocol status --porcelain) ]]; then
-  echo "error: protocol/ has uncommitted changes; commit them in the submodule first" >&2
-  exit 1
-fi
-PROTOCOL_COMMIT=$(git -C protocol rev-parse HEAD)
-
 core_protos=(
   types.x db_conflict.x contract.x exec_result.x event.x genesis.x transaction.x
   retrocausal_queue.x storage_cost.x network_config.x syscall_error.x auth_claim.x
@@ -74,16 +67,5 @@ fi
 # cross-type refs resolve through the hand-written index.ts barrel)
 $XDRC --ts -o "packages/protocol/test/fixtures/test_base.ts" "packages/protocol/test/fixtures/test_base.x"
 $XDRC --ts -o "packages/protocol/test/fixtures/test_compound.ts" "packages/protocol/test/fixtures/test_compound.x"
-
-# Record the protocol commit in each package that ships generated code.
-for pkg in protocol contract-spec rpc gateway; do
-  PROTOCOL_COMMIT=$PROTOCOL_COMMIT node -e '
-    const fs = require("fs");
-    const path = process.argv[1];
-    const manifest = JSON.parse(fs.readFileSync(path, "utf8"));
-    manifest.groundhog = { protocolCommit: process.env.PROTOCOL_COMMIT };
-    fs.writeFileSync(path, JSON.stringify(manifest, null, 2) + "\n");
-  ' "packages/${pkg}/package.json"
-done
 
 echo "-- Done --" >&2

@@ -46,7 +46,6 @@ packages/<name>/
   src/protocol/*.ts     # generated from protocol/*.x
 protocol/               # git submodule: upstream XDR definitions
 scripts/generate.sh     # regenerates *.ts from *.x via the x23c compiler
-scripts/check-codegen-provenance.sh  # checks generated code names the pinned protocol commit
 docs/archive/           # historical planning docs, not maintained
 ```
 
@@ -97,22 +96,9 @@ Generation also updates the generated test fixtures noted in
 and `packages/protocol/src/utils/index.ts` are the intended import surfaces and
 are not overwritten by the generator.
 
-The generated files are committed and must not be edited by hand. The
-generator also writes the protocol commit into the `package.json` of each
-package that ships generated code (`protocol`, `contract-spec`, `rpc`,
-`gateway`), so an installed package records what it encodes:
-
-```json
-"groundhog": { "protocolCommit": "<protocol commit>" }
-```
-
-Two checks keep this honest:
-
-- `npm run codegen:check` (run by CI and the publish workflows) fails if the
-  manifests name a different protocol commit than the submodule is pinned to. It needs neither x23c nor the submodule.
-- The `Codegen` workflow regenerates on every change to generated code, the
-  submodule, or the generator, and fails if the output differs from what is
-  committed.
+The generated files are committed and must not be edited by hand. The `Codegen`
+workflow regenerates on every change to generated code, the submodule, or the
+generator, and fails if the output differs from what is committed.
 
 ### What needs org access
 
@@ -123,15 +109,14 @@ Building and testing from a clone needs nothing beyond npm. Regenerating does:
   published only as the `latest-x23c` release of that private repository.
 - The `Codegen` and `Auto-update protocol` workflows run on an internal runner
   with a deploy key and a GitHub App token, so they are skipped for pull
-  requests from forks. `npm run codegen:check` still runs there.
+  requests from forks.
 - The cross-SDK tests install `groundhog-test-vectors` from the private Cargo
   registry.
 
 ## Protocol commit per release
 
-Each published version is generated from exactly one protocol commit. From
-the next release on it is recorded in the package manifest (above); for any tag,
-`git rev-parse <tag>:protocol` gives it. Devnet bundles are the releases cut
+Each published version is generated from exactly one protocol commit;
+`git rev-parse <tag>:protocol` gives it for any tag. Devnet bundles are the releases cut
 from `groundhogchain/packaging`, whose `release-manifest.toml` pins a protocol
 commit; a bundle and a package version encode the same protocol when they pin
 the same commit.
