@@ -8,7 +8,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: auto-update-protocol
+  group: qualification-private-app-updater-5292764
   cancel-in-progress: true
 
 jobs:
@@ -75,7 +75,7 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         run: |
           PROTOCOL_SHA=$(git -C protocol rev-parse --short=7 HEAD)
-          BRANCH="auto-update/protocol"
+          BRANCH="qualification/private-app-updater-5292764-generated"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -91,12 +91,14 @@ jobs:
             echo "Updated existing PR: $EXISTING_PR"
           else
             gh pr create \
+              --draft \
+              --base "qualification/private-app-updater-5292764-base" \
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" || true
+          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}"
           fi
 
-          gh pr merge "$BRANCH" --auto --squash
+          echo "Qualification PR remains a draft; auto-merge is disabled."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
