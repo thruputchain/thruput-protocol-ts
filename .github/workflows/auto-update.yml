@@ -31,24 +31,11 @@ jobs:
             ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
             ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
-      - name: Route pushes through the repository write key
-        run: |
-          # The retained write key still has the repository's pre-transfer comment.
-          SELF_KEY_URL=$(git config --global --get-regexp '^url\..*\.insteadof$' |
-            awk '$2 == "git@github.com:groundhogchain/protocol-ts" {
-              sub(/^url\./, "", $1); sub(/\.insteadof$/, "", $1); print $1; exit
-            }')
-          test -n "$SELF_KEY_URL"
-          git config --global \
-            url."${SELF_KEY_URL%:*}:thruputchain/thruput-protocol-ts".insteadOf \
-            git@github.com:thruputchain/thruput-protocol-ts
-
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           submodules: recursive
-          # SSH agent mappings handle private submodules and the later push.
-          persist-credentials: false
+          ssh-key: ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
       - name: Update protocol submodule to latest main
         run: |
@@ -97,9 +84,7 @@ jobs:
           git checkout -b "$BRANCH"
           git add -A
           git commit -m "bump to protocol@${PROTOCOL_SHA}"
-          git remote get-url origin
-          git config --show-origin --get-regexp '^url\..*\.insteadof$'
-          GIT_SSH_COMMAND="ssh -v" git push -f -u origin "$BRANCH"
+          git push -f -u origin "$BRANCH"
 
           EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
           if [ -n "$EXISTING_PR" ]; then
