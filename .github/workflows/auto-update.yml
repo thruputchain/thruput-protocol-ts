@@ -15,30 +15,34 @@ jobs:
   update:
     runs-on: namespace-profile-hogd-linux
     steps:
-      - name: Generate hogd read token
-        id: hogd-token
+      - name: Generate protocol inputs read token
+        id: inputs-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
-          owner: groundhogchain
-          repositories: hogd
+          owner: thruputchain
+          repositories: hogd,thruput-protocol
+          permission-contents: read
 
       - name: Setup SSH Agent
         uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
-          ssh-private-key: |
-            ${{ secrets.PROTOCOL_DEPLOY_SECRET_KEY }}
-            ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
+          ssh-private-key: ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
-          submodules: recursive
           ssh-key: ${{ secrets.PROT_TS_TO_SELF_WRITE_KEY }}
 
       - name: Update protocol submodule to latest main
+        env:
+          GH_TOKEN: ${{ steps.inputs-token.outputs.token }}
         run: |
+          git config --global \
+            url."https://x-access-token:${GH_TOKEN}@github.com/thruputchain/thruput-protocol.git".insteadOf \
+            "https://github.com/thruputchain/thruput-protocol.git"
+          git submodule update --init protocol
           git -C protocol fetch origin main
           git -C protocol checkout origin/main
 
@@ -50,12 +54,12 @@ jobs:
       - name: Download x23c
         run: |
           gh release download latest-x23c \
-            --repo groundhogchain/hogd \
+            --repo thruputchain/hogd \
             --pattern 'x23c-linux-x86_64.tar.gz'
           tar xzf x23c-linux-x86_64.tar.gz
           chmod +x x23c
         env:
-          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
+          GH_TOKEN: ${{ steps.inputs-token.outputs.token }}
 
       - name: Regenerate
         run: XDRC=./x23c ./scripts/generate.sh
@@ -94,7 +98,7 @@ jobs:
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}" || true
+          Protocol: thruputchain/thruput-protocol@${PROTOCOL_SHA}" || true
           fi
 
           gh pr merge "$BRANCH" --auto --squash
