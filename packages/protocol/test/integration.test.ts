@@ -76,6 +76,7 @@ describe("end-to-end: build and round-trip a SignedTransaction", () => {
           },
         },
       ],
+      pubkey_claim_key: null,
     };
 
     const bytes = serialize(stx, codec.SignedTransaction);
