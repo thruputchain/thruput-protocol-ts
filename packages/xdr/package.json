@@ -1,6 +1,6 @@
 {
   "name": "@thruputchain/xdr",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "XDR/CXS serialization framework for Thruput",
   "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/xdr#readme",
   "bugs": {
