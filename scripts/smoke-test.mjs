@@ -19,6 +19,10 @@ const packagesDir = new URL("packages/", root);
 const failures = [];
 let checked = 0;
 const requiredExports = {
+  "@thruputchain/protocol": {
+    ".": ["toBase58", "fromBase58", "maxBase58Length"],
+    "./utils": ["toBase58", "fromBase58", "maxBase58Length"],
+  },
   "@thruputchain/xdr": {
     ".": ["Uint8Codec", "FixedOpaqueCodec", "VarOpaqueCodec"],
   },
