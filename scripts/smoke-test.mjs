@@ -19,6 +19,10 @@ const packagesDir = new URL("packages/", root);
 const failures = [];
 let checked = 0;
 const requiredExports = {
+  "@thruputchain/protocol": {
+    ".": ["toBase58", "fromBase58", "maxBase58Length"],
+    "./utils": ["toBase58", "fromBase58", "maxBase58Length"],
+  },
   "@thruputchain/xdr": {
     ".": ["Uint8Codec", "FixedOpaqueCodec", "VarOpaqueCodec"],
   },
@@ -53,6 +57,16 @@ for (const dir of readdirSync(fileURLToPath(packagesDir)).sort()) {
         for (const name of requiredExports[pkg.name]?.[subpath] ?? []) {
           if (!names.includes(name)) {
             failures.push(`${label}: missing ${name}`);
+          }
+        }
+        if (pkg.name === "@thruputchain/protocol") {
+          const bytes = mod.fromBase58("119p", 4);
+          if (
+            bytes.length !== 4 ||
+            !bytes.every((byte, index) => byte === [0, 0, 1, 255][index]) ||
+            mod.toBase58(bytes) !== "119p"
+          ) {
+            failures.push(`${label}: base58 utilities returned incorrect values`);
           }
         }
         if (

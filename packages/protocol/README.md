@@ -5,6 +5,10 @@ XDR definitions in the protocol repository. Includes transactions,
 invocations, events, and the merged `codec` namespace, plus utility helpers
 under `@thruputchain/protocol/utils`.
 
+The utility entrypoint provides hex and base58 byte conversion. Base58 decoding
+requires an explicit maximum byte length. RPC field rules, fixed identifier
+widths, and human StrKey input belong to `@thruputchain/client`.
+
 ## Install
 
 ```sh

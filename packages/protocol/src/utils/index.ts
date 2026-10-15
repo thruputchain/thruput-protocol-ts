@@ -1,7 +1,7 @@
 /**
  * Utility helpers for working with Thruput protocol values.
  *
- * This subpath exposes hexadecimal encoding without importing the full
+ * This subpath exposes hex and base58 encoding without importing the full
  * protocol barrel.
  *
  * Derivations built on protocol types — transaction hashes, contract
@@ -15,3 +15,4 @@
  */
 
 export { toHex, fromHex } from "./hex.js";
+export { toBase58, fromBase58, maxBase58Length } from "./base58.js";
