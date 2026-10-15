@@ -73,6 +73,7 @@ function makeTxInfo(): TxInfo {
             },
           },
         ],
+        pubkey_claim_key: null,
       },
       nondeterministic_proposal_data: {
         nondeterministic_bits: new Uint8Array([0b1010]),

@@ -58,17 +58,41 @@ export function ed25519SecretKey(data: Uint8Array): Ed25519SecretKey {
   return data as Ed25519SecretKey;
 }
 
+/** XDR: `typedef opaque MlDsa65Signature[3309]` — exactly 3309 bytes. */
+export type MlDsa65Signature = FixedBytes<3309> & { readonly __brand: { readonly MlDsa65Signature: true } };
+export function mlDsa65Signature(data: Uint8Array): MlDsa65Signature {
+  if (data.length !== 3309) throw new Error(`MlDsa65Signature must be exactly 3309 bytes, got ${data.length}`);
+  return data as MlDsa65Signature;
+}
+
+/** XDR: `typedef opaque MlDsa65PublicKey[1952]` — exactly 1952 bytes. */
+export type MlDsa65PublicKey = FixedBytes<1952> & { readonly __brand: { readonly MlDsa65PublicKey: true } };
+export function mlDsa65PublicKey(data: Uint8Array): MlDsa65PublicKey {
+  if (data.length !== 1952) throw new Error(`MlDsa65PublicKey must be exactly 1952 bytes, got ${data.length}`);
+  return data as MlDsa65PublicKey;
+}
+
 export enum CryptographicScheme {
   Ed25519 = 0,
+  MlDsa65 = 1,
 }
 
 export type Signature =
   | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519Signature }
+  | { scheme: proto.CryptographicScheme.MlDsa65; mldsa65: proto.MlDsa65Signature }
 ;
 
 export type PublicKey =
   | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519PublicKey }
+  | { scheme: proto.CryptographicScheme.MlDsa65; mldsa65: proto.MlDsa65PublicKey }
 ;
+
+/** XDR: `typedef opaque PublicKeyHash[32]` — exactly 32 bytes. */
+export type PublicKeyHash = FixedBytes<32> & { readonly __brand: { readonly PublicKeyHash: true } };
+export function publicKeyHash(data: Uint8Array): PublicKeyHash {
+  if (data.length !== 32) throw new Error(`PublicKeyHash must be exactly 32 bytes, got ${data.length}`);
+  return data as PublicKeyHash;
+}
 
 export type SecretKey =
   | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519SecretKey }
@@ -240,6 +264,16 @@ const _Ed25519SecretKey: XdrCodec<Ed25519SecretKey> = {
   decode(r) { return ed25519SecretKey(r.readFixedOpaque(64)); },
 };
 
+const _MlDsa65Signature: XdrCodec<MlDsa65Signature> = {
+  encode(w, val) { w.writeFixedOpaque(val, 3309); },
+  decode(r) { return mlDsa65Signature(r.readFixedOpaque(3309)); },
+};
+
+const _MlDsa65PublicKey: XdrCodec<MlDsa65PublicKey> = {
+  encode(w, val) { w.writeFixedOpaque(val, 1952); },
+  decode(r) { return mlDsa65PublicKey(r.readFixedOpaque(1952)); },
+};
+
 const _CryptographicScheme: XdrCodec<CryptographicScheme> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as CryptographicScheme; },
@@ -252,6 +286,9 @@ const _Signature: XdrCodec<Signature> = {
       case proto.CryptographicScheme.Ed25519:
         proto.codec.Ed25519Signature.encode(w, val.ed25519);
         break;
+      case proto.CryptographicScheme.MlDsa65:
+        proto.codec.MlDsa65Signature.encode(w, val.mldsa65);
+        break;
     }
   },
   decode(r) {
@@ -260,6 +297,9 @@ const _Signature: XdrCodec<Signature> = {
       case proto.CryptographicScheme.Ed25519:
         const ed25519 = proto.codec.Ed25519Signature.decode(r);
         return { scheme, ed25519 };
+      case proto.CryptographicScheme.MlDsa65:
+        const mldsa65 = proto.codec.MlDsa65Signature.decode(r);
+        return { scheme, mldsa65 };
       default:
         throw new Error(`Unknown Signature discriminant: ${scheme}`);
     }
@@ -273,6 +313,9 @@ const _PublicKey: XdrCodec<PublicKey> = {
       case proto.CryptographicScheme.Ed25519:
         proto.codec.Ed25519PublicKey.encode(w, val.ed25519);
         break;
+      case proto.CryptographicScheme.MlDsa65:
+        proto.codec.MlDsa65PublicKey.encode(w, val.mldsa65);
+        break;
     }
   },
   decode(r) {
@@ -281,10 +324,18 @@ const _PublicKey: XdrCodec<PublicKey> = {
       case proto.CryptographicScheme.Ed25519:
         const ed25519 = proto.codec.Ed25519PublicKey.decode(r);
         return { scheme, ed25519 };
+      case proto.CryptographicScheme.MlDsa65:
+        const mldsa65 = proto.codec.MlDsa65PublicKey.decode(r);
+        return { scheme, mldsa65 };
       default:
         throw new Error(`Unknown PublicKey discriminant: ${scheme}`);
     }
   },
+};
+
+const _PublicKeyHash: XdrCodec<PublicKeyHash> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return publicKeyHash(r.readFixedOpaque(32)); },
 };
 
 const _SecretKey: XdrCodec<SecretKey> = {
@@ -451,9 +502,12 @@ export const codec = {
   Ed25519Signature: _Ed25519Signature,
   Ed25519PublicKey: _Ed25519PublicKey,
   Ed25519SecretKey: _Ed25519SecretKey,
+  MlDsa65Signature: _MlDsa65Signature,
+  MlDsa65PublicKey: _MlDsa65PublicKey,
   CryptographicScheme: _CryptographicScheme,
   Signature: _Signature,
   PublicKey: _PublicKey,
+  PublicKeyHash: _PublicKeyHash,
   SecretKey: _SecretKey,
   ExtensionPoint: _ExtensionPoint,
   SHA256Hash: _SHA256Hash,

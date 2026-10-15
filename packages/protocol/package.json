@@ -1,6 +1,6 @@
 {
   "name": "@thruputchain/protocol",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Thruput blockchain protocol types and XDR serialization",
   "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/protocol#readme",
   "bugs": {
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@scure/base": "2.0.0",
-    "@thruputchain/xdr": "0.15.0",
+    "@thruputchain/xdr": "0.16.0",
     "@noble/hashes": "2.2.0"
   },
   "devDependencies": {

@@ -66,6 +66,7 @@ export interface SignedTransaction {
   tx: proto.Transaction;
   /** XDR: `DecoratedSignature signatures<>`. */
   signatures: proto.DecoratedSignature[];
+  pubkey_claim_key: proto.PublicKey | null;
 }
 
 /** XDR: `typedef Transaction TransactionBatch<>`. */
@@ -236,11 +237,13 @@ const _SignedTransaction: XdrCodec<SignedTransaction> = {
   encode(w, val) {
     proto.codec.Transaction.encode(w, val.tx);
     VarArrayCodec(proto.codec.DecoratedSignature, Number(0xFFFFFFFF)).encode(w, val.signatures);
+    OptionCodec(proto.codec.PublicKey as XdrCodec<proto.PublicKey>).encode(w, val.pubkey_claim_key);
   },
   decode(r) {
     const tx = proto.codec.Transaction.decode(r);
     const signatures = VarArrayCodec(proto.codec.DecoratedSignature, Number(0xFFFFFFFF)).decode(r);
-    return { tx, signatures };
+    const pubkey_claim_key = OptionCodec(proto.codec.PublicKey as XdrCodec<proto.PublicKey>).decode(r);
+    return { tx, signatures, pubkey_claim_key };
   },
 };
 

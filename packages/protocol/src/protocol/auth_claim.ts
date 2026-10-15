@@ -36,7 +36,7 @@ export enum AuthClaimType {
 }
 
 export interface PubkeyAccountPreimage {
-  pubkey: proto.PublicKey;
+  pubkey_hash: proto.PublicKeyHash;
   nonce: bigint;
 }
 
@@ -83,13 +83,13 @@ const _AuthClaimType: XdrCodec<AuthClaimType> = {
 
 const _PubkeyAccountPreimage: XdrCodec<PubkeyAccountPreimage> = {
   encode(w, val) {
-    proto.codec.PublicKey.encode(w, val.pubkey);
+    proto.codec.PublicKeyHash.encode(w, val.pubkey_hash);
     w.writeUint64(val.nonce);
   },
   decode(r) {
-    const pubkey = proto.codec.PublicKey.decode(r);
+    const pubkey_hash = proto.codec.PublicKeyHash.decode(r);
     const nonce = r.readUint64();
-    return { pubkey, nonce };
+    return { pubkey_hash, nonce };
   },
 };
 
