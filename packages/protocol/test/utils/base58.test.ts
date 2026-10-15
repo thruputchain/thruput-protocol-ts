@@ -31,11 +31,22 @@ describe("base58", () => {
       Number.MAX_SAFE_INTEGER,
     );
     for (const limit of [-1, NaN, Infinity, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
-      expect(() => fromBase58("", limit)).toThrow();
+      expect(() => fromBase58("", limit)).toThrow(
+        new RangeError("Byte limit must be a nonnegative safe integer"),
+      );
     }
-    expect(() => fromBase58("1", 0)).toThrow();
-    expect(() => fromBase58("1".repeat(33), 32)).toThrow();
-    expect(() => fromBase58("z".repeat(46), 32)).toThrow();
+    for (const [text, limit] of [
+      ["1", 0],
+      ["1".repeat(33), 32], // Leading zeros exceed the decoded limit.
+      ["z".repeat(44), 32], // Nonzero bytes exceed it despite passing the text bound.
+      ["z".repeat(46), 32], // Rejected by the text bound before decoding.
+    ] as const) {
+      expect(() => fromBase58(text, limit)).toThrow(
+        new Error("Base58 value exceeds byte limit"),
+      );
+    }
+    expect(fromBase58("", 32)).toEqual(new Uint8Array());
+    expect(fromBase58("2", 32)).toEqual(Uint8Array.of(1));
   });
 
   it.each([
@@ -51,9 +62,20 @@ describe("base58", () => {
     "é",
     "１",
     "0x01",
+    "secret:do-not-echo",
   ])("rejects invalid text without echoing it: %s", (text) => {
-    expect(() => fromBase58(text, 32)).toThrow("Invalid base58 encoding");
+    expect(() => fromBase58(text, 32)).toThrow(
+      new Error("Invalid base58 encoding"),
+    );
   });
+
+  it.each([null, undefined, 1, {}, new Uint8Array()])(
+    "rejects non-string input from JavaScript callers: %s",
+    (text) => {
+      // @ts-expect-error Exercise the runtime boundary for JavaScript callers.
+      expect(() => fromBase58(text, 32)).toThrow(new TypeError("Expected base58 text"));
+    },
+  );
 
   it("is case sensitive and does not interpret alphabet-valid text as hex", () => {
     expect(fromBase58("ff", 2)).toEqual(Uint8Array.of(8, 194));
