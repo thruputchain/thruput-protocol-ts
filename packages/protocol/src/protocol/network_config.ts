@@ -22,6 +22,7 @@ export enum ConfigParamID {
   kConfigParamMaxAuthTokens = 10,
   kConfigParamMaxCalldataLen = 11,
   kConfigParamMaxReturnBufferLen = 12,
+  kConfigParamMaxTxGas = 13,
 }
 
 export type ConfigParam =
@@ -38,6 +39,7 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxAuthTokens; max_auth_tokens: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxCalldataLen; max_calldata_len: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxReturnBufferLen; max_return_buffer_len: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxTxGas; max_tx_gas: proto.GasAmount }
 ;
 
 export interface NetworkConfigV0 {
@@ -108,6 +110,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxReturnBufferLen:
         w.writeUint32(val.max_return_buffer_len);
         break;
+      case proto.ConfigParamID.kConfigParamMaxTxGas:
+        proto.codec.GasAmount.encode(w, val.max_tx_gas);
+        break;
     }
   },
   decode(r) {
@@ -152,6 +157,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
       case proto.ConfigParamID.kConfigParamMaxReturnBufferLen:
         const max_return_buffer_len = r.readUint32();
         return { param, max_return_buffer_len };
+      case proto.ConfigParamID.kConfigParamMaxTxGas:
+        const max_tx_gas = proto.codec.GasAmount.decode(r);
+        return { param, max_tx_gas };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
