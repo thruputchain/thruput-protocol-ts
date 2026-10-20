@@ -156,6 +156,8 @@ export enum IndexerQueryOutcome {
   IndexerQueryOk = 0,
   IndexerQueryNotReady = 1,
   IndexerQueryInternalFailure = 2,
+  IndexerQueryInvalidCursor = 3,
+  IndexerQueryHistoryUnavailable = 4,
 }
 
 export type EventPageResult =
