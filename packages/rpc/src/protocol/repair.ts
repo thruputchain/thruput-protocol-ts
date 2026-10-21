@@ -9,8 +9,8 @@ import * as proto from "./index.js";
 
 
 export interface MissingTransactions {
-  /** XDR: `TransactionHash transaction_hashes<>`. */
-  transaction_hashes: proto.TransactionHash[];
+  /** XDR: `SignedTransactionHash signed_tx_hashes<>`. */
+  signed_tx_hashes: proto.SignedTransactionHash[];
   consensus_value: proto.ConsensusValue;
 }
 
@@ -33,13 +33,13 @@ export interface RepairedTransactions {
 
 const _MissingTransactions: XdrCodec<MissingTransactions> = {
   encode(w, val) {
-    VarArrayCodec(proto.codec.TransactionHash, Number(0xFFFFFFFF)).encode(w, val.transaction_hashes);
+    VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.signed_tx_hashes);
     proto.codec.ConsensusValue.encode(w, val.consensus_value);
   },
   decode(r) {
-    const transaction_hashes = VarArrayCodec(proto.codec.TransactionHash, Number(0xFFFFFFFF)).decode(r);
+    const signed_tx_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
     const consensus_value = proto.codec.ConsensusValue.decode(r);
-    return { transaction_hashes, consensus_value };
+    return { signed_tx_hashes, consensus_value };
   },
 };
 

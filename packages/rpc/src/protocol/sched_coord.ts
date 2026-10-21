@@ -53,7 +53,7 @@ export interface SchedulerValidationBlock {
 
 export type SchedulerValidationResult =
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationOK; block: proto.SchedulerValidationBlock }
-  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs; missing_tx_hashes: proto.TransactionHash[] }
+  | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs; missing_signed_tx_hashes: proto.SignedTransactionHash[] }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationDbFailed }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed }
   | { outcome: proto.SchedulerValidationOutcome.SchedulerValidationInvalid }
@@ -251,7 +251,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
         proto.codec.SchedulerValidationBlock.encode(w, val.block);
         break;
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
-        VarArrayCodec(proto.codec.TransactionHash, Number(0xFFFFFFFF)).encode(w, val.missing_tx_hashes);
+        VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).encode(w, val.missing_signed_tx_hashes);
         break;
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:
@@ -269,8 +269,8 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
         const block = proto.codec.SchedulerValidationBlock.decode(r);
         return { outcome, block };
       case proto.SchedulerValidationOutcome.SchedulerValidationMissingTxs:
-        const missing_tx_hashes = VarArrayCodec(proto.codec.TransactionHash, Number(0xFFFFFFFF)).decode(r);
-        return { outcome, missing_tx_hashes };
+        const missing_signed_tx_hashes = VarArrayCodec(proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)).decode(r);
+        return { outcome, missing_signed_tx_hashes };
       case proto.SchedulerValidationOutcome.SchedulerValidationDbFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationExecutorFailed:
       case proto.SchedulerValidationOutcome.SchedulerValidationInvalid:
@@ -497,7 +497,7 @@ export const SchedulerCoordProgram: RpcProgramMeta = {
     schedcoord_get_tip: { proc: 7, request: () => VoidCodec, response: () => _SchedulerGetTipResult },
     schedcoord_load_genesis_configuration: { proc: 8, request: () => proto.codec.GenesisConfiguration as XdrCodec<proto.GenesisConfiguration>, response: () => proto.codec.DbSchedResult as XdrCodec<proto.DbSchedResult> },
     schedulercoord_commit_genesis_ceremony: { proc: 10, request: () => _GenesisCeremonyRequest, response: () => _GenesisCeremonyResult },
-    schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
+    schedcoord_lookup_transactions: { proc: 100, request: () => proto.codec.SignedTransactionHashBatch as XdrCodec<proto.SignedTransactionHashBatch>, response: () => proto.codec.OptSignedTransactionBatch as XdrCodec<proto.OptSignedTransactionBatch> },
     schedcoord_lookup_transaction_outcomes: { proc: 101, request: () => proto.codec.TransactionHashBatch as XdrCodec<proto.TransactionHashBatch>, response: () => _SchedulerTransactionOutcomeBatch },
   },
 };

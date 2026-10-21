@@ -22,9 +22,9 @@ export function parallelSignedTransactionBatch(val: proto.ParallelBatch): Parall
   return val as ParallelSignedTransactionBatch;
 }
 
-export type ParallelTransactionHashBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelTransactionHashBatch: true } }) | Extract<proto.ParallelBatch, null>;
-export function parallelTransactionHashBatch(val: proto.ParallelBatch): ParallelTransactionHashBatch {
-  return val as ParallelTransactionHashBatch;
+export type ParallelSignedTransactionHashBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelSignedTransactionHashBatch: true } }) | Extract<proto.ParallelBatch, null>;
+export function parallelSignedTransactionHashBatch(val: proto.ParallelBatch): ParallelSignedTransactionHashBatch {
+  return val as ParallelSignedTransactionHashBatch;
 }
 
 export type ParallelNondeterministicProposalDataBatch = (NonNullable<proto.ParallelBatch> & { readonly __brand: { readonly ParallelNondeterministicProposalDataBatch: true } }) | Extract<proto.ParallelBatch, null>;
@@ -60,9 +60,9 @@ const _ParallelSignedTransactionBatch: XdrCodec<ParallelSignedTransactionBatch> 
   decode(r) { return parallelSignedTransactionBatch(proto.codec.ParallelBatch.decode(r)); },
 };
 
-const _ParallelTransactionHashBatch: XdrCodec<ParallelTransactionHashBatch> = {
+const _ParallelSignedTransactionHashBatch: XdrCodec<ParallelSignedTransactionHashBatch> = {
   encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },
-  decode(r) { return parallelTransactionHashBatch(proto.codec.ParallelBatch.decode(r)); },
+  decode(r) { return parallelSignedTransactionHashBatch(proto.codec.ParallelBatch.decode(r)); },
 };
 
 const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterministicProposalDataBatch> = {
@@ -73,7 +73,7 @@ const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterminis
 export const codec = {
   ParallelBatch: _ParallelBatch,
   ParallelSignedTransactionBatch: _ParallelSignedTransactionBatch,
-  ParallelTransactionHashBatch: _ParallelTransactionHashBatch,
+  ParallelSignedTransactionHashBatch: _ParallelSignedTransactionHashBatch,
   ParallelNondeterministicProposalDataBatch: _ParallelNondeterministicProposalDataBatch,
 } as const;
 
