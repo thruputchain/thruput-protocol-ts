@@ -108,11 +108,6 @@ export type IntroAuthResult =
 ;
 
 
-export interface mempoolauth_auth_data_changed_args {
-  arg0: proto.BlockHeight;
-  arg1: proto.KeyChangeBatch;
-}
-
 
 //
 // XDR Codecs below this point
@@ -313,18 +308,6 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
   },
 };
 
-const _mempoolauth_auth_data_changed_args: XdrCodec<mempoolauth_auth_data_changed_args> = {
-  encode(w, val) {
-    proto.codec.BlockHeight.encode(w, val.arg0);
-    proto.codec.KeyChangeBatch.encode(w, val.arg1);
-  },
-  decode(r) {
-    const arg0 = proto.codec.BlockHeight.decode(r);
-    const arg1 = proto.codec.KeyChangeBatch.decode(r);
-    return { arg0, arg1 };
-  },
-};
-
 export const codec = {
   AuthErrorCode: _AuthErrorCode,
   AuthErrorCodeBatch: _AuthErrorCodeBatch,
@@ -373,7 +356,7 @@ export const MempoolAuthProgram: RpcProgramMeta = {
   version: 1,
   methods: {
     mempoolauth_intro_auth: { proc: 0, request: () => proto.codec.AuthCard as XdrCodec<proto.AuthCard>, response: () => _IntroAuthResult },
-    mempoolauth_auth_data_changed: { proc: 1, request: () => _mempoolauth_auth_data_changed_args, response: () => VoidCodec },
+    mempoolauth_auth_data_changed_chunk: { proc: 2, request: () => _KeyChangeChunk, response: () => VoidCodec },
   },
 };
 
