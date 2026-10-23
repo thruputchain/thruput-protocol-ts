@@ -14,57 +14,57 @@ export enum DbSchedResult {
   DbSchedResultInvalidParentId = 2,
 }
 
-export const kHogAgeGroupToSchedule = 0n;
+export const kNativeTokenAgeGroupToSchedule = 0n;
 /**
- * Type-level value of {@link kHogAgeGroupToSchedule}, for use in array-bound positions.
+ * Type-level value of {@link kNativeTokenAgeGroupToSchedule}, for use in array-bound positions.
  * @hidden
  */
-export type kHogAgeGroupToSchedule = 0;
+export type kNativeTokenAgeGroupToSchedule = 0;
 
-export const kHogAgeGroupAlreadyScheduled = 1n;
+export const kNativeTokenAgeGroupAlreadyScheduled = 1n;
 /**
- * Type-level value of {@link kHogAgeGroupAlreadyScheduled}, for use in array-bound positions.
+ * Type-level value of {@link kNativeTokenAgeGroupAlreadyScheduled}, for use in array-bound positions.
  * @hidden
  */
-export type kHogAgeGroupAlreadyScheduled = 1;
+export type kNativeTokenAgeGroupAlreadyScheduled = 1;
 
-export const kHogAgeGroupReceived = 2n;
+export const kNativeTokenAgeGroupReceived = 2n;
 /**
- * Type-level value of {@link kHogAgeGroupReceived}, for use in array-bound positions.
+ * Type-level value of {@link kNativeTokenAgeGroupReceived}, for use in array-bound positions.
  * @hidden
  */
-export type kHogAgeGroupReceived = 2;
+export type kNativeTokenAgeGroupReceived = 2;
 
-export const kHogAgeNumGroups = 3n;
+export const kNativeTokenAgeNumGroups = 3n;
 /**
- * Type-level value of {@link kHogAgeNumGroups}, for use in array-bound positions.
+ * Type-level value of {@link kNativeTokenAgeNumGroups}, for use in array-bound positions.
  * @hidden
  */
-export type kHogAgeNumGroups = 3;
+export type kNativeTokenAgeNumGroups = 3;
 
-export interface HogAge {
+export interface NativeTokenAge {
   address: proto.ContractAddress;
-  /** XDR: `uint128_xdr num_hogs[kHogAgeNumGroups]` — exactly {@link kHogAgeNumGroups} elements. */
-  num_hogs: FixedArray<proto.uint128_xdr, proto.kHogAgeNumGroups>;
-  /** XDR: `BlockHeight average_ages[kHogAgeNumGroups]` — exactly {@link kHogAgeNumGroups} elements. */
-  average_ages: FixedArray<proto.BlockHeight, proto.kHogAgeNumGroups>;
+  /** XDR: `uint128_xdr num_native_tokens[kNativeTokenAgeNumGroups]` — exactly {@link kNativeTokenAgeNumGroups} elements. */
+  num_native_tokens: FixedArray<proto.uint128_xdr, proto.kNativeTokenAgeNumGroups>;
+  /** XDR: `BlockHeight average_ages[kNativeTokenAgeNumGroups]` — exactly {@link kNativeTokenAgeNumGroups} elements. */
+  average_ages: FixedArray<proto.BlockHeight, proto.kNativeTokenAgeNumGroups>;
 }
 
-/** XDR: `typedef HogAge HogAgeBatch<>`. */
-export type HogAgeBatch = proto.HogAge[] & { readonly __brand: { readonly HogAgeBatch: true } };
-export function hogAgeBatch(val: proto.HogAge[]): HogAgeBatch {
-  return val as HogAgeBatch;
+/** XDR: `typedef NativeTokenAge NativeTokenAgeBatch<>`. */
+export type NativeTokenAgeBatch = proto.NativeTokenAge[] & { readonly __brand: { readonly NativeTokenAgeBatch: true } };
+export function nativeTokenAgeBatch(val: proto.NativeTokenAge[]): NativeTokenAgeBatch {
+  return val as NativeTokenAgeBatch;
 }
 
-export type HogAgeResult =
-  | { result: proto.DbSchedResult.DbSchedResultOK; hog_age: proto.HogAge }
+export type NativeTokenAgeResult =
+  | { result: proto.DbSchedResult.DbSchedResultOK; native_token_age: proto.NativeTokenAge }
   | { result: number }
 ;
 
-/** XDR: `typedef HogAgeResult HogAgeResults<>`. */
-export type HogAgeResults = proto.HogAgeResult[] & { readonly __brand: { readonly HogAgeResults: true } };
-export function hogAgeResults(val: proto.HogAgeResult[]): HogAgeResults {
-  return val as HogAgeResults;
+/** XDR: `typedef NativeTokenAgeResult NativeTokenAgeResults<>`. */
+export type NativeTokenAgeResults = proto.NativeTokenAgeResult[] & { readonly __brand: { readonly NativeTokenAgeResults: true } };
+export function nativeTokenAgeResults(val: proto.NativeTokenAgeResult[]): NativeTokenAgeResults {
+  return val as NativeTokenAgeResults;
 }
 
 export type DbAddressAuthDataBatchResult =
@@ -124,33 +124,33 @@ const _DbSchedResult: XdrCodec<DbSchedResult> = {
   decode(r) { return Number(r.readInt32()) as DbSchedResult; },
 };
 
-const _HogAge: XdrCodec<HogAge> = {
+const _NativeTokenAge: XdrCodec<NativeTokenAge> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
-    FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).encode(w, val.num_hogs);
-    FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).encode(w, val.average_ages);
+    FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kNativeTokenAgeNumGroups)).encode(w, val.num_native_tokens);
+    FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kNativeTokenAgeNumGroups)).encode(w, val.average_ages);
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const num_hogs = FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kHogAgeNumGroups)).decode(r) as FixedArray<proto.uint128_xdr, proto.kHogAgeNumGroups>;
-    const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kHogAgeNumGroups)).decode(r) as FixedArray<proto.BlockHeight, proto.kHogAgeNumGroups>;
-    return { address, num_hogs, average_ages };
+    const num_native_tokens = FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kNativeTokenAgeNumGroups)).decode(r) as FixedArray<proto.uint128_xdr, proto.kNativeTokenAgeNumGroups>;
+    const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kNativeTokenAgeNumGroups)).decode(r) as FixedArray<proto.BlockHeight, proto.kNativeTokenAgeNumGroups>;
+    return { address, num_native_tokens, average_ages };
   },
 };
 
-const _HogAgeBatch = VarArrayCodec(() => proto.codec.HogAge, Number(0xFFFFFFFF)) as XdrCodec<HogAgeBatch>;
+const _NativeTokenAgeBatch = VarArrayCodec(() => proto.codec.NativeTokenAge, Number(0xFFFFFFFF)) as XdrCodec<NativeTokenAgeBatch>;
 
-const _HogAgeResult: XdrCodec<HogAgeResult> = {
+const _NativeTokenAgeResult: XdrCodec<NativeTokenAgeResult> = {
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
       case proto.DbSchedResult.DbSchedResultOK:
       {
-        const v = val as { result: number; hog_age: proto.HogAge };
-        if (v.hog_age === undefined) {
-          throw new Error("HogAgeResult encode: hog_age is undefined");
+        const v = val as { result: number; native_token_age: proto.NativeTokenAge };
+        if (v.native_token_age === undefined) {
+          throw new Error("NativeTokenAgeResult encode: native_token_age is undefined");
         }
-        proto.codec.HogAge.encode(w, v.hog_age);
+        proto.codec.NativeTokenAge.encode(w, v.native_token_age);
         break;
       }
     }
@@ -159,15 +159,15 @@ const _HogAgeResult: XdrCodec<HogAgeResult> = {
     const result = Number(r.readInt32());
     switch (result) {
       case proto.DbSchedResult.DbSchedResultOK:
-        const hog_age = proto.codec.HogAge.decode(r);
-        return { result, hog_age };
+        const native_token_age = proto.codec.NativeTokenAge.decode(r);
+        return { result, native_token_age };
       default:
         return { result };
     }
   },
 };
 
-const _HogAgeResults = VarArrayCodec(() => proto.codec.HogAgeResult, Number(0xFFFFFFFF)) as XdrCodec<HogAgeResults>;
+const _NativeTokenAgeResults = VarArrayCodec(() => proto.codec.NativeTokenAgeResult, Number(0xFFFFFFFF)) as XdrCodec<NativeTokenAgeResults>;
 
 const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
   encode(w, val) {
@@ -321,10 +321,10 @@ const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_co
 
 export const codec = {
   DbSchedResult: _DbSchedResult,
-  HogAge: _HogAge,
-  HogAgeBatch: _HogAgeBatch,
-  HogAgeResult: _HogAgeResult,
-  HogAgeResults: _HogAgeResults,
+  NativeTokenAge: _NativeTokenAge,
+  NativeTokenAgeBatch: _NativeTokenAgeBatch,
+  NativeTokenAgeResult: _NativeTokenAgeResult,
+  NativeTokenAgeResults: _NativeTokenAgeResults,
   DbAddressAuthDataBatchResult: _DbAddressAuthDataBatchResult,
   DbBlockOk: _DbBlockOk,
   DbBlockResult: _DbBlockResult,
@@ -338,8 +338,8 @@ export const DbSchedProgram: RpcProgramMeta = {
   methods: {
     dbsched_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
     dbsched_get_address_auth_data: { proc: 1, request: () => _dbsched_get_address_auth_data_args, response: () => _DbAddressAuthDataBatchResult },
-    dbsched_get_hog_ages: { proc: 2, request: () => proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: () => _HogAgeResults },
-    dbsched_write_hog_ages: { proc: 3, request: () => _HogAgeBatch, response: () => _DbSchedResult },
+    dbsched_get_native_token_ages: { proc: 2, request: () => proto.codec.ContractAddressBatch as XdrCodec<proto.ContractAddressBatch>, response: () => _NativeTokenAgeResults },
+    dbsched_write_native_token_ages: { proc: 3, request: () => _NativeTokenAgeBatch, response: () => _DbSchedResult },
     dbsched_create_snapshot: { proc: 5, request: () => _dbsched_create_snapshot_args, response: () => _DbSchedResult },
     dbsched_commit_snapshot: { proc: 6, request: () => _dbsched_commit_snapshot_args, response: () => _DbBlockResult },
     dbsched_close_snapshot: { proc: 7, request: () => proto.codec.BlockID as XdrCodec<proto.BlockID>, response: () => _DbBlockResult },

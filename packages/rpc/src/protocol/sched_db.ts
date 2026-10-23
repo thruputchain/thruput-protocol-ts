@@ -19,10 +19,10 @@ export interface ShardCard {
 
 export interface Delta {
   address: proto.ContractAddress;
-  hog_delta: proto.int128_xdr;
+  native_token_delta: proto.int128_xdr;
 }
 
-export interface HogsTransferredChunk {
+export interface NativeTokensTransferredChunk {
   block: proto.BlockHeight;
   chunk_index: bigint;
   chunk_count: bigint;
@@ -59,16 +59,16 @@ const _ShardCard: XdrCodec<ShardCard> = {
 const _Delta: XdrCodec<Delta> = {
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
-    proto.codec.int128_xdr.encode(w, val.hog_delta);
+    proto.codec.int128_xdr.encode(w, val.native_token_delta);
   },
   decode(r) {
     const address = proto.codec.ContractAddress.decode(r);
-    const hog_delta = proto.codec.int128_xdr.decode(r);
-    return { address, hog_delta };
+    const native_token_delta = proto.codec.int128_xdr.decode(r);
+    return { address, native_token_delta };
   },
 };
 
-const _HogsTransferredChunk: XdrCodec<HogsTransferredChunk> = {
+const _NativeTokensTransferredChunk: XdrCodec<NativeTokensTransferredChunk> = {
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block);
     w.writeUint32(val.chunk_index);
@@ -87,7 +87,7 @@ const _HogsTransferredChunk: XdrCodec<HogsTransferredChunk> = {
 export const codec = {
   ShardCard: _ShardCard,
   Delta: _Delta,
-  HogsTransferredChunk: _HogsTransferredChunk,
+  NativeTokensTransferredChunk: _NativeTokensTransferredChunk,
 } as const;
 
 export const SchedDbProgram: RpcProgramMeta = {
@@ -95,7 +95,7 @@ export const SchedDbProgram: RpcProgramMeta = {
   version: 1,
   methods: {
     scheddb_intro_shard: { proc: 1, request: () => _ShardCard, response: () => VoidCodec },
-    scheddb_hogs_transferred_chunk: { proc: 4, request: () => _HogsTransferredChunk, response: () => VoidCodec },
+    scheddb_native_tokens_transferred_chunk: { proc: 4, request: () => _NativeTokensTransferredChunk, response: () => VoidCodec },
   },
 };
 
