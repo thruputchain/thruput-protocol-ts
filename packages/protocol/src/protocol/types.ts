@@ -181,14 +181,12 @@ export type StorageKey =
   | { key_type: proto.StorageKeyType.ReplayCache }
 ;
 
-export const kTotalHogSupply = 62_500_000_000n;
-
-export const kHogDivisibility = 10_000_000n;
+export const kNativeTokenDivisibility = 10_000_000n;
 /**
- * Type-level value of {@link kHogDivisibility}, for use in array-bound positions.
+ * Type-level value of {@link kNativeTokenDivisibility}, for use in array-bound positions.
  * @hidden
  */
-export type kHogDivisibility = 10_000_000;
+export type kNativeTokenDivisibility = 10_000_000;
 
 export interface AddressAndKey {
   address: proto.ContractAddress;

@@ -116,9 +116,9 @@ export enum SchedulerTransactionErrorSource {
 
 export enum SchedulerErrorCode {
   SchedulerErrorCapacity = 1,
-  SchedulerErrorHogAgeUnavailable = 2,
+  SchedulerErrorNativeTokenAgeUnavailable = 2,
   SchedulerErrorExpired = 3,
-  SchedulerErrorInsufficientHogs = 4,
+  SchedulerErrorInsufficientNativeTokens = 4,
 }
 
 export interface SchedulerTransactionOutcome {
