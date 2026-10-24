@@ -25,13 +25,6 @@ export const kDefaultNewAddressRequiredWeight = 1n;
  */
 export type kDefaultNewAddressRequiredWeight = 1;
 
-export const kDefaultNewAddressAcceptedKeys = 0xFFFFFFFFn;
-/**
- * Type-level value of {@link kDefaultNewAddressAcceptedKeys}, for use in array-bound positions.
- * @hidden
- */
-export type kDefaultNewAddressAcceptedKeys = 0xFFFFFFFF;
-
 export const kDefaultNewAddressKeyID = 0n;
 /**
  * Type-level value of {@link kDefaultNewAddressKeyID}, for use in array-bound positions.

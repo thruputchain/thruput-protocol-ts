@@ -38,23 +38,6 @@ export interface ContractDeploymentHashPreimage {
   contract_hash: proto.SHA256Hash;
 }
 
-/** XDR: `typedef string Identifier<>`. */
-export type Identifier = string & { readonly __brand: { readonly Identifier: true } };
-export function identifier(val: string): Identifier {
-  return val as Identifier;
-}
-
-/** XDR: `typedef string SemVer<>`. */
-export type SemVer = string & { readonly __brand: { readonly SemVer: true } };
-export function semVer(val: string): SemVer {
-  return val as SemVer;
-}
-
-export interface ContractInterfaceIDPreimage {
-  name: proto.Identifier;
-  vers: proto.SemVer;
-}
-
 /** XDR: `typedef opaque ContractEntrypointID[8]` — exactly 8 bytes. */
 export type ContractEntrypointID = FixedBytes<8> & { readonly __brand: { readonly ContractEntrypointID: true } };
 export function contractEntrypointID(data: Uint8Array): ContractEntrypointID {
@@ -66,10 +49,6 @@ export interface DeployedContractHash {
   hash: proto.SHA256Hash;
   contract_size: bigint;
   contract_type: proto.ContractType;
-}
-
-export interface AddressMetadata {
-  deployed_contract: proto.DeployedContractHash;
 }
 
 
@@ -140,28 +119,6 @@ const _ContractDeploymentHashPreimage: XdrCodec<ContractDeploymentHashPreimage> 
   },
 };
 
-const _Identifier: XdrCodec<Identifier> = {
-  encode(w, val) { w.writeString(val, Number(0xFFFFFFFF)); },
-  decode(r) { return identifier(r.readString(Number(0xFFFFFFFF))); },
-};
-
-const _SemVer: XdrCodec<SemVer> = {
-  encode(w, val) { w.writeString(val, Number(0xFFFFFFFF)); },
-  decode(r) { return semVer(r.readString(Number(0xFFFFFFFF))); },
-};
-
-const _ContractInterfaceIDPreimage: XdrCodec<ContractInterfaceIDPreimage> = {
-  encode(w, val) {
-    proto.codec.Identifier.encode(w, val.name);
-    proto.codec.SemVer.encode(w, val.vers);
-  },
-  decode(r) {
-    const name = proto.codec.Identifier.decode(r);
-    const vers = proto.codec.SemVer.decode(r);
-    return { name, vers };
-  },
-};
-
 const _ContractEntrypointID: XdrCodec<ContractEntrypointID> = {
   encode(w, val) { w.writeFixedOpaque(val, 8); },
   decode(r) { return contractEntrypointID(r.readFixedOpaque(8)); },
@@ -181,26 +138,12 @@ const _DeployedContractHash: XdrCodec<DeployedContractHash> = {
   },
 };
 
-const _AddressMetadata: XdrCodec<AddressMetadata> = {
-  encode(w, val) {
-    proto.codec.DeployedContractHash.encode(w, val.deployed_contract);
-  },
-  decode(r) {
-    const deployed_contract = proto.codec.DeployedContractHash.decode(r);
-    return { deployed_contract };
-  },
-};
-
 export const codec = {
   ContractBlob: _ContractBlob,
   ContractType: _ContractType,
   Contract: _Contract,
   ContractDeploymentHashPreimage: _ContractDeploymentHashPreimage,
-  Identifier: _Identifier,
-  SemVer: _SemVer,
-  ContractInterfaceIDPreimage: _ContractInterfaceIDPreimage,
   ContractEntrypointID: _ContractEntrypointID,
   DeployedContractHash: _DeployedContractHash,
-  AddressMetadata: _AddressMetadata,
 } as const;
 
