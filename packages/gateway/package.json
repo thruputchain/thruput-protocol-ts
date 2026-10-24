@@ -1,6 +1,6 @@
 {
   "name": "@thruputchain/gateway",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Thruput gateway and indexer protocol types",
   "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/gateway#readme",
   "bugs": {
@@ -41,9 +41,9 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@thruputchain/xdr": "0.18.0",
-    "@thruputchain/protocol": "0.18.0",
-    "@thruputchain/rpc": "0.18.0"
+    "@thruputchain/xdr": "0.19.0",
+    "@thruputchain/protocol": "0.19.0",
+    "@thruputchain/rpc": "0.19.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",
