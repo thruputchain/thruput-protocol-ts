@@ -5,16 +5,16 @@
 // so only the cross-package types the generated code references are
 // re-exported here.
 export { type Topic, topic } from "@thruputchain/protocol";
-export * from "./groundhog_contract_spec.js";
+export * from "./contract_spec.js";
 
 // Merged codec namespace
 import { codec as _protocol_codec } from "@thruputchain/protocol";
-import { codec as groundhog_contract_spec_codec } from "./groundhog_contract_spec.js";
+import { codec as contract_spec_codec } from "./contract_spec.js";
 
 function _buildCodec() {
   return {
     Topic: _protocol_codec.Topic,
-    ...groundhog_contract_spec_codec,
+    ...contract_spec_codec,
   } as const;
 }
 
