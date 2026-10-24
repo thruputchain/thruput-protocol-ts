@@ -72,9 +72,9 @@ for (const dir of readdirSync(fileURLToPath(packagesDir)).sort()) {
         if (
           pkg.name === "@thruputchain/protocol" &&
           subpath === "." &&
-          !isHogAddress(mod.HOG_ADDRESS)
+          !isNativeTokenAddress(mod.NATIVE_TOKEN_ADDRESS)
         ) {
-          failures.push(`${label}: HOG_ADDRESS has incorrect bytes`);
+          failures.push(`${label}: NATIVE_TOKEN_ADDRESS has incorrect bytes`);
         }
       } catch (err) {
         failures.push(`${label}: ${err.message}`);
@@ -99,7 +99,7 @@ console.log(
   `Smoke test passed on Node ${process.version}: ${checked} entry points loaded from dist/.`,
 );
 
-function isHogAddress(value) {
+function isNativeTokenAddress(value) {
   return (
     value instanceof Uint8Array &&
     value.length === 32 &&

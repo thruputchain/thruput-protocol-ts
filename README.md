@@ -102,8 +102,8 @@ The generated files are committed and must not be edited by hand.
 
 Building and testing from a clone needs nothing beyond npm. Regenerating does:
 
-- The `protocol/` submodule (`groundhogchain/protocol`) is currently private.
-- x23c, the XDR compiler, is built from `groundhogchain/hogd` (`x23/x23c`) and
+- The `protocol/` submodule (`thruputchain/thruput-protocol`) is currently private.
+- x23c, the XDR compiler, is built from `thruputchain/hogd` (`x23/x23c`) and
   published only as the `latest-x23c` release of that private repository.
 - The `Auto-update protocol` workflow runs on an internal runner with a deploy
   key and a GitHub App token.
@@ -114,7 +114,7 @@ Building and testing from a clone needs nothing beyond npm. Regenerating does:
 
 Each published version is generated from exactly one protocol commit;
 `git rev-parse <tag>:protocol` gives it for any tag. Devnet bundles are the releases cut
-from `groundhogchain/packaging`, whose `release-manifest.toml` pins a protocol
+from `thruputchain/packaging`, whose `release-manifest.toml` pins a protocol
 commit; a bundle and a package version encode the same protocol when they pin
 the same commit.
 
