@@ -15,24 +15,10 @@ fi
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
-# Released x23c builds emit the historical XDR runtime import. Normalize that
-# package reference here so manual and auto-update generation use the same scope.
 generate() {
   local output="$1"
   local input="$2"
   "$XDRC" --ts -o "$output" "$input"
-  node --input-type=module - "$output" <<'NODE'
-import { readFileSync, writeFileSync } from "node:fs";
-const path = process.argv[2];
-const source = readFileSync(path, "utf8");
-const oldImport = 'from "@groundhogchain/xdr";';
-const newImport = 'from "@thruputchain/xdr";';
-const count = source.split(oldImport).length - 1;
-if (count !== 1) {
-  throw new Error(`Expected one ${oldImport} in ${path}, found ${count}`);
-}
-writeFileSync(path, source.replace(oldImport, newImport));
-NODE
 }
 
 core_protos=(
