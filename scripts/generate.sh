@@ -56,7 +56,7 @@ for proto in "${core_protos[@]}"; do
 done
 
 contract_spec_protos=(
-  groundhog_contract_spec.x
+  contract_spec.x
 )
 
 for proto in "${contract_spec_protos[@]}"; do
