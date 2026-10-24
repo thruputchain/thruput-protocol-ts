@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
-  HOG_ADDRESS,
+  NATIVE_TOKEN_ADDRESS,
   toHex,
   type ContractAddress,
 } from "../src/index.js";
 
-describe("HOG_ADDRESS", () => {
-  it("is the typed precompiled native HOG token address", () => {
-    const address: ContractAddress = HOG_ADDRESS;
+describe("NATIVE_TOKEN_ADDRESS", () => {
+  it("is the typed precompiled native-token address", () => {
+    const address: ContractAddress = NATIVE_TOKEN_ADDRESS;
 
     expect(address).toHaveLength(32);
     expect(toHex(address)).toBe(

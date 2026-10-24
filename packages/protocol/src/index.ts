@@ -15,7 +15,7 @@ export * from "@thruputchain/xdr";
 export * from "./protocol/index.js";
 
 // Protocol-defined constants
-export { HOG_ADDRESS } from "./constants.js";
+export { NATIVE_TOKEN_ADDRESS } from "./constants.js";
 
 // Utilities (also available via "@thruputchain/protocol/utils" for tree-shaking)
 export * from "./utils/index.js";
