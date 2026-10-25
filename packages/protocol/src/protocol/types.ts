@@ -72,6 +72,13 @@ export function mlDsa65PublicKey(data: Uint8Array): MlDsa65PublicKey {
   return data as MlDsa65PublicKey;
 }
 
+/** XDR: `typedef opaque MlDsa65SecretKey[4032]` — exactly 4032 bytes. */
+export type MlDsa65SecretKey = FixedBytes<4032> & { readonly __brand: { readonly MlDsa65SecretKey: true } };
+export function mlDsa65SecretKey(data: Uint8Array): MlDsa65SecretKey {
+  if (data.length !== 4032) throw new Error(`MlDsa65SecretKey must be exactly 4032 bytes, got ${data.length}`);
+  return data as MlDsa65SecretKey;
+}
+
 export enum CryptographicScheme {
   Ed25519 = 0,
   MlDsa65 = 1,
@@ -96,6 +103,7 @@ export function publicKeyHash(data: Uint8Array): PublicKeyHash {
 
 export type SecretKey =
   | { scheme: proto.CryptographicScheme.Ed25519; ed25519: proto.Ed25519SecretKey }
+  | { scheme: proto.CryptographicScheme.MlDsa65; mldsa65: proto.MlDsa65SecretKey }
 ;
 
 export type ExtensionPoint =
@@ -272,6 +280,11 @@ const _MlDsa65PublicKey: XdrCodec<MlDsa65PublicKey> = {
   decode(r) { return mlDsa65PublicKey(r.readFixedOpaque(1952)); },
 };
 
+const _MlDsa65SecretKey: XdrCodec<MlDsa65SecretKey> = {
+  encode(w, val) { w.writeFixedOpaque(val, 4032); },
+  decode(r) { return mlDsa65SecretKey(r.readFixedOpaque(4032)); },
+};
+
 const _CryptographicScheme: XdrCodec<CryptographicScheme> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as CryptographicScheme; },
@@ -343,6 +356,9 @@ const _SecretKey: XdrCodec<SecretKey> = {
       case proto.CryptographicScheme.Ed25519:
         proto.codec.Ed25519SecretKey.encode(w, val.ed25519);
         break;
+      case proto.CryptographicScheme.MlDsa65:
+        proto.codec.MlDsa65SecretKey.encode(w, val.mldsa65);
+        break;
     }
   },
   decode(r) {
@@ -351,6 +367,9 @@ const _SecretKey: XdrCodec<SecretKey> = {
       case proto.CryptographicScheme.Ed25519:
         const ed25519 = proto.codec.Ed25519SecretKey.decode(r);
         return { scheme, ed25519 };
+      case proto.CryptographicScheme.MlDsa65:
+        const mldsa65 = proto.codec.MlDsa65SecretKey.decode(r);
+        return { scheme, mldsa65 };
       default:
         throw new Error(`Unknown SecretKey discriminant: ${scheme}`);
     }
@@ -502,6 +521,7 @@ export const codec = {
   Ed25519SecretKey: _Ed25519SecretKey,
   MlDsa65Signature: _MlDsa65Signature,
   MlDsa65PublicKey: _MlDsa65PublicKey,
+  MlDsa65SecretKey: _MlDsa65SecretKey,
   CryptographicScheme: _CryptographicScheme,
   Signature: _Signature,
   PublicKey: _PublicKey,
