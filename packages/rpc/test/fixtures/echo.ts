@@ -1,10 +1,12 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: d205b2a2427fe9af85bb4fcdcf7e85ac770d5961
+// Generated from x23c commit: 2ff2d08a54a36835f1f9a22aa693ba3205b0217e
+
+// Test-only RPC definition for round-trip testing.
+// Not part of the protocol — used only by the test suite.
 
 import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
-
 
 
 export interface EchoRequest {
