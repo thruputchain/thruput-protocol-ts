@@ -31,10 +31,10 @@ core_protos=(
 rpc_protos=(
   dogwood_kit.x auth_card.x sched_db.x
   wallet.x dogwood_rpc.x event_rpc.x auth_rpc.x test_rpc.x
-  discovery.x config.x dogwood.x
+  config.x dogwood.x
   scp.x scp_config.x scp_control.x scp_handle.x
   rpc_types.x parallel.x proposal.x db_sched.x exec_sched.x
-  consensus.x sched_coord.x coord_sched.x catchup.x repair.x loadgen.x
+  consensus.x sched_coord.x coord_sched.x catchup.x loadgen.x
 )
 
 for proto in "${core_protos[@]}"; do

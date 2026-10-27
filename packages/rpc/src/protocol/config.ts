@@ -95,6 +95,33 @@ export interface Config {
   storage_config: proto.StorageConfig | null;
 }
 
+export interface CoordinatorRouterConfig {
+  max_fanout: bigint;
+}
+
+export interface CoordinatorBatonConfig {
+  clock_skew_msec: proto.Milliseconds;
+}
+
+export interface CoordinatorConsensusConfig {
+  epoch_length: bigint;
+  pipeline_length: bigint;
+  timeout_msec: proto.Milliseconds;
+}
+
+export interface CoordinatorPoolConfig {
+  basis_pool_hotcold_window: bigint;
+  block_pool_hotcold_window: bigint;
+}
+
+export interface CoordinatorConfig {
+  router: proto.CoordinatorRouterConfig;
+  dogwood: proto.DogwoodConfig;
+  baton: proto.CoordinatorBatonConfig;
+  consensus: proto.CoordinatorConsensusConfig;
+  pool: proto.CoordinatorPoolConfig;
+}
+
 
 //
 // XDR Codecs below this point
@@ -284,6 +311,70 @@ const _Config: XdrCodec<Config> = {
   },
 };
 
+const _CoordinatorRouterConfig: XdrCodec<CoordinatorRouterConfig> = {
+  encode(w, val) {
+    w.writeUint64(val.max_fanout);
+  },
+  decode(r) {
+    const max_fanout = r.readUint64();
+    return { max_fanout };
+  },
+};
+
+const _CoordinatorBatonConfig: XdrCodec<CoordinatorBatonConfig> = {
+  encode(w, val) {
+    proto.codec.Milliseconds.encode(w, val.clock_skew_msec);
+  },
+  decode(r) {
+    const clock_skew_msec = proto.codec.Milliseconds.decode(r);
+    return { clock_skew_msec };
+  },
+};
+
+const _CoordinatorConsensusConfig: XdrCodec<CoordinatorConsensusConfig> = {
+  encode(w, val) {
+    w.writeUint64(val.epoch_length);
+    w.writeUint64(val.pipeline_length);
+    proto.codec.Milliseconds.encode(w, val.timeout_msec);
+  },
+  decode(r) {
+    const epoch_length = r.readUint64();
+    const pipeline_length = r.readUint64();
+    const timeout_msec = proto.codec.Milliseconds.decode(r);
+    return { epoch_length, pipeline_length, timeout_msec };
+  },
+};
+
+const _CoordinatorPoolConfig: XdrCodec<CoordinatorPoolConfig> = {
+  encode(w, val) {
+    w.writeUint64(val.basis_pool_hotcold_window);
+    w.writeUint64(val.block_pool_hotcold_window);
+  },
+  decode(r) {
+    const basis_pool_hotcold_window = r.readUint64();
+    const block_pool_hotcold_window = r.readUint64();
+    return { basis_pool_hotcold_window, block_pool_hotcold_window };
+  },
+};
+
+const _CoordinatorConfig: XdrCodec<CoordinatorConfig> = {
+  encode(w, val) {
+    proto.codec.CoordinatorRouterConfig.encode(w, val.router);
+    proto.codec.DogwoodConfig.encode(w, val.dogwood);
+    proto.codec.CoordinatorBatonConfig.encode(w, val.baton);
+    proto.codec.CoordinatorConsensusConfig.encode(w, val.consensus);
+    proto.codec.CoordinatorPoolConfig.encode(w, val.pool);
+  },
+  decode(r) {
+    const router = proto.codec.CoordinatorRouterConfig.decode(r);
+    const dogwood = proto.codec.DogwoodConfig.decode(r);
+    const baton = proto.codec.CoordinatorBatonConfig.decode(r);
+    const consensus = proto.codec.CoordinatorConsensusConfig.decode(r);
+    const pool = proto.codec.CoordinatorPoolConfig.decode(r);
+    return { router, dogwood, baton, consensus, pool };
+  },
+};
+
 export const codec = {
   Milliseconds: _Milliseconds,
   Seconds: _Seconds,
@@ -297,5 +388,10 @@ export const codec = {
   RepairConfig: _RepairConfig,
   StorageConfig: _StorageConfig,
   Config: _Config,
+  CoordinatorRouterConfig: _CoordinatorRouterConfig,
+  CoordinatorBatonConfig: _CoordinatorBatonConfig,
+  CoordinatorConsensusConfig: _CoordinatorConsensusConfig,
+  CoordinatorPoolConfig: _CoordinatorPoolConfig,
+  CoordinatorConfig: _CoordinatorConfig,
 } as const;
 
