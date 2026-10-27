@@ -9,8 +9,10 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
+// Invoke npm's JavaScript entrypoint, not the shell-only npm.cmd on Windows.
+const npmCli = process.env.npm_execpath;
+assert(npmCli, "Run this check with npm run test:package.");
 const directory = await mkdtemp(join(tmpdir(), "thruput-protocol-consumer-"));
-const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const require = createRequire(import.meta.url);
 const run = (command, args, cwd = directory) =>
   execFileSync(command, args, { cwd, encoding: "utf8", stdio: "pipe" });
@@ -24,7 +26,11 @@ try {
       await readFile(join(cwd, "package.json"), "utf8"),
     );
     const [packed] = JSON.parse(
-      run(npm, ["pack", "--json", "--pack-destination", directory], cwd),
+      run(
+        process.execPath,
+        [npmCli, "pack", "--json", "--pack-destination", directory],
+        cwd,
+      ),
     );
     assert(packed.files.some((file) => file.path === "LICENSE"));
     assert(packed.files.some((file) => file.path === "README.md"));
@@ -43,7 +49,13 @@ try {
   );
   // All Thruput packages come from the local tarballs. Other dependencies are public.
   await writeFile(join(directory, ".npmrc"), "ignore-scripts=true\n");
-  run(npm, ["install", "--ignore-scripts", "--no-audit", "--no-fund"]);
+  run(process.execPath, [
+    npmCli,
+    "install",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+  ]);
 
   const imports = specifiers
     .map(
