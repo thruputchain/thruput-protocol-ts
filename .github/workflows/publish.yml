@@ -2,12 +2,22 @@ name: Release packages
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Verify and preview publication without publishing or tagging
+        type: boolean
+        default: true
+
+concurrency:
+  group: release-packages
+  cancel-in-progress: false
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
-      packages: write
+      packages: read
     runs-on: ubuntu-latest
 
     steps:
@@ -83,42 +93,14 @@ jobs:
       - name: Packed consumer checks
         run: npm run test:package
 
-      - name: Tag commit with version
-        id: tag
-        run: |
-          set -euo pipefail
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          scope: "@thruputchain"
 
-          TAG="v${VERSION}"
-
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "ERROR: Tag $TAG already exists!"
-            exit 1
-          fi
-
-          git tag "$TAG"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-
-      - name: Push tag
-        run: |
-          set -euo pipefail
-
-          TAG="${{ steps.tag.outputs.tag }}"
-          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
-
-          REMOTE_TAG_REF=$(git ls-remote origin "refs/tags/$TAG" | cut -f1)
-          if [ -n "$REMOTE_TAG_REF" ]; then
-            LOCAL_COMMIT=$(git rev-parse "$TAG")
-            if [ "$REMOTE_TAG_REF" = "$LOCAL_COMMIT" ]; then
-              echo "Tag $TAG already exists on remote at same commit. Skipping push."
-            else
-              echo "ERROR: Tag $TAG exists on remote but points to different commit!"
-              exit 1
-            fi
-          else
-            git push origin "$TAG"
-          fi
-
-      - name: Publish packages
-        run: npm publish --workspaces
+      - name: Publish packages to npm
+        run: bash scripts/publish-npm.sh
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

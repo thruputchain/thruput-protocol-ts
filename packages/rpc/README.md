@@ -10,8 +10,8 @@ the request/response types generated from the protocol XDR definitions.
 npm install @thruputchain/rpc
 ```
 
-Published to GitHub Packages; configure your `.npmrc` for the
-`@thruputchain` scope.
+Public npm installs need no authentication. Remove any GitHub Packages registry
+override for the `@thruputchain` scope when using npm releases.
 
 ## Example
 

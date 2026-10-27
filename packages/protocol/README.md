@@ -15,8 +15,8 @@ widths, and human StrKey input belong to `@thruputchain/client`.
 npm install @thruputchain/protocol
 ```
 
-Published to GitHub Packages; configure your `.npmrc` for the
-`@thruputchain` scope.
+Public npm installs need no authentication. Remove any GitHub Packages registry
+override for the `@thruputchain` scope when using npm releases.
 
 ## Example
 
