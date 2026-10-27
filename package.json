@@ -3,11 +3,12 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build --workspace @thruputchain/xdr --workspace @thruputchain/protocol --workspace @thruputchain/contract-spec --workspace @thruputchain/rpc --workspace @thruputchain/gateway",
     "docs": "typedoc",
     "docs:check": "typedoc --emit none",
     "test": "npm run test --workspaces",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "test:package": "node scripts/package-test.mjs",
     "typecheck": "npm run typecheck --workspaces"
   },
   "devDependencies": {

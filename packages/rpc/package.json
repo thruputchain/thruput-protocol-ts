@@ -35,7 +35,7 @@
     "fixedExtension": false
   },
   "scripts": {
-    "build": "tsdown src/index.ts --format esm,cjs --dts",
+    "build": "tsdown src/index.ts --format esm,cjs --no-dts && tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.test.json"

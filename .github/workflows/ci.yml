@@ -29,6 +29,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Packed consumer checks
+        run: npm run test:package
+
   # We publish libraries, so the runtime is the consumer's choice, not ours.
   # Test the edges of the supported range: Active LTS and Current (which
   # catches deprecations before consumers hit them). Note that `22` here
