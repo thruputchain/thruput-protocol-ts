@@ -29,6 +29,23 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Packed consumer checks
+        run: npm run test:package
+
+  package-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:package
+
   # We publish libraries, so the runtime is the consumer's choice, not ours.
   # Test the edges of the supported range: Active LTS and Current (which
   # catches deprecations before consumers hit them). Note that `22` here

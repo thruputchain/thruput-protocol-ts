@@ -74,6 +74,9 @@ jobs:
       - name: Smoke test
         run: npm run test:smoke
 
+      - name: Packed consumer checks
+        run: npm run test:package
+
       - name: Publish dry run
         run: npm publish --workspaces --dry-run
         env:
