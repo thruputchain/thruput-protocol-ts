@@ -8,12 +8,14 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { WebSocketTransport } from "../../src/onc/transport.js";
 
 class FakeWebSocket {
+  static OPEN = 1;
   static instances: FakeWebSocket[] = [];
 
   url: string;
   binaryType = "blob";
   sent: Uint8Array[] = [];
   closed = false;
+  readyState = 0;
   onopen: (() => void) | null = null;
   onerror: ((e: unknown) => void) | null = null;
   onmessage: ((event: { data: ArrayBuffer }) => void) | null = null;
@@ -25,17 +27,20 @@ class FakeWebSocket {
   }
 
   send(data: Uint8Array): void {
-    if (this.closed) throw new Error("fake socket closed");
+    // Native WebSocket silently discards sends after closing starts.
+    if (this.readyState !== FakeWebSocket.OPEN) return;
     this.sent.push(data);
   }
 
   close(): void {
     this.closed = true;
+    this.readyState = 3;
     this.onclose?.();
   }
 
   /** Test helper: simulate the server opening the connection. */
   open(): void {
+    this.readyState = FakeWebSocket.OPEN;
     this.onopen?.();
   }
 
@@ -115,5 +120,53 @@ describe("WebSocketTransport", () => {
     await flushSend(ws);
     ws.close();
     await failure;
+  });
+
+  it("rejects a call made after the socket closes", async () => {
+    const { transport, ws } = connect();
+    ws.close();
+    await expect(transport.call(request(7))).rejects.toThrow("WebSocket closed");
+    expect(ws.sent).toHaveLength(0);
+  });
+
+  it("rejects calls while the close event is still pending", async () => {
+    const { transport, ws } = connect();
+    ws.readyState = 2;
+    await expect(transport.call(request(7))).rejects.toThrow("WebSocket is not open");
+    expect(ws.sent).toHaveLength(0);
+  });
+
+  it.each(["close", "error"])("settles calls waiting for open on %s", async (event) => {
+    const transport = new WebSocketTransport("ws://fake");
+    const ws = FakeWebSocket.instances[0];
+    const pending = transport.call(request(7));
+    const failure = expect(pending).rejects.toThrow(/WebSocket/);
+    if (event === "close") transport.close();
+    else ws.onerror?.(new Error("connection failed"));
+    await failure;
+    await expect(transport.call(request(8))).rejects.toThrow(/WebSocket/);
+    expect(ws.sent).toHaveLength(0);
+  });
+
+  it("rejects all in-flight calls on a connection error", async () => {
+    const { transport, ws } = connect();
+    const failures = [7, 8].map((xid) =>
+      expect(transport.call(request(xid))).rejects.toThrow("WebSocket connection failed"),
+    );
+    await flushSend(ws);
+    ws.onerror?.(new Error("connection failed"));
+    await Promise.all(failures);
+  });
+
+  it("removes requests whose send throws", async () => {
+    const { transport, ws } = connect();
+    vi.spyOn(ws, "send").mockImplementationOnce(() => { throw new Error("send failed"); });
+    await expect(transport.call(request(7))).rejects.toThrow("send failed");
+    // The failed send must not retain a pending request or consume a later reply.
+    expect((transport as unknown as { pending: Map<number, unknown> }).pending.size).toBe(0);
+    const next = transport.call(request(7));
+    await flushSend(ws);
+    ws.receive(reply(7));
+    await expect(next).resolves.toEqual(reply(7));
   });
 });
