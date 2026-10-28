@@ -10,8 +10,8 @@ tooling can read and emit contract specs.
 npm install @thruputchain/contract-spec
 ```
 
-Published to GitHub Packages; configure your `.npmrc` for the
-`@thruputchain` scope.
+Public npm installs need no authentication. Remove any GitHub Packages registry
+override for the `@thruputchain` scope when using npm releases.
 
 ## Example
 

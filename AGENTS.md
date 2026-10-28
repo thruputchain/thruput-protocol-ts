@@ -27,7 +27,7 @@
 ## Release Constraints
 - All package versions move in lockstep. Publish workflows fail if any `packages/*/package.json` version differs.
 - Internal workspace dependency versions are exact, not ranges.
-- `.npmrc` sets `save-exact=true`, `ignore-scripts=true`, and publishes `@thruputchain/*` to GitHub Packages.
+- `.npmrc` keeps GitHub Packages as the install source during migration. `publishConfig` publishes public packages to npm. See `RELEASING.md` for release order and authentication.
 
 ## Existing Workflow To Preserve
 - The auto-update workflow bumps the `protocol` submodule to upstream `main`, downloads `x23c`, runs `./scripts/generate.sh`, and opens a PR with the regenerated output. Keep manual regeneration changes aligned with that flow.

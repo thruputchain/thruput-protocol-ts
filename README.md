@@ -14,13 +14,11 @@ from the XDR definitions in the `protocol/` submodule.
 | `@thruputchain/rpc` | ONC-RPC client + RPC type defs | `xdr`, `protocol` |
 | `@thruputchain/gateway` | Gateway/indexer types | `xdr`, `protocol`, `rpc` |
 
-All packages are published to GitHub Packages with `access: restricted`.
+Public npm releases use `access: public` and need no installation token.
 
 Most application code should prefer `@thruputchain/client`, which lives in
-the separate [client-ts](https://github.com/thruputchain/client-ts)
-repository and is published to the same GitHub Packages registry
-(`npm install @thruputchain/client`, with the registry auth described in
-that repo's README). These protocol packages are lower-level building blocks
+the separate [thruput-sdk-ts](https://github.com/thruputchain/thruput-sdk-ts)
+repository (`npm install @thruputchain/client`). These protocol packages are lower-level building blocks
 for serialization, generated protocol types, RPC access, contract specs, and
 gateway/indexer types.
 
@@ -137,17 +135,13 @@ the same commit.
 Bump versions across all packages in lockstep (see the `bump-version` skill),
 add the new version to [Protocol commit per release](#protocol-commit-per-release),
 then publish. Inter-package `dependencies` versions must match the bumped
-version exactly, since publishes go to a private registry.
+version exactly.
 
 ## Publishing the renamed packages
 
-The `@thruputchain/*` packages publish to GitHub Packages from repositories in
-`thruputchain`. Release workflows use the repository's `GITHUB_TOKEN` with
-`packages: write`.
-
-Publish the protocol packages first, then the client, then React. Grant the
-client and React repositories Actions read access to the protocol packages,
-and grant React read access to the client package. Refresh downstream lockfiles
-from the published artifacts before merging their PRs.
+The manual release workflow targets public npm and defaults to dry-run.
+See [RELEASING.md](RELEASING.md) for authentication, release order, and retries.
+Repository installs retain GitHub Packages during the first npm release;
+consumer registry settings and lockfiles switch after all seven packages exist.
 
 Existing `@groundhogchain/*` releases retain their original identities.

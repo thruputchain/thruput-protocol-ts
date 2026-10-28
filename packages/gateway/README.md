@@ -10,8 +10,8 @@ XDR codecs generated from the protocol definitions.
 npm install @thruputchain/gateway
 ```
 
-Published to GitHub Packages; configure your `.npmrc` for the
-`@thruputchain` scope.
+Public npm installs need no authentication. Remove any GitHub Packages registry
+override for the `@thruputchain` scope when using npm releases.
 
 ## Example
 
