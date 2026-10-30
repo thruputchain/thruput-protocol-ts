@@ -13,7 +13,7 @@
 
 ## Testing Notes
 - `packages/protocol`, `packages/rpc`, `packages/contract-spec`, and `packages/gateway` use Vitest config aliases so tests resolve sibling workspace source directly instead of built output.
-- Cross-SDK protocol tests require the external Rust tool `thruput-test-vectors`, which CI installs via `cargo install thruput-test-vectors@0.51.0 --registry thruput --locked` before regenerating JSON fixtures.
+- Cross-SDK protocol tests require the external Rust tool `thruput-test-vectors`, which CI installs via `cargo install thruput-test-vectors@0.58.0 --locked` (from crates.io) before regenerating JSON fixtures.
 
 ## Codegen And Generated Files
 
