@@ -144,14 +144,6 @@ jobs:
 
   cross-sdk:
     runs-on: ubuntu-latest
-    env:
-      CARGO_REGISTRIES_THRUPUT_INDEX: "sparse+https://crates.thruput.network/api/v1/crates/"
-      CARGO_REGISTRIES_THRUPUT_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-      # Published crates and pinned submodules retain the legacy registry identity.
-      CARGO_REGISTRIES_GROUNDHOG_LEGACY_INDEX: sparse+https://groundhog.dev/crates/api/v1/crates/
-      CARGO_REGISTRIES_GROUNDHOG_LEGACY_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-      CARGO_REGISTRIES_GROUNDHOG_LEGACY_CREDENTIAL_PROVIDER: cargo:token
-      CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
 
@@ -167,7 +159,7 @@ jobs:
       - run: npm ci
 
       - name: Install thruput-test-vectors
-        run: cargo install thruput-test-vectors@0.51.0 --registry thruput --locked
+        run: cargo install thruput-test-vectors@0.58.0 --locked
 
       - name: Generate XDR vectors
         run: thruput-test-vectors xdr > packages/protocol/test/fixtures/xdr_vectors.json

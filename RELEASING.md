@@ -31,6 +31,6 @@ A retry skips a version only when its npm tarball integrity matches the local
 package exactly. A different tarball or a tag at another commit stops the release.
 Retry a partial publication from the same commit.
 
-These repositories are private. This workflow uses token authentication and
-does not request public provenance. Dry-run success does not prove npm scope
-ownership or token permissions.
+This workflow uses token authentication and does not yet request npm
+provenance. Dry-run success does not prove npm scope ownership or token
+permissions.

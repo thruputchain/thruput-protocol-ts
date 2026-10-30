@@ -44,7 +44,6 @@ packages/<name>/
   src/protocol/*.ts     # generated from protocol/*.x
 protocol/               # git submodule: upstream XDR definitions
 scripts/generate.sh     # regenerates *.ts from *.x via the x23c compiler
-docs/archive/           # historical planning docs, not maintained
 ```
 
 ## Setup & build
@@ -59,7 +58,7 @@ npm run typecheck
 The generated protocol sources are committed, so the `protocol/` submodule is
 only needed to regenerate them: run `git submodule update --init` before
 following [Regenerating from XDR](#regenerating-from-xdr) (see
-[What needs org access](#what-needs-org-access)).
+[What is not yet public](#what-is-not-yet-public)).
 
 ## API docs
 
@@ -96,17 +95,16 @@ are not overwritten by the generator.
 
 The generated files are committed and must not be edited by hand.
 
-### What needs org access
+### What is not yet public
 
-Building and testing from a clone needs nothing beyond npm. Regenerating does:
+Building and testing from a clone needs nothing beyond npm, and the cross-SDK
+tests need only `cargo install thruput-test-vectors --locked` from crates.io.
+Regenerating also needs x23c, the XDR compiler. It is built from
+`thruputchain/hogd` (`x23/x23c`) and published as that repository's
+`latest-x23c` release; until hogd is public, regeneration is maintainer-only.
 
-- The `protocol/` submodule (`thruputchain/thruput-protocol`) is currently private.
-- x23c, the XDR compiler, is built from `thruputchain/hogd` (`x23/x23c`) and
-  published only as the `latest-x23c` release of that private repository.
-- The `Auto-update protocol` workflow runs on an internal runner with a deploy
-  key and a GitHub App token.
-- The cross-SDK tests install `thruput-test-vectors` from the private Cargo
-  registry.
+The `Auto-update protocol` workflow runs on a maintainer runner with a deploy
+key and a GitHub App token, so contributors do not need to run it.
 
 ## Protocol commit per release
 
