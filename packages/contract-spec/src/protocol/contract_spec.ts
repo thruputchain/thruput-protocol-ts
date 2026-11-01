@@ -37,6 +37,10 @@ export interface ContractVectorType {
   max_len: bigint;
 }
 
+export interface ContractSignedTokenPreimage {
+  preimage_type: proto.ContractType | null;
+}
+
 export enum ContractTypeKind {
   Void = 0,
   Bool = 1,
@@ -82,10 +86,6 @@ export type ContractType =
   | { v: proto.ContractTypeKind.U256 }
   | { v: proto.ContractTypeKind.I256 }
 ;
-
-export interface ContractSignedTokenPreimage {
-  preimage_type: proto.ContractType | null;
-}
 
 export interface ContractExceptionType {
   selector: bigint;
@@ -241,6 +241,16 @@ const _ContractVectorType: XdrCodec<ContractVectorType> = {
   },
 };
 
+const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
+  encode(w, val) {
+    OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.preimage_type);
+  },
+  decode(r) {
+    const preimage_type = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
+    return { preimage_type };
+  },
+};
+
 const _ContractTypeKind: XdrCodec<ContractTypeKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractTypeKind; },
@@ -350,16 +360,6 @@ const _ContractType: XdrCodec<ContractType> = {
       default:
         throw new Error(`Unknown ContractType discriminant: ${v}`);
     }
-  },
-};
-
-const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
-  encode(w, val) {
-    OptionCodec(_ContractType).encode(w, val.preimage_type);
-  },
-  decode(r) {
-    const preimage_type = OptionCodec(_ContractType).decode(r);
-    return { preimage_type };
   },
 };
 
@@ -595,9 +595,9 @@ export const codec = {
   ContractSpecId: _ContractSpecId,
   ContractArrayType: _ContractArrayType,
   ContractVectorType: _ContractVectorType,
+  ContractSignedTokenPreimage: _ContractSignedTokenPreimage,
   ContractTypeKind: _ContractTypeKind,
   ContractType: _ContractType,
-  ContractSignedTokenPreimage: _ContractSignedTokenPreimage,
   ContractExceptionType: _ContractExceptionType,
   ContractField: _ContractField,
   ContractMethodEffect: _ContractMethodEffect,
