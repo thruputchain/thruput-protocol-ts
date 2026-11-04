@@ -106,12 +106,10 @@ describe("VarArrayCodec", () => {
 
   it("fails fast on a forged 0xFFFFFFFF length prefix without a large allocation", () => {
     // Forged length prefix of 4294967295 with no element bytes behind it.
-    // The initial reserve is bounded by the remaining input (0 bytes), so
-    // no 4-billion-entry array is attempted; the first element read fails
-    // on exhausted input.
+    // The work check rejects the collection before allocating or reading elements.
     const Unbounded = VarArrayCodec(Uint32Codec, 0xffffffff);
     const bytes = new Uint8Array([0xff, 0xff, 0xff, 0xff]);
-    expect(() => deserialize(bytes, Unbounded)).toThrow(/read past end/);
+    expect(() => deserialize(bytes, Unbounded)).toThrow(/work budget exceeded/);
   });
 
   it("throws on decode when the input runs out before the claimed length", () => {
@@ -131,7 +129,7 @@ describe("VarArrayCodec", () => {
     view.setUint32(0, len);
     view.setUint32(4 + 4 * (len - 1), 42);
     const Big = VarArrayCodec(Uint32Codec, 0xffffffff);
-    const result = deserialize(bytes, Big);
+    const result = deserialize(bytes, Big, { maxWork: len + 1 });
     expect(result.length).toBe(len);
     expect(result[0]).toBe(0n);
     expect(result[len - 1]).toBe(42n);

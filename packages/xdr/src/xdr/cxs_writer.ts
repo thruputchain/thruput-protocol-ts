@@ -7,6 +7,7 @@
  */
 
 import type { IWriter } from "./codec.js";
+import { EncodeBudget, type CodecLimits } from "./budget.js";
 
 const INITIAL_CAPACITY = 256;
 const textEncoder = new TextEncoder();
@@ -25,11 +26,14 @@ const IH_MIN = -31;  // signed negative
 
 /** Writes compact XDR serialization (CXS) bytes. */
 export class CxsWriter implements IWriter {
+  /** Shared value-depth limit. */
+  readonly budget: EncodeBudget;
   private buf: Uint8Array;
   private pos: number = 0;
 
   /** Create a writer with an optional initial buffer capacity. */
-  constructor(capacity: number = INITIAL_CAPACITY) {
+  constructor(capacity: number = INITIAL_CAPACITY, limits?: CodecLimits) {
+    this.budget = new EncodeBudget(limits);
     this.buf = new Uint8Array(capacity);
   }
 

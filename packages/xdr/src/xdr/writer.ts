@@ -1,4 +1,5 @@
 import type { IWriter } from "./codec.js";
+import { EncodeBudget, type CodecLimits } from "./budget.js";
 import { paddedLen } from "./padding.js";
 
 const INITIAL_CAPACITY = 256;
@@ -6,12 +7,15 @@ const textEncoder = new TextEncoder();
 
 /** Writes standard XDR bytes as defined by RFC 4506. */
 export class XdrWriter implements IWriter {
+  /** Shared value-depth limit. */
+  readonly budget: EncodeBudget;
   private buf: Uint8Array;
   private view: DataView;
   private pos: number = 0;
 
   /** Create a writer with an optional initial buffer capacity. */
-  constructor(capacity: number = INITIAL_CAPACITY) {
+  constructor(capacity: number = INITIAL_CAPACITY, limits?: CodecLimits) {
+    this.budget = new EncodeBudget(limits);
     this.buf = new Uint8Array(capacity);
     this.view = new DataView(this.buf.buffer);
   }
