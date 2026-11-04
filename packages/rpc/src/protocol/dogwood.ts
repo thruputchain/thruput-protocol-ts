@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -98,7 +98,7 @@ const _DogwoodTreeHash: XdrCodec<DogwoodTreeHash> = {
   decode(r) { return dogwoodTreeHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
-const _DogwoodTreeNode: XdrCodec<DogwoodTreeNode> = {
+const _DogwoodTreeNode: XdrCodec<DogwoodTreeNode> = withCodecBudget<DogwoodTreeNode>({
   encode(w, val) {
     proto.codec.ValidatorID.encode(w, val.node);
     VarArrayCodec(proto.codec.DogwoodTreeHash, Number(0xFFFFFFFF)).encode(w, val.children);
@@ -108,7 +108,7 @@ const _DogwoodTreeNode: XdrCodec<DogwoodTreeNode> = {
     const children = VarArrayCodec(proto.codec.DogwoodTreeHash, Number(0xFFFFFFFF)).decode(r);
     return { node, children };
   },
-};
+});
 
 const _DogwoodTreeNodes = VarArrayCodec(() => proto.codec.DogwoodTreeNode, Number(0xFFFFFFFF)) as XdrCodec<DogwoodTreeNodes>;
 
@@ -122,7 +122,7 @@ const _DogwoodTransmissionID: XdrCodec<DogwoodTransmissionID> = {
   decode(r) { return dogwoodTransmissionID(proto.codec.DogwoodInt64.decode(r)); },
 };
 
-const _DogwoodStream: XdrCodec<DogwoodStream> = {
+const _DogwoodStream: XdrCodec<DogwoodStream> = withCodecBudget<DogwoodStream>({
   encode(w, val) {
     proto.codec.ValidatorID.encode(w, val.source_id);
     proto.codec.DogwoodStreamID.encode(w, val.stream_id);
@@ -132,9 +132,9 @@ const _DogwoodStream: XdrCodec<DogwoodStream> = {
     const stream_id = proto.codec.DogwoodStreamID.decode(r);
     return { source_id, stream_id };
   },
-};
+});
 
-const _DogwoodRoute: XdrCodec<DogwoodRoute> = {
+const _DogwoodRoute: XdrCodec<DogwoodRoute> = withCodecBudget<DogwoodRoute>({
   encode(w, val) {
     OptionCodec(_DogwoodTreeHash).encode(w, val.route_hash);
     OptionCodec(_DogwoodTreeNodes).encode(w, val.route_nodes);
@@ -144,14 +144,14 @@ const _DogwoodRoute: XdrCodec<DogwoodRoute> = {
     const route_nodes = OptionCodec(_DogwoodTreeNodes).decode(r);
     return { route_hash, route_nodes };
   },
-};
+});
 
 const _DogwoodTransmissionType: XdrCodec<DogwoodTransmissionType> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as DogwoodTransmissionType; },
 };
 
-const _DogwoodTransmission: XdrCodec<DogwoodTransmission> = {
+const _DogwoodTransmission: XdrCodec<DogwoodTransmission> = withCodecBudget<DogwoodTransmission>({
   encode(w, val) {
     proto.codec.DogwoodTransmissionID.encode(w, val.transmission_id);
     proto.codec.DogwoodTransmissionType.encode(w, val.type);
@@ -171,9 +171,9 @@ const _DogwoodTransmission: XdrCodec<DogwoodTransmission> = {
     const shuffle_seed = proto.codec.DogwoodInt32.decode(r);
     return { transmission_id, type, num_payload_bytes, num_payload_sheaves, num_parity_sheaves, max_bytes_per_chunk, shuffle_seed };
   },
-};
+});
 
-const _DogwoodChunk: XdrCodec<DogwoodChunk> = {
+const _DogwoodChunk: XdrCodec<DogwoodChunk> = withCodecBudget<DogwoodChunk>({
   encode(w, val) {
     proto.codec.DogwoodInt32.encode(w, val.sheaf_index);
     proto.codec.DogwoodInt32.encode(w, val.chunk_index);
@@ -185,9 +185,9 @@ const _DogwoodChunk: XdrCodec<DogwoodChunk> = {
     const chunk = r.readVarOpaque(Number(0xFFFFFFFF));
     return { sheaf_index, chunk_index, chunk };
   },
-};
+});
 
-const _DogwoodPackage: XdrCodec<DogwoodPackage> = {
+const _DogwoodPackage: XdrCodec<DogwoodPackage> = withCodecBudget<DogwoodPackage>({
   encode(w, val) {
     proto.codec.DogwoodTransmission.encode(w, val.transmission);
     proto.codec.DogwoodChunk.encode(w, val.chunk);
@@ -197,9 +197,9 @@ const _DogwoodPackage: XdrCodec<DogwoodPackage> = {
     const chunk = proto.codec.DogwoodChunk.decode(r);
     return { transmission, chunk };
   },
-};
+});
 
-const _DogwoodDelivery: XdrCodec<DogwoodDelivery> = {
+const _DogwoodDelivery: XdrCodec<DogwoodDelivery> = withCodecBudget<DogwoodDelivery>({
   encode(w, val) {
     proto.codec.DogwoodStream.encode(w, val.stream);
     proto.codec.DogwoodRoute.encode(w, val.route);
@@ -211,9 +211,9 @@ const _DogwoodDelivery: XdrCodec<DogwoodDelivery> = {
     const pkg = proto.codec.DogwoodPackage.decode(r);
     return { stream, route, pkg };
   },
-};
+});
 
-const _DogwoodRouting: XdrCodec<DogwoodRouting> = {
+const _DogwoodRouting: XdrCodec<DogwoodRouting> = withCodecBudget<DogwoodRouting>({
   encode(w, val) {
     VarArrayCodec(proto.codec.DogwoodTreeNodes, Number(0xFFFFFFFF)).encode(w, val.routes);
   },
@@ -221,9 +221,9 @@ const _DogwoodRouting: XdrCodec<DogwoodRouting> = {
     const routes = VarArrayCodec(proto.codec.DogwoodTreeNodes, Number(0xFFFFFFFF)).decode(r);
     return { routes };
   },
-};
+});
 
-const _DogwoodDeliveryEnvelope: XdrCodec<DogwoodDeliveryEnvelope> = {
+const _DogwoodDeliveryEnvelope: XdrCodec<DogwoodDeliveryEnvelope> = withCodecBudget<DogwoodDeliveryEnvelope>({
   encode(w, val) {
     proto.codec.Signature.encode(w, val.signature);
     proto.codec.DogwoodDelivery.encode(w, val.delivery);
@@ -233,7 +233,7 @@ const _DogwoodDeliveryEnvelope: XdrCodec<DogwoodDeliveryEnvelope> = {
     const delivery = proto.codec.DogwoodDelivery.decode(r);
     return { signature, delivery };
   },
-};
+});
 
 export const codec = {
   DogwoodTreeHash: _DogwoodTreeHash,

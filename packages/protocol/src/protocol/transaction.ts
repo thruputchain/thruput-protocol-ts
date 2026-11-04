@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -147,7 +147,7 @@ const _ReturnBuffer: XdrCodec<ReturnBuffer> = {
   decode(r) { return returnBuffer(r.readVarOpaque(Number(0xFFFFFFFF))); },
 };
 
-const _Invocation: XdrCodec<Invocation> = {
+const _Invocation: XdrCodec<Invocation> = withCodecBudget<Invocation>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.invoked_address);
     proto.codec.ContractEntrypointID.encode(w, val.entrypoint);
@@ -161,14 +161,14 @@ const _Invocation: XdrCodec<Invocation> = {
     const calldata = proto.codec.Calldata.decode(r);
     return { invoked_address, entrypoint, gas_limit, calldata };
   },
-};
+});
 
 const _InvocationFrameStatusCode: XdrCodec<InvocationFrameStatusCode> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as InvocationFrameStatusCode; },
 };
 
-const _InvocationFrameOutput: XdrCodec<InvocationFrameOutput> = {
+const _InvocationFrameOutput: XdrCodec<InvocationFrameOutput> = withCodecBudget<InvocationFrameOutput>({
   encode(w, val) {
     w.writeInt32(BigInt(val.status_code));
     switch (val.status_code) {
@@ -197,9 +197,9 @@ const _InvocationFrameOutput: XdrCodec<InvocationFrameOutput> = {
         throw new Error(`Unknown InvocationFrameOutput discriminant: ${status_code}`);
     }
   },
-};
+});
 
-const _Uniquifier: XdrCodec<Uniquifier> = {
+const _Uniquifier: XdrCodec<Uniquifier> = withCodecBudget<Uniquifier>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block_expiry_height);
     w.writeUint64(val.nonce);
@@ -209,9 +209,9 @@ const _Uniquifier: XdrCodec<Uniquifier> = {
     const nonce = r.readUint64();
     return { block_expiry_height, nonce };
   },
-};
+});
 
-const _Transaction: XdrCodec<Transaction> = {
+const _Transaction: XdrCodec<Transaction> = withCodecBudget<Transaction>({
   encode(w, val) {
     proto.codec.Invocation.encode(w, val.invocation);
     proto.codec.Uniquifier.encode(w, val.uniquifier);
@@ -225,9 +225,9 @@ const _Transaction: XdrCodec<Transaction> = {
     const auth_claim = proto.codec.AuthClaim.decode(r);
     return { invocation, uniquifier, contracts_to_deploy, auth_claim };
   },
-};
+});
 
-const _DecoratedSignature: XdrCodec<DecoratedSignature> = {
+const _DecoratedSignature: XdrCodec<DecoratedSignature> = withCodecBudget<DecoratedSignature>({
   encode(w, val) {
     w.writeUint32(val.public_key_id);
     proto.codec.Signature.encode(w, val.signature);
@@ -237,7 +237,7 @@ const _DecoratedSignature: XdrCodec<DecoratedSignature> = {
     const signature = proto.codec.Signature.decode(r);
     return { public_key_id, signature };
   },
-};
+});
 
 const _TransactionHash: XdrCodec<TransactionHash> = {
   encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
@@ -249,7 +249,7 @@ const _SignedTransactionHash: XdrCodec<SignedTransactionHash> = {
   decode(r) { return signedTransactionHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
-const _SignedTransaction: XdrCodec<SignedTransaction> = {
+const _SignedTransaction: XdrCodec<SignedTransaction> = withCodecBudget<SignedTransaction>({
   encode(w, val) {
     proto.codec.Transaction.encode(w, val.tx);
     VarArrayCodec(proto.codec.DecoratedSignature, Number(0xFFFFFFFF)).encode(w, val.signatures);
@@ -261,7 +261,7 @@ const _SignedTransaction: XdrCodec<SignedTransaction> = {
     const pubkey_claim_key = OptionCodec(proto.codec.PublicKey as XdrCodec<proto.PublicKey>).decode(r);
     return { tx, signatures, pubkey_claim_key };
   },
-};
+});
 
 const _TransactionBatch = VarArrayCodec(() => proto.codec.Transaction, Number(0xFFFFFFFF)) as XdrCodec<TransactionBatch>;
 
@@ -275,7 +275,7 @@ const _TransactionHashBatch = VarArrayCodec(() => proto.codec.TransactionHash, N
 
 const _SignedTransactionHashBatch = VarArrayCodec(() => proto.codec.SignedTransactionHash, Number(0xFFFFFFFF)) as XdrCodec<SignedTransactionHashBatch>;
 
-const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = {
+const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = withCodecBudget<NondeterministicProposalData>({
   encode(w, val) {
     w.writeVarOpaque(val.nondeterministic_bits, Number(0xFFFFFFFF));
     w.writeUint32(val.nondeterministic_bit_count);
@@ -287,9 +287,9 @@ const _NondeterministicProposalData: XdrCodec<NondeterministicProposalData> = {
     const observed_queue_entry_sequence = VarArrayCodec(proto.codec.QueueEntry, Number(proto.kMaxConcurrentRcqReadsPerTx)).decode(r);
     return { nondeterministic_bits, nondeterministic_bit_count, observed_queue_entry_sequence };
   },
-};
+});
 
-const _ProposedTransaction: XdrCodec<ProposedTransaction> = {
+const _ProposedTransaction: XdrCodec<ProposedTransaction> = withCodecBudget<ProposedTransaction>({
   encode(w, val) {
     proto.codec.SignedTransaction.encode(w, val.signed_tx);
     proto.codec.NondeterministicProposalData.encode(w, val.nondeterministic_proposal_data);
@@ -299,7 +299,7 @@ const _ProposedTransaction: XdrCodec<ProposedTransaction> = {
     const nondeterministic_proposal_data = proto.codec.NondeterministicProposalData.decode(r);
     return { signed_tx, nondeterministic_proposal_data };
   },
-};
+});
 
 const _ProposedTransactionBatch = VarArrayCodec(() => proto.codec.ProposedTransaction, Number(0xFFFFFFFF)) as XdrCodec<ProposedTransactionBatch>;
 

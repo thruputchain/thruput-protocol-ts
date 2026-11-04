@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -211,7 +211,7 @@ export function blockHeight(val: bigint): BlockHeight {
 // XDR Codecs below this point
 //
 
-const _uint128_xdr: XdrCodec<uint128_xdr> = {
+const _uint128_xdr: XdrCodec<uint128_xdr> = withCodecBudget<uint128_xdr>({
   encode(w, val) {
     w.writeUint64(val.highbits);
     w.writeUint64(val.lowbits);
@@ -221,9 +221,9 @@ const _uint128_xdr: XdrCodec<uint128_xdr> = {
     const lowbits = r.readUint64();
     return { highbits, lowbits };
   },
-};
+});
 
-const _int128_xdr: XdrCodec<int128_xdr> = {
+const _int128_xdr: XdrCodec<int128_xdr> = withCodecBudget<int128_xdr>({
   encode(w, val) {
     w.writeInt64(val.highbits);
     w.writeUint64(val.lowbits);
@@ -233,7 +233,7 @@ const _int128_xdr: XdrCodec<int128_xdr> = {
     const lowbits = r.readUint64();
     return { highbits, lowbits };
   },
-};
+});
 
 const _Protocol: XdrCodec<Protocol> = {
   encode(w, val) { w.writeUint32(val); },
@@ -290,7 +290,7 @@ const _CryptographicScheme: XdrCodec<CryptographicScheme> = {
   decode(r) { return Number(r.readInt32()) as CryptographicScheme; },
 };
 
-const _Signature: XdrCodec<Signature> = {
+const _Signature: XdrCodec<Signature> = withCodecBudget<Signature>({
   encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
@@ -315,9 +315,9 @@ const _Signature: XdrCodec<Signature> = {
         throw new Error(`Unknown Signature discriminant: ${scheme}`);
     }
   },
-};
+});
 
-const _PublicKey: XdrCodec<PublicKey> = {
+const _PublicKey: XdrCodec<PublicKey> = withCodecBudget<PublicKey>({
   encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
@@ -342,14 +342,14 @@ const _PublicKey: XdrCodec<PublicKey> = {
         throw new Error(`Unknown PublicKey discriminant: ${scheme}`);
     }
   },
-};
+});
 
 const _PublicKeyHash: XdrCodec<PublicKeyHash> = {
   encode(w, val) { w.writeFixedOpaque(val, 32); },
   decode(r) { return publicKeyHash(r.readFixedOpaque(32)); },
 };
 
-const _SecretKey: XdrCodec<SecretKey> = {
+const _SecretKey: XdrCodec<SecretKey> = withCodecBudget<SecretKey>({
   encode(w, val) {
     w.writeInt32(BigInt(val.scheme));
     switch (val.scheme) {
@@ -374,9 +374,9 @@ const _SecretKey: XdrCodec<SecretKey> = {
         throw new Error(`Unknown SecretKey discriminant: ${scheme}`);
     }
   },
-};
+});
 
-const _ExtensionPoint: XdrCodec<ExtensionPoint> = {
+const _ExtensionPoint: XdrCodec<ExtensionPoint> = withCodecBudget<ExtensionPoint>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -393,7 +393,7 @@ const _ExtensionPoint: XdrCodec<ExtensionPoint> = {
         throw new Error(`Unknown ExtensionPoint discriminant: ${v}`);
     }
   },
-};
+});
 
 const _SHA256Hash: XdrCodec<SHA256Hash> = {
   encode(w, val) { w.writeFixedOpaque(val, 32); },
@@ -455,7 +455,7 @@ const _StorageKeyContractData: XdrCodec<StorageKeyContractData> = {
   decode(r) { return storageKeyContractData(r.readFixedOpaque(32)); },
 };
 
-const _StorageKey: XdrCodec<StorageKey> = {
+const _StorageKey: XdrCodec<StorageKey> = withCodecBudget<StorageKey>({
   encode(w, val) {
     w.writeInt32(BigInt(val.key_type));
     switch (val.key_type) {
@@ -490,9 +490,9 @@ const _StorageKey: XdrCodec<StorageKey> = {
         throw new Error(`Unknown StorageKey discriminant: ${key_type}`);
     }
   },
-};
+});
 
-const _AddressAndKey: XdrCodec<AddressAndKey> = {
+const _AddressAndKey: XdrCodec<AddressAndKey> = withCodecBudget<AddressAndKey>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
     proto.codec.StorageKey.encode(w, val.key);
@@ -502,7 +502,7 @@ const _AddressAndKey: XdrCodec<AddressAndKey> = {
     const key = proto.codec.StorageKey.decode(r);
     return { address, key };
   },
-};
+});
 
 const _BlockHeight: XdrCodec<BlockHeight> = {
   encode(w, val) { w.writeInt64(val); },

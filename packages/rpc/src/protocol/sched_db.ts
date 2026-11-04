@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -36,7 +36,7 @@ export interface NativeTokensTransferredChunk {
 // XDR Codecs below this point
 //
 
-const _ShardCard: XdrCodec<ShardCard> = {
+const _ShardCard: XdrCodec<ShardCard> = withCodecBudget<ShardCard>({
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.UPID.encode(w, val.upid);
@@ -54,9 +54,9 @@ const _ShardCard: XdrCodec<ShardCard> = {
     const address_for_auth = proto.codec.ServerAddress.decode(r);
     return { protocol, upid, block_height, address_for_exec, address_for_sched, address_for_auth };
   },
-};
+});
 
-const _Delta: XdrCodec<Delta> = {
+const _Delta: XdrCodec<Delta> = withCodecBudget<Delta>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
     proto.codec.int128_xdr.encode(w, val.native_token_delta);
@@ -66,9 +66,9 @@ const _Delta: XdrCodec<Delta> = {
     const native_token_delta = proto.codec.int128_xdr.decode(r);
     return { address, native_token_delta };
   },
-};
+});
 
-const _NativeTokensTransferredChunk: XdrCodec<NativeTokensTransferredChunk> = {
+const _NativeTokensTransferredChunk: XdrCodec<NativeTokensTransferredChunk> = withCodecBudget<NativeTokensTransferredChunk>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block);
     w.writeUint32(val.chunk_index);
@@ -82,7 +82,7 @@ const _NativeTokensTransferredChunk: XdrCodec<NativeTokensTransferredChunk> = {
     const deltas = VarArrayCodec(proto.codec.Delta, Number(0xFFFFFFFF)).decode(r);
     return { block, chunk_index, chunk_count, deltas };
   },
-};
+});
 
 export const codec = {
   ShardCard: _ShardCard,

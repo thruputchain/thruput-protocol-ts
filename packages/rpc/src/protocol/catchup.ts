@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -48,7 +48,7 @@ export interface SignedCatchupBlocksResult {
 // XDR Codecs below this point
 //
 
-const _CatchupBlock: XdrCodec<CatchupBlock> = {
+const _CatchupBlock: XdrCodec<CatchupBlock> = withCodecBudget<CatchupBlock>({
   encode(w, val) {
     proto.codec.ConsensusBasis.encode(w, val.consensus_basis);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.signed_transactions);
@@ -58,9 +58,9 @@ const _CatchupBlock: XdrCodec<CatchupBlock> = {
     const signed_transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
     return { consensus_basis, signed_transactions };
   },
-};
+});
 
-const _CatchupSpan: XdrCodec<CatchupSpan> = {
+const _CatchupSpan: XdrCodec<CatchupSpan> = withCodecBudget<CatchupSpan>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.from_block_height);
     proto.codec.BlockHeight.encode(w, val.to_block_height);
@@ -70,9 +70,9 @@ const _CatchupSpan: XdrCodec<CatchupSpan> = {
     const to_block_height = proto.codec.BlockHeight.decode(r);
     return { from_block_height, to_block_height };
   },
-};
+});
 
-const _CatchupBlocksRequest: XdrCodec<CatchupBlocksRequest> = {
+const _CatchupBlocksRequest: XdrCodec<CatchupBlocksRequest> = withCodecBudget<CatchupBlocksRequest>({
   encode(w, val) {
     proto.codec.TimePoint.encode(w, val.timestamp);
     VarArrayCodec(proto.codec.CatchupSpan, Number(0xFFFFFFFF)).encode(w, val.spans);
@@ -82,9 +82,9 @@ const _CatchupBlocksRequest: XdrCodec<CatchupBlocksRequest> = {
     const spans = VarArrayCodec(proto.codec.CatchupSpan, Number(0xFFFFFFFF)).decode(r);
     return { timestamp, spans };
   },
-};
+});
 
-const _SignedCatchupBlocksRequest: XdrCodec<SignedCatchupBlocksRequest> = {
+const _SignedCatchupBlocksRequest: XdrCodec<SignedCatchupBlocksRequest> = withCodecBudget<SignedCatchupBlocksRequest>({
   encode(w, val) {
     proto.codec.ValidatorPublicInfo.encode(w, val.signer);
     proto.codec.Signature.encode(w, val.signature);
@@ -96,9 +96,9 @@ const _SignedCatchupBlocksRequest: XdrCodec<SignedCatchupBlocksRequest> = {
     const request = proto.codec.CatchupBlocksRequest.decode(r);
     return { signer, signature, request };
   },
-};
+});
 
-const _CatchupBlocksResult: XdrCodec<CatchupBlocksResult> = {
+const _CatchupBlocksResult: XdrCodec<CatchupBlocksResult> = withCodecBudget<CatchupBlocksResult>({
   encode(w, val) {
     proto.codec.TimePoint.encode(w, val.timestamp);
     VarArrayCodec(proto.codec.CatchupBlock, Number(0xFFFFFFFF)).encode(w, val.blocks);
@@ -108,9 +108,9 @@ const _CatchupBlocksResult: XdrCodec<CatchupBlocksResult> = {
     const blocks = VarArrayCodec(proto.codec.CatchupBlock, Number(0xFFFFFFFF)).decode(r);
     return { timestamp, blocks };
   },
-};
+});
 
-const _SignedCatchupBlocksResult: XdrCodec<SignedCatchupBlocksResult> = {
+const _SignedCatchupBlocksResult: XdrCodec<SignedCatchupBlocksResult> = withCodecBudget<SignedCatchupBlocksResult>({
   encode(w, val) {
     proto.codec.ValidatorPublicInfo.encode(w, val.signer);
     proto.codec.Signature.encode(w, val.signature);
@@ -122,7 +122,7 @@ const _SignedCatchupBlocksResult: XdrCodec<SignedCatchupBlocksResult> = {
     const result = proto.codec.CatchupBlocksResult.decode(r);
     return { signer, signature, result };
   },
-};
+});
 
 export const codec = {
   CatchupBlock: _CatchupBlock,

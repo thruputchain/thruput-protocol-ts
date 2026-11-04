@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -27,7 +27,7 @@ export enum GenesisContractAddresses {
 // XDR Codecs below this point
 //
 
-const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
+const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = withCodecBudget<GenesisConfiguration>({
   encode(w, val) {
     proto.codec.NetworkHash.encode(w, val.network_hash);
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
@@ -43,7 +43,7 @@ const _GenesisConfiguration: XdrCodec<GenesisConfiguration> = {
     const default_wallet = proto.codec.DeployedContractHash.decode(r);
     return { network_hash, storage_cost_model, network_config, root_contract, default_wallet };
   },
-};
+});
 
 const _GenesisContractAddresses: XdrCodec<GenesisContractAddresses> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },

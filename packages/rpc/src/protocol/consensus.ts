@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -41,7 +41,7 @@ const _Upgrade: XdrCodec<Upgrade> = {
   decode(r) { return upgrade(r.readVarOpaque(Number(128))); },
 };
 
-const _ConsensusValue: XdrCodec<ConsensusValue> = {
+const _ConsensusValue: XdrCodec<ConsensusValue> = withCodecBudget<ConsensusValue>({
   encode(w, val) {
     proto.codec.Protocol.encode(w, val.protocol);
     proto.codec.ExtensionPoint.encode(w, val.ext);
@@ -59,9 +59,9 @@ const _ConsensusValue: XdrCodec<ConsensusValue> = {
     const upgrades = VarArrayCodec(proto.codec.Upgrade, Number(6)).decode(r);
     return { protocol, ext, prev_hash, proposal_header, proposal_txs_hash, upgrades };
   },
-};
+});
 
-const _ConsensusBasis: XdrCodec<ConsensusBasis> = {
+const _ConsensusBasis: XdrCodec<ConsensusBasis> = withCodecBudget<ConsensusBasis>({
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     proto.codec.ConsensusValue.encode(w, val.value);
@@ -73,7 +73,7 @@ const _ConsensusBasis: XdrCodec<ConsensusBasis> = {
     const proposal_txs = proto.codec.ProposalTxs.decode(r);
     return { ext, value, proposal_txs };
   },
-};
+});
 
 export const codec = {
   Upgrade: _Upgrade,

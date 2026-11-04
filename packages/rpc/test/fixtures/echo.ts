@@ -1,12 +1,12 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
 // Test-only RPC definition for round-trip testing.
 // Not part of the protocol — used only by the test suite.
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 
 
 export interface EchoRequest {
@@ -36,7 +36,7 @@ export interface AddResponse {
 // XDR Codecs below this point
 //
 
-const _EchoRequest: XdrCodec<EchoRequest> = {
+const _EchoRequest: XdrCodec<EchoRequest> = withCodecBudget<EchoRequest>({
   encode(w, val) {
     w.writeUint32(val.value);
     w.writeString(val.message, Number(256));
@@ -46,9 +46,9 @@ const _EchoRequest: XdrCodec<EchoRequest> = {
     const message = r.readString(Number(256));
     return { value, message };
   },
-};
+});
 
-const _EchoResponse: XdrCodec<EchoResponse> = {
+const _EchoResponse: XdrCodec<EchoResponse> = withCodecBudget<EchoResponse>({
   encode(w, val) {
     w.writeUint32(val.value);
     w.writeString(val.message, Number(256));
@@ -58,9 +58,9 @@ const _EchoResponse: XdrCodec<EchoResponse> = {
     const message = r.readString(Number(256));
     return { value, message };
   },
-};
+});
 
-const _AddRequest: XdrCodec<AddRequest> = {
+const _AddRequest: XdrCodec<AddRequest> = withCodecBudget<AddRequest>({
   encode(w, val) {
     w.writeUint32(val.a);
     w.writeUint32(val.b);
@@ -70,9 +70,9 @@ const _AddRequest: XdrCodec<AddRequest> = {
     const b = r.readUint32();
     return { a, b };
   },
-};
+});
 
-const _AddResponse: XdrCodec<AddResponse> = {
+const _AddResponse: XdrCodec<AddResponse> = withCodecBudget<AddResponse>({
   encode(w, val) {
     w.writeUint32(val.result);
   },
@@ -80,7 +80,7 @@ const _AddResponse: XdrCodec<AddResponse> = {
     const result = r.readUint32();
     return { result };
   },
-};
+});
 
 export const codec = {
   EchoRequest: _EchoRequest,

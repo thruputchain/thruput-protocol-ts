@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -69,7 +69,7 @@ const _Topic: XdrCodec<Topic> = {
   decode(r) { return topic(r.readFixedOpaque(32)); },
 };
 
-const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = {
+const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = withCodecBudget<TxEmittedEvent>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.contract_address);
     w.writeUint32(val.num_topics);
@@ -81,9 +81,9 @@ const _TxEmittedEvent: XdrCodec<TxEmittedEvent> = {
     const serialized_event = r.readVarOpaque(Number(proto.kMaxEventLength));
     return { contract_address, num_topics, serialized_event };
   },
-};
+});
 
-const _TxEventLog: XdrCodec<TxEventLog> = {
+const _TxEventLog: XdrCodec<TxEventLog> = withCodecBudget<TxEventLog>({
   encode(w, val) {
     proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.ExecResult.encode(w, val.exec_result);
@@ -99,9 +99,9 @@ const _TxEventLog: XdrCodec<TxEventLog> = {
     const events = VarArrayCodec(proto.codec.TxEmittedEvent, Number(proto.kMaxEventsPerTransaction)).decode(r);
     return { tx_hash, exec_result, root_output, gas_consumed, events };
   },
-};
+});
 
-const _IdentifiedEvent: XdrCodec<IdentifiedEvent> = {
+const _IdentifiedEvent: XdrCodec<IdentifiedEvent> = withCodecBudget<IdentifiedEvent>({
   encode(w, val) {
     proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.BlockHeight.encode(w, val.block_height);
@@ -115,7 +115,7 @@ const _IdentifiedEvent: XdrCodec<IdentifiedEvent> = {
     const emitted_event = proto.codec.TxEmittedEvent.decode(r);
     return { tx_hash, block_height, sequence_number, emitted_event };
   },
-};
+});
 
 export const codec = {
   Topic: _Topic,

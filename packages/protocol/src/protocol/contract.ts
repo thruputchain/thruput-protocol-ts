@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -57,7 +57,7 @@ export interface DeployedContractHash {
 // XDR Codecs below this point
 //
 
-const _ContractBlob: XdrCodec<ContractBlob> = {
+const _ContractBlob: XdrCodec<ContractBlob> = withCodecBudget<ContractBlob>({
   encode(w, val) {
     w.writeVarOpaque(val.data, Number(0xFFFFFFFF));
   },
@@ -65,14 +65,14 @@ const _ContractBlob: XdrCodec<ContractBlob> = {
     const data = r.readVarOpaque(Number(0xFFFFFFFF));
     return { data };
   },
-};
+});
 
 const _ContractType: XdrCodec<ContractType> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractType; },
 };
 
-const _Contract: XdrCodec<Contract> = {
+const _Contract: XdrCodec<Contract> = withCodecBudget<Contract>({
   encode(w, val) {
     w.writeInt32(BigInt(val.contract_type));
     switch (val.contract_type) {
@@ -103,9 +103,9 @@ const _Contract: XdrCodec<Contract> = {
         throw new Error(`Unknown Contract discriminant: ${contract_type}`);
     }
   },
-};
+});
 
-const _ContractDeploymentHashPreimage: XdrCodec<ContractDeploymentHashPreimage> = {
+const _ContractDeploymentHashPreimage: XdrCodec<ContractDeploymentHashPreimage> = withCodecBudget<ContractDeploymentHashPreimage>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.deployer_address);
     proto.codec.SHA256Hash.encode(w, val.nonce);
@@ -117,14 +117,14 @@ const _ContractDeploymentHashPreimage: XdrCodec<ContractDeploymentHashPreimage> 
     const contract_hash = proto.codec.SHA256Hash.decode(r);
     return { deployer_address, nonce, contract_hash };
   },
-};
+});
 
 const _ContractEntrypointID: XdrCodec<ContractEntrypointID> = {
   encode(w, val) { w.writeFixedOpaque(val, 8); },
   decode(r) { return contractEntrypointID(r.readFixedOpaque(8)); },
 };
 
-const _DeployedContractHash: XdrCodec<DeployedContractHash> = {
+const _DeployedContractHash: XdrCodec<DeployedContractHash> = withCodecBudget<DeployedContractHash>({
   encode(w, val) {
     proto.codec.SHA256Hash.encode(w, val.hash);
     w.writeUint32(val.contract_size);
@@ -136,7 +136,7 @@ const _DeployedContractHash: XdrCodec<DeployedContractHash> = {
     const contract_type = proto.codec.ContractType.decode(r);
     return { hash, contract_size, contract_type };
   },
-};
+});
 
 export const codec = {
   ContractBlob: _ContractBlob,

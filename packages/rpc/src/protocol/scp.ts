@@ -1,13 +1,13 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
 // Copyright 2015 Stellar Development Foundation and contributors. Licensed
 // under the Apache License, Version 2.0. See the COPYING file at the root
 // of this distribution or at http://www.apache.org/licenses/LICENSE-2.0
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -165,7 +165,7 @@ const _SCPValues = VarArrayCodec(() => proto.codec.SCPValue, Number(0xFFFFFFFF))
 
 const _SCPOptValue = OptionCodec(() => _SCPValue) as XdrCodec<SCPOptValue>;
 
-const _SCPBallot: XdrCodec<SCPBallot> = {
+const _SCPBallot: XdrCodec<SCPBallot> = withCodecBudget<SCPBallot>({
   encode(w, val) {
     proto.codec.SCPCount.encode(w, val.counter);
     proto.codec.SCPValue.encode(w, val.value);
@@ -175,14 +175,14 @@ const _SCPBallot: XdrCodec<SCPBallot> = {
     const value = proto.codec.SCPValue.decode(r);
     return { counter, value };
   },
-};
+});
 
 const _SCPStatementType: XdrCodec<SCPStatementType> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as SCPStatementType; },
 };
 
-const _SCPStatementNominate: XdrCodec<SCPStatementNominate> = {
+const _SCPStatementNominate: XdrCodec<SCPStatementNominate> = withCodecBudget<SCPStatementNominate>({
   encode(w, val) {
     proto.codec.SCPHash.encode(w, val.quorum_set_hash);
     VarArrayCodec(proto.codec.SCPValue, Number(0xFFFFFFFF)).encode(w, val.votes);
@@ -194,9 +194,9 @@ const _SCPStatementNominate: XdrCodec<SCPStatementNominate> = {
     const accepted = VarArrayCodec(proto.codec.SCPValue, Number(0xFFFFFFFF)).decode(r);
     return { quorum_set_hash, votes, accepted };
   },
-};
+});
 
-const _SCPStatementPrepare: XdrCodec<SCPStatementPrepare> = {
+const _SCPStatementPrepare: XdrCodec<SCPStatementPrepare> = withCodecBudget<SCPStatementPrepare>({
   encode(w, val) {
     proto.codec.SCPHash.encode(w, val.quorum_set_hash);
     proto.codec.SCPBallot.encode(w, val.ballot);
@@ -214,9 +214,9 @@ const _SCPStatementPrepare: XdrCodec<SCPStatementPrepare> = {
     const n_h = proto.codec.SCPCount.decode(r);
     return { quorum_set_hash, ballot, prepared, prepared_prime, n_c, n_h };
   },
-};
+});
 
-const _SCPStatementConfirm: XdrCodec<SCPStatementConfirm> = {
+const _SCPStatementConfirm: XdrCodec<SCPStatementConfirm> = withCodecBudget<SCPStatementConfirm>({
   encode(w, val) {
     proto.codec.SCPBallot.encode(w, val.ballot);
     proto.codec.SCPCount.encode(w, val.n_prepared);
@@ -232,9 +232,9 @@ const _SCPStatementConfirm: XdrCodec<SCPStatementConfirm> = {
     const quorum_set_hash = proto.codec.SCPHash.decode(r);
     return { ballot, n_prepared, n_commit, n_h, quorum_set_hash };
   },
-};
+});
 
-const _SCPStatementExternalize: XdrCodec<SCPStatementExternalize> = {
+const _SCPStatementExternalize: XdrCodec<SCPStatementExternalize> = withCodecBudget<SCPStatementExternalize>({
   encode(w, val) {
     proto.codec.SCPBallot.encode(w, val.commit);
     proto.codec.SCPCount.encode(w, val.n_h);
@@ -246,9 +246,9 @@ const _SCPStatementExternalize: XdrCodec<SCPStatementExternalize> = {
     const commit_quorum_set_hash = proto.codec.SCPHash.decode(r);
     return { commit, n_h, commit_quorum_set_hash };
   },
-};
+});
 
-const _SCPStatement_pledges: XdrCodec<SCPStatement_pledges> = {
+const _SCPStatement_pledges: XdrCodec<SCPStatement_pledges> = withCodecBudget<SCPStatement_pledges>({
   encode(w, val) {
     w.writeInt32(BigInt(val.stmt_type));
     switch (val.stmt_type) {
@@ -285,9 +285,9 @@ const _SCPStatement_pledges: XdrCodec<SCPStatement_pledges> = {
         throw new Error(`Unknown SCPStatement_pledges discriminant: ${stmt_type}`);
     }
   },
-};
+});
 
-const _SCPStatement: XdrCodec<SCPStatement> = {
+const _SCPStatement: XdrCodec<SCPStatement> = withCodecBudget<SCPStatement>({
   encode(w, val) {
     proto.codec.SCPNodeID.encode(w, val.node_id);
     proto.codec.SCPSlotIndex.encode(w, val.slot_index);
@@ -299,9 +299,9 @@ const _SCPStatement: XdrCodec<SCPStatement> = {
     const pledges = proto.codec.SCPStatement_pledges.decode(r);
     return { node_id, slot_index, pledges };
   },
-};
+});
 
-const _SCPEnvelope: XdrCodec<SCPEnvelope> = {
+const _SCPEnvelope: XdrCodec<SCPEnvelope> = withCodecBudget<SCPEnvelope>({
   encode(w, val) {
     proto.codec.SCPStatement.encode(w, val.statement);
     proto.codec.Signature.encode(w, val.signature);
@@ -311,11 +311,11 @@ const _SCPEnvelope: XdrCodec<SCPEnvelope> = {
     const signature = proto.codec.Signature.decode(r);
     return { statement, signature };
   },
-};
+});
 
 const _SCPEnvelopes = VarArrayCodec(() => proto.codec.SCPEnvelope, Number(0xFFFFFFFF)) as XdrCodec<SCPEnvelopes>;
 
-const _SCPQuorumSet: XdrCodec<SCPQuorumSet> = {
+const _SCPQuorumSet: XdrCodec<SCPQuorumSet> = withCodecBudget<SCPQuorumSet>({
   encode(w, val) {
     proto.codec.SCPCount.encode(w, val.threshold);
     VarArrayCodec(proto.codec.SCPNodeID, Number(0xFFFFFFFF)).encode(w, val.validators);
@@ -327,7 +327,7 @@ const _SCPQuorumSet: XdrCodec<SCPQuorumSet> = {
     const inner_sets = VarArrayCodec(proto.codec.SCPQuorumSet, Number(0xFFFFFFFF)).decode(r);
     return { threshold, validators, inner_sets };
   },
-};
+});
 
 const _SCPOptQuorumSet = OptionCodec(() => _SCPQuorumSet) as XdrCodec<SCPOptQuorumSet>;
 

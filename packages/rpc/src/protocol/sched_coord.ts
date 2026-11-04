@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -170,7 +170,7 @@ const _CoordinatorRegistrationOutcome: XdrCodec<CoordinatorRegistrationOutcome> 
   decode(r) { return Number(r.readInt32()) as CoordinatorRegistrationOutcome; },
 };
 
-const _CoordCard: XdrCodec<CoordCard> = {
+const _CoordCard: XdrCodec<CoordCard> = withCodecBudget<CoordCard>({
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.ServerAddress.encode(w, val.address_for_sched);
@@ -180,14 +180,14 @@ const _CoordCard: XdrCodec<CoordCard> = {
     const address_for_sched = proto.codec.ServerAddress.decode(r);
     return { protocol, address_for_sched };
   },
-};
+});
 
 const _SchedulerProposalOutcome: XdrCodec<SchedulerProposalOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as SchedulerProposalOutcome; },
 };
 
-const _SchedulerProposedBlock: XdrCodec<SchedulerProposedBlock> = {
+const _SchedulerProposedBlock: XdrCodec<SchedulerProposedBlock> = withCodecBudget<SchedulerProposedBlock>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.block_id);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.txs);
@@ -199,9 +199,9 @@ const _SchedulerProposedBlock: XdrCodec<SchedulerProposedBlock> = {
     const proposal = proto.codec.Proposal.decode(r);
     return { block_id, txs, proposal };
   },
-};
+});
 
-const _SchedulerProposalResult: XdrCodec<SchedulerProposalResult> = {
+const _SchedulerProposalResult: XdrCodec<SchedulerProposalResult> = withCodecBudget<SchedulerProposalResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -224,14 +224,14 @@ const _SchedulerProposalResult: XdrCodec<SchedulerProposalResult> = {
         throw new Error(`Unknown SchedulerProposalResult discriminant: ${outcome}`);
     }
   },
-};
+});
 
 const _SchedulerValidationOutcome: XdrCodec<SchedulerValidationOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as SchedulerValidationOutcome; },
 };
 
-const _SchedulerValidationBlock: XdrCodec<SchedulerValidationBlock> = {
+const _SchedulerValidationBlock: XdrCodec<SchedulerValidationBlock> = withCodecBudget<SchedulerValidationBlock>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.block_id);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.signed_transactions);
@@ -241,9 +241,9 @@ const _SchedulerValidationBlock: XdrCodec<SchedulerValidationBlock> = {
     const signed_transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
     return { block_id, signed_transactions };
   },
-};
+});
 
-const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
+const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = withCodecBudget<SchedulerValidationResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -282,7 +282,7 @@ const _SchedulerValidationResult: XdrCodec<SchedulerValidationResult> = {
         throw new Error(`Unknown SchedulerValidationResult discriminant: ${outcome}`);
     }
   },
-};
+});
 
 const _SchedulerCommitOutcome: XdrCodec<SchedulerCommitOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -294,7 +294,7 @@ const _SchedulerGetTipOutcome: XdrCodec<SchedulerGetTipOutcome> = {
   decode(r) { return Number(r.readInt32()) as SchedulerGetTipOutcome; },
 };
 
-const _SchedulerGetTipResult: XdrCodec<SchedulerGetTipResult> = {
+const _SchedulerGetTipResult: XdrCodec<SchedulerGetTipResult> = withCodecBudget<SchedulerGetTipResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -317,9 +317,9 @@ const _SchedulerGetTipResult: XdrCodec<SchedulerGetTipResult> = {
         throw new Error(`Unknown SchedulerGetTipResult discriminant: ${outcome}`);
     }
   },
-};
+});
 
-const _GenesisCeremonyRequest: XdrCodec<GenesisCeremonyRequest> = {
+const _GenesisCeremonyRequest: XdrCodec<GenesisCeremonyRequest> = withCodecBudget<GenesisCeremonyRequest>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.expected_parent_height);
     proto.codec.ConsensusValueHash.encode(w, val.expected_parent_value_hash);
@@ -333,14 +333,14 @@ const _GenesisCeremonyRequest: XdrCodec<GenesisCeremonyRequest> = {
     const transactions = proto.codec.ParallelSignedTransactionBatch.decode(r);
     return { expected_parent_height, expected_parent_value_hash, context, transactions };
   },
-};
+});
 
 const _GenesisCeremonyOutcome: XdrCodec<GenesisCeremonyOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as GenesisCeremonyOutcome; },
 };
 
-const _GenesisCeremonyCommit: XdrCodec<GenesisCeremonyCommit> = {
+const _GenesisCeremonyCommit: XdrCodec<GenesisCeremonyCommit> = withCodecBudget<GenesisCeremonyCommit>({
   encode(w, val) {
     proto.codec.DbTip.encode(w, val.db_tip);
     proto.codec.ProposalTxs.encode(w, val.proposal_txs);
@@ -350,7 +350,7 @@ const _GenesisCeremonyCommit: XdrCodec<GenesisCeremonyCommit> = {
     const proposal_txs = proto.codec.ProposalTxs.decode(r);
     return { db_tip, proposal_txs };
   },
-};
+});
 
 const _SchedulerTransactionStatus: XdrCodec<SchedulerTransactionStatus> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -367,7 +367,7 @@ const _SchedulerErrorCode: XdrCodec<SchedulerErrorCode> = {
   decode(r) { return Number(r.readInt32()) as SchedulerErrorCode; },
 };
 
-const _SchedulerTransactionOutcome: XdrCodec<SchedulerTransactionOutcome> = {
+const _SchedulerTransactionOutcome: XdrCodec<SchedulerTransactionOutcome> = withCodecBudget<SchedulerTransactionOutcome>({
   encode(w, val) {
     proto.codec.SchedulerTransactionStatus.encode(w, val.status);
     proto.codec.SchedulerTransactionErrorSource.encode(w, val.error_source);
@@ -381,11 +381,11 @@ const _SchedulerTransactionOutcome: XdrCodec<SchedulerTransactionOutcome> = {
     const height = proto.codec.BlockHeight.decode(r);
     return { status, error_source, error_code, height };
   },
-};
+});
 
 const _SchedulerTransactionOutcomeBatch = VarArrayCodec(() => proto.codec.SchedulerTransactionOutcome, Number(0xFFFFFFFF)) as XdrCodec<SchedulerTransactionOutcomeBatch>;
 
-const _GenesisCeremonyResult: XdrCodec<GenesisCeremonyResult> = {
+const _GenesisCeremonyResult: XdrCodec<GenesisCeremonyResult> = withCodecBudget<GenesisCeremonyResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -410,9 +410,9 @@ const _GenesisCeremonyResult: XdrCodec<GenesisCeremonyResult> = {
         return { outcome };
     }
   },
-};
+});
 
-const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_args> = {
+const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_args> = withCodecBudget<schedulercoord_submit_vetted_args>({
   encode(w, val) {
     proto.codec.ValidatorID.encode(w, val.arg0);
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.arg1);
@@ -422,9 +422,9 @@ const _schedulercoord_submit_vetted_args: XdrCodec<schedulercoord_submit_vetted_
     const arg1 = proto.codec.ParallelSignedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _schedulercoord_propose_block_args: XdrCodec<schedulercoord_propose_block_args> = {
+const _schedulercoord_propose_block_args: XdrCodec<schedulercoord_propose_block_args> = withCodecBudget<schedulercoord_propose_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ProposalContext.encode(w, val.arg1);
@@ -434,9 +434,9 @@ const _schedulercoord_propose_block_args: XdrCodec<schedulercoord_propose_block_
     const arg1 = proto.codec.ProposalContext.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _schedulercoord_validate_block_args: XdrCodec<schedulercoord_validate_block_args> = {
+const _schedulercoord_validate_block_args: XdrCodec<schedulercoord_validate_block_args> = withCodecBudget<schedulercoord_validate_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.Proposal.encode(w, val.arg1);
@@ -446,9 +446,9 @@ const _schedulercoord_validate_block_args: XdrCodec<schedulercoord_validate_bloc
     const arg1 = proto.codec.Proposal.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _schedulercoord_commit_block_args: XdrCodec<schedulercoord_commit_block_args> = {
+const _schedulercoord_commit_block_args: XdrCodec<schedulercoord_commit_block_args> = withCodecBudget<schedulercoord_commit_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ConsensusValue.encode(w, val.arg1);
@@ -458,7 +458,7 @@ const _schedulercoord_commit_block_args: XdrCodec<schedulercoord_commit_block_ar
     const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   CoordinatorRegistrationOutcome: _CoordinatorRegistrationOutcome,

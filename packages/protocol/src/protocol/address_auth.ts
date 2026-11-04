@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -44,7 +44,7 @@ export interface AddressAuthData {
 // XDR Codecs below this point
 //
 
-const _PublicKeyConfig: XdrCodec<PublicKeyConfig> = {
+const _PublicKeyConfig: XdrCodec<PublicKeyConfig> = withCodecBudget<PublicKeyConfig>({
   encode(w, val) {
     proto.codec.PublicKey.encode(w, val.key);
     proto.codec.Weight.encode(w, val.max_weight);
@@ -54,11 +54,11 @@ const _PublicKeyConfig: XdrCodec<PublicKeyConfig> = {
     const max_weight = proto.codec.Weight.decode(r);
     return { key, max_weight };
   },
-};
+});
 
 const _PublicKeyConfigOpt = OptionCodec(() => _PublicKeyConfig) as XdrCodec<PublicKeyConfigOpt>;
 
-const _AddressAuthData: XdrCodec<AddressAuthData> = {
+const _AddressAuthData: XdrCodec<AddressAuthData> = withCodecBudget<AddressAuthData>({
   encode(w, val) {
     FixedArrayCodec(proto.codec.PublicKeyConfigOpt, Number(proto.kMaxSigners)).encode(w, val.public_keys);
     proto.codec.Weight.encode(w, val.required_weight);
@@ -70,7 +70,7 @@ const _AddressAuthData: XdrCodec<AddressAuthData> = {
     const last_written_height = proto.codec.BlockHeight.decode(r);
     return { public_keys, required_weight, last_written_height };
   },
-};
+});
 
 export const codec = {
   PublicKeyConfig: _PublicKeyConfig,

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -41,7 +41,7 @@ export interface WalletAck {
 // XDR Codecs below this point
 //
 
-const _WalletSubmit: XdrCodec<WalletSubmit> = {
+const _WalletSubmit: XdrCodec<WalletSubmit> = withCodecBudget<WalletSubmit>({
   encode(w, val) {
     VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).encode(w, val.signed_transactions);
   },
@@ -49,7 +49,7 @@ const _WalletSubmit: XdrCodec<WalletSubmit> = {
     const signed_transactions = VarArrayCodec(proto.codec.SignedTransaction, Number(0xFFFFFFFF)).decode(r);
     return { signed_transactions };
   },
-};
+});
 
 const _WalletTransactionAckType: XdrCodec<WalletTransactionAckType> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -61,7 +61,7 @@ const _WalletSubmittedTransactionID: XdrCodec<WalletSubmittedTransactionID> = {
   decode(r) { return walletSubmittedTransactionID(r.readFixedOpaque(32)); },
 };
 
-const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
+const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = withCodecBudget<WalletTransactionAck>({
   encode(w, val) {
     w.writeInt32(BigInt(val.ack_type));
     switch (val.ack_type) {
@@ -90,9 +90,9 @@ const _WalletTransactionAck: XdrCodec<WalletTransactionAck> = {
         return { ack_type };
     }
   },
-};
+});
 
-const _WalletAck: XdrCodec<WalletAck> = {
+const _WalletAck: XdrCodec<WalletAck> = withCodecBudget<WalletAck>({
   encode(w, val) {
     VarArrayCodec(proto.codec.WalletTransactionAck, Number(0xFFFFFFFF)).encode(w, val.transaction_acks);
   },
@@ -100,7 +100,7 @@ const _WalletAck: XdrCodec<WalletAck> = {
     const transaction_acks = VarArrayCodec(proto.codec.WalletTransactionAck, Number(0xFFFFFFFF)).decode(r);
     return { transaction_acks };
   },
-};
+});
 
 export const codec = {
   WalletSubmit: _WalletSubmit,

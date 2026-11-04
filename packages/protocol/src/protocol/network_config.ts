@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -67,7 +67,7 @@ const _ConfigParamID: XdrCodec<ConfigParamID> = {
   decode(r) { return Number(r.readInt32()) as ConfigParamID; },
 };
 
-const _ConfigParam: XdrCodec<ConfigParam> = {
+const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
   encode(w, val) {
     w.writeInt32(BigInt(val.param));
     switch (val.param) {
@@ -164,9 +164,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = {
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
   },
-};
+});
 
-const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = {
+const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = withCodecBudget<NetworkConfigV0>({
   encode(w, val) {
     VarArrayCodec(proto.codec.ConfigParam, Number(0xFFFFFFFF)).encode(w, val.params);
   },
@@ -174,9 +174,9 @@ const _NetworkConfigV0: XdrCodec<NetworkConfigV0> = {
     const params = VarArrayCodec(proto.codec.ConfigParam, Number(0xFFFFFFFF)).decode(r);
     return { params };
   },
-};
+});
 
-const _NetworkConfig: XdrCodec<NetworkConfig> = {
+const _NetworkConfig: XdrCodec<NetworkConfig> = withCodecBudget<NetworkConfig>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -195,9 +195,9 @@ const _NetworkConfig: XdrCodec<NetworkConfig> = {
         throw new Error(`Unknown NetworkConfig discriminant: ${v}`);
     }
   },
-};
+});
 
-const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
+const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = withCodecBudget<ConfigHashPreimage>({
   encode(w, val) {
     proto.codec.StorageCostModelXdr.encode(w, val.storage_cost_model);
     proto.codec.NetworkConfig.encode(w, val.network_config);
@@ -209,7 +209,7 @@ const _ConfigHashPreimage: XdrCodec<ConfigHashPreimage> = {
     const default_wallet = proto.codec.DeployedContractHash.decode(r);
     return { storage_cost_model, network_config, default_wallet };
   },
-};
+});
 
 export const codec = {
   ConfigParamID: _ConfigParamID,

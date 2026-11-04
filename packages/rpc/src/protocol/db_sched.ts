@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -124,7 +124,7 @@ const _DbSchedResult: XdrCodec<DbSchedResult> = {
   decode(r) { return Number(r.readInt32()) as DbSchedResult; },
 };
 
-const _NativeTokenAge: XdrCodec<NativeTokenAge> = {
+const _NativeTokenAge: XdrCodec<NativeTokenAge> = withCodecBudget<NativeTokenAge>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
     FixedArrayCodec(proto.codec.uint128_xdr, Number(proto.kNativeTokenAgeNumGroups)).encode(w, val.num_native_tokens);
@@ -136,11 +136,11 @@ const _NativeTokenAge: XdrCodec<NativeTokenAge> = {
     const average_ages = FixedArrayCodec(proto.codec.BlockHeight, Number(proto.kNativeTokenAgeNumGroups)).decode(r) as FixedArray<proto.BlockHeight, proto.kNativeTokenAgeNumGroups>;
     return { address, num_native_tokens, average_ages };
   },
-};
+});
 
 const _NativeTokenAgeBatch = VarArrayCodec(() => proto.codec.NativeTokenAge, Number(0xFFFFFFFF)) as XdrCodec<NativeTokenAgeBatch>;
 
-const _NativeTokenAgeResult: XdrCodec<NativeTokenAgeResult> = {
+const _NativeTokenAgeResult: XdrCodec<NativeTokenAgeResult> = withCodecBudget<NativeTokenAgeResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
@@ -165,11 +165,11 @@ const _NativeTokenAgeResult: XdrCodec<NativeTokenAgeResult> = {
         return { result };
     }
   },
-};
+});
 
 const _NativeTokenAgeResults = VarArrayCodec(() => proto.codec.NativeTokenAgeResult, Number(0xFFFFFFFF)) as XdrCodec<NativeTokenAgeResults>;
 
-const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
+const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = withCodecBudget<DbAddressAuthDataBatchResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
@@ -194,9 +194,9 @@ const _DbAddressAuthDataBatchResult: XdrCodec<DbAddressAuthDataBatchResult> = {
         return { result };
     }
   },
-};
+});
 
-const _DbBlockOk: XdrCodec<DbBlockOk> = {
+const _DbBlockOk: XdrCodec<DbBlockOk> = withCodecBudget<DbBlockOk>({
   encode(w, val) {
     proto.codec.StorageShortHash.encode(w, val.storage_hash);
     proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
@@ -208,9 +208,9 @@ const _DbBlockOk: XdrCodec<DbBlockOk> = {
     const config_hash_preimage = proto.codec.ConfigHashPreimage.decode(r);
     return { storage_hash, storage_long_hash, config_hash_preimage };
   },
-};
+});
 
-const _DbBlockResult: XdrCodec<DbBlockResult> = {
+const _DbBlockResult: XdrCodec<DbBlockResult> = withCodecBudget<DbBlockResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
@@ -235,14 +235,14 @@ const _DbBlockResult: XdrCodec<DbBlockResult> = {
         return { result };
     }
   },
-};
+});
 
 const _DbShardResult: XdrCodec<DbShardResult> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as DbShardResult; },
 };
 
-const _DbTipResult: XdrCodec<DbTipResult> = {
+const _DbTipResult: XdrCodec<DbTipResult> = withCodecBudget<DbTipResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
@@ -267,9 +267,9 @@ const _DbTipResult: XdrCodec<DbTipResult> = {
         return { result };
     }
   },
-};
+});
 
-const _dbsched_get_address_auth_data_args: XdrCodec<dbsched_get_address_auth_data_args> = {
+const _dbsched_get_address_auth_data_args: XdrCodec<dbsched_get_address_auth_data_args> = withCodecBudget<dbsched_get_address_auth_data_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ContractAddressBatch.encode(w, val.arg1);
@@ -279,9 +279,9 @@ const _dbsched_get_address_auth_data_args: XdrCodec<dbsched_get_address_auth_dat
     const arg1 = proto.codec.ContractAddressBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _dbsched_create_snapshot_args: XdrCodec<dbsched_create_snapshot_args> = {
+const _dbsched_create_snapshot_args: XdrCodec<dbsched_create_snapshot_args> = withCodecBudget<dbsched_create_snapshot_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockID.encode(w, val.arg1);
@@ -293,9 +293,9 @@ const _dbsched_create_snapshot_args: XdrCodec<dbsched_create_snapshot_args> = {
     const arg2 = proto.codec.BlockExecutionMode.decode(r);
     return { arg0, arg1, arg2 };
   },
-};
+});
 
-const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = {
+const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = withCodecBudget<dbsched_commit_snapshot_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ConsensusValue.encode(w, val.arg1);
@@ -305,9 +305,9 @@ const _dbsched_commit_snapshot_args: XdrCodec<dbsched_commit_snapshot_args> = {
     const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_configuration_args> = {
+const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_configuration_args> = withCodecBudget<dbsched_load_genesis_configuration_args>({
   encode(w, val) {
     proto.codec.GenesisConfiguration.encode(w, val.arg0);
     proto.codec.ConsensusValue.encode(w, val.arg1);
@@ -317,7 +317,7 @@ const _dbsched_load_genesis_configuration_args: XdrCodec<dbsched_load_genesis_co
     const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   DbSchedResult: _DbSchedResult,

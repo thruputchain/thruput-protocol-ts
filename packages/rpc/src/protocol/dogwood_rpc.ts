@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -41,7 +41,7 @@ const _Bytes: XdrCodec<Bytes> = {
   decode(r) { return bytes(r.readVarOpaque(Number(0xFFFFFFFF))); },
 };
 
-const _DogwoodStandaloneConfig: XdrCodec<DogwoodStandaloneConfig> = {
+const _DogwoodStandaloneConfig: XdrCodec<DogwoodStandaloneConfig> = withCodecBudget<DogwoodStandaloneConfig>({
   encode(w, val) {
     proto.codec.ValidatorConfig.encode(w, val.validator_config);
     proto.codec.RouterConfig.encode(w, val.router_config);
@@ -53,9 +53,9 @@ const _DogwoodStandaloneConfig: XdrCodec<DogwoodStandaloneConfig> = {
     const dogwood_config = proto.codec.DogwoodConfig.decode(r);
     return { validator_config, router_config, dogwood_config };
   },
-};
+});
 
-const _DogwoodReceived: XdrCodec<DogwoodReceived> = {
+const _DogwoodReceived: XdrCodec<DogwoodReceived> = withCodecBudget<DogwoodReceived>({
   encode(w, val) {
     proto.codec.ValidatorID.encode(w, val.from);
     w.writeVarOpaque(val.payload, Number(0xFFFFFFFF));
@@ -65,9 +65,9 @@ const _DogwoodReceived: XdrCodec<DogwoodReceived> = {
     const payload = r.readVarOpaque(Number(0xFFFFFFFF));
     return { from, payload };
   },
-};
+});
 
-const _dogwoodapi_send_args: XdrCodec<dogwoodapi_send_args> = {
+const _dogwoodapi_send_args: XdrCodec<dogwoodapi_send_args> = withCodecBudget<dogwoodapi_send_args>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.arg0);
     proto.codec.Bytes.encode(w, val.arg1);
@@ -77,7 +77,7 @@ const _dogwoodapi_send_args: XdrCodec<dogwoodapi_send_args> = {
     const arg1 = proto.codec.Bytes.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   Bytes: _Bytes,

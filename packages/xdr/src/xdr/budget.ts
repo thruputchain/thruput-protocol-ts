@@ -2,7 +2,7 @@
 export interface CodecLimits {
   /** Maximum nested value levels. Default: 128. */
   maxDepth?: number;
-  /** Maximum decoded value visits. Default: min(100000, 1024 + 16 * input bytes). */
+  /** Maximum decoded value visits. Default: 1024 + 16 * input bytes. */
   maxWork?: number;
 }
 
@@ -39,10 +39,10 @@ export class DecodeBudget {
   private remaining: number;
   private readonly maxDepth: number;
 
-  /** Allow small zero-width values, with at most 100,000 value visits. */
+  /** Bound work relative to input size, including small zero-width values. */
   constructor(inputBytes: number, limits: CodecLimits = {}) {
     this.maxDepth = limit(limits.maxDepth ?? 128, "maxDepth");
-    this.remaining = limit(limits.maxWork ?? Math.min(100_000, 1024 + 16 * inputBytes), "maxWork");
+    this.remaining = limit(limits.maxWork ?? (1024 + 16 * inputBytes), "maxWork");
   }
 
   /** Check a collection before allocating it; individual values charge the work. */

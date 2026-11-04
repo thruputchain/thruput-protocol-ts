@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -85,7 +85,7 @@ const _SCPValidationLevel: XdrCodec<SCPValidationLevel> = {
   decode(r) { return Number(r.readInt32()) as SCPValidationLevel; },
 };
 
-const _scp_handle_validate_ballot_value_args: XdrCodec<scp_handle_validate_ballot_value_args> = {
+const _scp_handle_validate_ballot_value_args: XdrCodec<scp_handle_validate_ballot_value_args> = withCodecBudget<scp_handle_validate_ballot_value_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -95,9 +95,9 @@ const _scp_handle_validate_ballot_value_args: XdrCodec<scp_handle_validate_ballo
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_validate_nomination_value_args: XdrCodec<scp_handle_validate_nomination_value_args> = {
+const _scp_handle_validate_nomination_value_args: XdrCodec<scp_handle_validate_nomination_value_args> = withCodecBudget<scp_handle_validate_nomination_value_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -107,9 +107,9 @@ const _scp_handle_validate_nomination_value_args: XdrCodec<scp_handle_validate_n
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_extract_valid_value_args: XdrCodec<scp_handle_extract_valid_value_args> = {
+const _scp_handle_extract_valid_value_args: XdrCodec<scp_handle_extract_valid_value_args> = withCodecBudget<scp_handle_extract_valid_value_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -119,9 +119,9 @@ const _scp_handle_extract_valid_value_args: XdrCodec<scp_handle_extract_valid_va
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_combine_candidates_args: XdrCodec<scp_handle_combine_candidates_args> = {
+const _scp_handle_combine_candidates_args: XdrCodec<scp_handle_combine_candidates_args> = withCodecBudget<scp_handle_combine_candidates_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValues.encode(w, val.arg1);
@@ -131,9 +131,9 @@ const _scp_handle_combine_candidates_args: XdrCodec<scp_handle_combine_candidate
     const arg1 = proto.codec.SCPValues.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_value_externalized_args: XdrCodec<scp_handle_value_externalized_args> = {
+const _scp_handle_value_externalized_args: XdrCodec<scp_handle_value_externalized_args> = withCodecBudget<scp_handle_value_externalized_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -143,9 +143,9 @@ const _scp_handle_value_externalized_args: XdrCodec<scp_handle_value_externalize
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_nominating_value_args: XdrCodec<scp_handle_nominating_value_args> = {
+const _scp_handle_nominating_value_args: XdrCodec<scp_handle_nominating_value_args> = withCodecBudget<scp_handle_nominating_value_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -155,9 +155,9 @@ const _scp_handle_nominating_value_args: XdrCodec<scp_handle_nominating_value_ar
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_updated_candidate_value_args: XdrCodec<scp_handle_updated_candidate_value_args> = {
+const _scp_handle_updated_candidate_value_args: XdrCodec<scp_handle_updated_candidate_value_args> = withCodecBudget<scp_handle_updated_candidate_value_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -167,9 +167,9 @@ const _scp_handle_updated_candidate_value_args: XdrCodec<scp_handle_updated_cand
     const arg1 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_started_ballot_proto_args: XdrCodec<scp_handle_started_ballot_proto_args> = {
+const _scp_handle_started_ballot_proto_args: XdrCodec<scp_handle_started_ballot_proto_args> = withCodecBudget<scp_handle_started_ballot_proto_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPBallot.encode(w, val.arg1);
@@ -179,9 +179,9 @@ const _scp_handle_started_ballot_proto_args: XdrCodec<scp_handle_started_ballot_
     const arg1 = proto.codec.SCPBallot.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_accepted_ballot_prepared_args: XdrCodec<scp_handle_accepted_ballot_prepared_args> = {
+const _scp_handle_accepted_ballot_prepared_args: XdrCodec<scp_handle_accepted_ballot_prepared_args> = withCodecBudget<scp_handle_accepted_ballot_prepared_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPBallot.encode(w, val.arg1);
@@ -191,9 +191,9 @@ const _scp_handle_accepted_ballot_prepared_args: XdrCodec<scp_handle_accepted_ba
     const arg1 = proto.codec.SCPBallot.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_confirmed_ballot_prepared_args: XdrCodec<scp_handle_confirmed_ballot_prepared_args> = {
+const _scp_handle_confirmed_ballot_prepared_args: XdrCodec<scp_handle_confirmed_ballot_prepared_args> = withCodecBudget<scp_handle_confirmed_ballot_prepared_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPBallot.encode(w, val.arg1);
@@ -203,9 +203,9 @@ const _scp_handle_confirmed_ballot_prepared_args: XdrCodec<scp_handle_confirmed_
     const arg1 = proto.codec.SCPBallot.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_accepted_commit_args: XdrCodec<scp_handle_accepted_commit_args> = {
+const _scp_handle_accepted_commit_args: XdrCodec<scp_handle_accepted_commit_args> = withCodecBudget<scp_handle_accepted_commit_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPBallot.encode(w, val.arg1);
@@ -215,9 +215,9 @@ const _scp_handle_accepted_commit_args: XdrCodec<scp_handle_accepted_commit_args
     const arg1 = proto.codec.SCPBallot.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _scp_handle_ballot_did_hear_from_quorum_args: XdrCodec<scp_handle_ballot_did_hear_from_quorum_args> = {
+const _scp_handle_ballot_did_hear_from_quorum_args: XdrCodec<scp_handle_ballot_did_hear_from_quorum_args> = withCodecBudget<scp_handle_ballot_did_hear_from_quorum_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPBallot.encode(w, val.arg1);
@@ -227,7 +227,7 @@ const _scp_handle_ballot_did_hear_from_quorum_args: XdrCodec<scp_handle_ballot_d
     const arg1 = proto.codec.SCPBallot.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   SCPValidationLevel: _SCPValidationLevel,

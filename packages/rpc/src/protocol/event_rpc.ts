@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -42,7 +42,7 @@ export interface eventsched_commit_block_args {
 // XDR Codecs below this point
 //
 
-const _eventexecutor_report_tx_failure_args: XdrCodec<eventexecutor_report_tx_failure_args> = {
+const _eventexecutor_report_tx_failure_args: XdrCodec<eventexecutor_report_tx_failure_args> = withCodecBudget<eventexecutor_report_tx_failure_args>({
   encode(w, val) {
     proto.codec.TransactionHash.encode(w, val.arg0);
     proto.codec.TxFailureDiagnostic.encode(w, val.arg1);
@@ -52,9 +52,9 @@ const _eventexecutor_report_tx_failure_args: XdrCodec<eventexecutor_report_tx_fa
     const arg1 = proto.codec.TxFailureDiagnostic.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = {
+const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = withCodecBudget<eventexecutor_emit_event_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.TransactionID.encode(w, val.arg1);
@@ -68,9 +68,9 @@ const _eventexecutor_emit_event_args: XdrCodec<eventexecutor_emit_event_args> = 
     const arg3 = proto.codec.ProposedTransaction.decode(r);
     return { arg0, arg1, arg2, arg3 };
   },
-};
+});
 
-const _EventBlockResult: XdrCodec<EventBlockResult> = {
+const _EventBlockResult: XdrCodec<EventBlockResult> = withCodecBudget<EventBlockResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -95,9 +95,9 @@ const _EventBlockResult: XdrCodec<EventBlockResult> = {
         return { error };
     }
   },
-};
+});
 
-const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = {
+const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = withCodecBudget<eventsched_close_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockHeight.encode(w, val.arg1);
@@ -107,9 +107,9 @@ const _eventsched_close_block_args: XdrCodec<eventsched_close_block_args> = {
     const arg1 = proto.codec.BlockHeight.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _eventsched_commit_block_args: XdrCodec<eventsched_commit_block_args> = {
+const _eventsched_commit_block_args: XdrCodec<eventsched_commit_block_args> = withCodecBudget<eventsched_commit_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ConsensusValue.encode(w, val.arg1);
@@ -119,7 +119,7 @@ const _eventsched_commit_block_args: XdrCodec<eventsched_commit_block_args> = {
     const arg1 = proto.codec.ConsensusValue.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   EventBlockResult: _EventBlockResult,

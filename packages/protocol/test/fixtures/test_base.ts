@@ -1,12 +1,12 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
 // Base test types — no cross-type references.
 // Not part of the protocol — used only by the test suite.
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint32Codec } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint32Codec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -137,7 +137,7 @@ const _TestBlob: XdrCodec<TestBlob> = {
   decode(r) { return testBlob(r.readVarOpaque(Number(0xFFFFFFFF))); },
 };
 
-const _TestPoint: XdrCodec<TestPoint> = {
+const _TestPoint: XdrCodec<TestPoint> = withCodecBudget<TestPoint>({
   encode(w, val) {
     w.writeUint32(val.x);
     w.writeUint32(val.y);
@@ -147,7 +147,7 @@ const _TestPoint: XdrCodec<TestPoint> = {
     const y = r.readUint32();
     return { x, y };
   },
-};
+});
 
 const _TestOptPoint = OptionCodec(() => _TestPoint) as XdrCodec<TestOptPoint>;
 
@@ -156,7 +156,7 @@ const _TestOptPointAlias: XdrCodec<TestOptPointAlias> = {
   decode(r) { return testOptPointAlias(proto.codec.TestOptPoint.decode(r)); },
 };
 
-const _TestMessage: XdrCodec<TestMessage> = {
+const _TestMessage: XdrCodec<TestMessage> = withCodecBudget<TestMessage>({
   encode(w, val) {
     w.writeInt32(BigInt(val.tag));
     switch (val.tag) {
@@ -194,9 +194,9 @@ const _TestMessage: XdrCodec<TestMessage> = {
         return { tag, raw_payload };
     }
   },
-};
+});
 
-const _TestExtPoint: XdrCodec<TestExtPoint> = {
+const _TestExtPoint: XdrCodec<TestExtPoint> = withCodecBudget<TestExtPoint>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -213,9 +213,9 @@ const _TestExtPoint: XdrCodec<TestExtPoint> = {
         throw new Error(`Unknown TestExtPoint discriminant: ${v}`);
     }
   },
-};
+});
 
-const _TestMatrix: XdrCodec<TestMatrix> = {
+const _TestMatrix: XdrCodec<TestMatrix> = withCodecBudget<TestMatrix>({
   encode(w, val) {
     for (const _item of val.row) w.writeUint32(_item);
   },
@@ -223,9 +223,9 @@ const _TestMatrix: XdrCodec<TestMatrix> = {
     const row = Array.from({ length: Number(3) }, () => r.readUint32()) as FixedArray<bigint, 3>;
     return { row };
   },
-};
+});
 
-const _TestScores: XdrCodec<TestScores> = {
+const _TestScores: XdrCodec<TestScores> = withCodecBudget<TestScores>({
   encode(w, val) {
     w.writeUint32(BigInt(val.values.length));
     for (const _item of val.values) w.writeUint32(_item);
@@ -235,9 +235,9 @@ const _TestScores: XdrCodec<TestScores> = {
     const values = Array.from({ length: _values_len }, () => r.readUint32());
     return { values };
   },
-};
+});
 
-const _TestOptional: XdrCodec<TestOptional> = {
+const _TestOptional: XdrCodec<TestOptional> = withCodecBudget<TestOptional>({
   encode(w, val) {
     OptionCodec(Uint32Codec).encode(w, val.maybe_value);
   },
@@ -245,7 +245,7 @@ const _TestOptional: XdrCodec<TestOptional> = {
     const maybe_value = OptionCodec(Uint32Codec).decode(r);
     return { maybe_value };
   },
-};
+});
 
 export const codec = {
   TestColor: _TestColor,

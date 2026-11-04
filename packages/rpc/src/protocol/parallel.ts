@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -37,7 +37,7 @@ export function parallelNondeterministicProposalDataBatch(val: proto.ParallelBat
 // XDR Codecs below this point
 //
 
-const _ParallelBatch: XdrCodec<ParallelBatch> = {
+const _ParallelBatch: XdrCodec<ParallelBatch> = withCodecBudget<ParallelBatch>({
   encode(w, val) {
     w.writeUint32(BigInt(val.segment_tokens.length));
     for (const _item of val.segment_tokens) w.writeUint32(_item);
@@ -53,7 +53,7 @@ const _ParallelBatch: XdrCodec<ParallelBatch> = {
     const xdr = r.readVarOpaque(Number(0xFFFFFFFF));
     return { segment_tokens, segment_bytes, xdr };
   },
-};
+});
 
 const _ParallelSignedTransactionBatch: XdrCodec<ParallelSignedTransactionBatch> = {
   encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },

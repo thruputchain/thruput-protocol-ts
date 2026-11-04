@@ -129,7 +129,7 @@ describe("VarArrayCodec", () => {
     view.setUint32(0, len);
     view.setUint32(4 + 4 * (len - 1), 42);
     const Big = VarArrayCodec(Uint32Codec, 0xffffffff);
-    const result = deserialize(bytes, Big, { maxWork: len + 1 });
+    const result = deserialize(bytes, Big);
     expect(result.length).toBe(len);
     expect(result[0]).toBe(0n);
     expect(result[len - 1]).toBe(42n);

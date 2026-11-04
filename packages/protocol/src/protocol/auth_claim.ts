@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -81,7 +81,7 @@ const _AuthClaimType: XdrCodec<AuthClaimType> = {
   decode(r) { return Number(r.readInt32()) as AuthClaimType; },
 };
 
-const _PubkeyAccountPreimage: XdrCodec<PubkeyAccountPreimage> = {
+const _PubkeyAccountPreimage: XdrCodec<PubkeyAccountPreimage> = withCodecBudget<PubkeyAccountPreimage>({
   encode(w, val) {
     proto.codec.PublicKeyHash.encode(w, val.pubkey_hash);
     w.writeUint64(val.nonce);
@@ -91,9 +91,9 @@ const _PubkeyAccountPreimage: XdrCodec<PubkeyAccountPreimage> = {
     const nonce = r.readUint64();
     return { pubkey_hash, nonce };
   },
-};
+});
 
-const _AuthClaim_source_address_claim: XdrCodec<AuthClaim_source_address_claim> = {
+const _AuthClaim_source_address_claim: XdrCodec<AuthClaim_source_address_claim> = withCodecBudget<AuthClaim_source_address_claim>({
   encode(w, val) {
     proto.codec.BitMap.encode(w, val.allowed_keys);
     proto.codec.Weight.encode(w, val.required_weight);
@@ -103,9 +103,9 @@ const _AuthClaim_source_address_claim: XdrCodec<AuthClaim_source_address_claim> 
     const required_weight = proto.codec.Weight.decode(r);
     return { allowed_keys, required_weight };
   },
-};
+});
 
-const _AuthClaim: XdrCodec<AuthClaim> = {
+const _AuthClaim: XdrCodec<AuthClaim> = withCodecBudget<AuthClaim>({
   encode(w, val) {
     w.writeInt32(BigInt(val.claim_type));
     switch (val.claim_type) {
@@ -130,7 +130,7 @@ const _AuthClaim: XdrCodec<AuthClaim> = {
         throw new Error(`Unknown AuthClaim discriminant: ${claim_type}`);
     }
   },
-};
+});
 
 const _AuthVerifyErrorCode: XdrCodec<AuthVerifyErrorCode> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },

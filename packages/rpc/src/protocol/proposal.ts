@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -38,7 +38,7 @@ export interface PrevProposalSummary {
 // XDR Codecs below this point
 //
 
-const _ProposalTxs: XdrCodec<ProposalTxs> = {
+const _ProposalTxs: XdrCodec<ProposalTxs> = withCodecBudget<ProposalTxs>({
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     proto.codec.ParallelSignedTransactionHashBatch.encode(w, val.signed_hash);
@@ -50,14 +50,14 @@ const _ProposalTxs: XdrCodec<ProposalTxs> = {
     const nondeterministic_data = proto.codec.ParallelNondeterministicProposalDataBatch.decode(r);
     return { ext, signed_hash, nondeterministic_data };
   },
-};
+});
 
 const _ProposalTxsHash: XdrCodec<ProposalTxsHash> = {
   encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
   decode(r) { return proposalTxsHash(proto.codec.SHA256Hash.decode(r)); },
 };
 
-const _Proposal: XdrCodec<Proposal> = {
+const _Proposal: XdrCodec<Proposal> = withCodecBudget<Proposal>({
   encode(w, val) {
     proto.codec.ProposalHeader.encode(w, val.header);
     proto.codec.ProposalTxs.encode(w, val.transactions);
@@ -67,11 +67,11 @@ const _Proposal: XdrCodec<Proposal> = {
     const transactions = proto.codec.ProposalTxs.decode(r);
     return { header, transactions };
   },
-};
+});
 
 const _OptProposal = OptionCodec(() => _Proposal) as XdrCodec<OptProposal>;
 
-const _PrevProposalSummary: XdrCodec<PrevProposalSummary> = {
+const _PrevProposalSummary: XdrCodec<PrevProposalSummary> = withCodecBudget<PrevProposalSummary>({
   encode(w, val) {
     proto.codec.ConsensusValueHash.encode(w, val.value_hash);
   },
@@ -79,7 +79,7 @@ const _PrevProposalSummary: XdrCodec<PrevProposalSummary> = {
     const value_hash = proto.codec.ConsensusValueHash.decode(r);
     return { value_hash };
   },
-};
+});
 
 export const codec = {
   ProposalTxs: _ProposalTxs,

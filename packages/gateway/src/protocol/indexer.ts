@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -310,7 +310,7 @@ export function indexerTxFailureNoticeBatch(val: proto.IndexerTxFailureNotice[])
 // XDR Codecs below this point
 //
 
-const _TxInfo: XdrCodec<TxInfo> = {
+const _TxInfo: XdrCodec<TxInfo> = withCodecBudget<TxInfo>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.height);
     proto.codec.ProposedTransaction.encode(w, val.tx);
@@ -322,14 +322,14 @@ const _TxInfo: XdrCodec<TxInfo> = {
     const events = proto.codec.TxEventLog.decode(r);
     return { height, tx, events };
   },
-};
+});
 
 const _TxInfoOutcome: XdrCodec<TxInfoOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as TxInfoOutcome; },
 };
 
-const _TxInfoResult: XdrCodec<TxInfoResult> = {
+const _TxInfoResult: XdrCodec<TxInfoResult> = withCodecBudget<TxInfoResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -366,14 +366,14 @@ const _TxInfoResult: XdrCodec<TxInfoResult> = {
         return { outcome };
     }
   },
-};
+});
 
 const _BlockLookupOutcome: XdrCodec<BlockLookupOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as BlockLookupOutcome; },
 };
 
-const _BlockLookupResult: XdrCodec<BlockLookupResult> = {
+const _BlockLookupResult: XdrCodec<BlockLookupResult> = withCodecBudget<BlockLookupResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -398,7 +398,7 @@ const _BlockLookupResult: XdrCodec<BlockLookupResult> = {
         return { outcome };
     }
   },
-};
+});
 
 const _IdentifiedEventBatch = VarArrayCodec(() => proto.codec.IdentifiedEvent, Number(0xFFFFFFFF)) as XdrCodec<IdentifiedEventBatch>;
 
@@ -406,7 +406,7 @@ const _TxInfoBatch = VarArrayCodec(() => proto.codec.TxInfo, Number(0xFFFFFFFF))
 
 const _ContractAddressList = VarArrayCodec(() => proto.codec.ContractAddress, Number(proto.kMaxContractAddressesPerEventFilter)) as XdrCodec<ContractAddressList>;
 
-const _EventTopicFilter: XdrCodec<EventTopicFilter> = {
+const _EventTopicFilter: XdrCodec<EventTopicFilter> = withCodecBudget<EventTopicFilter>({
   encode(w, val) {
     VarArrayCodec(proto.codec.Topic, Number(0xFFFFFFFF)).encode(w, val.topic0);
     VarArrayCodec(proto.codec.Topic, Number(0xFFFFFFFF)).encode(w, val.topic1);
@@ -418,9 +418,9 @@ const _EventTopicFilter: XdrCodec<EventTopicFilter> = {
     const topic2 = VarArrayCodec(proto.codec.Topic, Number(0xFFFFFFFF)).decode(r);
     return { topic0, topic1, topic2 };
   },
-};
+});
 
-const _EventFilter: XdrCodec<EventFilter> = {
+const _EventFilter: XdrCodec<EventFilter> = withCodecBudget<EventFilter>({
   encode(w, val) {
     proto.codec.ContractAddressList.encode(w, val.contract_addresses);
     proto.codec.EventTopicFilter.encode(w, val.topics);
@@ -430,11 +430,11 @@ const _EventFilter: XdrCodec<EventFilter> = {
     const topics = proto.codec.EventTopicFilter.decode(r);
     return { contract_addresses, topics };
   },
-};
+});
 
 const _EventFilterList = VarArrayCodec(() => proto.codec.EventFilter, Number(proto.kMaxEventFiltersPerQuery)) as XdrCodec<EventFilterList>;
 
-const _EventQuery: XdrCodec<EventQuery> = {
+const _EventQuery: XdrCodec<EventQuery> = withCodecBudget<EventQuery>({
   encode(w, val) {
     proto.codec.EventFilterList.encode(w, val.filters);
     proto.codec.IterationOrder.encode(w, val.order);
@@ -450,9 +450,9 @@ const _EventQuery: XdrCodec<EventQuery> = {
     const limit = r.readUint32();
     return { filters, order, anchor, cursor, limit };
   },
-};
+});
 
-const _EventPage: XdrCodec<EventPage> = {
+const _EventPage: XdrCodec<EventPage> = withCodecBudget<EventPage>({
   encode(w, val) {
     proto.codec.IdentifiedEventBatch.encode(w, val.events);
     proto.codec.PaginationCursor.encode(w, val.cursor);
@@ -466,9 +466,9 @@ const _EventPage: XdrCodec<EventPage> = {
     const oldest_block = proto.codec.BlockHeight.decode(r);
     return { events, cursor, latest_block, oldest_block };
   },
-};
+});
 
-const _TransactionQuery: XdrCodec<TransactionQuery> = {
+const _TransactionQuery: XdrCodec<TransactionQuery> = withCodecBudget<TransactionQuery>({
   encode(w, val) {
     proto.codec.IterationOrder.encode(w, val.order);
     proto.codec.BlockAnchor.encode(w, val.anchor);
@@ -482,9 +482,9 @@ const _TransactionQuery: XdrCodec<TransactionQuery> = {
     const limit = r.readUint32();
     return { order, anchor, cursor, limit };
   },
-};
+});
 
-const _TransactionPage: XdrCodec<TransactionPage> = {
+const _TransactionPage: XdrCodec<TransactionPage> = withCodecBudget<TransactionPage>({
   encode(w, val) {
     proto.codec.TxInfoBatch.encode(w, val.transactions);
     proto.codec.PaginationCursor.encode(w, val.cursor);
@@ -498,9 +498,9 @@ const _TransactionPage: XdrCodec<TransactionPage> = {
     const oldest_block = proto.codec.BlockHeight.decode(r);
     return { transactions, cursor, latest_block, oldest_block };
   },
-};
+});
 
-const _TransactionRef: XdrCodec<TransactionRef> = {
+const _TransactionRef: XdrCodec<TransactionRef> = withCodecBudget<TransactionRef>({
   encode(w, val) {
     proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.BlockHeight.encode(w, val.height);
@@ -510,11 +510,11 @@ const _TransactionRef: XdrCodec<TransactionRef> = {
     const height = proto.codec.BlockHeight.decode(r);
     return { tx_hash, height };
   },
-};
+});
 
 const _TransactionRefBatch = VarArrayCodec(() => proto.codec.TransactionRef, Number(0xFFFFFFFF)) as XdrCodec<TransactionRefBatch>;
 
-const _AddressTransactionQuery: XdrCodec<AddressTransactionQuery> = {
+const _AddressTransactionQuery: XdrCodec<AddressTransactionQuery> = withCodecBudget<AddressTransactionQuery>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
     proto.codec.IterationOrder.encode(w, val.order);
@@ -530,9 +530,9 @@ const _AddressTransactionQuery: XdrCodec<AddressTransactionQuery> = {
     const limit = r.readUint32();
     return { address, order, anchor, cursor, limit };
   },
-};
+});
 
-const _BlockTransactionQuery: XdrCodec<BlockTransactionQuery> = {
+const _BlockTransactionQuery: XdrCodec<BlockTransactionQuery> = withCodecBudget<BlockTransactionQuery>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.height);
     proto.codec.IterationOrder.encode(w, val.order);
@@ -546,9 +546,9 @@ const _BlockTransactionQuery: XdrCodec<BlockTransactionQuery> = {
     const limit = r.readUint32();
     return { height, order, cursor, limit };
   },
-};
+});
 
-const _TransactionRefPage: XdrCodec<TransactionRefPage> = {
+const _TransactionRefPage: XdrCodec<TransactionRefPage> = withCodecBudget<TransactionRefPage>({
   encode(w, val) {
     proto.codec.TransactionRefBatch.encode(w, val.refs);
     proto.codec.PaginationCursor.encode(w, val.cursor);
@@ -562,14 +562,14 @@ const _TransactionRefPage: XdrCodec<TransactionRefPage> = {
     const oldest_block = proto.codec.BlockHeight.decode(r);
     return { refs, cursor, latest_block, oldest_block };
   },
-};
+});
 
 const _IndexerQueryOutcome: XdrCodec<IndexerQueryOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IndexerQueryOutcome; },
 };
 
-const _EventPageResult: XdrCodec<EventPageResult> = {
+const _EventPageResult: XdrCodec<EventPageResult> = withCodecBudget<EventPageResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -594,9 +594,9 @@ const _EventPageResult: XdrCodec<EventPageResult> = {
         return { outcome };
     }
   },
-};
+});
 
-const _TransactionPageResult: XdrCodec<TransactionPageResult> = {
+const _TransactionPageResult: XdrCodec<TransactionPageResult> = withCodecBudget<TransactionPageResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -621,9 +621,9 @@ const _TransactionPageResult: XdrCodec<TransactionPageResult> = {
         return { outcome };
     }
   },
-};
+});
 
-const _TransactionRefPageResult: XdrCodec<TransactionRefPageResult> = {
+const _TransactionRefPageResult: XdrCodec<TransactionRefPageResult> = withCodecBudget<TransactionRefPageResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -648,7 +648,7 @@ const _TransactionRefPageResult: XdrCodec<TransactionRefPageResult> = {
         return { outcome };
     }
   },
-};
+});
 
 const _IndexerBlockExplorerIntroOutcome: XdrCodec<IndexerBlockExplorerIntroOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -657,7 +657,7 @@ const _IndexerBlockExplorerIntroOutcome: XdrCodec<IndexerBlockExplorerIntroOutco
 
 const _TxEventLogBatch = VarArrayCodec(() => proto.codec.TxEventLog, Number(0xFFFFFFFF)) as XdrCodec<TxEventLogBatch>;
 
-const _IndexerOutboxOrigin: XdrCodec<IndexerOutboxOrigin> = {
+const _IndexerOutboxOrigin: XdrCodec<IndexerOutboxOrigin> = withCodecBudget<IndexerOutboxOrigin>({
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
     w.writeUint64(val.epoch_sequence);
@@ -671,9 +671,9 @@ const _IndexerOutboxOrigin: XdrCodec<IndexerOutboxOrigin> = {
     const first_prev_hash = proto.codec.ConsensusValueHash.decode(r);
     return { protocol, epoch_sequence, first_height, first_prev_hash };
   },
-};
+});
 
-const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = {
+const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = withCodecBudget<IndexerCommittedBlockPayload>({
   encode(w, val) {
     w.writeUint32(val.format_version);
     proto.codec.ConsensusValue.encode(w, val.consensus_value);
@@ -687,9 +687,9 @@ const _IndexerCommittedBlockPayload: XdrCodec<IndexerCommittedBlockPayload> = {
     const tx_bodies = proto.codec.ProposedTransactionBatch.decode(r);
     return { format_version, consensus_value, event_logs, tx_bodies };
   },
-};
+});
 
-const _IndexerCommittedBlockIdentity: XdrCodec<IndexerCommittedBlockIdentity> = {
+const _IndexerCommittedBlockIdentity: XdrCodec<IndexerCommittedBlockIdentity> = withCodecBudget<IndexerCommittedBlockIdentity>({
   encode(w, val) {
     proto.codec.ConsensusValueHash.encode(w, val.consensus_hash);
   },
@@ -697,9 +697,9 @@ const _IndexerCommittedBlockIdentity: XdrCodec<IndexerCommittedBlockIdentity> = 
     const consensus_hash = proto.codec.ConsensusValueHash.decode(r);
     return { consensus_hash };
   },
-};
+});
 
-const _IndexerCommittedBlock: XdrCodec<IndexerCommittedBlock> = {
+const _IndexerCommittedBlock: XdrCodec<IndexerCommittedBlock> = withCodecBudget<IndexerCommittedBlock>({
   encode(w, val) {
     proto.codec.IndexerCommittedBlockPayload.encode(w, val.payload);
     proto.codec.IndexerCommittedBlockIdentity.encode(w, val.identity);
@@ -709,9 +709,9 @@ const _IndexerCommittedBlock: XdrCodec<IndexerCommittedBlock> = {
     const identity = proto.codec.IndexerCommittedBlockIdentity.decode(r);
     return { payload, identity };
   },
-};
+});
 
-const _IndexerInitializedProgress: XdrCodec<IndexerInitializedProgress> = {
+const _IndexerInitializedProgress: XdrCodec<IndexerInitializedProgress> = withCodecBudget<IndexerInitializedProgress>({
   encode(w, val) {
     proto.codec.IndexerOutboxOrigin.encode(w, val.origin);
     proto.codec.BlockHeight.encode(w, val.contiguous_height);
@@ -723,14 +723,14 @@ const _IndexerInitializedProgress: XdrCodec<IndexerInitializedProgress> = {
     const last_consensus_hash = proto.codec.ConsensusValueHash.decode(r);
     return { origin, contiguous_height, last_consensus_hash };
   },
-};
+});
 
 const _IndexerProgressState: XdrCodec<IndexerProgressState> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IndexerProgressState; },
 };
 
-const _IndexerProgress: XdrCodec<IndexerProgress> = {
+const _IndexerProgress: XdrCodec<IndexerProgress> = withCodecBudget<IndexerProgress>({
   encode(w, val) {
     w.writeInt32(BigInt(val.state));
     switch (val.state) {
@@ -757,7 +757,7 @@ const _IndexerProgress: XdrCodec<IndexerProgress> = {
         return { state };
     }
   },
-};
+});
 
 const _IndexerFailureMessage: XdrCodec<IndexerFailureMessage> = {
   encode(w, val) { w.writeString(val, Number(1024)); },
@@ -769,7 +769,7 @@ const _IndexerEpochOutcome: XdrCodec<IndexerEpochOutcome> = {
   decode(r) { return Number(r.readInt32()) as IndexerEpochOutcome; },
 };
 
-const _IndexerEpochResult: XdrCodec<IndexerEpochResult> = {
+const _IndexerEpochResult: XdrCodec<IndexerEpochResult> = withCodecBudget<IndexerEpochResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -805,9 +805,9 @@ const _IndexerEpochResult: XdrCodec<IndexerEpochResult> = {
         return { outcome, diagnostic };
     }
   },
-};
+});
 
-const _IndexerHeightGap: XdrCodec<IndexerHeightGap> = {
+const _IndexerHeightGap: XdrCodec<IndexerHeightGap> = withCodecBudget<IndexerHeightGap>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.expected_height);
   },
@@ -815,14 +815,14 @@ const _IndexerHeightGap: XdrCodec<IndexerHeightGap> = {
     const expected_height = proto.codec.BlockHeight.decode(r);
     return { expected_height };
   },
-};
+});
 
 const _IndexerBlockApplyOutcome: XdrCodec<IndexerBlockApplyOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IndexerBlockApplyOutcome; },
 };
 
-const _IndexerBlockApplyResult: XdrCodec<IndexerBlockApplyResult> = {
+const _IndexerBlockApplyResult: XdrCodec<IndexerBlockApplyResult> = withCodecBudget<IndexerBlockApplyResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -870,9 +870,9 @@ const _IndexerBlockApplyResult: XdrCodec<IndexerBlockApplyResult> = {
         return { outcome, diagnostic };
     }
   },
-};
+});
 
-const _EventIndexerPullRequest: XdrCodec<EventIndexerPullRequest> = {
+const _EventIndexerPullRequest: XdrCodec<EventIndexerPullRequest> = withCodecBudget<EventIndexerPullRequest>({
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.IndexerProgress.encode(w, val.progress);
@@ -882,9 +882,9 @@ const _EventIndexerPullRequest: XdrCodec<EventIndexerPullRequest> = {
     const progress = proto.codec.IndexerProgress.decode(r);
     return { protocol, progress };
   },
-};
+});
 
-const _EventIndexerPulledBlock: XdrCodec<EventIndexerPulledBlock> = {
+const _EventIndexerPulledBlock: XdrCodec<EventIndexerPulledBlock> = withCodecBudget<EventIndexerPulledBlock>({
   encode(w, val) {
     proto.codec.IndexerOutboxOrigin.encode(w, val.origin);
     proto.codec.IndexerCommittedBlock.encode(w, val.block);
@@ -894,14 +894,14 @@ const _EventIndexerPulledBlock: XdrCodec<EventIndexerPulledBlock> = {
     const block = proto.codec.IndexerCommittedBlock.decode(r);
     return { origin, block };
   },
-};
+});
 
 const _EventIndexerPullOutcome: XdrCodec<EventIndexerPullOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as EventIndexerPullOutcome; },
 };
 
-const _EventIndexerPullResult: XdrCodec<EventIndexerPullResult> = {
+const _EventIndexerPullResult: XdrCodec<EventIndexerPullResult> = withCodecBudget<EventIndexerPullResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -947,9 +947,9 @@ const _EventIndexerPullResult: XdrCodec<EventIndexerPullResult> = {
         return { outcome, diagnostic };
     }
   },
-};
+});
 
-const _IndexerTxFailureNotice: XdrCodec<IndexerTxFailureNotice> = {
+const _IndexerTxFailureNotice: XdrCodec<IndexerTxFailureNotice> = withCodecBudget<IndexerTxFailureNotice>({
   encode(w, val) {
     proto.codec.TransactionHash.encode(w, val.tx_hash);
     proto.codec.TxFailureDiagnostic.encode(w, val.diagnostic);
@@ -959,7 +959,7 @@ const _IndexerTxFailureNotice: XdrCodec<IndexerTxFailureNotice> = {
     const diagnostic = proto.codec.TxFailureDiagnostic.decode(r);
     return { tx_hash, diagnostic };
   },
-};
+});
 
 const _IndexerTxFailureNoticeBatch = VarArrayCodec(() => proto.codec.IndexerTxFailureNotice, Number(256)) as XdrCodec<IndexerTxFailureNoticeBatch>;
 

@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -63,7 +63,7 @@ export interface executorsched_open_validation_block_args {
 // XDR Codecs below this point
 //
 
-const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
+const _ExecProposeResult: XdrCodec<ExecProposeResult> = withCodecBudget<ExecProposeResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.result));
     switch (val.result) {
@@ -92,13 +92,13 @@ const _ExecProposeResult: XdrCodec<ExecProposeResult> = {
         return { result };
     }
   },
-};
+});
 
 const _ExecProposeBatchResult = VarArrayCodec(() => proto.codec.ExecProposeResult, Number(0xFFFFFFFF)) as XdrCodec<ExecProposeBatchResult>;
 
 const _ExecValidateBatchResult = VarArrayCodec(() => proto.codec.ExecResult, Number(0xFFFFFFFF)) as XdrCodec<ExecValidateBatchResult>;
 
-const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_transaction_args> = {
+const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_transaction_args> = withCodecBudget<executorsched_propose_transaction_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.SignedTransaction.encode(w, val.arg1);
@@ -108,9 +108,9 @@ const _executorsched_propose_transaction_args: XdrCodec<executorsched_propose_tr
     const arg1 = proto.codec.SignedTransaction.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _executorsched_validate_transaction_args: XdrCodec<executorsched_validate_transaction_args> = {
+const _executorsched_validate_transaction_args: XdrCodec<executorsched_validate_transaction_args> = withCodecBudget<executorsched_validate_transaction_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ProposedTransaction.encode(w, val.arg1);
@@ -120,9 +120,9 @@ const _executorsched_validate_transaction_args: XdrCodec<executorsched_validate_
     const arg1 = proto.codec.ProposedTransaction.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _executorsched_propose_batch_args: XdrCodec<executorsched_propose_batch_args> = {
+const _executorsched_propose_batch_args: XdrCodec<executorsched_propose_batch_args> = withCodecBudget<executorsched_propose_batch_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.SignedTransactionBatch.encode(w, val.arg1);
@@ -132,9 +132,9 @@ const _executorsched_propose_batch_args: XdrCodec<executorsched_propose_batch_ar
     const arg1 = proto.codec.SignedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_args> = {
+const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_args> = withCodecBudget<executorsched_validate_batch_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.ProposedTransactionBatch.encode(w, val.arg1);
@@ -144,9 +144,9 @@ const _executorsched_validate_batch_args: XdrCodec<executorsched_validate_batch_
     const arg1 = proto.codec.ProposedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _executorsched_open_proposal_block_args: XdrCodec<executorsched_open_proposal_block_args> = {
+const _executorsched_open_proposal_block_args: XdrCodec<executorsched_open_proposal_block_args> = withCodecBudget<executorsched_open_proposal_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockExecutionContext.encode(w, val.arg1);
@@ -156,9 +156,9 @@ const _executorsched_open_proposal_block_args: XdrCodec<executorsched_open_propo
     const arg1 = proto.codec.BlockExecutionContext.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _executorsched_open_validation_block_args: XdrCodec<executorsched_open_validation_block_args> = {
+const _executorsched_open_validation_block_args: XdrCodec<executorsched_open_validation_block_args> = withCodecBudget<executorsched_open_validation_block_args>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.arg0);
     proto.codec.BlockExecutionContext.encode(w, val.arg1);
@@ -168,7 +168,7 @@ const _executorsched_open_validation_block_args: XdrCodec<executorsched_open_val
     const arg1 = proto.codec.BlockExecutionContext.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
   ExecProposeResult: _ExecProposeResult,
