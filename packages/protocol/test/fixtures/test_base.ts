@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 // Base test types — no cross-type references.
 // Not part of the protocol — used only by the test suite.
@@ -151,10 +151,7 @@ const _TestPoint: XdrCodec<TestPoint> = withCodecBudget<TestPoint>({
 
 const _TestOptPoint = OptionCodec(() => _TestPoint) as XdrCodec<TestOptPoint>;
 
-const _TestOptPointAlias: XdrCodec<TestOptPointAlias> = {
-  encode(w, val) { proto.codec.TestOptPoint.encode(w, val); },
-  decode(r) { return testOptPointAlias(proto.codec.TestOptPoint.decode(r)); },
-};
+const _TestOptPointAlias: XdrCodec<TestOptPointAlias> = withCodecBudget(() => proto.codec.TestOptPoint as XdrCodec<TestOptPointAlias>);
 
 const _TestMessage: XdrCodec<TestMessage> = withCodecBudget<TestMessage>({
   encode(w, val) {
@@ -217,22 +214,20 @@ const _TestExtPoint: XdrCodec<TestExtPoint> = withCodecBudget<TestExtPoint>({
 
 const _TestMatrix: XdrCodec<TestMatrix> = withCodecBudget<TestMatrix>({
   encode(w, val) {
-    for (const _item of val.row) w.writeUint32(_item);
+    FixedArrayCodec(Uint32Codec, Number(3)).encode(w, val.row);
   },
   decode(r) {
-    const row = Array.from({ length: Number(3) }, () => r.readUint32()) as FixedArray<bigint, 3>;
+    const row = FixedArrayCodec(Uint32Codec, Number(3)).decode(r) as FixedArray<bigint, 3>;
     return { row };
   },
 });
 
 const _TestScores: XdrCodec<TestScores> = withCodecBudget<TestScores>({
   encode(w, val) {
-    w.writeUint32(BigInt(val.values.length));
-    for (const _item of val.values) w.writeUint32(_item);
+    VarArrayCodec(Uint32Codec, Number(10)).encode(w, val.values);
   },
   decode(r) {
-    const _values_len = Number(r.readUint32());
-    const values = Array.from({ length: _values_len }, () => r.readUint32());
+    const values = VarArrayCodec(Uint32Codec, Number(10)).decode(r);
     return { values };
   },
 });

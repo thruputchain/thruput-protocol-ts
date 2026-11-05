@@ -39,7 +39,10 @@ an opaque byte buffer counts as one value.
 The updated x23c generator wraps structs and unions with `withCodecBudget`.
 Regenerate older bindings to apply these checks to direct recursive calls.
 Wrap custom structs, unions, tuples, and recursive codecs with the same helper.
-Reuse that codec for aliases. Primitive reader calls do not track value nesting.
+Reuse that codec for aliases. Use `withCodecBudget(() => baseCodec)` when an
+alias must resolve its base lazily, such as across generated module imports.
+This delegates to the base budget without counting the alias again.
+Primitive reader calls do not track value nesting.
 Transparent adapters that
 forward to a bounded codec should spread it (`{ ...codec, ... }`) to preserve
 its budget marker and avoid counting the same value twice.

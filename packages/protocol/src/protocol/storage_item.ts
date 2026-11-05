@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
-import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint64Codec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -398,12 +398,10 @@ const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = withCodecBudget<Repl
 
 const _ReplayCacheData: XdrCodec<ReplayCacheData> = withCodecBudget<ReplayCacheData>({
   encode(w, val) {
-    w.writeUint32(BigInt(val.nonces.length));
-    for (const _item of val.nonces) w.writeUint64(_item);
+    VarArrayCodec(Uint64Codec, Number(proto.kReplayCacheNoncesMaxLen)).encode(w, val.nonces);
   },
   decode(r) {
-    const _nonces_len = Number(r.readUint32());
-    const nonces = Array.from({ length: _nonces_len }, () => r.readUint64());
+    const nonces = VarArrayCodec(Uint64Codec, Number(proto.kReplayCacheNoncesMaxLen)).decode(r);
     return { nonces };
   },
 });

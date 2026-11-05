@@ -78,12 +78,16 @@ const budgeted = Symbol("budgeted codec");
  * do not track nesting. Custom recursive codecs must use this helper too.
  * Wrapping an already bounded codec does not count it twice. Transparent
  * adapters should spread the original codec to preserve its budget marker.
+ * A lazy alias delegates to the resolved codec's budget without an extra charge.
  */
-export function withCodecBudget<T>(codec: XdrCodec<T>): XdrCodec<T> {
-  if (budgeted in codec) return codec;
+export function withCodecBudget<T>(codec: XdrCodec<T> | (() => XdrCodec<T>)): XdrCodec<T> {
+  if (typeof codec !== "function" && budgeted in codec) return codec;
   const cached = boundedCodecs.get(codec);
   if (cached) return cached as XdrCodec<T>;
-  const bounded: XdrCodec<T> = {
+  const bounded: XdrCodec<T> = typeof codec === "function" ? {
+    encode(w, value) { withCodecBudget(codec()).encode(w, value); },
+    decode(r) { return withCodecBudget(codec()).decode(r); },
+  } : {
     encode(w, value) {
       w.budget.enter();
       try { codec.encode(w, value); } finally { w.budget.leave(); }

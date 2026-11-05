@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -400,45 +400,24 @@ const _SHA256Hash: XdrCodec<SHA256Hash> = {
   decode(r) { return sha256Hash(r.readFixedOpaque(32)); },
 };
 
-const _ConsensusValueHash: XdrCodec<ConsensusValueHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return consensusValueHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _ConsensusValueHash: XdrCodec<ConsensusValueHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<ConsensusValueHash>);
 
-const _NetworkHash: XdrCodec<NetworkHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return networkHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _NetworkHash: XdrCodec<NetworkHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<NetworkHash>);
 
-const _ConfigHash: XdrCodec<ConfigHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return configHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _ConfigHash: XdrCodec<ConfigHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<ConfigHash>);
 
 const _StorageLongHash: XdrCodec<StorageLongHash> = {
   encode(w, val) { w.writeFixedOpaque(val, 2048); },
   decode(r) { return storageLongHash(r.readFixedOpaque(2048)); },
 };
 
-const _StorageShortHash: XdrCodec<StorageShortHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return storageShortHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _StorageShortHash: XdrCodec<StorageShortHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<StorageShortHash>);
 
-const _TxsHash: XdrCodec<TxsHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return txsHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _TxsHash: XdrCodec<TxsHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<TxsHash>);
 
-const _EventsHash: XdrCodec<EventsHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return eventsHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _EventsHash: XdrCodec<EventsHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<EventsHash>);
 
-const _ProposalHeaderHash: XdrCodec<ProposalHeaderHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return proposalHeaderHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _ProposalHeaderHash: XdrCodec<ProposalHeaderHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<ProposalHeaderHash>);
 
 const _ContractAddress: XdrCodec<ContractAddress> = {
   encode(w, val) { w.writeFixedOpaque(val, 32); },

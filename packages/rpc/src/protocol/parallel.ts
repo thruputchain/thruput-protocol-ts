@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
-import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint32Codec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -39,36 +39,23 @@ export function parallelNondeterministicProposalDataBatch(val: proto.ParallelBat
 
 const _ParallelBatch: XdrCodec<ParallelBatch> = withCodecBudget<ParallelBatch>({
   encode(w, val) {
-    w.writeUint32(BigInt(val.segment_tokens.length));
-    for (const _item of val.segment_tokens) w.writeUint32(_item);
-    w.writeUint32(BigInt(val.segment_bytes.length));
-    for (const _item of val.segment_bytes) w.writeUint32(_item);
+    VarArrayCodec(Uint32Codec, Number(0xFFFFFFFF)).encode(w, val.segment_tokens);
+    VarArrayCodec(Uint32Codec, Number(0xFFFFFFFF)).encode(w, val.segment_bytes);
     w.writeVarOpaque(val.xdr, Number(0xFFFFFFFF));
   },
   decode(r) {
-    const _segment_tokens_len = Number(r.readUint32());
-    const segment_tokens = Array.from({ length: _segment_tokens_len }, () => r.readUint32());
-    const _segment_bytes_len = Number(r.readUint32());
-    const segment_bytes = Array.from({ length: _segment_bytes_len }, () => r.readUint32());
+    const segment_tokens = VarArrayCodec(Uint32Codec, Number(0xFFFFFFFF)).decode(r);
+    const segment_bytes = VarArrayCodec(Uint32Codec, Number(0xFFFFFFFF)).decode(r);
     const xdr = r.readVarOpaque(Number(0xFFFFFFFF));
     return { segment_tokens, segment_bytes, xdr };
   },
 });
 
-const _ParallelSignedTransactionBatch: XdrCodec<ParallelSignedTransactionBatch> = {
-  encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },
-  decode(r) { return parallelSignedTransactionBatch(proto.codec.ParallelBatch.decode(r)); },
-};
+const _ParallelSignedTransactionBatch: XdrCodec<ParallelSignedTransactionBatch> = withCodecBudget(() => proto.codec.ParallelBatch as XdrCodec<ParallelSignedTransactionBatch>);
 
-const _ParallelSignedTransactionHashBatch: XdrCodec<ParallelSignedTransactionHashBatch> = {
-  encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },
-  decode(r) { return parallelSignedTransactionHashBatch(proto.codec.ParallelBatch.decode(r)); },
-};
+const _ParallelSignedTransactionHashBatch: XdrCodec<ParallelSignedTransactionHashBatch> = withCodecBudget(() => proto.codec.ParallelBatch as XdrCodec<ParallelSignedTransactionHashBatch>);
 
-const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterministicProposalDataBatch> = {
-  encode(w, val) { proto.codec.ParallelBatch.encode(w, val); },
-  decode(r) { return parallelNondeterministicProposalDataBatch(proto.codec.ParallelBatch.decode(r)); },
-};
+const _ParallelNondeterministicProposalDataBatch: XdrCodec<ParallelNondeterministicProposalDataBatch> = withCodecBudget(() => proto.codec.ParallelBatch as XdrCodec<ParallelNondeterministicProposalDataBatch>);
 
 export const codec = {
   ParallelBatch: _ParallelBatch,

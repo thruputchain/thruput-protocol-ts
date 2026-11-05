@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -93,10 +93,7 @@ export interface DogwoodDeliveryEnvelope {
 // XDR Codecs below this point
 //
 
-const _DogwoodTreeHash: XdrCodec<DogwoodTreeHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return dogwoodTreeHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _DogwoodTreeHash: XdrCodec<DogwoodTreeHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<DogwoodTreeHash>);
 
 const _DogwoodTreeNode: XdrCodec<DogwoodTreeNode> = withCodecBudget<DogwoodTreeNode>({
   encode(w, val) {
@@ -112,15 +109,9 @@ const _DogwoodTreeNode: XdrCodec<DogwoodTreeNode> = withCodecBudget<DogwoodTreeN
 
 const _DogwoodTreeNodes = VarArrayCodec(() => proto.codec.DogwoodTreeNode, Number(0xFFFFFFFF)) as XdrCodec<DogwoodTreeNodes>;
 
-const _DogwoodStreamID: XdrCodec<DogwoodStreamID> = {
-  encode(w, val) { proto.codec.DogwoodInt64.encode(w, val); },
-  decode(r) { return dogwoodStreamID(proto.codec.DogwoodInt64.decode(r)); },
-};
+const _DogwoodStreamID: XdrCodec<DogwoodStreamID> = withCodecBudget(() => proto.codec.DogwoodInt64 as XdrCodec<DogwoodStreamID>);
 
-const _DogwoodTransmissionID: XdrCodec<DogwoodTransmissionID> = {
-  encode(w, val) { proto.codec.DogwoodInt64.encode(w, val); },
-  decode(r) { return dogwoodTransmissionID(proto.codec.DogwoodInt64.decode(r)); },
-};
+const _DogwoodTransmissionID: XdrCodec<DogwoodTransmissionID> = withCodecBudget(() => proto.codec.DogwoodInt64 as XdrCodec<DogwoodTransmissionID>);
 
 const _DogwoodStream: XdrCodec<DogwoodStream> = withCodecBudget<DogwoodStream>({
   encode(w, val) {

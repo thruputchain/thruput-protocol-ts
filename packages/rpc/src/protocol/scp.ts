@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 // Copyright 2015 Stellar Development Foundation and contributors. Licensed
 // under the Apache License, Version 2.0. See the COPYING file at the root
@@ -141,10 +141,7 @@ const _SCPHash: XdrCodec<SCPHash> = {
   decode(r) { return scpHash(r.readFixedOpaque(32)); },
 };
 
-const _SCPNodeID: XdrCodec<SCPNodeID> = {
-  encode(w, val) { proto.codec.PublicKey.encode(w, val); },
-  decode(r) { return scpNodeID(proto.codec.PublicKey.decode(r)); },
-};
+const _SCPNodeID: XdrCodec<SCPNodeID> = withCodecBudget(() => proto.codec.PublicKey as XdrCodec<SCPNodeID>);
 
 const _SCPCount: XdrCodec<SCPCount> = {
   encode(w, val) { w.writeUint32(val); },

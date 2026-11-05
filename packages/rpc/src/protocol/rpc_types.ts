@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 // clang-format off
 
@@ -160,10 +160,7 @@ const _BlockExecutionMode: XdrCodec<BlockExecutionMode> = {
   decode(r) { return Number(r.readInt32()) as BlockExecutionMode; },
 };
 
-const _StorageCost: XdrCodec<StorageCost> = {
-  encode(w, val) { proto.codec.int128_xdr.encode(w, val); },
-  decode(r) { return storageCost(proto.codec.int128_xdr.decode(r)); },
-};
+const _StorageCost: XdrCodec<StorageCost> = withCodecBudget(() => proto.codec.int128_xdr as XdrCodec<StorageCost>);
 
 const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = withCodecBudget<ExpectedStorageCost>({
   encode(w, val) {

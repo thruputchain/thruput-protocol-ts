@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -239,15 +239,9 @@ const _DecoratedSignature: XdrCodec<DecoratedSignature> = withCodecBudget<Decora
   },
 });
 
-const _TransactionHash: XdrCodec<TransactionHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return transactionHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _TransactionHash: XdrCodec<TransactionHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<TransactionHash>);
 
-const _SignedTransactionHash: XdrCodec<SignedTransactionHash> = {
-  encode(w, val) { proto.codec.SHA256Hash.encode(w, val); },
-  decode(r) { return signedTransactionHash(proto.codec.SHA256Hash.decode(r)); },
-};
+const _SignedTransactionHash: XdrCodec<SignedTransactionHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<SignedTransactionHash>);
 
 const _SignedTransaction: XdrCodec<SignedTransaction> = withCodecBudget<SignedTransaction>({
   encode(w, val) {

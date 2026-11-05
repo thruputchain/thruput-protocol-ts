@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1c30211c5d6878eb91eabe02750b1b278312152b
+// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -45,15 +45,9 @@ const _ValidatorID: XdrCodec<ValidatorID> = {
   decode(r) { return validatorID(r.readFixedOpaque(32)); },
 };
 
-const _ValidatorPublicKey: XdrCodec<ValidatorPublicKey> = {
-  encode(w, val) { proto.codec.PublicKey.encode(w, val); },
-  decode(r) { return validatorPublicKey(proto.codec.PublicKey.decode(r)); },
-};
+const _ValidatorPublicKey: XdrCodec<ValidatorPublicKey> = withCodecBudget(() => proto.codec.PublicKey as XdrCodec<ValidatorPublicKey>);
 
-const _ValidatorSecretKey: XdrCodec<ValidatorSecretKey> = {
-  encode(w, val) { proto.codec.SecretKey.encode(w, val); },
-  decode(r) { return validatorSecretKey(proto.codec.SecretKey.decode(r)); },
-};
+const _ValidatorSecretKey: XdrCodec<ValidatorSecretKey> = withCodecBudget(() => proto.codec.SecretKey as XdrCodec<ValidatorSecretKey>);
 
 const _ValidatorPublicInfo: XdrCodec<ValidatorPublicInfo> = withCodecBudget<ValidatorPublicInfo>({
   encode(w, val) {
