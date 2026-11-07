@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: efe13bdcad5abf2ed5ac220ef814461f3906da77
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -18,6 +18,28 @@ export type kDefaultMaxContractSizeBytes = 524288;
 export interface ContractBlob {
   /** XDR: `opaque data<>`. */
   data: Uint8Array;
+}
+
+export enum Rv32ArtifactExtensionKind {
+  kRv32ExtensionContractSpec = 1,
+}
+
+export interface Rv32ArtifactExtension {
+  kind: bigint;
+  /** XDR: `opaque body<>`. */
+  body: Uint8Array;
+}
+
+/** XDR: `typedef Rv32ArtifactExtension Rv32ArtifactExtensions<>`. */
+export type Rv32ArtifactExtensions = proto.Rv32ArtifactExtension[] & { readonly __brand: { readonly Rv32ArtifactExtensions: true } };
+export function rv32ArtifactExtensions(val: proto.Rv32ArtifactExtension[]): Rv32ArtifactExtensions {
+  return val as Rv32ArtifactExtensions;
+}
+
+export interface Rv32ContractSpecExtension {
+  schema_version: bigint;
+  /** XDR: `opaque spec<>`. */
+  spec: Uint8Array;
 }
 
 export enum ContractType {
@@ -64,6 +86,37 @@ const _ContractBlob: XdrCodec<ContractBlob> = withCodecBudget<ContractBlob>({
   decode(r) {
     const data = r.readVarOpaque(Number(0xFFFFFFFF));
     return { data };
+  },
+});
+
+const _Rv32ArtifactExtensionKind: XdrCodec<Rv32ArtifactExtensionKind> = {
+  encode(w, val) { w.writeInt32(BigInt(val)); },
+  decode(r) { return Number(r.readInt32()) as Rv32ArtifactExtensionKind; },
+};
+
+const _Rv32ArtifactExtension: XdrCodec<Rv32ArtifactExtension> = withCodecBudget<Rv32ArtifactExtension>({
+  encode(w, val) {
+    w.writeUint32(val.kind);
+    w.writeVarOpaque(val.body, Number(0xFFFFFFFF));
+  },
+  decode(r) {
+    const kind = r.readUint32();
+    const body = r.readVarOpaque(Number(0xFFFFFFFF));
+    return { kind, body };
+  },
+});
+
+const _Rv32ArtifactExtensions = VarArrayCodec(() => proto.codec.Rv32ArtifactExtension, Number(0xFFFFFFFF)) as XdrCodec<Rv32ArtifactExtensions>;
+
+const _Rv32ContractSpecExtension: XdrCodec<Rv32ContractSpecExtension> = withCodecBudget<Rv32ContractSpecExtension>({
+  encode(w, val) {
+    w.writeUint32(val.schema_version);
+    w.writeVarOpaque(val.spec, Number(0xFFFFFFFF));
+  },
+  decode(r) {
+    const schema_version = r.readUint32();
+    const spec = r.readVarOpaque(Number(0xFFFFFFFF));
+    return { schema_version, spec };
   },
 });
 
@@ -140,6 +193,10 @@ const _DeployedContractHash: XdrCodec<DeployedContractHash> = withCodecBudget<De
 
 export const codec = {
   ContractBlob: _ContractBlob,
+  Rv32ArtifactExtensionKind: _Rv32ArtifactExtensionKind,
+  Rv32ArtifactExtension: _Rv32ArtifactExtension,
+  Rv32ArtifactExtensions: _Rv32ArtifactExtensions,
+  Rv32ContractSpecExtension: _Rv32ContractSpecExtension,
   ContractType: _ContractType,
   Contract: _Contract,
   ContractDeploymentHashPreimage: _ContractDeploymentHashPreimage,
