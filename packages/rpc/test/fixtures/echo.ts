@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // Test-only RPC definition for round-trip testing.
 // Not part of the protocol — used only by the test suite.
