@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -120,7 +120,7 @@ const _AuthErrorCode: XdrCodec<AuthErrorCode> = {
 
 const _AuthErrorCodeBatch = VarArrayCodec(() => proto.codec.AuthErrorCode, Number(0xFFFFFFFF)) as XdrCodec<AuthErrorCodeBatch>;
 
-const _authmempool_verify_transactions_args: XdrCodec<authmempool_verify_transactions_args> = {
+const _authmempool_verify_transactions_args: XdrCodec<authmempool_verify_transactions_args> = withCodecBudget<authmempool_verify_transactions_args>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.arg0);
     proto.codec.SignedTransactionBatch.encode(w, val.arg1);
@@ -130,9 +130,9 @@ const _authmempool_verify_transactions_args: XdrCodec<authmempool_verify_transac
     const arg1 = proto.codec.SignedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = {
+const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = withCodecBudget<authmempool_verify_batch_args>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.arg0);
     proto.codec.SignedTransactionBatch.encode(w, val.arg1);
@@ -142,9 +142,9 @@ const _authmempool_verify_batch_args: XdrCodec<authmempool_verify_batch_args> = 
     const arg1 = proto.codec.SignedTransactionBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _KeyChange: XdrCodec<KeyChange> = {
+const _KeyChange: XdrCodec<KeyChange> = withCodecBudget<KeyChange>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.address);
     OptionCodec(proto.codec.AddressAuthData as XdrCodec<proto.AddressAuthData>).encode(w, val.auth_data);
@@ -154,11 +154,11 @@ const _KeyChange: XdrCodec<KeyChange> = {
     const auth_data = OptionCodec(proto.codec.AddressAuthData as XdrCodec<proto.AddressAuthData>).decode(r);
     return { address, auth_data };
   },
-};
+});
 
 const _KeyChangeBatch = VarArrayCodec(() => proto.codec.KeyChange, Number(0xFFFFFFFF)) as XdrCodec<KeyChangeBatch>;
 
-const _KeyChangeChunk: XdrCodec<KeyChangeChunk> = {
+const _KeyChangeChunk: XdrCodec<KeyChangeChunk> = withCodecBudget<KeyChangeChunk>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.height);
     w.writeUint32(val.chunk_index);
@@ -172,14 +172,14 @@ const _KeyChangeChunk: XdrCodec<KeyChangeChunk> = {
     const changes = VarArrayCodec(proto.codec.KeyChange, Number(0xFFFFFFFF)).decode(r);
     return { height, chunk_index, chunk_count, changes };
   },
-};
+});
 
 const _DBAuthError: XdrCodec<DBAuthError> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as DBAuthError; },
 };
 
-const _DBAuthResult: XdrCodec<DBAuthResult> = {
+const _DBAuthResult: XdrCodec<DBAuthResult> = withCodecBudget<DBAuthResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -204,14 +204,14 @@ const _DBAuthResult: XdrCodec<DBAuthResult> = {
         return { error };
     }
   },
-};
+});
 
 const _DBAuthIntroOutcome: XdrCodec<DBAuthIntroOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as DBAuthIntroOutcome; },
 };
 
-const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
+const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = withCodecBudget<DBAuthIntroResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -236,11 +236,11 @@ const _DBAuthIntroResult: XdrCodec<DBAuthIntroResult> = {
         return { outcome };
     }
   },
-};
+});
 
 const _DBAuthResultBatch = VarArrayCodec(() => proto.codec.DBAuthResult, Number(0xFFFFFFFF)) as XdrCodec<DBAuthResultBatch>;
 
-const _authdb_get_auth_data_args: XdrCodec<authdb_get_auth_data_args> = {
+const _authdb_get_auth_data_args: XdrCodec<authdb_get_auth_data_args> = withCodecBudget<authdb_get_auth_data_args>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.arg0);
     proto.codec.ContractAddress.encode(w, val.arg1);
@@ -250,9 +250,9 @@ const _authdb_get_auth_data_args: XdrCodec<authdb_get_auth_data_args> = {
     const arg1 = proto.codec.ContractAddress.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
-const _authdb_get_auth_data_batch_args: XdrCodec<authdb_get_auth_data_batch_args> = {
+const _authdb_get_auth_data_batch_args: XdrCodec<authdb_get_auth_data_batch_args> = withCodecBudget<authdb_get_auth_data_batch_args>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.arg0);
     proto.codec.ContractAddressBatch.encode(w, val.arg1);
@@ -262,14 +262,14 @@ const _authdb_get_auth_data_batch_args: XdrCodec<authdb_get_auth_data_batch_args
     const arg1 = proto.codec.ContractAddressBatch.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 const _IntroAuthOutcome: XdrCodec<IntroAuthOutcome> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as IntroAuthOutcome; },
 };
 
-const _MempoolAuthIntroSuccess: XdrCodec<MempoolAuthIntroSuccess> = {
+const _MempoolAuthIntroSuccess: XdrCodec<MempoolAuthIntroSuccess> = withCodecBudget<MempoolAuthIntroSuccess>({
   encode(w, val) {
     VarArrayCodec(proto.codec.ShardCard, Number(0xFFFFFFFF)).encode(w, val.shards);
     proto.codec.NetworkHash.encode(w, val.network_hash);
@@ -279,9 +279,9 @@ const _MempoolAuthIntroSuccess: XdrCodec<MempoolAuthIntroSuccess> = {
     const network_hash = proto.codec.NetworkHash.decode(r);
     return { shards, network_hash };
   },
-};
+});
 
-const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
+const _IntroAuthResult: XdrCodec<IntroAuthResult> = withCodecBudget<IntroAuthResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.outcome));
     switch (val.outcome) {
@@ -306,7 +306,7 @@ const _IntroAuthResult: XdrCodec<IntroAuthResult> = {
         return { outcome };
     }
   },
-};
+});
 
 export const codec = {
   AuthErrorCode: _AuthErrorCode,

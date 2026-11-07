@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -81,7 +81,7 @@ const _QueueEntry: XdrCodec<QueueEntry> = {
   decode(r) { return queueEntry(r.readVarOpaque(Number(proto.kQueueEntryMaxLen))); },
 };
 
-const _RetrocausalQueueBlock: XdrCodec<RetrocausalQueueBlock> = {
+const _RetrocausalQueueBlock: XdrCodec<RetrocausalQueueBlock> = withCodecBudget<RetrocausalQueueBlock>({
   encode(w, val) {
     VarArrayCodec(proto.codec.QueueEntry, Number(0xFFFFFFFF)).encode(w, val.entries);
     w.writeUint64(val.block_number);
@@ -91,9 +91,9 @@ const _RetrocausalQueueBlock: XdrCodec<RetrocausalQueueBlock> = {
     const block_number = r.readUint64();
     return { entries, block_number };
   },
-};
+});
 
-const _RetrocausalQueuePastBlockConsumeDelta: XdrCodec<RetrocausalQueuePastBlockConsumeDelta> = {
+const _RetrocausalQueuePastBlockConsumeDelta: XdrCodec<RetrocausalQueuePastBlockConsumeDelta> = withCodecBudget<RetrocausalQueuePastBlockConsumeDelta>({
   encode(w, val) {
     w.writeUint64(val.max_fully_consumed_block_number);
     w.writeUint64(val.partial_consumed_number);
@@ -103,9 +103,9 @@ const _RetrocausalQueuePastBlockConsumeDelta: XdrCodec<RetrocausalQueuePastBlock
     const partial_consumed_number = r.readUint64();
     return { max_fully_consumed_block_number, partial_consumed_number };
   },
-};
+});
 
-const _RetrocausalQueueMetadata: XdrCodec<RetrocausalQueueMetadata> = {
+const _RetrocausalQueueMetadata: XdrCodec<RetrocausalQueueMetadata> = withCodecBudget<RetrocausalQueueMetadata>({
   encode(w, val) {
     proto.codec.RetrocausalQueuePastBlockConsumeDelta.encode(w, val.consume_state);
     w.writeUint64(val.max_live_block_num);
@@ -117,9 +117,9 @@ const _RetrocausalQueueMetadata: XdrCodec<RetrocausalQueueMetadata> = {
     const live_entries = r.readUint64();
     return { consume_state, max_live_block_num, live_entries };
   },
-};
+});
 
-const _RetrocausalQueueConsumeDelta: XdrCodec<RetrocausalQueueConsumeDelta> = {
+const _RetrocausalQueueConsumeDelta: XdrCodec<RetrocausalQueueConsumeDelta> = withCodecBudget<RetrocausalQueueConsumeDelta>({
   encode(w, val) {
     proto.codec.RetrocausalQueuePastBlockConsumeDelta.encode(w, val.past_block_consume);
     VarArrayCodec(proto.codec.QueueEntry, Number(proto.kRetrocausalQueueBlockEntriesMaxLen)).encode(w, val.current_block_consumed);
@@ -129,9 +129,9 @@ const _RetrocausalQueueConsumeDelta: XdrCodec<RetrocausalQueueConsumeDelta> = {
     const current_block_consumed = VarArrayCodec(proto.codec.QueueEntry, Number(proto.kRetrocausalQueueBlockEntriesMaxLen)).decode(r);
     return { past_block_consume, current_block_consumed };
   },
-};
+});
 
-const _RetrocausalQueueInsertDelta: XdrCodec<RetrocausalQueueInsertDelta> = {
+const _RetrocausalQueueInsertDelta: XdrCodec<RetrocausalQueueInsertDelta> = withCodecBudget<RetrocausalQueueInsertDelta>({
   encode(w, val) {
     VarArrayCodec(proto.codec.QueueEntry, Number(proto.kRetrocausalQueueBlockEntriesMaxLen)).encode(w, val.added_entries);
   },
@@ -139,9 +139,9 @@ const _RetrocausalQueueInsertDelta: XdrCodec<RetrocausalQueueInsertDelta> = {
     const added_entries = VarArrayCodec(proto.codec.QueueEntry, Number(proto.kRetrocausalQueueBlockEntriesMaxLen)).decode(r);
     return { added_entries };
   },
-};
+});
 
-const _RetrocausalQueueDelta: XdrCodec<RetrocausalQueueDelta> = {
+const _RetrocausalQueueDelta: XdrCodec<RetrocausalQueueDelta> = withCodecBudget<RetrocausalQueueDelta>({
   encode(w, val) {
     OptionCodec(_RetrocausalQueueConsumeDelta).encode(w, val.consume);
     proto.codec.RetrocausalQueueInsertDelta.encode(w, val.insert);
@@ -153,7 +153,7 @@ const _RetrocausalQueueDelta: XdrCodec<RetrocausalQueueDelta> = {
     const observed_concurrent_entries = VarArrayCodec(proto.codec.QueueEntry, Number(proto.kMaxConcurrentRcqReadsPerTx)).decode(r);
     return { consume, insert, observed_concurrent_entries };
   },
-};
+});
 
 export const codec = {
   QueueEntry: _QueueEntry,

@@ -1,14 +1,14 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // Thruput contract specification AST
 //
 // Excluded from goxdr in CI. protocol-rs generates its thruput-spec crate from
 // this file, and the SDK's contract-spec crate re-exports those types.
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -201,7 +201,7 @@ const _ContractSpecString: XdrCodec<ContractSpecString> = {
   decode(r) { return contractSpecString(r.readString(Number(0xFFFFFFFF))); },
 };
 
-const _ContractSpecId: XdrCodec<ContractSpecId> = {
+const _ContractSpecId: XdrCodec<ContractSpecId> = withCodecBudget<ContractSpecId>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.crate_name);
     proto.codec.ContractSpecString.encode(w, val.major);
@@ -215,9 +215,9 @@ const _ContractSpecId: XdrCodec<ContractSpecId> = {
     const declared = proto.codec.ContractSpecString.decode(r);
     return { crate_name, major, module_path, declared };
   },
-};
+});
 
-const _ContractArrayType: XdrCodec<ContractArrayType> = {
+const _ContractArrayType: XdrCodec<ContractArrayType> = withCodecBudget<ContractArrayType>({
   encode(w, val) {
     proto.codec.ContractType.encode(w, val.element);
     w.writeUint32(val.len);
@@ -227,9 +227,9 @@ const _ContractArrayType: XdrCodec<ContractArrayType> = {
     const len = r.readUint32();
     return { element, len };
   },
-};
+});
 
-const _ContractVectorType: XdrCodec<ContractVectorType> = {
+const _ContractVectorType: XdrCodec<ContractVectorType> = withCodecBudget<ContractVectorType>({
   encode(w, val) {
     proto.codec.ContractType.encode(w, val.element);
     w.writeUint32(val.max_len);
@@ -239,9 +239,9 @@ const _ContractVectorType: XdrCodec<ContractVectorType> = {
     const max_len = r.readUint32();
     return { element, max_len };
   },
-};
+});
 
-const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
+const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = withCodecBudget<ContractSignedTokenPreimage>({
   encode(w, val) {
     OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).encode(w, val.preimage_type);
   },
@@ -249,14 +249,14 @@ const _ContractSignedTokenPreimage: XdrCodec<ContractSignedTokenPreimage> = {
     const preimage_type = OptionCodec(proto.codec.ContractType as XdrCodec<proto.ContractType>).decode(r);
     return { preimage_type };
   },
-};
+});
 
 const _ContractTypeKind: XdrCodec<ContractTypeKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractTypeKind; },
 };
 
-const _ContractType: XdrCodec<ContractType> = {
+const _ContractType: XdrCodec<ContractType> = withCodecBudget<ContractType>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -361,9 +361,9 @@ const _ContractType: XdrCodec<ContractType> = {
         throw new Error(`Unknown ContractType discriminant: ${v}`);
     }
   },
-};
+});
 
-const _ContractExceptionType: XdrCodec<ContractExceptionType> = {
+const _ContractExceptionType: XdrCodec<ContractExceptionType> = withCodecBudget<ContractExceptionType>({
   encode(w, val) {
     w.writeUint64(val.selector);
     proto.codec.ContractType.encode(w, val.ty);
@@ -373,9 +373,9 @@ const _ContractExceptionType: XdrCodec<ContractExceptionType> = {
     const ty = proto.codec.ContractType.decode(r);
     return { selector, ty };
   },
-};
+});
 
-const _ContractField: XdrCodec<ContractField> = {
+const _ContractField: XdrCodec<ContractField> = withCodecBudget<ContractField>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     proto.codec.ContractType.encode(w, val.ty);
@@ -385,14 +385,14 @@ const _ContractField: XdrCodec<ContractField> = {
     const ty = proto.codec.ContractType.decode(r);
     return { name, ty };
   },
-};
+});
 
 const _ContractMethodEffect: XdrCodec<ContractMethodEffect> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractMethodEffect; },
 };
 
-const _ContractSpecMethod: XdrCodec<ContractSpecMethod> = {
+const _ContractSpecMethod: XdrCodec<ContractSpecMethod> = withCodecBudget<ContractSpecMethod>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.args);
@@ -406,9 +406,9 @@ const _ContractSpecMethod: XdrCodec<ContractSpecMethod> = {
     const effect = OptionCodec(_ContractMethodEffect).decode(r);
     return { name, args, return_type, effect };
   },
-};
+});
 
-const _ContractSpecInterface: XdrCodec<ContractSpecInterface> = {
+const _ContractSpecInterface: XdrCodec<ContractSpecInterface> = withCodecBudget<ContractSpecInterface>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     proto.codec.ContractSpecString.encode(w, val.vers);
@@ -422,9 +422,9 @@ const _ContractSpecInterface: XdrCodec<ContractSpecInterface> = {
     const methods = VarArrayCodec(proto.codec.ContractSpecMethod, Number(0xFFFFFFFF)).decode(r);
     return { name, vers, throws, methods };
   },
-};
+});
 
-const _ContractStructDef: XdrCodec<ContractStructDef> = {
+const _ContractStructDef: XdrCodec<ContractStructDef> = withCodecBudget<ContractStructDef>({
   encode(w, val) {
     proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).encode(w, val.fields);
@@ -434,9 +434,9 @@ const _ContractStructDef: XdrCodec<ContractStructDef> = {
     const fields = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
     return { name, fields };
   },
-};
+});
 
-const _ContractEnumVariant: XdrCodec<ContractEnumVariant> = {
+const _ContractEnumVariant: XdrCodec<ContractEnumVariant> = withCodecBudget<ContractEnumVariant>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     w.writeInt32(val.value);
@@ -446,9 +446,9 @@ const _ContractEnumVariant: XdrCodec<ContractEnumVariant> = {
     const value = r.readInt32();
     return { name, value };
   },
-};
+});
 
-const _ContractEnumDef: XdrCodec<ContractEnumDef> = {
+const _ContractEnumDef: XdrCodec<ContractEnumDef> = withCodecBudget<ContractEnumDef>({
   encode(w, val) {
     proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractEnumVariant, Number(0xFFFFFFFF)).encode(w, val.variants);
@@ -458,14 +458,14 @@ const _ContractEnumDef: XdrCodec<ContractEnumDef> = {
     const variants = VarArrayCodec(proto.codec.ContractEnumVariant, Number(0xFFFFFFFF)).decode(r);
     return { name, variants };
   },
-};
+});
 
 const _ContractUnionCaseKind: XdrCodec<ContractUnionCaseKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractUnionCaseKind; },
 };
 
-const _ContractUnionCaseType: XdrCodec<ContractUnionCaseType> = {
+const _ContractUnionCaseType: XdrCodec<ContractUnionCaseType> = withCodecBudget<ContractUnionCaseType>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -494,9 +494,9 @@ const _ContractUnionCaseType: XdrCodec<ContractUnionCaseType> = {
         throw new Error(`Unknown ContractUnionCaseType discriminant: ${v}`);
     }
   },
-};
+});
 
-const _ContractUnionCase: XdrCodec<ContractUnionCase> = {
+const _ContractUnionCase: XdrCodec<ContractUnionCase> = withCodecBudget<ContractUnionCase>({
   encode(w, val) {
     proto.codec.ContractSpecString.encode(w, val.name);
     w.writeInt32(val.discriminant);
@@ -508,9 +508,9 @@ const _ContractUnionCase: XdrCodec<ContractUnionCase> = {
     const case_type = proto.codec.ContractUnionCaseType.decode(r);
     return { name, discriminant, case_type };
   },
-};
+});
 
-const _ContractUnionDef: XdrCodec<ContractUnionDef> = {
+const _ContractUnionDef: XdrCodec<ContractUnionDef> = withCodecBudget<ContractUnionDef>({
   encode(w, val) {
     proto.codec.ContractSpecId.encode(w, val.name);
     VarArrayCodec(proto.codec.ContractUnionCase, Number(0xFFFFFFFF)).encode(w, val.cases);
@@ -520,14 +520,14 @@ const _ContractUnionDef: XdrCodec<ContractUnionDef> = {
     const cases = VarArrayCodec(proto.codec.ContractUnionCase, Number(0xFFFFFFFF)).decode(r);
     return { name, cases };
   },
-};
+});
 
 const _ContractTypeDefKind: XdrCodec<ContractTypeDefKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractTypeDefKind; },
 };
 
-const _ContractTypeDef: XdrCodec<ContractTypeDef> = {
+const _ContractTypeDef: XdrCodec<ContractTypeDef> = withCodecBudget<ContractTypeDef>({
   encode(w, val) {
     w.writeInt32(BigInt(val.v));
     switch (val.v) {
@@ -558,9 +558,9 @@ const _ContractTypeDef: XdrCodec<ContractTypeDef> = {
         throw new Error(`Unknown ContractTypeDef discriminant: ${v}`);
     }
   },
-};
+});
 
-const _ContractEventDef: XdrCodec<ContractEventDef> = {
+const _ContractEventDef: XdrCodec<ContractEventDef> = withCodecBudget<ContractEventDef>({
   encode(w, val) {
     proto.codec.ContractSpecId.encode(w, val.name);
     proto.codec.Topic.encode(w, val.signature);
@@ -574,9 +574,9 @@ const _ContractEventDef: XdrCodec<ContractEventDef> = {
     const fields = VarArrayCodec(proto.codec.ContractField, Number(0xFFFFFFFF)).decode(r);
     return { name, signature, topics, fields };
   },
-};
+});
 
-const _ContractSpec: XdrCodec<ContractSpec> = {
+const _ContractSpec: XdrCodec<ContractSpec> = withCodecBudget<ContractSpec>({
   encode(w, val) {
     VarArrayCodec(proto.codec.ContractSpecInterface, Number(0xFFFFFFFF)).encode(w, val.interfaces);
     VarArrayCodec(proto.codec.ContractTypeDef, Number(0xFFFFFFFF)).encode(w, val.type_defs);
@@ -588,7 +588,7 @@ const _ContractSpec: XdrCodec<ContractSpec> = {
     const events = VarArrayCodec(proto.codec.ContractEventDef, Number(0xFFFFFFFF)).decode(r);
     return { interfaces, type_defs, events };
   },
-};
+});
 
 export const codec = {
   ContractSpecString: _ContractSpecString,

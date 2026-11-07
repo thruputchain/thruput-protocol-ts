@@ -1,11 +1,11 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // clang-format off
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -91,7 +91,7 @@ const _DbDiagnosticLevel: XdrCodec<DbDiagnosticLevel> = {
   decode(r) { return Number(r.readInt32()) as DbDiagnosticLevel; },
 };
 
-const _DbConflictDiagnostic: XdrCodec<DbConflictDiagnostic> = {
+const _DbConflictDiagnostic: XdrCodec<DbConflictDiagnostic> = withCodecBudget<DbConflictDiagnostic>({
   encode(w, val) {
     proto.codec.AddressAndKey.encode(w, val.addrkey);
     proto.codec.DbConflictCode.encode(w, val.code);
@@ -101,9 +101,9 @@ const _DbConflictDiagnostic: XdrCodec<DbConflictDiagnostic> = {
     const code = proto.codec.DbConflictCode.decode(r);
     return { addrkey, code };
   },
-};
+});
 
-const _DbConflictResult: XdrCodec<DbConflictResult> = {
+const _DbConflictResult: XdrCodec<DbConflictResult> = withCodecBudget<DbConflictResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.level));
     switch (val.level) {
@@ -132,14 +132,14 @@ const _DbConflictResult: XdrCodec<DbConflictResult> = {
         throw new Error(`Unknown DbConflictResult discriminant: ${level}`);
     }
   },
-};
+});
 
 const _ContractRejectCode: XdrCodec<ContractRejectCode> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as ContractRejectCode; },
 };
 
-const _ContractRejectDiagnostic: XdrCodec<ContractRejectDiagnostic> = {
+const _ContractRejectDiagnostic: XdrCodec<ContractRejectDiagnostic> = withCodecBudget<ContractRejectDiagnostic>({
   encode(w, val) {
     w.writeUint32(val.contract_index);
     proto.codec.ContractRejectCode.encode(w, val.code);
@@ -149,14 +149,14 @@ const _ContractRejectDiagnostic: XdrCodec<ContractRejectDiagnostic> = {
     const code = proto.codec.ContractRejectCode.decode(r);
     return { contract_index, code };
   },
-};
+});
 
 const _TxFailureKind: XdrCodec<TxFailureKind> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as TxFailureKind; },
 };
 
-const _TxFailureCause: XdrCodec<TxFailureCause> = {
+const _TxFailureCause: XdrCodec<TxFailureCause> = withCodecBudget<TxFailureCause>({
   encode(w, val) {
     w.writeInt32(BigInt(val.kind));
     switch (val.kind) {
@@ -181,9 +181,9 @@ const _TxFailureCause: XdrCodec<TxFailureCause> = {
         throw new Error(`Unknown TxFailureCause discriminant: ${kind}`);
     }
   },
-};
+});
 
-const _TxFailureDiagnostic: XdrCodec<TxFailureDiagnostic> = {
+const _TxFailureDiagnostic: XdrCodec<TxFailureDiagnostic> = withCodecBudget<TxFailureDiagnostic>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.attempt_height);
     proto.codec.TxFailureCause.encode(w, val.cause);
@@ -193,7 +193,7 @@ const _TxFailureDiagnostic: XdrCodec<TxFailureDiagnostic> = {
     const cause = proto.codec.TxFailureCause.decode(r);
     return { attempt_height, cause };
   },
-};
+});
 
 export const codec = {
   DbConflictCode: _DbConflictCode,

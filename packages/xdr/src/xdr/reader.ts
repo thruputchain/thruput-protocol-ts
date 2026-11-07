@@ -1,15 +1,19 @@
 import type { IReader } from "./codec.js";
+import { DecodeBudget, type CodecLimits } from "./budget.js";
 import { paddedLen } from "./padding.js";
 
 const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
 /** Reads standard XDR bytes as defined by RFC 4506. */
 export class XdrReader implements IReader {
+  /** Shared value-depth and work limits. */
+  readonly budget: DecodeBudget;
   private view: DataView;
   private pos: number = 0;
 
   /** Create a reader over an XDR byte array. */
-  constructor(private data: Uint8Array) {
+  constructor(private data: Uint8Array, limits?: CodecLimits) {
+    this.budget = new DecodeBudget(data.length, limits);
     this.view = new DataView(data.buffer, data.byteOffset, data.byteLength);
   }
 

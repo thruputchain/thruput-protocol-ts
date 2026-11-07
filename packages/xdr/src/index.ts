@@ -26,6 +26,7 @@ export {
 
 export {
   MAX_PREALLOC_BYTES,
+  withCodecBudget,
   VoidCodec,
   BoolCodec,
   Uint8Codec,
@@ -48,6 +49,9 @@ export {
   deserializeCxs,
   resolve,
 } from "./xdr/codec.js";
+
+export { DecodeBudget, EncodeBudget } from "./xdr/budget.js";
+export type { CodecLimits } from "./xdr/budget.js";
 
 export type {
   IWriter,

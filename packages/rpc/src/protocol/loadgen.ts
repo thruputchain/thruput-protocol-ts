@@ -1,11 +1,11 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // clang-format off
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -81,7 +81,7 @@ const _ExperimentType: XdrCodec<ExperimentType> = {
   decode(r) { return Number(r.readInt32()) as ExperimentType; },
 };
 
-const _ERC20PaymentsConfig: XdrCodec<ERC20PaymentsConfig> = {
+const _ERC20PaymentsConfig: XdrCodec<ERC20PaymentsConfig> = withCodecBudget<ERC20PaymentsConfig>({
   encode(w, val) {
     w.writeUint64(val.num_addresses);
     proto.codec.NetworkHash.encode(w, val.network_hash);
@@ -91,9 +91,9 @@ const _ERC20PaymentsConfig: XdrCodec<ERC20PaymentsConfig> = {
     const network_hash = proto.codec.NetworkHash.decode(r);
     return { num_addresses, network_hash };
   },
-};
+});
 
-const _ExperimentConfig: XdrCodec<ExperimentConfig> = {
+const _ExperimentConfig: XdrCodec<ExperimentConfig> = withCodecBudget<ExperimentConfig>({
   encode(w, val) {
     w.writeInt32(BigInt(val.experiment_type));
     switch (val.experiment_type) {
@@ -114,7 +114,7 @@ const _ExperimentConfig: XdrCodec<ExperimentConfig> = {
         throw new Error(`Unknown ExperimentConfig discriminant: ${experiment_type}`);
     }
   },
-};
+});
 
 const _InitializationBlock = VarArrayCodec(() => proto.codec.SignedTransaction, Number(0xFFFFFFFF)) as XdrCodec<InitializationBlock>;
 
@@ -123,7 +123,7 @@ const _LoadgenContextID: XdrCodec<LoadgenContextID> = {
   decode(r) { return loadgenContextID(r.readUint64()); },
 };
 
-const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = {
+const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = withCodecBudget<LoadgenSuccessResult>({
   encode(w, val) {
     proto.codec.GenesisConfiguration.encode(w, val.genesis_configuration);
     proto.codec.InitializationBlock.encode(w, val.genesis_ceremony_txs);
@@ -137,9 +137,9 @@ const _LoadgenSuccessResult: XdrCodec<LoadgenSuccessResult> = {
     const context_id = proto.codec.LoadgenContextID.decode(r);
     return { genesis_configuration, genesis_ceremony_txs, initialization_txs, context_id };
   },
-};
+});
 
-const _LoadgenExtension: XdrCodec<LoadgenExtension> = {
+const _LoadgenExtension: XdrCodec<LoadgenExtension> = withCodecBudget<LoadgenExtension>({
   encode(w, val) {
     proto.codec.ParallelSignedTransactionBatch.encode(w, val.work_txs);
   },
@@ -147,14 +147,14 @@ const _LoadgenExtension: XdrCodec<LoadgenExtension> = {
     const work_txs = proto.codec.ParallelSignedTransactionBatch.decode(r);
     return { work_txs };
   },
-};
+});
 
 const _LoadgenRPCError: XdrCodec<LoadgenRPCError> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as LoadgenRPCError; },
 };
 
-const _LoadgenResult: XdrCodec<LoadgenResult> = {
+const _LoadgenResult: XdrCodec<LoadgenResult> = withCodecBudget<LoadgenResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -179,9 +179,9 @@ const _LoadgenResult: XdrCodec<LoadgenResult> = {
         return { error };
     }
   },
-};
+});
 
-const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
+const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = withCodecBudget<LoadgenExtensionResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -206,9 +206,9 @@ const _LoadgenExtensionResult: XdrCodec<LoadgenExtensionResult> = {
         return { error };
     }
   },
-};
+});
 
-const _extend_experiment_args: XdrCodec<extend_experiment_args> = {
+const _extend_experiment_args: XdrCodec<extend_experiment_args> = withCodecBudget<extend_experiment_args>({
   encode(w, val) {
     proto.codec.LoadgenContextID.encode(w, val.arg0);
     w.writeUint64(val.arg1);
@@ -220,7 +220,7 @@ const _extend_experiment_args: XdrCodec<extend_experiment_args> = {
     const arg2 = proto.codec.BlockHeight.decode(r);
     return { arg0, arg1, arg2 };
   },
-};
+});
 
 export const codec = {
   ExperimentType: _ExperimentType,

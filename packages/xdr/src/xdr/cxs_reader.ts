@@ -9,6 +9,7 @@
  */
 
 import type { IReader } from "./codec.js";
+import { DecodeBudget, type CodecLimits } from "./budget.js";
 
 const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
@@ -19,10 +20,14 @@ const IH_MIN = -31;
 
 /** Reads compact XDR serialization (CXS) bytes. */
 export class CxsReader implements IReader {
+  /** Shared value-depth and work limits. */
+  readonly budget: DecodeBudget;
   private pos: number = 0;
 
   /** Create a reader over a CXS byte array. */
-  constructor(private data: Uint8Array) {}
+  constructor(private data: Uint8Array, limits?: CodecLimits) {
+    this.budget = new DecodeBudget(data.length, limits);
+  }
 
   /** Current byte offset in the input. */
   get position(): number { return this.pos; }

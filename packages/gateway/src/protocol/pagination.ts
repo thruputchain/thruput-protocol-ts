@@ -1,11 +1,11 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // clang-format off
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -48,7 +48,7 @@ const _BlockAnchorKind: XdrCodec<BlockAnchorKind> = {
   decode(r) { return Number(r.readInt32()) as BlockAnchorKind; },
 };
 
-const _BlockAnchor: XdrCodec<BlockAnchor> = {
+const _BlockAnchor: XdrCodec<BlockAnchor> = withCodecBudget<BlockAnchor>({
   encode(w, val) {
     w.writeInt32(BigInt(val.kind));
     switch (val.kind) {
@@ -73,7 +73,7 @@ const _BlockAnchor: XdrCodec<BlockAnchor> = {
         throw new Error(`Unknown BlockAnchor discriminant: ${kind}`);
     }
   },
-};
+});
 
 const _PaginationCursor: XdrCodec<PaginationCursor> = {
   encode(w, val) { w.writeVarOpaque(val, Number(0xFFFFFFFF)); },

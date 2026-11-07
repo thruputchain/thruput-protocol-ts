@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -25,7 +25,7 @@ export interface StorageCostModelXdr {
 // XDR Codecs below this point
 //
 
-const _StorageCostModelXdr: XdrCodec<StorageCostModelXdr> = {
+const _StorageCostModelXdr: XdrCodec<StorageCostModelXdr> = withCodecBudget<StorageCostModelXdr>({
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     w.writeUint64(val.base_data_item_cost);
@@ -49,7 +49,7 @@ const _StorageCostModelXdr: XdrCodec<StorageCostModelXdr> = {
     const balance_cost = r.readUint64();
     return { ext, base_data_item_cost, bytestring_cost_per_byte, base_contract_deployment_cost, contract_deployment_cost_per_byte, auth_per_key_cost, rcq_cost_per_entry, replay_cache_cost_per_entry, balance_cost };
   },
-};
+});
 
 export const codec = {
   StorageCostModelXdr: _StorageCostModelXdr,

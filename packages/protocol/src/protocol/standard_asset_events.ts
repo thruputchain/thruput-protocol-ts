@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -25,7 +25,7 @@ export interface ApprovalEvent {
 // XDR Codecs below this point
 //
 
-const _TransferEvent: XdrCodec<TransferEvent> = {
+const _TransferEvent: XdrCodec<TransferEvent> = withCodecBudget<TransferEvent>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.from_address);
     proto.codec.ContractAddress.encode(w, val.to_address);
@@ -37,9 +37,9 @@ const _TransferEvent: XdrCodec<TransferEvent> = {
     const amount = proto.codec.int128_xdr.decode(r);
     return { from_address, to_address, amount };
   },
-};
+});
 
-const _ApprovalEvent: XdrCodec<ApprovalEvent> = {
+const _ApprovalEvent: XdrCodec<ApprovalEvent> = withCodecBudget<ApprovalEvent>({
   encode(w, val) {
     proto.codec.ContractAddress.encode(w, val.owner_address);
     proto.codec.ContractAddress.encode(w, val.spender_address);
@@ -51,7 +51,7 @@ const _ApprovalEvent: XdrCodec<ApprovalEvent> = {
     const amount = proto.codec.int128_xdr.decode(r);
     return { owner_address, spender_address, amount };
   },
-};
+});
 
 export const codec = {
   TransferEvent: _TransferEvent,

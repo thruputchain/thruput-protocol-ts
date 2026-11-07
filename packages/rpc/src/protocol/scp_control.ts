@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta, BoolCodec } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, type RpcProgramMeta, BoolCodec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -25,7 +25,7 @@ export interface scp_control_set_state_from_envelope_args {
 // XDR Codecs below this point
 //
 
-const _scp_control_nominate_args: XdrCodec<scp_control_nominate_args> = {
+const _scp_control_nominate_args: XdrCodec<scp_control_nominate_args> = withCodecBudget<scp_control_nominate_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPValue.encode(w, val.arg1);
@@ -37,9 +37,9 @@ const _scp_control_nominate_args: XdrCodec<scp_control_nominate_args> = {
     const arg2 = proto.codec.SCPValue.decode(r);
     return { arg0, arg1, arg2 };
   },
-};
+});
 
-const _scp_control_set_state_from_envelope_args: XdrCodec<scp_control_set_state_from_envelope_args> = {
+const _scp_control_set_state_from_envelope_args: XdrCodec<scp_control_set_state_from_envelope_args> = withCodecBudget<scp_control_set_state_from_envelope_args>({
   encode(w, val) {
     proto.codec.SCPSlotIndex.encode(w, val.arg0);
     proto.codec.SCPEnvelope.encode(w, val.arg1);
@@ -49,7 +49,7 @@ const _scp_control_set_state_from_envelope_args: XdrCodec<scp_control_set_state_
     const arg1 = proto.codec.SCPEnvelope.decode(r);
     return { arg0, arg1 };
   },
-};
+});
 
 export const codec = {
 } as const;

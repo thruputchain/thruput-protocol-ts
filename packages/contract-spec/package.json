@@ -1,6 +1,6 @@
 {
   "name": "@thruputchain/contract-spec",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "Thruput contract specification AST types and XDR serialization",
   "homepage": "https://github.com/thruputchain/thruput-protocol-ts/tree/main/packages/contract-spec#readme",
   "bugs": {
@@ -40,8 +40,8 @@
     "typecheck": "tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@thruputchain/xdr": "0.19.1",
-    "@thruputchain/protocol": "0.19.1"
+    "@thruputchain/xdr": "0.20.0",
+    "@thruputchain/protocol": "0.20.0"
   },
   "devDependencies": {
     "@types/node": "25.5.0",

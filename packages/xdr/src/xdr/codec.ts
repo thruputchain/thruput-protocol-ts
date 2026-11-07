@@ -2,8 +2,12 @@
 // XdrWriter/XdrReader implement these for standard XDR (RFC 4506).
 // CxsWriter/CxsReader implement them for compact XDR (CXS).
 
+import type { CodecLimits, DecodeBudget, EncodeBudget } from "./budget.js";
+
 /** Writes primitive values to an XDR-compatible serialization format. */
 export interface IWriter {
+  /** Shared nesting limit for this writer. */
+  readonly budget: EncodeBudget;
   /** Write a signed 32-bit integer. */
   writeInt32(val: bigint): void;
   /** Write an unsigned 32-bit integer. */
@@ -28,6 +32,8 @@ export interface IWriter {
 
 /** Reads primitive values from an XDR-compatible serialization format. */
 export interface IReader {
+  /** Shared nesting and work limits for this reader. */
+  readonly budget: DecodeBudget;
   /** Current byte offset in the input. */
   readonly position: number;
   /** Number of unread bytes remaining in the input. */
@@ -60,6 +66,40 @@ export interface XdrCodec<T> {
   encode(w: IWriter, val: T): void;
   /** Read and return a value from `r`. */
   decode(r: IReader): T;
+}
+
+const boundedCodecs = new WeakMap<object, XdrCodec<unknown>>();
+const budgeted = Symbol("budgeted codec");
+
+/**
+ * Account for one value using the reader or writer's shared budget.
+ * Wrap custom structs, unions and tuples once; aliases reuse their codec.
+ * Built-in containers apply this automatically. Primitive reader operations
+ * do not track nesting. Custom recursive codecs must use this helper too.
+ * Wrapping an already bounded codec does not count it twice. Transparent
+ * adapters should spread the original codec to preserve its budget marker.
+ * A lazy alias delegates to the resolved codec's budget without an extra charge.
+ */
+export function withCodecBudget<T>(codec: XdrCodec<T> | (() => XdrCodec<T>)): XdrCodec<T> {
+  if (typeof codec !== "function" && budgeted in codec) return codec;
+  const cached = boundedCodecs.get(codec);
+  if (cached) return cached as XdrCodec<T>;
+  const bounded: XdrCodec<T> = typeof codec === "function" ? {
+    encode(w, value) { withCodecBudget(codec()).encode(w, value); },
+    decode(r) { return withCodecBudget(codec()).decode(r); },
+  } : {
+    encode(w, value) {
+      w.budget.enter();
+      try { codec.encode(w, value); } finally { w.budget.leave(); }
+    },
+    decode(r) {
+      r.budget.enter();
+      try { return codec.decode(r); } finally { r.budget.leave(); }
+    },
+  };
+  Object.assign(bounded, { [budgeted]: true });
+  boundedCodecs.set(codec, bounded as XdrCodec<unknown>);
+  return bounded;
 }
 
 /** Codec for XDR void — encodes/decodes nothing. */
@@ -204,22 +244,22 @@ export function resolve<T>(c: LazyCodec<T>): XdrCodec<T> {
 
 /** Codec combinator for XDR optional values (u32 discriminant + inner value). */
 export function OptionCodec<T>(inner: LazyCodec<T>): XdrCodec<T | null> {
-  return {
+  return withCodecBudget({
     encode(w, val) {
       if (val !== null) {
         w.writeUint32(1n);
-        resolve(inner).encode(w, val);
+        withCodecBudget(resolve(inner)).encode(w, val);
       } else {
         w.writeUint32(0n);
       }
     },
     decode(r) {
       const disc = r.readUint32();
-      if (disc === 1n) return resolve(inner).decode(r);
+      if (disc === 1n) return withCodecBudget(resolve(inner)).decode(r);
       if (disc === 0n) return null;
       throw new Error(`Option: invalid discriminant ${disc} (expected 0 or 1)`);
     },
-  };
+  });
 }
 
 /**
@@ -242,12 +282,12 @@ const MAX_PREALLOC_SLOTS = MAX_PREALLOC_BYTES / ARRAY_SLOT_BYTES;
 
 /** Codec combinator for XDR variable-length array (u32 length prefix + elements). */
 export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]> {
-  return {
+  return withCodecBudget({
     encode(w, val) {
       if (val.length > max) {
         throw new Error(`VarArray length ${val.length} exceeds max ${max}`);
       }
-      const c = resolve(inner);
+      const c = withCodecBudget(resolve(inner));
       w.writeUint32(BigInt(val.length));
       for (const item of val) c.encode(w, item);
     },
@@ -256,22 +296,19 @@ export function VarArrayCodec<T>(inner: LazyCodec<T>, max: number): XdrCodec<T[]
       if (len > max) {
         throw new Error(`VarArray length ${len} exceeds max ${max}`);
       }
-      const c = resolve(inner);
+      r.budget.checkCapacity(len);
+      const c = withCodecBudget(resolve(inner));
       // Bounded reserve, lazy growth — the hogd x23 / Rust xdrs pattern.
       // The untrusted length prefix sizes the initial allocation only up to
-      // MAX_PREALLOC_BYTES and the bytes actually remaining in the input
-      // (every element consumes at least one byte); the array grows lazily
-      // past the reserve as elements really decode. A forged length prefix
-      // (max is often 0xFFFFFFFF) therefore never causes a large up-front
-      // allocation, and decoding fails naturally when an element read
-      // exhausts the input.
+      // MAX_PREALLOC_BYTES and the bytes remaining in the input. Zero-width
+      // elements can grow beyond that reserve, but still consume work units.
       const reserve = Math.min(len, r.remaining, MAX_PREALLOC_SLOTS);
       const result: T[] = new Array(reserve);
       for (let i = 0; i < reserve; i++) result[i] = c.decode(r);
       for (let i = reserve; i < len; i++) result.push(c.decode(r));
       return result;
     },
-  };
+  });
 }
 
 /**
@@ -285,19 +322,20 @@ export function FixedArrayCodec<T>(
   inner: LazyCodec<T>,
   len: number,
 ): XdrCodec<T[]> & { encode(w: IWriter, val: readonly T[]): void } {
-  return {
-    encode(w, val) {
+  return withCodecBudget<T[]>({
+    encode(w, val: readonly T[]) {
       if (val.length !== len) {
         throw new Error(`FixedArray expected ${len} elements, got ${val.length}`);
       }
-      const c = resolve(inner);
+      const c = withCodecBudget(resolve(inner));
       for (const item of val) c.encode(w, item);
     },
     decode(r) {
-      const c = resolve(inner);
+      r.budget.checkCapacity(len);
+      const c = withCodecBudget(resolve(inner));
       return Array.from({ length: len }, () => c.decode(r));
     },
-  };
+  });
 }
 
 /** Codec for exactly `len` opaque bytes. */
@@ -364,16 +402,16 @@ import { XdrReader } from "./reader.js";
  * const bytes = serialize(42n, Int32Codec);
  * ```
  */
-export function serialize<T>(val: T, codec: XdrCodec<T>): Uint8Array {
-  const w = new XdrWriter();
-  codec.encode(w, val);
+export function serialize<T>(val: T, codec: XdrCodec<T>, limits?: CodecLimits): Uint8Array {
+  const w = new XdrWriter(undefined, limits);
+  withCodecBudget(codec).encode(w, val);
   return w.finish();
 }
 
 /** Deserialize a standard XDR byte array and reject trailing bytes. */
-export function deserialize<T>(data: Uint8Array, codec: XdrCodec<T>): T {
-  const r = new XdrReader(data);
-  const val = codec.decode(r);
+export function deserialize<T>(data: Uint8Array, codec: XdrCodec<T>, limits?: CodecLimits): T {
+  const r = new XdrReader(data, limits);
+  const val = withCodecBudget(codec).decode(r);
   if (r.remaining > 0) {
     throw new Error(`Trailing data after XDR decode: ${r.remaining} bytes remaining`);
   }
@@ -385,16 +423,16 @@ import { CxsWriter } from "./cxs_writer.js";
 import { CxsReader } from "./cxs_reader.js";
 
 /** Serialize a value with compact XDR serialization (CXS). */
-export function serializeCxs<T>(val: T, codec: XdrCodec<T>): Uint8Array {
-  const w = new CxsWriter();
-  codec.encode(w, val);
+export function serializeCxs<T>(val: T, codec: XdrCodec<T>, limits?: CodecLimits): Uint8Array {
+  const w = new CxsWriter(undefined, limits);
+  withCodecBudget(codec).encode(w, val);
   return w.finish();
 }
 
 /** Deserialize a CXS byte array and reject trailing bytes. */
-export function deserializeCxs<T>(data: Uint8Array, codec: XdrCodec<T>): T {
-  const r = new CxsReader(data);
-  const val = codec.decode(r);
+export function deserializeCxs<T>(data: Uint8Array, codec: XdrCodec<T>, limits?: CodecLimits): T {
+  const r = new CxsReader(data, limits);
+  const val = withCodecBudget(codec).decode(r);
   if (r.remaining > 0) {
     throw new Error(`Trailing data after CXS decode: ${r.remaining} bytes remaining`);
   }
