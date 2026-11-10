@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
+// Generated from x23c commit: 1a0af366169a99b67ad0a6ed7a8eb58f45da5b7c
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -23,6 +23,8 @@ export enum ConfigParamID {
   kConfigParamMaxCalldataLen = 11,
   kConfigParamMaxReturnBufferLen = 12,
   kConfigParamMaxTxGas = 13,
+  kConfigParamMinRv32ArtifactVersion = 14,
+  kConfigParamMaxRv32ArtifactVersion = 15,
 }
 
 export type ConfigParam =
@@ -40,6 +42,8 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxCalldataLen; max_calldata_len: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxReturnBufferLen; max_return_buffer_len: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxTxGas; max_tx_gas: proto.GasAmount }
+  | { param: proto.ConfigParamID.kConfigParamMinRv32ArtifactVersion; min_rv32_artifact_version: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion; max_rv32_artifact_version: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -113,6 +117,12 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxTxGas:
         proto.codec.GasAmount.encode(w, val.max_tx_gas);
         break;
+      case proto.ConfigParamID.kConfigParamMinRv32ArtifactVersion:
+        w.writeUint32(val.min_rv32_artifact_version);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion:
+        w.writeUint32(val.max_rv32_artifact_version);
+        break;
     }
   },
   decode(r) {
@@ -160,6 +170,12 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxTxGas:
         const max_tx_gas = proto.codec.GasAmount.decode(r);
         return { param, max_tx_gas };
+      case proto.ConfigParamID.kConfigParamMinRv32ArtifactVersion:
+        const min_rv32_artifact_version = r.readUint32();
+        return { param, min_rv32_artifact_version };
+      case proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion:
+        const max_rv32_artifact_version = r.readUint32();
+        return { param, max_rv32_artifact_version };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
