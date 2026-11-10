@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -22,7 +22,7 @@ export interface SCPConfig {
 // XDR Codecs below this point
 //
 
-const _SCPConfig: XdrCodec<SCPConfig> = {
+const _SCPConfig: XdrCodec<SCPConfig> = withCodecBudget<SCPConfig>({
   encode(w, val) {
     w.writeUint64(val.max_timeout_ms);
     w.writeUint64(val.initial_ballot_timeout_ms);
@@ -40,7 +40,7 @@ const _SCPConfig: XdrCodec<SCPConfig> = {
     const quorum_set = proto.codec.SCPQuorumSet.decode(r);
     return { max_timeout_ms, initial_ballot_timeout_ms, increment_ballot_timeout_ms, initial_nomination_timeout_ms, increment_nomination_timeout_ms, quorum_set };
   },
-};
+});
 
 export const codec = {
   SCPConfig: _SCPConfig,

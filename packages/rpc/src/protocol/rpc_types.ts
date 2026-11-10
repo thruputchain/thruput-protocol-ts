@@ -1,11 +1,11 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // clang-format off
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -115,7 +115,7 @@ const _BlockID: XdrCodec<BlockID> = {
   decode(r) { return blockID(r.readUint64()); },
 };
 
-const _BlockExecutionContext: XdrCodec<BlockExecutionContext> = {
+const _BlockExecutionContext: XdrCodec<BlockExecutionContext> = withCodecBudget<BlockExecutionContext>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.block_height);
     proto.codec.TimePoint.encode(w, val.block_timepoint);
@@ -125,9 +125,9 @@ const _BlockExecutionContext: XdrCodec<BlockExecutionContext> = {
     const block_timepoint = proto.codec.TimePoint.decode(r);
     return { block_height, block_timepoint };
   },
-};
+});
 
-const _DbTip: XdrCodec<DbTip> = {
+const _DbTip: XdrCodec<DbTip> = withCodecBudget<DbTip>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.id);
     proto.codec.StorageLongHash.encode(w, val.storage_long_hash);
@@ -143,7 +143,7 @@ const _DbTip: XdrCodec<DbTip> = {
     const network_config = proto.codec.NetworkConfig.decode(r);
     return { id, storage_long_hash, value, default_wallet, network_config };
   },
-};
+});
 
 const _TransactionID: XdrCodec<TransactionID> = {
   encode(w, val) { w.writeUint64(val); },
@@ -160,12 +160,9 @@ const _BlockExecutionMode: XdrCodec<BlockExecutionMode> = {
   decode(r) { return Number(r.readInt32()) as BlockExecutionMode; },
 };
 
-const _StorageCost: XdrCodec<StorageCost> = {
-  encode(w, val) { proto.codec.int128_xdr.encode(w, val); },
-  decode(r) { return storageCost(proto.codec.int128_xdr.decode(r)); },
-};
+const _StorageCost: XdrCodec<StorageCost> = withCodecBudget(() => proto.codec.int128_xdr as XdrCodec<StorageCost>);
 
-const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
+const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = withCodecBudget<ExpectedStorageCost>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -190,9 +187,9 @@ const _ExpectedStorageCost: XdrCodec<ExpectedStorageCost> = {
         return { error };
     }
   },
-};
+});
 
-const _ExpectedContract: XdrCodec<ExpectedContract> = {
+const _ExpectedContract: XdrCodec<ExpectedContract> = withCodecBudget<ExpectedContract>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -217,9 +214,9 @@ const _ExpectedContract: XdrCodec<ExpectedContract> = {
         return { error };
     }
   },
-};
+});
 
-const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = {
+const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = withCodecBudget<ExpectedDeployment>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -244,9 +241,9 @@ const _ExpectedDeployment: XdrCodec<ExpectedDeployment> = {
         return { error };
     }
   },
-};
+});
 
-const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
+const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = withCodecBudget<ExpectedProposalData>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -271,9 +268,9 @@ const _ExpectedProposalData: XdrCodec<ExpectedProposalData> = {
         return { error };
     }
   },
-};
+});
 
-const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = {
+const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = withCodecBudget<ExpectedRetrocausalQueueBlock>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -298,9 +295,9 @@ const _ExpectedRetrocausalQueueBlock: XdrCodec<ExpectedRetrocausalQueueBlock> = 
         return { error };
     }
   },
-};
+});
 
-const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = {
+const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = withCodecBudget<ExpectedQueueEntry>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -325,9 +322,9 @@ const _ExpectedQueueEntry: XdrCodec<ExpectedQueueEntry> = {
         return { error };
     }
   },
-};
+});
 
-const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
+const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = withCodecBudget<ExpectedDBTip>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -352,9 +349,9 @@ const _ExpectedDBTip: XdrCodec<ExpectedDBTip> = {
         return { error };
     }
   },
-};
+});
 
-const _ViewingSnapshot: XdrCodec<ViewingSnapshot> = {
+const _ViewingSnapshot: XdrCodec<ViewingSnapshot> = withCodecBudget<ViewingSnapshot>({
   encode(w, val) {
     proto.codec.BlockID.encode(w, val.viewing_block_id);
     proto.codec.DbTip.encode(w, val.tip);
@@ -364,9 +361,9 @@ const _ViewingSnapshot: XdrCodec<ViewingSnapshot> = {
     const tip = proto.codec.DbTip.decode(r);
     return { viewing_block_id, tip };
   },
-};
+});
 
-const _ExpectedViewingSnapshot: XdrCodec<ExpectedViewingSnapshot> = {
+const _ExpectedViewingSnapshot: XdrCodec<ExpectedViewingSnapshot> = withCodecBudget<ExpectedViewingSnapshot>({
   encode(w, val) {
     w.writeInt32(BigInt(val.error));
     switch (val.error) {
@@ -391,7 +388,7 @@ const _ExpectedViewingSnapshot: XdrCodec<ExpectedViewingSnapshot> = {
         return { error };
     }
   },
-};
+});
 
 const _ContractAddressBatch = VarArrayCodec(() => proto.codec.ContractAddress, Number(0xFFFFFFFF)) as XdrCodec<ContractAddressBatch>;
 

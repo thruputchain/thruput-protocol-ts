@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint64Codec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -160,7 +160,7 @@ const _Bytestring: XdrCodec<Bytestring> = {
   decode(r) { return bytestring(r.readVarOpaque(Number(proto.kBytestringCeilingLen))); },
 };
 
-const _StorageItem: XdrCodec<StorageItem> = {
+const _StorageItem: XdrCodec<StorageItem> = withCodecBudget<StorageItem>({
   encode(w, val) {
     w.writeInt32(BigInt(val.type));
     switch (val.type) {
@@ -209,9 +209,9 @@ const _StorageItem: XdrCodec<StorageItem> = {
         throw new Error(`Unknown StorageItem discriminant: ${type}`);
     }
   },
-};
+});
 
-const _WireStorageItem: XdrCodec<WireStorageItem> = {
+const _WireStorageItem: XdrCodec<WireStorageItem> = withCodecBudget<WireStorageItem>({
   encode(w, val) {
     w.writeInt32(BigInt(val.type));
     switch (val.type) {
@@ -258,14 +258,14 @@ const _WireStorageItem: XdrCodec<WireStorageItem> = {
         throw new Error(`Unknown WireStorageItem discriminant: ${type}`);
     }
   },
-};
+});
 
 const _StorageDeltaType: XdrCodec<StorageDeltaType> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
   decode(r) { return Number(r.readInt32()) as StorageDeltaType; },
 };
 
-const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
+const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = withCodecBudget<AuthDataChangeSigner>({
   encode(w, val) {
     w.writeUint32(val.public_key_id);
     proto.codec.PublicKeyConfigOpt.encode(w, val.public_key);
@@ -275,9 +275,9 @@ const _AuthDataChangeSigner: XdrCodec<AuthDataChangeSigner> = {
     const public_key = proto.codec.PublicKeyConfigOpt.decode(r);
     return { public_key_id, public_key };
   },
-};
+});
 
-const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
+const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = withCodecBudget<AuthDataChangeArgs>({
   encode(w, val) {
     VarArrayCodec(proto.codec.AuthDataChangeSigner, Number(proto.kMaxSigners)).encode(w, val.auth_data_change_signers);
     OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).encode(w, val.new_required_weight);
@@ -287,9 +287,9 @@ const _AuthDataChangeArgs: XdrCodec<AuthDataChangeArgs> = {
     const new_required_weight = OptionCodec(proto.codec.Weight as XdrCodec<proto.Weight>).decode(r);
     return { auth_data_change_signers, new_required_weight };
   },
-};
+});
 
-const _NonnegativeInt128SetAddArgs: XdrCodec<NonnegativeInt128SetAddArgs> = {
+const _NonnegativeInt128SetAddArgs: XdrCodec<NonnegativeInt128SetAddArgs> = withCodecBudget<NonnegativeInt128SetAddArgs>({
   encode(w, val) {
     proto.codec.int128_xdr.encode(w, val.set_value);
     proto.codec.int128_xdr.encode(w, val.add_value);
@@ -299,9 +299,9 @@ const _NonnegativeInt128SetAddArgs: XdrCodec<NonnegativeInt128SetAddArgs> = {
     const add_value = proto.codec.int128_xdr.decode(r);
     return { set_value, add_value };
   },
-};
+});
 
-const _ConsumeUniquifierArgs: XdrCodec<ConsumeUniquifierArgs> = {
+const _ConsumeUniquifierArgs: XdrCodec<ConsumeUniquifierArgs> = withCodecBudget<ConsumeUniquifierArgs>({
   encode(w, val) {
     proto.codec.Uniquifier.encode(w, val.uniquifier);
   },
@@ -309,9 +309,9 @@ const _ConsumeUniquifierArgs: XdrCodec<ConsumeUniquifierArgs> = {
     const uniquifier = proto.codec.Uniquifier.decode(r);
     return { uniquifier };
   },
-};
+});
 
-const _StorageDelta: XdrCodec<StorageDelta> = {
+const _StorageDelta: XdrCodec<StorageDelta> = withCodecBudget<StorageDelta>({
   encode(w, val) {
     w.writeInt32(BigInt(val.type));
     switch (val.type) {
@@ -370,9 +370,9 @@ const _StorageDelta: XdrCodec<StorageDelta> = {
         throw new Error(`Unknown StorageDelta discriminant: ${type}`);
     }
   },
-};
+});
 
-const _ReplayCacheHeightCount: XdrCodec<ReplayCacheHeightCount> = {
+const _ReplayCacheHeightCount: XdrCodec<ReplayCacheHeightCount> = withCodecBudget<ReplayCacheHeightCount>({
   encode(w, val) {
     proto.codec.BlockHeight.encode(w, val.height);
     w.writeUint32(val.nonce_count);
@@ -382,9 +382,9 @@ const _ReplayCacheHeightCount: XdrCodec<ReplayCacheHeightCount> = {
     const nonce_count = r.readUint32();
     return { height, nonce_count };
   },
-};
+});
 
-const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = {
+const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = withCodecBudget<ReplayCacheMetadata>({
   encode(w, val) {
     w.writeInt64(val.size);
     VarArrayCodec(proto.codec.ReplayCacheHeightCount, Number(proto.kReplayCacheNoncesMaxLen)).encode(w, val.heights);
@@ -394,19 +394,17 @@ const _ReplayCacheMetadata: XdrCodec<ReplayCacheMetadata> = {
     const heights = VarArrayCodec(proto.codec.ReplayCacheHeightCount, Number(proto.kReplayCacheNoncesMaxLen)).decode(r);
     return { size, heights };
   },
-};
+});
 
-const _ReplayCacheData: XdrCodec<ReplayCacheData> = {
+const _ReplayCacheData: XdrCodec<ReplayCacheData> = withCodecBudget<ReplayCacheData>({
   encode(w, val) {
-    w.writeUint32(BigInt(val.nonces.length));
-    for (const _item of val.nonces) w.writeUint64(_item);
+    VarArrayCodec(Uint64Codec, Number(proto.kReplayCacheNoncesMaxLen)).encode(w, val.nonces);
   },
   decode(r) {
-    const _nonces_len = Number(r.readUint32());
-    const nonces = Array.from({ length: _nonces_len }, () => r.readUint64());
+    const nonces = VarArrayCodec(Uint64Codec, Number(proto.kReplayCacheNoncesMaxLen)).decode(r);
     return { nonces };
   },
-};
+});
 
 const _StorageDeltaFlags: XdrCodec<StorageDeltaFlags> = {
   encode(w, val) { w.writeInt32(BigInt(val)); },
@@ -418,7 +416,7 @@ const _StorageDeltaFlagSet: XdrCodec<StorageDeltaFlagSet> = {
   decode(r) { return storageDeltaFlagSet(r.readUint32()); },
 };
 
-const _FlaggedStorageDelta: XdrCodec<FlaggedStorageDelta> = {
+const _FlaggedStorageDelta: XdrCodec<FlaggedStorageDelta> = withCodecBudget<FlaggedStorageDelta>({
   encode(w, val) {
     proto.codec.AddressAndKey.encode(w, val.addrkey);
     proto.codec.StorageDelta.encode(w, val.delta);
@@ -430,7 +428,7 @@ const _FlaggedStorageDelta: XdrCodec<FlaggedStorageDelta> = {
     const flags = proto.codec.StorageDeltaFlagSet.decode(r);
     return { addrkey, delta, flags };
   },
-};
+});
 
 export const codec = {
   StorageItemType: _StorageItemType,

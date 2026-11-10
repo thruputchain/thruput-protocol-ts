@@ -1,12 +1,12 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
 // Compound test types — reference base types via proto barrel.
 // Not part of the protocol — used only by the test suite.
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -38,7 +38,7 @@ export type TestResult =
 // XDR Codecs below this point
 //
 
-const _TestPerson: XdrCodec<TestPerson> = {
+const _TestPerson: XdrCodec<TestPerson> = withCodecBudget<TestPerson>({
   encode(w, val) {
     w.writeString(val.name, Number(256));
     proto.codec.TestHash.encode(w, val.id);
@@ -50,9 +50,9 @@ const _TestPerson: XdrCodec<TestPerson> = {
     const location = proto.codec.TestPoint.decode(r);
     return { name, id, location };
   },
-};
+});
 
-const _TestShape_rectangle: XdrCodec<TestShape_rectangle> = {
+const _TestShape_rectangle: XdrCodec<TestShape_rectangle> = withCodecBudget<TestShape_rectangle>({
   encode(w, val) {
     w.writeUint32(val.width);
     w.writeUint32(val.height);
@@ -62,9 +62,9 @@ const _TestShape_rectangle: XdrCodec<TestShape_rectangle> = {
     const height = r.readUint32();
     return { width, height };
   },
-};
+});
 
-const _TestShape: XdrCodec<TestShape> = {
+const _TestShape: XdrCodec<TestShape> = withCodecBudget<TestShape>({
   encode(w, val) {
     w.writeInt32(BigInt(val.color));
     switch (val.color) {
@@ -93,9 +93,9 @@ const _TestShape: XdrCodec<TestShape> = {
         throw new Error(`Unknown TestShape discriminant: ${color}`);
     }
   },
-};
+});
 
-const _TestResult: XdrCodec<TestResult> = {
+const _TestResult: XdrCodec<TestResult> = withCodecBudget<TestResult>({
   encode(w, val) {
     w.writeInt32(BigInt(val.status));
     switch (val.status) {
@@ -120,7 +120,7 @@ const _TestResult: XdrCodec<TestResult> = {
         return { status };
     }
   },
-};
+});
 
 export const codec = {
   TestPerson: _TestPerson,

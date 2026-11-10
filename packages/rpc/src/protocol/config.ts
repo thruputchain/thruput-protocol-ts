@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -137,7 +137,7 @@ const _Seconds: XdrCodec<Seconds> = {
   decode(r) { return seconds(r.readInt64()); },
 };
 
-const _ValidatorConfig: XdrCodec<ValidatorConfig> = {
+const _ValidatorConfig: XdrCodec<ValidatorConfig> = withCodecBudget<ValidatorConfig>({
   encode(w, val) {
     proto.codec.ValidatorPrivateInfo.encode(w, val.private_info);
     VarArrayCodec(proto.codec.ValidatorPublicInfo, Number(0xFFFFFFFF)).encode(w, val.known_validators);
@@ -147,9 +147,9 @@ const _ValidatorConfig: XdrCodec<ValidatorConfig> = {
     const known_validators = VarArrayCodec(proto.codec.ValidatorPublicInfo, Number(0xFFFFFFFF)).decode(r);
     return { private_info, known_validators };
   },
-};
+});
 
-const _DiscoveryConfig: XdrCodec<DiscoveryConfig> = {
+const _DiscoveryConfig: XdrCodec<DiscoveryConfig> = withCodecBudget<DiscoveryConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.advertise_interval_msec);
     w.writeUint32(val.advertise_par);
@@ -161,9 +161,9 @@ const _DiscoveryConfig: XdrCodec<DiscoveryConfig> = {
     const snapshot_ttl_msec = proto.codec.Milliseconds.decode(r);
     return { advertise_interval_msec, advertise_par, snapshot_ttl_msec };
   },
-};
+});
 
-const _RouterConfig: XdrCodec<RouterConfig> = {
+const _RouterConfig: XdrCodec<RouterConfig> = withCodecBudget<RouterConfig>({
   encode(w, val) {
     w.writeUint32(val.tree_fan_out);
   },
@@ -171,9 +171,9 @@ const _RouterConfig: XdrCodec<RouterConfig> = {
     const tree_fan_out = r.readUint32();
     return { tree_fan_out };
   },
-};
+});
 
-const _DogwoodConfig: XdrCodec<DogwoodConfig> = {
+const _DogwoodConfig: XdrCodec<DogwoodConfig> = withCodecBudget<DogwoodConfig>({
   encode(w, val) {
     proto.codec.DogwoodInt32.encode(w, val.route_count);
     proto.codec.Milliseconds.encode(w, val.route_time_to_live_msec);
@@ -209,9 +209,9 @@ const _DogwoodConfig: XdrCodec<DogwoodConfig> = {
     const transmission_partial_idle_ttl_msec = proto.codec.Milliseconds.decode(r);
     return { route_count, route_time_to_live_msec, route_max_latency_msec, endpoint_max_pending, endpoint_num_clients, endpoint_idle_ttl_msec, endpoint_dial_timeout_msec, endpoint_redial_delay_msec, endpoint_call_timeout_msec, stream_receiver_worker_count, stream_sender_worker_count, transmission_receiver_decode_worker_count, transmission_sender_worker_count, transmission_partial_max_ttl_msec, transmission_partial_idle_ttl_msec };
   },
-};
+});
 
-const _MempoolConfig: XdrCodec<MempoolConfig> = {
+const _MempoolConfig: XdrCodec<MempoolConfig> = withCodecBudget<MempoolConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.transaction_ttl_msec);
     w.writeInt64(val.submission_lot_size);
@@ -223,9 +223,9 @@ const _MempoolConfig: XdrCodec<MempoolConfig> = {
     const submission_lot_wait_msec = proto.codec.Milliseconds.decode(r);
     return { transaction_ttl_msec, submission_lot_size, submission_lot_wait_msec };
   },
-};
+});
 
-const _CatchupConfig: XdrCodec<CatchupConfig> = {
+const _CatchupConfig: XdrCodec<CatchupConfig> = withCodecBudget<CatchupConfig>({
   encode(w, val) {
     proto.codec.Seconds.encode(w, val.catchup_block_ttl_sec);
     proto.codec.BlockHeight.encode(w, val.catchup_block_age);
@@ -235,9 +235,9 @@ const _CatchupConfig: XdrCodec<CatchupConfig> = {
     const catchup_block_age = proto.codec.BlockHeight.decode(r);
     return { catchup_block_ttl_sec, catchup_block_age };
   },
-};
+});
 
-const _BatonConfig: XdrCodec<BatonConfig> = {
+const _BatonConfig: XdrCodec<BatonConfig> = withCodecBudget<BatonConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.skew_msec);
     proto.codec.Milliseconds.encode(w, val.heartbeat_msec);
@@ -251,9 +251,9 @@ const _BatonConfig: XdrCodec<BatonConfig> = {
     const max_catchup_height = r.readInt32();
     return { skew_msec, heartbeat_msec, patience_msec, max_catchup_height };
   },
-};
+});
 
-const _RepairConfig: XdrCodec<RepairConfig> = {
+const _RepairConfig: XdrCodec<RepairConfig> = withCodecBudget<RepairConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.base_delay_msec);
     proto.codec.Milliseconds.encode(w, val.max_delay_msec);
@@ -267,9 +267,9 @@ const _RepairConfig: XdrCodec<RepairConfig> = {
     const multiplier_denom = r.readUint32();
     return { base_delay_msec, max_delay_msec, multiplier_nom, multiplier_denom };
   },
-};
+});
 
-const _StorageConfig: XdrCodec<StorageConfig> = {
+const _StorageConfig: XdrCodec<StorageConfig> = withCodecBudget<StorageConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.reclaim_interval_msec);
     w.writeInt32(val.max_catchup_blocks);
@@ -281,9 +281,9 @@ const _StorageConfig: XdrCodec<StorageConfig> = {
     const max_scp_slots = r.readInt32();
     return { reclaim_interval_msec, max_catchup_blocks, max_scp_slots };
   },
-};
+});
 
-const _Config: XdrCodec<Config> = {
+const _Config: XdrCodec<Config> = withCodecBudget<Config>({
   encode(w, val) {
     OptionCodec(_ValidatorConfig).encode(w, val.validator_config);
     OptionCodec(_DiscoveryConfig).encode(w, val.discovery_config);
@@ -309,9 +309,9 @@ const _Config: XdrCodec<Config> = {
     const storage_config = OptionCodec(_StorageConfig).decode(r);
     return { validator_config, discovery_config, router_config, dogwood_config, mempool_config, catchup_config, scp_config, baton_config, repair_config, storage_config };
   },
-};
+});
 
-const _CoordinatorRouterConfig: XdrCodec<CoordinatorRouterConfig> = {
+const _CoordinatorRouterConfig: XdrCodec<CoordinatorRouterConfig> = withCodecBudget<CoordinatorRouterConfig>({
   encode(w, val) {
     w.writeUint64(val.max_fanout);
   },
@@ -319,9 +319,9 @@ const _CoordinatorRouterConfig: XdrCodec<CoordinatorRouterConfig> = {
     const max_fanout = r.readUint64();
     return { max_fanout };
   },
-};
+});
 
-const _CoordinatorBatonConfig: XdrCodec<CoordinatorBatonConfig> = {
+const _CoordinatorBatonConfig: XdrCodec<CoordinatorBatonConfig> = withCodecBudget<CoordinatorBatonConfig>({
   encode(w, val) {
     proto.codec.Milliseconds.encode(w, val.clock_skew_msec);
   },
@@ -329,9 +329,9 @@ const _CoordinatorBatonConfig: XdrCodec<CoordinatorBatonConfig> = {
     const clock_skew_msec = proto.codec.Milliseconds.decode(r);
     return { clock_skew_msec };
   },
-};
+});
 
-const _CoordinatorConsensusConfig: XdrCodec<CoordinatorConsensusConfig> = {
+const _CoordinatorConsensusConfig: XdrCodec<CoordinatorConsensusConfig> = withCodecBudget<CoordinatorConsensusConfig>({
   encode(w, val) {
     w.writeUint64(val.epoch_length);
     w.writeUint64(val.pipeline_length);
@@ -343,9 +343,9 @@ const _CoordinatorConsensusConfig: XdrCodec<CoordinatorConsensusConfig> = {
     const timeout_msec = proto.codec.Milliseconds.decode(r);
     return { epoch_length, pipeline_length, timeout_msec };
   },
-};
+});
 
-const _CoordinatorPoolConfig: XdrCodec<CoordinatorPoolConfig> = {
+const _CoordinatorPoolConfig: XdrCodec<CoordinatorPoolConfig> = withCodecBudget<CoordinatorPoolConfig>({
   encode(w, val) {
     w.writeUint64(val.basis_pool_hotcold_window);
     w.writeUint64(val.block_pool_hotcold_window);
@@ -355,9 +355,9 @@ const _CoordinatorPoolConfig: XdrCodec<CoordinatorPoolConfig> = {
     const block_pool_hotcold_window = r.readUint64();
     return { basis_pool_hotcold_window, block_pool_hotcold_window };
   },
-};
+});
 
-const _CoordinatorConfig: XdrCodec<CoordinatorConfig> = {
+const _CoordinatorConfig: XdrCodec<CoordinatorConfig> = withCodecBudget<CoordinatorConfig>({
   encode(w, val) {
     proto.codec.CoordinatorRouterConfig.encode(w, val.router);
     proto.codec.DogwoodConfig.encode(w, val.dogwood);
@@ -373,7 +373,7 @@ const _CoordinatorConfig: XdrCodec<CoordinatorConfig> = {
     const pool = proto.codec.CoordinatorPoolConfig.decode(r);
     return { router, dogwood, baton, consensus, pool };
   },
-};
+});
 
 export const codec = {
   Milliseconds: _Milliseconds,

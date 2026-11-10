@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -20,7 +20,7 @@ export interface AuthCard {
 // XDR Codecs below this point
 //
 
-const _AuthCard: XdrCodec<AuthCard> = {
+const _AuthCard: XdrCodec<AuthCard> = withCodecBudget<AuthCard>({
   encode(w, val) {
     proto.codec.ProtocolCommit.encode(w, val.protocol);
     proto.codec.UPID.encode(w, val.upid);
@@ -34,7 +34,7 @@ const _AuthCard: XdrCodec<AuthCard> = {
     const address_for_mempool = proto.codec.ServerAddress.decode(r);
     return { protocol, upid, address_for_db, address_for_mempool };
   },
-};
+});
 
 export const codec = {
   AuthCard: _AuthCard,

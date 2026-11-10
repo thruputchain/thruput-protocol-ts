@@ -1,9 +1,9 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from x23c commit: 2fc45939fb978fe9459bf18e0aa0f80e2880f87b
 
-import { type XdrCodec, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
+import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
 
 
@@ -31,7 +31,7 @@ export interface ProposalHeader {
 // XDR Codecs below this point
 //
 
-const _ProposalContext: XdrCodec<ProposalContext> = {
+const _ProposalContext: XdrCodec<ProposalContext> = withCodecBudget<ProposalContext>({
   encode(w, val) {
     proto.codec.Protocol.encode(w, val.protocol);
     proto.codec.ValidatorID.encode(w, val.proposer);
@@ -43,9 +43,9 @@ const _ProposalContext: XdrCodec<ProposalContext> = {
     const block_timepoint = proto.codec.TimePoint.decode(r);
     return { protocol, proposer, block_timepoint };
   },
-};
+});
 
-const _ProposalHeader: XdrCodec<ProposalHeader> = {
+const _ProposalHeader: XdrCodec<ProposalHeader> = withCodecBudget<ProposalHeader>({
   encode(w, val) {
     proto.codec.ExtensionPoint.encode(w, val.ext);
     proto.codec.NetworkHash.encode(w, val.network_hash);
@@ -69,7 +69,7 @@ const _ProposalHeader: XdrCodec<ProposalHeader> = {
     const events_hash = proto.codec.EventsHash.decode(r);
     return { ext, network_hash, config_hash, proposer, block_timepoint, block_height, txs_hash, storage_hash, events_hash };
   },
-};
+});
 
 export const codec = {
   ProposalContext: _ProposalContext,
