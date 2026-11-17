@@ -25,6 +25,7 @@ export enum ConfigParamID {
   kConfigParamMaxTxGas = 13,
   kConfigParamMinRv32ArtifactVersion = 14,
   kConfigParamMaxRv32ArtifactVersion = 15,
+  kConfigParamMaxSubtransactionOutputBytes = 16,
 }
 
 export type ConfigParam =
@@ -44,6 +45,7 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMaxTxGas; max_tx_gas: proto.GasAmount }
   | { param: proto.ConfigParamID.kConfigParamMinRv32ArtifactVersion; min_rv32_artifact_version: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion; max_rv32_artifact_version: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes; max_subtransaction_output_bytes: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -123,6 +125,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion:
         w.writeUint32(val.max_rv32_artifact_version);
         break;
+      case proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes:
+        w.writeUint32(val.max_subtransaction_output_bytes);
+        break;
     }
   },
   decode(r) {
@@ -176,6 +181,9 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion:
         const max_rv32_artifact_version = r.readUint32();
         return { param, max_rv32_artifact_version };
+      case proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes:
+        const max_subtransaction_output_bytes = r.readUint32();
+        return { param, max_subtransaction_output_bytes };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
