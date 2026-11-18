@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1a0af366169a99b67ad0a6ed7a8eb58f45da5b7c
+// Generated from x23c commit: 27c2d4d8be10f9aeeb886090c13524a793e4a386
 
 // Copyright 2015 Stellar Development Foundation and contributors. Licensed
 // under the Apache License, Version 2.0. See the COPYING file at the root
