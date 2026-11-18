@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1a0af366169a99b67ad0a6ed7a8eb58f45da5b7c
+// Generated from x23c commit: 27c2d4d8be10f9aeeb886090c13524a793e4a386
 
 // Compound test types — reference base types via proto barrel.
 // Not part of the protocol — used only by the test suite.

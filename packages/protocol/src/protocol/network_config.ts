@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 1a0af366169a99b67ad0a6ed7a8eb58f45da5b7c
+// Generated from x23c commit: 27c2d4d8be10f9aeeb886090c13524a793e4a386
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -26,6 +26,8 @@ export enum ConfigParamID {
   kConfigParamMinRv32ArtifactVersion = 14,
   kConfigParamMaxRv32ArtifactVersion = 15,
   kConfigParamMaxSubtransactionOutputBytes = 16,
+  kConfigParamMinSyscallApiMinor = 17,
+  kConfigParamMaxSyscallApiMinor = 18,
 }
 
 export type ConfigParam =
@@ -46,6 +48,8 @@ export type ConfigParam =
   | { param: proto.ConfigParamID.kConfigParamMinRv32ArtifactVersion; min_rv32_artifact_version: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxRv32ArtifactVersion; max_rv32_artifact_version: bigint }
   | { param: proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes; max_subtransaction_output_bytes: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMinSyscallApiMinor; min_syscall_api_minor: bigint }
+  | { param: proto.ConfigParamID.kConfigParamMaxSyscallApiMinor; max_syscall_api_minor: bigint }
 ;
 
 export interface NetworkConfigV0 {
@@ -128,6 +132,12 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes:
         w.writeUint32(val.max_subtransaction_output_bytes);
         break;
+      case proto.ConfigParamID.kConfigParamMinSyscallApiMinor:
+        w.writeUint32(val.min_syscall_api_minor);
+        break;
+      case proto.ConfigParamID.kConfigParamMaxSyscallApiMinor:
+        w.writeUint32(val.max_syscall_api_minor);
+        break;
     }
   },
   decode(r) {
@@ -184,6 +194,12 @@ const _ConfigParam: XdrCodec<ConfigParam> = withCodecBudget<ConfigParam>({
       case proto.ConfigParamID.kConfigParamMaxSubtransactionOutputBytes:
         const max_subtransaction_output_bytes = r.readUint32();
         return { param, max_subtransaction_output_bytes };
+      case proto.ConfigParamID.kConfigParamMinSyscallApiMinor:
+        const min_syscall_api_minor = r.readUint32();
+        return { param, min_syscall_api_minor };
+      case proto.ConfigParamID.kConfigParamMaxSyscallApiMinor:
+        const max_syscall_api_minor = r.readUint32();
+        return { param, max_syscall_api_minor };
       default:
         throw new Error(`Unknown ConfigParam discriminant: ${param}`);
     }
