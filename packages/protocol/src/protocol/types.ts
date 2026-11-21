@@ -51,6 +51,13 @@ export function ristretto255Point(data: Uint8Array): Ristretto255Point {
   return data as Ristretto255Point;
 }
 
+/** XDR: `typedef opaque U256Le[32]` — exactly 32 bytes. */
+export type U256Le = FixedBytes<32> & { readonly __brand: { readonly U256Le: true } };
+export function u256Le(data: Uint8Array): U256Le {
+  if (data.length !== 32) throw new Error(`U256Le must be exactly 32 bytes, got ${data.length}`);
+  return data as U256Le;
+}
+
 /** XDR: `typedef opaque Ed25519PublicKey[32]` — exactly 32 bytes. */
 export type Ed25519PublicKey = FixedBytes<32> & { readonly __brand: { readonly Ed25519PublicKey: true } };
 export function ed25519PublicKey(data: Uint8Array): Ed25519PublicKey {
@@ -270,6 +277,11 @@ const _Ed25519Signature: XdrCodec<Ed25519Signature> = {
 const _Ristretto255Point: XdrCodec<Ristretto255Point> = {
   encode(w, val) { w.writeFixedOpaque(val, 32); },
   decode(r) { return ristretto255Point(r.readFixedOpaque(32)); },
+};
+
+const _U256Le: XdrCodec<U256Le> = {
+  encode(w, val) { w.writeFixedOpaque(val, 32); },
+  decode(r) { return u256Le(r.readFixedOpaque(32)); },
 };
 
 const _Ed25519PublicKey: XdrCodec<Ed25519PublicKey> = {
@@ -509,6 +521,7 @@ export const codec = {
   GasAmount: _GasAmount,
   Ed25519Signature: _Ed25519Signature,
   Ristretto255Point: _Ristretto255Point,
+  U256Le: _U256Le,
   Ed25519PublicKey: _Ed25519PublicKey,
   Ed25519SecretKey: _Ed25519SecretKey,
   MlDsa65Signature: _MlDsa65Signature,
