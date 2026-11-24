@@ -111,7 +111,7 @@ export const codec = {
 } as const;
 
 export const WalletProgram: RpcProgramMeta = {
-  programId: 0x8aa87aa7,
+  programId: 0x8aa87aa6,
   version: 1,
   methods: {
     wallet_null: { proc: 0, request: () => VoidCodec, response: () => VoidCodec },
