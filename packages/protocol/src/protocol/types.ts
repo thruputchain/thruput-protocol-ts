@@ -27,6 +27,11 @@ export function timePoint(val: bigint): TimePoint {
   return val as TimePoint;
 }
 
+export type TimeSpan = bigint & { readonly __brand: { readonly TimeSpan: true } };
+export function timeSpan(val: bigint): TimeSpan {
+  return val as TimeSpan;
+}
+
 export type RuntimeMemoryLength = bigint & { readonly __brand: { readonly RuntimeMemoryLength: true } };
 export function runtimeMemoryLength(val: bigint): RuntimeMemoryLength {
   return val as RuntimeMemoryLength;
@@ -257,6 +262,11 @@ const _Protocol: XdrCodec<Protocol> = {
 const _TimePoint: XdrCodec<TimePoint> = {
   encode(w, val) { w.writeUint64(val); },
   decode(r) { return timePoint(r.readUint64()); },
+};
+
+const _TimeSpan: XdrCodec<TimeSpan> = {
+  encode(w, val) { w.writeUint64(val); },
+  decode(r) { return timeSpan(r.readUint64()); },
 };
 
 const _RuntimeMemoryLength: XdrCodec<RuntimeMemoryLength> = {
@@ -517,6 +527,7 @@ export const codec = {
   int128_xdr: _int128_xdr,
   Protocol: _Protocol,
   TimePoint: _TimePoint,
+  TimeSpan: _TimeSpan,
   RuntimeMemoryLength: _RuntimeMemoryLength,
   GasAmount: _GasAmount,
   Ed25519Signature: _Ed25519Signature,
