@@ -19,6 +19,12 @@ export function proposalTxsHash(val: proto.SHA256Hash): ProposalTxsHash {
   return val as ProposalTxsHash;
 }
 
+export interface ProposalTxsCommit {
+  ext: proto.ExtensionPoint;
+  signed_hash_hash: proto.SHA256Hash;
+  nondeterministic_data_hash: proto.SHA256Hash;
+}
+
 export interface Proposal {
   header: proto.ProposalHeader;
   transactions: proto.ProposalTxs;
@@ -54,6 +60,20 @@ const _ProposalTxs: XdrCodec<ProposalTxs> = withCodecBudget<ProposalTxs>({
 
 const _ProposalTxsHash: XdrCodec<ProposalTxsHash> = withCodecBudget(() => proto.codec.SHA256Hash as XdrCodec<ProposalTxsHash>);
 
+const _ProposalTxsCommit: XdrCodec<ProposalTxsCommit> = withCodecBudget<ProposalTxsCommit>({
+  encode(w, val) {
+    proto.codec.ExtensionPoint.encode(w, val.ext);
+    proto.codec.SHA256Hash.encode(w, val.signed_hash_hash);
+    proto.codec.SHA256Hash.encode(w, val.nondeterministic_data_hash);
+  },
+  decode(r) {
+    const ext = proto.codec.ExtensionPoint.decode(r);
+    const signed_hash_hash = proto.codec.SHA256Hash.decode(r);
+    const nondeterministic_data_hash = proto.codec.SHA256Hash.decode(r);
+    return { ext, signed_hash_hash, nondeterministic_data_hash };
+  },
+});
+
 const _Proposal: XdrCodec<Proposal> = withCodecBudget<Proposal>({
   encode(w, val) {
     proto.codec.ProposalHeader.encode(w, val.header);
@@ -81,6 +101,7 @@ const _PrevProposalSummary: XdrCodec<PrevProposalSummary> = withCodecBudget<Prev
 export const codec = {
   ProposalTxs: _ProposalTxs,
   ProposalTxsHash: _ProposalTxsHash,
+  ProposalTxsCommit: _ProposalTxsCommit,
   Proposal: _Proposal,
   OptProposal: _OptProposal,
   PrevProposalSummary: _PrevProposalSummary,
