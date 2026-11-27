@@ -1,7 +1,7 @@
 // -*- TypeScript -*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from x23c commit: 27c2d4d8be10f9aeeb886090c13524a793e4a386
+// Generated from x23c commit: a9ffbba797aa0c6dfbd417c2df77ed99cae34100
 
 import { type XdrCodec, withCodecBudget, VoidCodec, OptionCodec, VarArrayCodec, FixedArrayCodec, type FixedBytes, type FixedArray, type VarBytes, type VarArray, type VarString, Uint64Codec } from "@thruputchain/xdr";
 import * as proto from "./index.js";
@@ -15,7 +15,6 @@ export enum StorageItemType {
   kItemTypeReplayCacheData = 3,
   kItemTypeAuthData = 4,
   kItemTypeDeployedContractHash = 5,
-  kItemTypeDeleted = -1,
 }
 
 export const kBytestringCeilingLen = 65000n;
