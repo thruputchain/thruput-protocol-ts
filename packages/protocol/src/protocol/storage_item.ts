@@ -24,12 +24,12 @@ export const kBytestringCeilingLen = 65000n;
  */
 export type kBytestringCeilingLen = 65000;
 
-export const kDefaultMaxBytestringLen = 1024n;
+export const kDefaultMaxBytestringLen = 4096n;
 /**
  * Type-level value of {@link kDefaultMaxBytestringLen}, for use in array-bound positions.
  * @hidden
  */
-export type kDefaultMaxBytestringLen = 1024;
+export type kDefaultMaxBytestringLen = 4096;
 
 /** XDR: `typedef opaque Bytestring<kBytestringCeilingLen>` — max {@link kBytestringCeilingLen} bytes. */
 export type Bytestring = VarBytes<proto.kBytestringCeilingLen> & { readonly __brand: { readonly Bytestring: true } };
