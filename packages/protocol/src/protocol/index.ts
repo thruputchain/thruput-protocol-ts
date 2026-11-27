@@ -11,6 +11,7 @@ export * from "./storage_cost.js";
 export * from "./network_config.js";
 export * from "./syscall_error.js";
 export * from "./auth_claim.js";
+export * from "./auth_token.js";
 export * from "./standard_asset_events.js";
 export * from "./address_auth.js";
 export * from "./storage_item.js";
@@ -33,6 +34,7 @@ import { codec as storage_cost_codec } from "./storage_cost.js";
 import { codec as network_config_codec } from "./network_config.js";
 import { codec as syscall_error_codec } from "./syscall_error.js";
 import { codec as auth_claim_codec } from "./auth_claim.js";
+import { codec as auth_token_codec } from "./auth_token.js";
 import { codec as standard_asset_events_codec } from "./standard_asset_events.js";
 import { codec as address_auth_codec } from "./address_auth.js";
 import { codec as storage_item_codec } from "./storage_item.js";
@@ -59,6 +61,7 @@ function _buildCodec() {
     ...network_config_codec,
     ...syscall_error_codec,
     ...auth_claim_codec,
+    ...auth_token_codec,
     ...standard_asset_events_codec,
     ...address_auth_codec,
     ...storage_item_codec,
